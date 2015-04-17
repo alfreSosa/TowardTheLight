@@ -1,0 +1,16 @@
+﻿Compilación iniciada a las 17/04/2015 19:09:44.
+     1>Proyecto "C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" en el nodo 2 (Build destinos).
+     1>Build:
+         "C:\Program Files\Epic Games\4.7\Engine\Build\BatchFiles\Build.bat" TowardsTheLightEditor Win64 Development "C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\TowardsTheLight.uproject" -rocket
+         Performing 2 actions (4 in parallel)
+         OviCharacter.cpp
+         [2/2] Link UE4Editor-TowardsTheLight.dll
+            Creando biblioteca C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\Development\UE4Editor-TowardsTheLight.lib y objeto C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\Development\UE4Editor-TowardsTheLight.exp
+         -------- End Detailed Actions Stats -----------------------------------------------------------
+         Cumulative action seconds (8 processors): 0,00 building projects, 0,40 compiling, 0,00 creating app bundles, 0,00 generating debug info, 0,55 linking, 0,00 other
+         UBT execution time: 4,50 seconds
+     1>Compilación del proyecto terminada "C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" (Build destinos).
+
+Compilación correcta.
+
+Tiempo transcurrido 00:00:04.69
