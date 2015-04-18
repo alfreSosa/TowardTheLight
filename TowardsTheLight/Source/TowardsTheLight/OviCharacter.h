@@ -24,22 +24,22 @@ public:
   // Called to bind functionality to input
   virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
-  //sets jump flag when key is pressed
+  //sets right flag when key is pressed
   UFUNCTION()
     void OnStartRight();
-  //clears jump flag when key is released
+  //clears right flag when key is released
   UFUNCTION()
     void OnStopRight();
-  //sets jump flag when key is pressed
+  //sets left flag when key is pressed
   UFUNCTION()
     void OnStartLeft();
-  //clears jump flag when key is released
+  //clears left flag when key is released
   UFUNCTION()
     void OnStopLeft();
 
 private:
-  bool m_Right;
-  bool m_Left;
-  States state;
+  bool m_right;
+  bool m_left;
+  States m_state;
   float m_limit;
 };

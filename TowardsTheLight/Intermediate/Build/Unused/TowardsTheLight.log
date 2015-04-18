@@ -1,16 +1,23 @@
-﻿Compilación iniciada a las 17/04/2015 19:09:44.
-     1>Proyecto "C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" en el nodo 2 (Build destinos).
+﻿Compilación iniciada a las 18/04/2015 12:32:25.
+     1>Proyecto "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" en el nodo 2 (Build destinos).
      1>Build:
-         "C:\Program Files\Epic Games\4.7\Engine\Build\BatchFiles\Build.bat" TowardsTheLightEditor Win64 Development "C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\TowardsTheLight.uproject" -rocket
-         Performing 2 actions (4 in parallel)
+         "C:\Program Files\Epic Games\4.7\Engine\Build\BatchFiles\Build.bat" TowardsTheLightEditor Win64 DebugGame "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\TowardsTheLight.uproject" -rocket
+         Performing 9 actions (4 in parallel)
+         [2/9] Resource ModuleVersionResource.rc.inl
+         [3/9] Resource TowardsTheLight.rc
+         PCH.TowardsTheLight.TowardsTheLight.h.cpp
+         TowardsTheLight.generated.cpp
+         MyGameMode.cpp
+         TowardsTheLightGameMode.cpp
          OviCharacter.cpp
-         [2/2] Link UE4Editor-TowardsTheLight.dll
-            Creando biblioteca C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\Development\UE4Editor-TowardsTheLight.lib y objeto C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\Development\UE4Editor-TowardsTheLight.exp
+         TowardsTheLight.cpp
+         [9/9] Link UE4Editor-TowardsTheLight-Win64-DebugGame.dll
+            Creando biblioteca D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\DebugGame\UE4Editor-TowardsTheLight-Win64-DebugGame.lib y objeto D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\DebugGame\UE4Editor-TowardsTheLight-Win64-DebugGame.exp
          -------- End Detailed Actions Stats -----------------------------------------------------------
-         Cumulative action seconds (8 processors): 0,00 building projects, 0,40 compiling, 0,00 creating app bundles, 0,00 generating debug info, 0,55 linking, 0,00 other
-         UBT execution time: 4,50 seconds
-     1>Compilación del proyecto terminada "C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" (Build destinos).
+         Cumulative action seconds (8 processors): 0,00 building projects, 32,76 compiling, 0,00 creating app bundles, 0,00 generating debug info, 1,68 linking, 0,00 other
+         UBT execution time: 47,06 seconds
+     1>Compilación del proyecto terminada "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" (Build destinos).
 
 Compilación correcta.
 
-Tiempo transcurrido 00:00:04.69
+Tiempo transcurrido 00:00:50.21
