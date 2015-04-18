@@ -18,7 +18,9 @@ AOviCharacter::AOviCharacter(){
   m_state = States::STOP;
   m_limit = 0;
 
- 
+
+  FName *name = new FName("player", EFindName::FNAME_Add);
+  FName f = GetFName();
 }
 
 // Called when the game starts or when spawned

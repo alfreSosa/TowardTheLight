@@ -1,23 +1,39 @@
-﻿Compilación iniciada a las 18/04/2015 12:32:25.
+﻿Compilación iniciada a las 18/04/2015 14:10:54.
      1>Proyecto "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" en el nodo 2 (Build destinos).
      1>Build:
          "C:\Program Files\Epic Games\4.7\Engine\Build\BatchFiles\Build.bat" TowardsTheLightEditor Win64 DebugGame "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\TowardsTheLight.uproject" -rocket
-         Performing 9 actions (4 in parallel)
-         [2/9] Resource ModuleVersionResource.rc.inl
-         [3/9] Resource TowardsTheLight.rc
-         PCH.TowardsTheLight.TowardsTheLight.h.cpp
-         TowardsTheLight.generated.cpp
-         MyGameMode.cpp
-         TowardsTheLightGameMode.cpp
-         OviCharacter.cpp
-         TowardsTheLight.cpp
-         [9/9] Link UE4Editor-TowardsTheLight-Win64-DebugGame.dll
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-2105-Win64-DebugGame.dll".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-2105-Win64-DebugGame.pdb".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-2131-Win64-DebugGame.dll".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-2131-Win64-DebugGame.pdb".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-2349-Win64-DebugGame.dll".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-2349-Win64-DebugGame.pdb".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-3052-Win64-DebugGame.dll".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-3052-Win64-DebugGame.pdb".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-5130-Win64-DebugGame.dll".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-5130-Win64-DebugGame.pdb".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-5251-Win64-DebugGame.dll".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-5251-Win64-DebugGame.pdb".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-7735-Win64-DebugGame.dll".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-7735-Win64-DebugGame.pdb".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-868-Win64-DebugGame.dll".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-868-Win64-DebugGame.pdb".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-8812-Win64-DebugGame.dll".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-8812-Win64-DebugGame.pdb".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-9172-Win64-DebugGame.dll".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-9172-Win64-DebugGame.pdb".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-9406-Win64-DebugGame.dll".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-9406-Win64-DebugGame.pdb".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-9594-Win64-DebugGame.dll".
+         Deleting old hot reload file: "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Binaries\Win64\UE4Editor-TowardsTheLight-9594-Win64-DebugGame.pdb".
+         Performing 1 actions (4 in parallel)
+         [1/1] Link UE4Editor-TowardsTheLight-Win64-DebugGame.dll
             Creando biblioteca D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\DebugGame\UE4Editor-TowardsTheLight-Win64-DebugGame.lib y objeto D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\DebugGame\UE4Editor-TowardsTheLight-Win64-DebugGame.exp
          -------- End Detailed Actions Stats -----------------------------------------------------------
-         Cumulative action seconds (8 processors): 0,00 building projects, 32,76 compiling, 0,00 creating app bundles, 0,00 generating debug info, 1,68 linking, 0,00 other
-         UBT execution time: 47,06 seconds
+         Cumulative action seconds (8 processors): 0,00 building projects, 0,00 compiling, 0,00 creating app bundles, 0,00 generating debug info, 0,68 linking, 0,00 other
+         UBT execution time: 5,74 seconds
      1>Compilación del proyecto terminada "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" (Build destinos).
 
 Compilación correcta.
 
-Tiempo transcurrido 00:00:50.21
+Tiempo transcurrido 00:00:07.26

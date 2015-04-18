@@ -8,6 +8,9 @@
 #ifndef TOWARDSTHELIGHT_MyGameMode_generated_h
 	#include "MyGameMode.h"
 #endif
+#ifndef TOWARDSTHELIGHT_OviCameraActor_generated_h
+	#include "OviCameraActor.h"
+#endif
 #ifndef TOWARDSTHELIGHT_OviCharacter_generated_h
 	#include "OviCharacter.h"
 #endif

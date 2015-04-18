@@ -50,9 +50,11 @@
     <None Include="..\..\Config\DefaultEngine.ini" />
     <None Include="..\..\Source\TowardsTheLight\TowardsTheLight.Build.cs" />
     <ClCompile Include="..\..\Source\TowardsTheLight\MyGameMode.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\OviCameraActor.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\OviCharacter.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\TowardsTheLight.cpp" />
     <ClInclude Include="..\..\Source\TowardsTheLight\MyGameMode.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\OviCameraActor.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\OviCharacter.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\TowardsTheLight.h" />
     <ClCompile Include="..\..\Source\TowardsTheLight\TowardsTheLightGameMode.cpp" />

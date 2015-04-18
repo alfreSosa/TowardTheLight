@@ -12,6 +12,10 @@ void EmptyLinkFunctionForGeneratedCodeTowardsTheLight() {}
 	{
 	}
 	IMPLEMENT_CLASS(AMyGameMode, 1103993847);
+	void AOviCameraActor::StaticRegisterNativesAOviCameraActor()
+	{
+	}
+	IMPLEMENT_CLASS(AOviCameraActor, 1499575868);
 	void AOviCharacter::StaticRegisterNativesAOviCharacter()
 	{
 		FNativeFunctionRegistrar::RegisterFunction(AOviCharacter::StaticClass(),"OnStartLeft",(Native)&AOviCharacter::execOnStartLeft);
@@ -19,7 +23,7 @@ void EmptyLinkFunctionForGeneratedCodeTowardsTheLight() {}
 		FNativeFunctionRegistrar::RegisterFunction(AOviCharacter::StaticClass(),"OnStopLeft",(Native)&AOviCharacter::execOnStopLeft);
 		FNativeFunctionRegistrar::RegisterFunction(AOviCharacter::StaticClass(),"OnStopRight",(Native)&AOviCharacter::execOnStopRight);
 	}
-	IMPLEMENT_CLASS(AOviCharacter, 2027976400);
+	IMPLEMENT_CLASS(AOviCharacter, 2676855267);
 	void ATowardsTheLightGameMode::StaticRegisterNativesATowardsTheLightGameMode()
 	{
 	}
@@ -27,10 +31,13 @@ void EmptyLinkFunctionForGeneratedCodeTowardsTheLight() {}
 #if USE_COMPILED_IN_NATIVES
 // Cross Module References
 	ENGINE_API class UClass* Z_Construct_UClass_AGameMode();
+	ENGINE_API class UClass* Z_Construct_UClass_ACameraActor();
 	ENGINE_API class UClass* Z_Construct_UClass_ACharacter();
 
 	TOWARDSTHELIGHT_API class UClass* Z_Construct_UClass_AMyGameMode_NoRegister();
 	TOWARDSTHELIGHT_API class UClass* Z_Construct_UClass_AMyGameMode();
+	TOWARDSTHELIGHT_API class UClass* Z_Construct_UClass_AOviCameraActor_NoRegister();
+	TOWARDSTHELIGHT_API class UClass* Z_Construct_UClass_AOviCameraActor();
 	TOWARDSTHELIGHT_API class UFunction* Z_Construct_UFunction_AOviCharacter_OnStartLeft();
 	TOWARDSTHELIGHT_API class UFunction* Z_Construct_UFunction_AOviCharacter_OnStartRight();
 	TOWARDSTHELIGHT_API class UFunction* Z_Construct_UFunction_AOviCharacter_OnStopLeft();
@@ -73,6 +80,38 @@ void EmptyLinkFunctionForGeneratedCodeTowardsTheLight() {}
 		return OuterClass;
 	}
 	static FCompiledInDefer Z_CompiledInDefer_UClass_AMyGameMode(Z_Construct_UClass_AMyGameMode, TEXT("AMyGameMode"));
+	UClass* Z_Construct_UClass_AOviCameraActor_NoRegister()
+	{
+		return AOviCameraActor::StaticClass();
+	}
+	UClass* Z_Construct_UClass_AOviCameraActor()
+	{
+		static UClass* OuterClass = NULL;
+		if (!OuterClass)
+		{
+			Z_Construct_UClass_ACameraActor();
+			Z_Construct_UPackage_TowardsTheLight();
+			OuterClass = AOviCameraActor::StaticClass();
+			if (!(OuterClass->ClassFlags & CLASS_Constructed))
+			{
+				UObjectForceRegistration(OuterClass);
+				OuterClass->ClassFlags |= 0x20900080;
+
+
+				OuterClass->StaticLink();
+#if WITH_METADATA
+				UMetaData* MetaData = OuterClass->GetOutermost()->GetMetaData();
+				MetaData->SetValue(OuterClass, TEXT("HideCategories"), TEXT("Input Rendering"));
+				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("OviCameraActor.h"));
+				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("OviCameraActor.h"));
+				MetaData->SetValue(OuterClass, TEXT("ShowCategories"), TEXT("Input|MouseInput Input|TouchInput"));
+#endif
+			}
+		}
+		check(OuterClass->GetClass());
+		return OuterClass;
+	}
+	static FCompiledInDefer Z_CompiledInDefer_UClass_AOviCameraActor(Z_Construct_UClass_AOviCameraActor, TEXT("AOviCameraActor"));
 	UFunction* Z_Construct_UFunction_AOviCharacter_OnStartLeft()
 	{
 		UClass* OuterClass=Z_Construct_UClass_AOviCharacter();
@@ -85,7 +124,7 @@ void EmptyLinkFunctionForGeneratedCodeTowardsTheLight() {}
 #if WITH_METADATA
 			UMetaData* MetaData = ReturnFunction->GetOutermost()->GetMetaData();
 			MetaData->SetValue(ReturnFunction, TEXT("ModuleRelativePath"), TEXT("OviCharacter.h"));
-			MetaData->SetValue(ReturnFunction, TEXT("ToolTip"), TEXT("sets jump flag when key is pressed"));
+			MetaData->SetValue(ReturnFunction, TEXT("ToolTip"), TEXT("sets left flag when key is pressed"));
 #endif
 		}
 		return ReturnFunction;
@@ -102,7 +141,7 @@ void EmptyLinkFunctionForGeneratedCodeTowardsTheLight() {}
 #if WITH_METADATA
 			UMetaData* MetaData = ReturnFunction->GetOutermost()->GetMetaData();
 			MetaData->SetValue(ReturnFunction, TEXT("ModuleRelativePath"), TEXT("OviCharacter.h"));
-			MetaData->SetValue(ReturnFunction, TEXT("ToolTip"), TEXT("sets jump flag when key is pressed"));
+			MetaData->SetValue(ReturnFunction, TEXT("ToolTip"), TEXT("sets right flag when key is pressed"));
 #endif
 		}
 		return ReturnFunction;
@@ -119,7 +158,7 @@ void EmptyLinkFunctionForGeneratedCodeTowardsTheLight() {}
 #if WITH_METADATA
 			UMetaData* MetaData = ReturnFunction->GetOutermost()->GetMetaData();
 			MetaData->SetValue(ReturnFunction, TEXT("ModuleRelativePath"), TEXT("OviCharacter.h"));
-			MetaData->SetValue(ReturnFunction, TEXT("ToolTip"), TEXT("clears jump flag when key is released"));
+			MetaData->SetValue(ReturnFunction, TEXT("ToolTip"), TEXT("clears left flag when key is released"));
 #endif
 		}
 		return ReturnFunction;
@@ -136,7 +175,7 @@ void EmptyLinkFunctionForGeneratedCodeTowardsTheLight() {}
 #if WITH_METADATA
 			UMetaData* MetaData = ReturnFunction->GetOutermost()->GetMetaData();
 			MetaData->SetValue(ReturnFunction, TEXT("ModuleRelativePath"), TEXT("OviCharacter.h"));
-			MetaData->SetValue(ReturnFunction, TEXT("ToolTip"), TEXT("clears jump flag when key is released"));
+			MetaData->SetValue(ReturnFunction, TEXT("ToolTip"), TEXT("clears right flag when key is released"));
 #endif
 		}
 		return ReturnFunction;
@@ -163,10 +202,10 @@ void EmptyLinkFunctionForGeneratedCodeTowardsTheLight() {}
 				OuterClass->LinkChild(Z_Construct_UFunction_AOviCharacter_OnStopLeft());
 				OuterClass->LinkChild(Z_Construct_UFunction_AOviCharacter_OnStopRight());
 
-				OuterClass->AddFunctionToFunctionMap(Z_Construct_UFunction_AOviCharacter_OnStartLeft()); // 942803798
-				OuterClass->AddFunctionToFunctionMap(Z_Construct_UFunction_AOviCharacter_OnStartRight()); // 2861980806
-				OuterClass->AddFunctionToFunctionMap(Z_Construct_UFunction_AOviCharacter_OnStopLeft()); // 3766891746
-				OuterClass->AddFunctionToFunctionMap(Z_Construct_UFunction_AOviCharacter_OnStopRight()); // 852021322
+				OuterClass->AddFunctionToFunctionMap(Z_Construct_UFunction_AOviCharacter_OnStartLeft()); // 1250530965
+				OuterClass->AddFunctionToFunctionMap(Z_Construct_UFunction_AOviCharacter_OnStartRight()); // 138707036
+				OuterClass->AddFunctionToFunctionMap(Z_Construct_UFunction_AOviCharacter_OnStopLeft()); // 980823435
+				OuterClass->AddFunctionToFunctionMap(Z_Construct_UFunction_AOviCharacter_OnStopRight()); // 1337981620
 				OuterClass->StaticLink();
 #if WITH_METADATA
 				UMetaData* MetaData = OuterClass->GetOutermost()->GetMetaData();
@@ -221,8 +260,8 @@ void EmptyLinkFunctionForGeneratedCodeTowardsTheLight() {}
 			ReturnPackage = CastChecked<UPackage>(StaticFindObjectFast(UPackage::StaticClass(), NULL, FName(TEXT("/Script/TowardsTheLight")), false, false));
 			ReturnPackage->PackageFlags |= PKG_CompiledIn | 0x00000000;
 			FGuid Guid;
-			Guid.A = 0x33112818;
-			Guid.B = 0xBB764EBA;
+			Guid.A = 0x3546C43F;
+			Guid.B = 0x7917791C;
 			Guid.C = 0x00000000;
 			Guid.D = 0x00000000;
 			ReturnPackage->SetGuid(Guid);
