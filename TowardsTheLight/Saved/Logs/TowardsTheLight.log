@@ -1,442 +1,114 @@
-﻿Log file open, 04/20/15 12:52:15
+﻿Log file open, 04/20/15 17:13:56
 LogInit:Display: Running engine for game: TowardsTheLight
 LogInit: Version: 4.7.5-2503383+++depot+UE4-Releases+4.7
 LogInit: API Version: 2455222
 LogInit: Compiled (64-bit): Apr  6 2015 23:21:51
 LogInit: Compiled with Visual C++: 18.00.21005.01
-LogInit: Build Configuration: DebugGame
+LogInit: Build Configuration: Development
 LogInit: Branch Name: ++depot+UE4-Releases+4.7
-LogInit: Command line:  -debug
+LogInit: Command line: 
 LogInit: Base directory: C:/Program Files/Epic Games/4.7/Engine/Binaries/Win64/
 LogInit: Rocket: 1
-[2015.04.20-10.52.15:993][  0]LogTaskGraph: Started task graph with 3 named threads and 6 total threads.
-[2015.04.20-10.52.16:050][  0]LogOnline:Warning: No default platform service specified for OnlineSubsystem
-[2015.04.20-10.52.16:110][  0]LogInit: Presizing for 0 objects not considered by GC, pre-allocating 0 bytes.
-[2015.04.20-10.52.16:120][  0]LogInit: Object subsystem initialized
-[2015.04.20-10.52.16:122][  0]LogConsoleResponse:Warning: Skipping Unknown console variable: 'TranslucentSortAxis = (X=0.000000,Y=-1.000000,Z=0.000000)'
-[2015.04.20-10.52.16:122][  0]LogConsoleResponse:Warning:   Found in ini file 'C:/Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Saved/Config/Windows/Engine.ini', in section '[/Script/Engine.RendererSettings]'
-[2015.04.20-10.52.16:122][  0]LogConsoleResponse:Warning: Skipping Unknown console variable: 'UIScaleRule = ShortestSide'
-[2015.04.20-10.52.16:123][  0]LogConsoleResponse:Warning:   Found in ini file 'C:/Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Saved/Config/Windows/Engine.ini', in section '[/Script/Engine.RendererSettings]'
-[2015.04.20-10.52.16:123][  0]LogConsoleResponse:Warning: Skipping Unknown console variable: 'UIScaleCurve = (EditorCurveData=(Keys=),ExternalCurve=None)'
-[2015.04.20-10.52.16:123][  0]LogConsoleResponse:Warning:   Found in ini file 'C:/Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Saved/Config/Windows/Engine.ini', in section '[/Script/Engine.RendererSettings]'
-[2015.04.20-10.52.16:124][  0]LogInit: Selected Device Profile: [Windows]
-[2015.04.20-10.52.16:124][  0]LogInit: Applying CVar settings loaded from the selected device profile: [Windows]
-[2015.04.20-10.52.16:132][  0]LogInit: Computer: ALFREDO
-[2015.04.20-10.52.16:132][  0]LogInit: User: Souusek
-[2015.04.20-10.52.16:133][  0]LogInit: CPU Page size=4096, Cores=4
-[2015.04.20-10.52.16:133][  0]LogInit: High frequency timer resolution =3.312786 MHz
-[2015.04.20-10.52.16:133][  0]LogMemory: Memory total: Physical=8.0GB (8GB approx) Virtual=131072.0GB
-[2015.04.20-10.52.16:134][  0]LogMemory: Platform Memory Stats for Windows
-[2015.04.20-10.52.16:134][  0]LogMemory: Process Physical Memory: 46.25 MB used, 46.25 MB peak
-[2015.04.20-10.52.16:134][  0]LogMemory: Process Virtual Memory: 26.52 MB used, 26.53 MB peak
-[2015.04.20-10.52.16:135][  0]LogMemory: Physical Memory: 3051.66 MB used, 8175.20 MB total
-[2015.04.20-10.52.16:135][  0]LogMemory: Virtual Memory: 286.67 MB used, 134217728.00 MB total
-[2015.04.20-10.52.16:209][  0]LogD3D11RHI: Found D3D11 adapter 0: NVIDIA GeForce GTX 550 Ti (Feature Level 11_0)
-[2015.04.20-10.52.16:209][  0]LogD3D11RHI: Adapter has 977MB of dedicated video memory, 0MB of dedicated system memory, and 3071MB of shared system memory, 1 output[s]
-[2015.04.20-10.52.16:218][  0]LogD3D11RHI: Found D3D11 adapter 1: Microsoft Basic Render Driver (Feature Level 11_0)
-[2015.04.20-10.52.16:218][  0]LogD3D11RHI: Adapter has 0MB of dedicated video memory, 0MB of dedicated system memory, and 256MB of shared system memory, 0 output[s]
-[2015.04.20-10.52.16:218][  0]LogD3D11RHI: Chosen D3D11 Adapter Id = 0
-[2015.04.20-10.52.16:222][  0]LogRHI: Texture pool is 684 MB (70% of 977 MB)
-[2015.04.20-10.52.16:254][  0]LogD3D11RHI: Async texture creation enabled
-[2015.04.20-10.52.16:352][  0]LogTextLocalizationManager: The requested culture ('es_ES') has no localization data; parent culture's ('es') localization data will be used.
-[2015.04.20-10.52.16:391][  0]LogTextLocalizationManager:Warning: Loading localization resources contain conflicting entries for (Namespace:ContentBrowser, Key:ImportAssetToolTip):
+[2015.04.20-15.13.56:840][  0]LogTaskGraph: Started task graph with 3 named threads and 6 total threads.
+[2015.04.20-15.13.56:908][  0]LogOnline:Warning: No default platform service specified for OnlineSubsystem
+[2015.04.20-15.13.56:959][  0]LogInit: Presizing for 0 objects not considered by GC, pre-allocating 0 bytes.
+[2015.04.20-15.13.56:968][  0]LogInit: Object subsystem initialized
+[2015.04.20-15.13.56:970][  0]LogConsoleResponse:Warning: Skipping Unknown console variable: 'TranslucentSortAxis = (X=0.000000,Y=-1.000000,Z=0.000000)'
+[2015.04.20-15.13.56:970][  0]LogConsoleResponse:Warning:   Found in ini file 'D:/master_videojuegos/proyecto/TowardTheLight/TowardsTheLight/Saved/Config/Windows/Engine.ini', in section '[/Script/Engine.RendererSettings]'
+[2015.04.20-15.13.56:971][  0]LogConsoleResponse:Warning: Skipping Unknown console variable: 'UIScaleRule = ShortestSide'
+[2015.04.20-15.13.56:971][  0]LogConsoleResponse:Warning:   Found in ini file 'D:/master_videojuegos/proyecto/TowardTheLight/TowardsTheLight/Saved/Config/Windows/Engine.ini', in section '[/Script/Engine.RendererSettings]'
+[2015.04.20-15.13.56:971][  0]LogConsoleResponse:Warning: Skipping Unknown console variable: 'UIScaleCurve = (EditorCurveData=(Keys=),ExternalCurve=None)'
+[2015.04.20-15.13.56:972][  0]LogConsoleResponse:Warning:   Found in ini file 'D:/master_videojuegos/proyecto/TowardTheLight/TowardsTheLight/Saved/Config/Windows/Engine.ini', in section '[/Script/Engine.RendererSettings]'
+[2015.04.20-15.13.56:972][  0]LogInit: Selected Device Profile: [Windows]
+[2015.04.20-15.13.56:972][  0]LogInit: Applying CVar settings loaded from the selected device profile: [Windows]
+[2015.04.20-15.13.56:978][  0]LogInit: Computer: MCRUZ
+[2015.04.20-15.13.56:979][  0]LogInit: User: ManuelCruz
+[2015.04.20-15.13.56:979][  0]LogInit: CPU Page size=4096, Cores=4
+[2015.04.20-15.13.56:979][  0]LogInit: High frequency timer resolution =2.435774 MHz
+[2015.04.20-15.13.56:980][  0]LogMemory: Memory total: Physical=7.9GB (8GB approx) Virtual=131072.0GB
+[2015.04.20-15.13.56:980][  0]LogMemory: Platform Memory Stats for Windows
+[2015.04.20-15.13.56:980][  0]LogMemory: Process Physical Memory: 46.34 MB used, 46.34 MB peak
+[2015.04.20-15.13.56:981][  0]LogMemory: Process Virtual Memory: 26.62 MB used, 26.62 MB peak
+[2015.04.20-15.13.56:981][  0]LogMemory: Physical Memory: 3852.86 MB used, 8111.30 MB total
+[2015.04.20-15.13.56:981][  0]LogMemory: Virtual Memory: 292.10 MB used, 134217728.00 MB total
+[2015.04.20-15.13.57:250][  0]LogD3D11RHI: Found D3D11 adapter 0: NVIDIA GeForce GTX 860M   (Feature Level 11_0)
+[2015.04.20-15.13.57:250][  0]LogD3D11RHI: Adapter has 1972MB of dedicated video memory, 0MB of dedicated system memory, and 2048MB of shared system memory, 1 output[s]
+[2015.04.20-15.13.57:275][  0]LogD3D11RHI: Found D3D11 adapter 1: Intel(R) HD Graphics 4600 (Feature Level 11_0)
+[2015.04.20-15.13.57:275][  0]LogD3D11RHI: Adapter has 0MB of dedicated video memory, 0MB of dedicated system memory, and 1792MB of shared system memory, 0 output[s]
+[2015.04.20-15.13.57:281][  0]LogD3D11RHI: Found D3D11 adapter 2: Microsoft Basic Render Driver (Feature Level 11_0)
+[2015.04.20-15.13.57:282][  0]LogD3D11RHI: Adapter has 0MB of dedicated video memory, 0MB of dedicated system memory, and 256MB of shared system memory, 0 output[s]
+[2015.04.20-15.13.57:282][  0]LogD3D11RHI: Chosen D3D11 Adapter Id = 0
+[2015.04.20-15.13.57:288][  0]LogRHI: Texture pool is 1361 MB (70% of 1945 MB)
+[2015.04.20-15.13.57:330][  0]LogD3D11RHI: Async texture creation enabled
+[2015.04.20-15.13.57:454][  0]LogTextLocalizationManager: The requested culture ('es_ES') has no localization data; parent culture's ('es') localization data will be used.
+[2015.04.20-15.13.57:502][  0]LogTextLocalizationManager:Warning: Loading localization resources contain conflicting entries for (Namespace:ContentBrowser, Key:ImportAssetToolTip):
 Resource: (C:/Program Files/Epic Games/4.7/Engine/Content/Localization/Editor/es/Editor.locres) Hash: (-630476809) String: (Importar a {0}...)
 Resource: (C:/Program Files/Epic Games/4.7/Engine/Content/Localization/Editor/es/Editor.locres) Hash: (1271782899) String: (Importa un activo desde el archivo a esta carpeta.)
-[2015.04.20-10.52.16:443][  0]LogContentStreaming: Texture pool size is 0.000000MB
-[2015.04.20-10.52.19:135][  0]LogTargetPlatformManager:Display: Building Assets For Windows
-[2015.04.20-10.52.19:967][  0]LogTargetPlatformManager:Display: Building Assets For Windows
-[2015.04.20-10.52.20:046][  0]LogDerivedDataCache:Display: Max Cache Size: 512 MB
-[2015.04.20-10.52.20:082][  0]LogDerivedDataCache: Loaded boot cache 0.04s 39MB C:/Users/Souusek/AppData/Local/UnrealEngine/4.7/DerivedDataCache/Boot.ddc.
-[2015.04.20-10.52.20:082][  0]LogDerivedDataCache:Display: Loaded Boot cache: C:/Users/Souusek/AppData/Local/UnrealEngine/4.7/DerivedDataCache/Boot.ddc
-[2015.04.20-10.52.20:083][  0]LogDerivedDataCache: FDerivedDataBackendGraph:  Pak pak cache file ../../../../../../Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/DerivedDataCache/DDC.ddp not found, will not use a pak cache.
-[2015.04.20-10.52.20:083][  0]LogDerivedDataCache: Unable to find inner node Pak for hierarchical cache Hierarchy.
-[2015.04.20-10.52.20:198][  0]LogDerivedDataCache:Display: Pak cache opened for reading ../../../Engine/DerivedDataCache/Compressed.ddp.
-[2015.04.20-10.52.20:211][  0]LogDerivedDataCache: Using Local data cache path C:/Users/Souusek/AppData/Local/UnrealEngine/Common/DerivedDataCache: Writable
-[2015.04.20-10.52.20:525][  0]LogMeshUtilities: No automatic mesh reduction module available
-[2015.04.20-10.52.20:525][  0]LogMeshUtilities: No automatic mesh merging module available
-[2015.04.20-10.52.20:941][  0]LogInit: WinSock: version 1.1 (2.2), MaxSocks=32767, MaxUdp=65467
-[2015.04.20-10.52.21:086][  0]LogSlate:Warning: Failed to load font data from '../../../Engine/Content/Slate/Fonts/Roboto-Italic.ttf'
-[2015.04.20-10.52.22:321][  0]LogWmfMedia: Failed to load mf.dll
-[2015.04.20-10.52.22:321][  0]LogWmfMedia: Failed to load required Windows Media Foundation libraries
-[2015.04.20-10.52.22:353][  0]LogWindowsMoviePlayer:Warning: Could not load mf.dll
-[2015.04.20-10.52.22:354][  0]LogWindowsMoviePlayer:Warning: Could not load mfplat.dll
-[2015.04.20-10.52.22:355][  0]LogWindowsMoviePlayer:Warning: Could not load mfplay.dll
-[2015.04.20-10.52.22:467][  0]UdpMessaging: Initializing bridge on interface 0.0.0.0:0 to multicast group 230.0.0.1:6666.
-[2015.04.20-10.52.22:986][  0]SourceControl: Información El control de código fuente está desactivado
-[2015.04.20-10.52.22:986][  0]SourceControl: Información El control de código fuente está desactivado
-[2015.04.20-10.52.22:987][  0]SourceControl: Información El control de código fuente está desactivado
-[2015.04.20-10.52.22:987][  0]LogSourceControl: RunCommandInternalRaw: 'git version'
-[2015.04.20-10.52.22:987][  0]LogSourceControl: RunCommandInternalRaw: ExecProcess ReturnCode=2 OutResults=''
-[2015.04.20-10.52.22:997][  0]SourceControl: Información El control de código fuente está desactivado
-[2015.04.20-10.52.23:485][  0]LogObj: 24251 objects as part of root set at end of initial load.
-[2015.04.20-10.52.23:485][  0]LogUObjectAllocator: 5152600 out of 0 bytes used by permanent object pool.
-[2015.04.20-10.52.23:621][  0]LogEngine: Initializing Engine...
-[2015.04.20-10.52.25:784][  0]LogInit: XAudio2 using 'Auriculares (2- Dispositivo de High Definition Audio)' : 2 channels at 44.1 kHz using 16 bits per sample (channel mask 0x3)
-[2015.04.20-10.52.25:800][  0]LogInit: FAudioDevice initialized.
-[2015.04.20-10.52.25:855][  0]LogAIModule: Creating AISystem for world NewWorld
-[2015.04.20-10.52.25:874][  0]LogDerivedDataCache: Saved boot cache 0.02s 39MB C:/Users/Souusek/AppData/Local/UnrealEngine/4.7/DerivedDataCache/Boot.ddc.
-[2015.04.20-10.52.25:880][  0]LogInit: Texture streaming: Enabled
-[2015.04.20-10.52.25:993][  0]LogAnalytics: Creating configured Analytics provider AnalyticsET
-[2015.04.20-10.52.25:993][  0]LogAnalytics: ET APIKey = Rocket.Release. APIServer = http://et2.epicgames.com/ET2/. AppVersion = 4.7.5-2503383+++depot+UE4-Releases+4.7
-[2015.04.20-10.52.25:994][  0]LogAnalytics: ET APIKey = Rocket.Release. DataRouterUploadURL = https://datarouter-public-service-gamedev.ol.epicgames.net/datarouter/api/v1/public/data. AppVersion = 4.7.5-2503383+++depot+UE4-Releases+4.7
-[2015.04.20-10.52.25:994][  0]LogAnalytics: SetUserId 74b1e39d4e2976022fb68eb3b801aa33|2a8e7d3158ac4c6c9c02023c01519f4e|b0df70cd-5515-45c8-92ca-c6064a1aae1c
-[2015.04.20-10.52.25:994][  0]LogAnalytics: AnalyticsET::StartSession [Rocket.Release]
-[2015.04.20-10.52.26:026][  0]LogInit: Transaction tracking system initialized
-[2015.04.20-10.52.26:547][  0]BlueprintLog: New page: Cargar el editor
-[2015.04.20-10.52.26:598][  0]LogAssetRegistry: FAssetRegistry took 0.0116 seconds to start up
-[2015.04.20-10.52.26:599][  0]LogDirectoryWatcher:Warning: Failed to begin reading directory changes for ../../../Engine/Plugins/Experimental/CharacterAI/Content/. Error: 0
-[2015.04.20-10.52.27:479][  0]LogTargetPlatformManager:Display: Building Assets For Windows
-[2015.04.20-10.52.27:925][  0]LogTargetPlatformManager:Display: Building Assets For Windows
-[2015.04.20-10.52.28:540][  0]LogSlate:Warning: Failed to load font data from '../../../Engine/Content/Editor/Slate/Fonts/Roboto-Regular.ttf'
-[2015.04.20-10.52.28:540][  0]LogSlate:Warning: Failed to load font data from '../../../Engine/Content/Editor/Slate/Fonts/Roboto-Bold.ttf'
-[2015.04.20-10.52.28:545][  0]LogConsoleResponse:Display: 
-[2015.04.20-10.52.28:693][  0]LogCook:Display: Done creating registry. It took  0.00s.
-[2015.04.20-10.52.29:067][  0]SourceControl: Información El control de código fuente está desactivado
-[2015.04.20-10.52.29:067][  0]Cmd: MAP LOAD FILE="../../../Engine/Content/Maps/Templates/Template_Default.umap" TEMPLATE=1 SHOWPROGRESS=1 FEATURELEVEL=3
-[2015.04.20-10.52.29:068][  0]LightingResults: New page: Diseñar la iluminación
-[2015.04.20-10.52.29:081][  0]MapCheck: New page: Revisión del mapa
-[2015.04.20-10.52.29:081][  0]LightingResults: New page: Diseñar la iluminación
-[2015.04.20-10.52.29:092][  0]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x0000001B8D58B380
-[2015.04.20-10.52.29:897][  0]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
-[2015.04.20-10.52.29:902][  0]LogAIModule: Creating AISystem for world Untitled_1
-[2015.04.20-10.52.29:904][  0]Cmd: MAP CHECKDEP
-[2015.04.20-10.52.29:904][  0]MapCheck: New page: Untitled_1 - 20/4/2015 14:52:29
-[2015.04.20-10.52.29:986][  0]MapCheck: Información Map check complete: 0 Error(s), 0 Warning(s), took 81,764ms to complete.
-[2015.04.20-10.52.29:986][  0]LogFileHelpers: Loading map 'Template_Default' took 0.919
-[2015.04.20-10.52.30:145][  0]LogCollectionManager: Loaded 0 collections in 0.001829 seconds
-[2015.04.20-10.52.30:158][  0]LogContentBrowser: Native class hierarchy populated in 0.0125 seconds. Added 1700 classes and 263 folders.
-[2015.04.20-10.52.30:181][  0]LogContentBrowser:Verbose: The content browser source was changed by the sources view to '/Classes_Game/TowardsTheLight'
-[2015.04.20-10.52.30:260][  0]LogContentBrowser: Native class hierarchy updated for 'SceneOutliner' in 0.0068 seconds. Added 1 classes and 2 folders.
-[2015.04.20-10.52.30:369][  0]LogCrashTracker: Crashtracker disabled due to settings.
-[2015.04.20-10.52.30:370][  0]LogSlate:Warning: Failed to load font data from 'Veranda'
-[2015.04.20-10.52.30:375][  0]LogUObjectGlobals:Warning: Error al encontrar el objeto 'Class Ninguno.'
-[2015.04.20-10.52.30:376][  0]LogUObjectGlobals:Warning: Error al encontrar el objeto 'Class Ninguno.'
-[2015.04.20-10.52.30:407][  0]LogLoad: Full Startup: 16.65 seconds (BP compile: 0.09 seconds)
-[2015.04.20-10.52.30:545][  0]LogRenderer:Warning: Reallocating scene render targets to support 32x32 (Frame:2).
-[2015.04.20-10.52.30:624][  0]LogRenderer:Warning: Reallocating scene render targets to support 1120x576 (Frame:4).
-[2015.04.20-10.52.30:863][  4]LogAssetRegistry: Asset discovery search completed in 4.2772 seconds
-[2015.04.20-10.52.35:418][534]LogContentBrowser:Verbose: The content browser source was changed by the sources view to '/Game'
-[2015.04.20-10.52.36:512][665]LogContentBrowser:Verbose: The content browser source was changed by the sources view to '/Game/Levels'
-[2015.04.20-10.52.37:323][754]LogLinker:Warning: No puede encontrar el archivo '/Game/SideScroller/Character/SideScrollerSkeleton'
-[2015.04.20-10.52.37:323][754]LogLinker:Warning: No puede encontrar el archivo para el activo '/Game/SideScroller/Character/SideScrollerSkeleton' mientras carga ../../../../../../Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Content/Models/Character/SideScrollerSkeletalMesh.uasset.
-[2015.04.20-10.52.37:324][754]LoadErrors:Error: Error /Game/Models/Character/SideScrollerSkeletalMesh : No puede encontrar el archivo para el activo. /Game/SideScroller/Character/SideScrollerSkeleton
-[2015.04.20-10.52.37:324][754]LogLinker:Warning: No puede encontrar el archivo '/Game/SideScroller/Character/SideScrollerSkeleton'
-[2015.04.20-10.52.37:325][754]LogLinker:Warning: No puede encontrar el archivo para el activo '/Game/SideScroller/Character/SideScrollerSkeleton' mientras carga ../../../../../../Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Content/Models/Character/SideScrollerSkeletalMesh.uasset.
-[2015.04.20-10.52.37:331][754]LogLinker:Warning: No puede encontrar el archivo '/Game/SideScroller/Character/SideScrollerSkeleton'
-[2015.04.20-10.52.37:332][754]LoadErrors: Información Error al cargar /Game/SideScroller/Character/SideScrollerSkeleton.SideScrollerSkeleton Referenciado por SideScrollerSkeletalMesh
-[2015.04.20-10.52.37:332][754]LogLinker:Warning: No puede encontrar el archivo para el activo '/Game/SideScroller/Character/SideScrollerSkeleton' mientras carga NULL.
-[2015.04.20-10.52.37:373][754]Cmd: MAP LOAD FILE="../../../../../../Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Content/Levels/DevelopmentLevel.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
-[2015.04.20-10.52.37:374][754]LightingResults: New page: Diseñar la iluminación
-[2015.04.20-10.52.37:407][754]LoadErrors: New page: Cargando mapa: DevelopmentLevel.umap
-[2015.04.20-10.52.37:408][754]MapCheck: New page: Revisión del mapa
-[2015.04.20-10.52.37:408][754]LightingResults: New page: Diseñar la iluminación
-[2015.04.20-10.52.37:415][754]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x0000001B8AED7A60
-[2015.04.20-10.52.37:443][754]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
-[2015.04.20-10.52.37:446][754]LogAIModule: Creating AISystem for world DevelopmentLevel
-[2015.04.20-10.52.37:478][754]Cmd: MAP CHECKDEP
-[2015.04.20-10.52.37:478][754]MapCheck: New page: DevelopmentLevel - 20/4/2015 14:52:37
-[2015.04.20-10.52.37:564][754]MapCheck: Información Map check complete: 0 Error(s), 0 Warning(s), took 86,182ms to complete.
-[2015.04.20-10.52.37:566][754]LogFileHelpers: Loading map 'DevelopmentLevel' took 0.195
-[2015.04.20-10.52.39:806][  0]LogPlayLevel: PIE:  No blueprints needed recompiling
-[2015.04.20-10.52.39:807][  0]PIE: New page: Sesión PIE (reproducción en el editor): DevelopmentLevel (20/4/2015 14:52:39)
-[2015.04.20-10.52.39:809][  0]LogPlayLevel: PIE: StaticDuplicateObject took: (0.001698s)
-[2015.04.20-10.52.39:811][  0]LogPlayLevel: PIE: World Init took: (0.001107s)
-[2015.04.20-10.52.39:811][  0]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Levels/DevelopmentLevel.DevelopmentLevel to /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel (0.003831s)
-[2015.04.20-10.52.39:865][  0]LogWorld: Game class is 'MyGameMode'
-[2015.04.20-10.52.39:868][  0]LogAIModule: Creating AISystem for world DevelopmentLevel
-[2015.04.20-10.52.39:871][  0]LogWorld: Bringing World /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel up for play (max tick rate 0) at 2015.04.20-12.52.39
-[2015.04.20-10.52.39:872][  0]LogWorld: Bringing up level for play took: 0.003767
-[2015.04.20-10.52.39:879][  0]PIE: Información Tiempo de inicio de la reproducción en el editor para  /Game/Levels/UEDPIE_0_DevelopmentLevel -0,607
-[2015.04.20-10.52.55:657][498]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x0000001B8ABCF1A0
-[2015.04.20-10.55.48:099][395]Recompiling TowardsTheLight...
-[2015.04.20-10.55.48:100][395]Launching UnrealBuildTool... [C:/Program Files/Epic Games/4.7/Engine/Binaries/DotNET/UnrealBuildTool.exe TowardsTheLight -ModuleWithSuffix TowardsTheLight 1467 Win64 DebugGame -editorrecompile -canskiplink "C:/Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/TowardsTheLight.uproject" -rocket  -rocket]
-[2015.04.20-10.55.48:102][395]Warning: Starting HotReload took  0.0s.
-[2015.04.20-10.55.53:228][974]CompilerResultsLog: New page: Compilación - 20/4/2015 14:55:53
-[2015.04.20-10.55.53:229][974]CompilerResultsLog: Información Performing 2 actions (4 in parallel)
-[2015.04.20-10.55.53:229][974]CompilerResultsLog: Información OviCharacter.cpp
-[2015.04.20-10.55.53:229][974]CompilerResultsLog: Información [2/2] Link UE4Editor-TowardsTheLight-1467-Win64-DebugGame.dll
-[2015.04.20-10.55.53:230][974]CompilerResultsLog: Información    Creando biblioteca C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\DebugGame\UE4Editor-TowardsTheLight-1467-Win64-DebugGame.lib y objeto C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\DebugGame\UE4Editor-TowardsTheLight-1467-Win64-DebugGame.exp
-[2015.04.20-10.55.53:230][974]CompilerResultsLog: Información -------- End Detailed Actions Stats -----------------------------------------------------------
-[2015.04.20-10.55.53:230][974]CompilerResultsLog: Información Cumulative action seconds (8 processors): 0,00 building projects, 0,32 compiling, 0,00 creating app bundles, 0,00 generating debug info, 0,62 linking, 0,00 other
-[2015.04.20-10.55.53:230][974]CompilerResultsLog: Información UBT execution time: 4,99 seconds
-[2015.04.20-10.55.53:231][974]LogMainFrame: MainFrame: Module compiling took 5.152 seconds
-[2015.04.20-10.55.53:285][974]LogContentBrowser: Native class hierarchy updated for 'TowardsTheLight' in 0.0061 seconds. Added 4 classes and 2 folders.
-[2015.04.20-10.55.53:287][974]Warning: HotReload successful (4 functions remapped  0 scriptstructs remapped)
-[2015.04.20-10.55.53:304][974]LogContentBrowser: Native class hierarchy populated in 0.0114 seconds. Added 1701 classes and 265 folders.
-[2015.04.20-10.55.54:164][ 74]LogPlayLevel: PIE:  No blueprints needed recompiling
-[2015.04.20-10.55.54:164][ 74]PIE: New page: Sesión PIE (reproducción en el editor): DevelopmentLevel (20/4/2015 14:55:54)
-[2015.04.20-10.55.54:166][ 74]LogPlayLevel: PIE: StaticDuplicateObject took: (0.001780s)
-[2015.04.20-10.55.54:168][ 74]LogPlayLevel: PIE: World Init took: (0.000949s)
-[2015.04.20-10.55.54:168][ 74]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Levels/DevelopmentLevel.DevelopmentLevel to /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel (0.003709s)
-[2015.04.20-10.55.54:207][ 74]LogWorld: Game class is 'MyGameMode'
-[2015.04.20-10.55.54:209][ 74]LogAIModule: Creating AISystem for world DevelopmentLevel
-[2015.04.20-10.55.54:213][ 74]LogWorld: Bringing World /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel up for play (max tick rate 0) at 2015.04.20-12.55.54
-[2015.04.20-10.55.54:213][ 74]LogWorld: Bringing up level for play took: 0.003866
-[2015.04.20-10.55.54:216][ 74]PIE: Información Tiempo de inicio de la reproducción en el editor para  /Game/Levels/UEDPIE_0_DevelopmentLevel -0,271
-[2015.04.20-10.56.07:300][311]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x0000001B8D101E40
-[2015.04.20-10.56.42:186][202]LogPlayLevel: PIE:  No blueprints needed recompiling
-[2015.04.20-10.56.42:186][202]PIE: New page: Sesión PIE (reproducción en el editor): DevelopmentLevel (20/4/2015 14:56:42)
-[2015.04.20-10.56.42:189][202]LogPlayLevel: PIE: StaticDuplicateObject took: (0.001754s)
-[2015.04.20-10.56.42:190][202]LogPlayLevel: PIE: World Init took: (0.000925s)
-[2015.04.20-10.56.42:191][202]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Levels/DevelopmentLevel.DevelopmentLevel to /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel (0.003610s)
-[2015.04.20-10.56.42:229][202]LogWorld: Game class is 'MyGameMode'
-[2015.04.20-10.56.42:232][202]LogAIModule: Creating AISystem for world DevelopmentLevel
-[2015.04.20-10.56.42:235][202]LogWorld: Bringing World /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel up for play (max tick rate 0) at 2015.04.20-12.56.42
-[2015.04.20-10.56.42:236][202]LogWorld: Bringing up level for play took: 0.003774
-[2015.04.20-10.56.42:238][202]PIE: Información Tiempo de inicio de la reproducción en el editor para  /Game/Levels/UEDPIE_0_DevelopmentLevel -0,247
-[2015.04.20-10.56.48:114][748]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x0000001B88E467A0
-[2015.04.20-10.56.55:304][574]LogSavePackage: Save=32.063343ms
-[2015.04.20-10.56.55:304][574]LogSavePackage: Moving '../../../../../../Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Saved/DevelopmentLevel4D44FE42431AAC571ABB9A97C9E14AC4.tmp' to '../../../../../../Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Content/Levels/DevelopmentLevel.umap'
-[2015.04.20-10.56.56:021][652]LogPlayLevel: PIE:  No blueprints needed recompiling
-[2015.04.20-10.56.56:021][652]PIE: New page: Sesión PIE (reproducción en el editor): DevelopmentLevel (20/4/2015 14:56:56)
-[2015.04.20-10.56.56:023][652]LogPlayLevel: PIE: StaticDuplicateObject took: (0.001676s)
-[2015.04.20-10.56.56:025][652]LogPlayLevel: PIE: World Init took: (0.000916s)
-[2015.04.20-10.56.56:025][652]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Levels/DevelopmentLevel.DevelopmentLevel to /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel (0.003524s)
-[2015.04.20-10.56.56:065][652]LogWorld: Game class is 'MyGameMode'
-[2015.04.20-10.56.56:067][652]LogAIModule: Creating AISystem for world DevelopmentLevel
-[2015.04.20-10.56.56:070][652]LogWorld: Bringing World /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel up for play (max tick rate 0) at 2015.04.20-12.56.56
-[2015.04.20-10.56.56:071][652]LogWorld: Bringing up level for play took: 0.003802
-[2015.04.20-10.56.56:074][652]PIE: Información Tiempo de inicio de la reproducción en el editor para  /Game/Levels/UEDPIE_0_DevelopmentLevel -0,413
-[2015.04.20-10.57.01:268][131]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x0000001B8E80C220
-[2015.04.20-10.57.33:742][941]Recompiling TowardsTheLight...
-[2015.04.20-10.57.33:743][941]Launching UnrealBuildTool... [C:/Program Files/Epic Games/4.7/Engine/Binaries/DotNET/UnrealBuildTool.exe TowardsTheLight -ModuleWithSuffix TowardsTheLight 1553 Win64 DebugGame -editorrecompile -canskiplink "C:/Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/TowardsTheLight.uproject" -rocket  -rocket]
-[2015.04.20-10.57.33:745][941]Warning: Starting HotReload took  0.0s.
-[2015.04.20-10.57.38:570][479]CompilerResultsLog: New page: Compilación - 20/4/2015 14:57:38
-[2015.04.20-10.57.38:570][479]CompilerResultsLog: Información Performing 2 actions (4 in parallel)
-[2015.04.20-10.57.38:571][479]CompilerResultsLog: Información OviCharacter.cpp
-[2015.04.20-10.57.38:571][479]CompilerResultsLog: Información [2/2] Link UE4Editor-TowardsTheLight-1553-Win64-DebugGame.dll
-[2015.04.20-10.57.38:571][479]CompilerResultsLog: Información    Creando biblioteca C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\DebugGame\UE4Editor-TowardsTheLight-1553-Win64-DebugGame.lib y objeto C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\DebugGame\UE4Editor-TowardsTheLight-1553-Win64-DebugGame.exp
-[2015.04.20-10.57.38:572][479]CompilerResultsLog: Información -------- End Detailed Actions Stats -----------------------------------------------------------
-[2015.04.20-10.57.38:572][479]CompilerResultsLog: Información Cumulative action seconds (8 processors): 0,00 building projects, 0,35 compiling, 0,00 creating app bundles, 0,00 generating debug info, 0,62 linking, 0,00 other
-[2015.04.20-10.57.38:572][479]CompilerResultsLog: Información UBT execution time: 4,69 seconds
-[2015.04.20-10.57.38:572][479]LogMainFrame: MainFrame: Module compiling took 4.837 seconds
-[2015.04.20-10.57.38:632][479]LogContentBrowser: Native class hierarchy updated for 'TowardsTheLight' in 0.0061 seconds. Added 4 classes and 2 folders.
-[2015.04.20-10.57.38:633][479]Warning: HotReload successful (4 functions remapped  0 scriptstructs remapped)
-[2015.04.20-10.57.38:651][479]LogContentBrowser: Native class hierarchy populated in 0.0114 seconds. Added 1701 classes and 265 folders.
-[2015.04.20-10.57.39:356][560]LogPlayLevel: PIE:  No blueprints needed recompiling
-[2015.04.20-10.57.39:357][560]PIE: New page: Sesión PIE (reproducción en el editor): DevelopmentLevel (20/4/2015 14:57:39)
-[2015.04.20-10.57.39:359][560]LogPlayLevel: PIE: StaticDuplicateObject took: (0.001769s)
-[2015.04.20-10.57.39:361][560]LogPlayLevel: PIE: World Init took: (0.000826s)
-[2015.04.20-10.57.39:361][560]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Levels/DevelopmentLevel.DevelopmentLevel to /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel (0.003509s)
-[2015.04.20-10.57.39:402][560]LogWorld: Game class is 'MyGameMode'
-[2015.04.20-10.57.39:405][560]LogAIModule: Creating AISystem for world DevelopmentLevel
-[2015.04.20-10.57.39:408][560]LogWorld: Bringing World /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel up for play (max tick rate 0) at 2015.04.20-12.57.39
-[2015.04.20-10.57.39:409][560]LogWorld: Bringing up level for play took: 0.003800
-[2015.04.20-10.57.39:411][560]PIE: Información Tiempo de inicio de la reproducción en el editor para  /Game/Levels/UEDPIE_0_DevelopmentLevel 0,925
-[2015.04.20-10.57.55:638][ 81]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x0000001B88C69E40
-[2015.04.20-10.57.57:879][322]LogSavePackage: Save=30.904200ms
-[2015.04.20-10.57.57:880][322]LogSavePackage: Moving '../../../../../../Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Saved/DevelopmentLevel0CFC083D4D5D5889CA59889A8BC0F963.tmp' to '../../../../../../Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Content/Levels/DevelopmentLevel.umap'
-[2015.04.20-11.02.57:086][693]LogPlayLevel: PIE:  No blueprints needed recompiling
-[2015.04.20-11.02.57:087][693]PIE: New page: Sesión PIE (reproducción en el editor): DevelopmentLevel (20/4/2015 15:02:57)
-[2015.04.20-11.02.57:089][693]LogPlayLevel: PIE: StaticDuplicateObject took: (0.002065s)
-[2015.04.20-11.02.57:091][693]LogPlayLevel: PIE: World Init took: (0.000961s)
-[2015.04.20-11.02.57:091][693]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Levels/DevelopmentLevel.DevelopmentLevel to /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel (0.004010s)
-[2015.04.20-11.02.57:133][693]LogWorld: Game class is 'MyGameMode'
-[2015.04.20-11.02.57:135][693]LogAIModule: Creating AISystem for world DevelopmentLevel
-[2015.04.20-11.02.57:139][693]LogWorld: Bringing World /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel up for play (max tick rate 0) at 2015.04.20-13.02.57
-[2015.04.20-11.02.57:140][693]LogWorld: Bringing up level for play took: 0.003933
-[2015.04.20-11.02.57:142][693]PIE: Información Tiempo de inicio de la reproducción en el editor para  /Game/Levels/UEDPIE_0_DevelopmentLevel 0,656
-[2015.04.20-11.03.18:192][680]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x0000001B9DAE60C0
-[2015.04.20-11.03.37:187][985]LogPlayLevel: PIE:  No blueprints needed recompiling
-[2015.04.20-11.03.37:188][985]PIE: New page: Sesión PIE (reproducción en el editor): DevelopmentLevel (20/4/2015 15:03:37)
-[2015.04.20-11.03.37:190][985]LogPlayLevel: PIE: StaticDuplicateObject took: (0.001818s)
-[2015.04.20-11.03.37:192][985]LogPlayLevel: PIE: World Init took: (0.001138s)
-[2015.04.20-11.03.37:192][985]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Levels/DevelopmentLevel.DevelopmentLevel to /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel (0.003915s)
-[2015.04.20-11.03.37:228][985]LogWorld: Game class is 'MyGameMode'
-[2015.04.20-11.03.37:230][985]LogAIModule: Creating AISystem for world DevelopmentLevel
-[2015.04.20-11.03.37:234][985]LogWorld: Bringing World /Game/Levels/UEDPIE_0_DevelopmentLevel.DevelopmentLevel up for play (max tick rate 0) at 2015.04.20-13.03.37
-[2015.04.20-11.03.37:235][985]LogWorld: Bringing up level for play took: 0.003846
-[2015.04.20-11.03.37:237][985]PIE: Información Tiempo de inicio de la reproducción en el editor para  /Game/Levels/UEDPIE_0_DevelopmentLevel 0,751
-[2015.04.20-11.04.00:203][155]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x0000001B9A1A8900
-[2015.04.20-11.04.28:525][334]LogSavePackage: Save=51.284931ms
-[2015.04.20-11.04.28:526][334]LogSavePackage: Moving '../../../../../../Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Saved/DevelopmentLevel3C5A37514E9E5B8193A794ADA603E30D.tmp' to '../../../../../../Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Content/Levels/DevelopmentLevel.umap'
-[2015.04.20-11.04.30:208][462]LogSavePackage: Save=30.496386ms
-[2015.04.20-11.04.30:209][462]LogSavePackage: Moving '../../../../../../Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Saved/DevelopmentLevel394421514F9470C67A0539B057689FED.tmp' to '../../../../../../Users/Souusek/Documents/GitHub/TowardTheLight/TowardsTheLight/Content/Levels/DevelopmentLevel.umap'
-[2015.04.20-11.04.33:052][751]Cmd: QUIT_EDITOR
-[2015.04.20-11.04.33:360][751]LogExit: Preparing to exit.
-[2015.04.20-11.04.34:054][751]LogExit: Editor shut down
-[2015.04.20-11.04.34:055][751]LogExit: Transaction tracking system shut down
-[2015.04.20-11.04.34:056][751]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x0000001B88EFE160
-[2015.04.20-11.04.34:057][751]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x0000001B94F26B60
-[2015.04.20-11.04.34:057][751]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x0000001B80F10FE0
-[2015.04.20-11.04.34:093][751]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x0000001B8E80C9A0
-[2015.04.20-11.04.34:093][751]LogExit: Object subsystem successfully closed.
-[2015.04.20-11.04.34:141][751]LogModuleManager: Shutting down and abandoning module CrashTracker (178)
-[2015.04.20-11.04.34:141][751]LogModuleManager: Shutting down and abandoning module SuperSearch (177)
-[2015.04.20-11.04.34:142][751]LogModuleManager: Shutting down and abandoning module SceneOutliner (176)
-[2015.04.20-11.04.34:142][751]LogModuleManager: Shutting down and abandoning module EditorWidgets (175)
-[2015.04.20-11.04.34:142][751]LogModuleManager: Shutting down and abandoning module CollectionManager (174)
-[2015.04.20-11.04.34:143][751]LogModuleManager: Shutting down and abandoning module StatsViewer (173)
-[2015.04.20-11.04.34:143][751]LogModuleManager: Shutting down and abandoning module FoliageEdit (172)
-[2015.04.20-11.04.34:143][751]LogModuleManager: Shutting down and abandoning module LandscapeEditor (171)
-[2015.04.20-11.04.34:144][751]LogModuleManager: Shutting down and abandoning module MeshPaint (170)
-[2015.04.20-11.04.34:144][751]LogModuleManager: Shutting down and abandoning module ActorPickerMode (169)
-[2015.04.20-11.04.34:144][751]LogModuleManager: Shutting down and abandoning module GeometryMode (168)
-[2015.04.20-11.04.34:144][751]LogModuleManager: Shutting down and abandoning module TextureAlignMode (167)
-[2015.04.20-11.04.34:145][751]LogModuleManager: Shutting down and abandoning module BspMode (166)
-[2015.04.20-11.04.34:145][751]LogModuleManager: Shutting down and abandoning module PlacementMode (165)
-[2015.04.20-11.04.34:145][751]LogModuleManager: Shutting down and abandoning module AutomationWorker (164)
-[2015.04.20-11.04.34:145][751]LogModuleManager: Shutting down and abandoning module CharacterAI (163)
-[2015.04.20-11.04.34:145][751]LogModuleManager: Shutting down and abandoning module SmartSnapping (162)
-[2015.04.20-11.04.34:146][751]LogModuleManager: Shutting down and abandoning module ViewportSnapping (161)
-[2015.04.20-11.04.34:146][751]LogModuleManager: Shutting down and abandoning module LogVisualizer (160)
-[2015.04.20-11.04.34:146][751]LogModuleManager: Shutting down and abandoning module GameProjectGeneration (159)
-[2015.04.20-11.04.34:147][751]LogModuleManager: Shutting down and abandoning module IntroTutorials (158)
-[2015.04.20-11.04.34:147][751]LogModuleManager: Shutting down and abandoning module EditorLiveStreaming (157)
-[2015.04.20-11.04.34:147][751]LogModuleManager: Shutting down and abandoning module HardwareTargeting (156)
-[2015.04.20-11.04.34:147][751]LogModuleManager: Shutting down and abandoning module DeviceProfileEditor (155)
-[2015.04.20-11.04.34:148][751]LogModuleManager: Shutting down and abandoning module UndoHistory (154)
-[2015.04.20-11.04.34:148][751]LogModuleManager: Shutting down and abandoning module GameplayTagsEditor (153)
-[2015.04.20-11.04.34:148][751]LogModuleManager: Shutting down and abandoning module UserFeedback (152)
-[2015.04.20-11.04.34:148][751]LogModuleManager: Shutting down and abandoning module XmlParser (151)
-[2015.04.20-11.04.34:149][751]LogModuleManager: Shutting down and abandoning module Blutility (150)
-[2015.04.20-11.04.34:149][751]LogModuleManager: Shutting down and abandoning module IOSPlatformEditor (149)
-[2015.04.20-11.04.34:149][751]LogModuleManager: Shutting down and abandoning module IOSRuntimeSettings (148)
-[2015.04.20-11.04.34:149][751]LogModuleManager: Shutting down and abandoning module AndroidDeviceDetection (147)
-[2015.04.20-11.04.34:166][751]LogModuleManager: Shutting down and abandoning module AndroidPlatformEditor (146)
-[2015.04.20-11.04.34:166][751]LogModuleManager: Shutting down and abandoning module AndroidRuntimeSettings (145)
-[2015.04.20-11.04.34:167][751]LogModuleManager: Shutting down and abandoning module ProjectTargetPlatformEditor (144)
-[2015.04.20-11.04.34:167][751]LogModuleManager: Shutting down and abandoning module ProjectSettingsViewer (143)
-[2015.04.20-11.04.34:167][751]LogModuleManager: Shutting down and abandoning module InputBindingEditor (142)
-[2015.04.20-11.04.34:168][751]LogModuleManager: Shutting down and abandoning module EditorSettingsViewer (141)
-[2015.04.20-11.04.34:168][751]LogModuleManager: Shutting down and abandoning module SettingsEditor (140)
-[2015.04.20-11.04.34:168][751]LogModuleManager: Shutting down and abandoning module ProjectLauncher (139)
-[2015.04.20-11.04.34:168][751]LogModuleManager: Shutting down and abandoning module SessionFrontend (138)
-[2015.04.20-11.04.34:169][751]LogModuleManager: Shutting down and abandoning module ProfilerClient (137)
-[2015.04.20-11.04.34:169][751]LogModuleManager: Shutting down and abandoning module TargetDeviceServices (136)
-[2015.04.20-11.04.34:169][751]LogModuleManager: Shutting down and abandoning module DeviceManager (135)
-[2015.04.20-11.04.34:169][751]LogModuleManager: Shutting down and abandoning module AutomationController (134)
-[2015.04.20-11.04.34:170][751]LogModuleManager: Shutting down and abandoning module AutomationWindow (133)
-[2015.04.20-11.04.34:170][751]LogModuleManager: Shutting down and abandoning module Layers (132)
-[2015.04.20-11.04.34:170][751]LogModuleManager: Shutting down and abandoning module ComponentVisualizers (131)
-[2015.04.20-11.04.34:170][751]LogModuleManager: Shutting down and abandoning module DetailCustomizations (130)
-[2015.04.20-11.04.34:171][751]LogModuleManager: Shutting down and abandoning module PackagesDialog (129)
-[2015.04.20-11.04.34:171][751]LogModuleManager: Shutting down and abandoning module AssetRegistry (128)
-[2015.04.20-11.04.34:249][751]LogModuleManager: Shutting down and abandoning module Persona (127)
-[2015.04.20-11.04.34:250][751]LogModuleManager: Shutting down and abandoning module SlateReflector (126)
-[2015.04.20-11.04.34:250][751]LogModuleManager: Shutting down and abandoning module LevelEditor (125)
-[2015.04.20-11.04.34:251][751]LogModuleManager: Shutting down and abandoning module Kismet (124)
-[2015.04.20-11.04.34:251][751]LogModuleManager: Shutting down and abandoning module GraphEditor (123)
-[2015.04.20-11.04.34:252][751]LogModuleManager: Shutting down and abandoning module ClassViewer (122)
-[2015.04.20-11.04.34:252][751]LogModuleManager: Shutting down and abandoning module Toolbox (121)
-[2015.04.20-11.04.34:252][751]LogModuleManager: Shutting down and abandoning module ModuleUI (120)
-[2015.04.20-11.04.34:252][751]LogModuleManager: Shutting down and abandoning module MovieSceneTools (119)
-[2015.04.20-11.04.34:252][751]LogModuleManager: Shutting down and abandoning module OutputLog (118)
-[2015.04.20-11.04.34:253][751]LogModuleManager: Shutting down and abandoning module GammaUI (117)
-[2015.04.20-11.04.34:253][751]LogModuleManager: Shutting down and abandoning module Documentation (116)
-[2015.04.20-11.04.34:253][751]LogModuleManager: Shutting down and abandoning module GameLiveStreaming (115)
-[2015.04.20-11.04.34:253][751]LogModuleManager: Shutting down and abandoning module StreamingPauseRendering (114)
-[2015.04.20-11.04.34:254][751]LogModuleManager: Shutting down and abandoning module HTTP (113)
-[2015.04.20-11.04.34:254][751]LogModuleManager: Shutting down and abandoning module AnalyticsET (112)
-[2015.04.20-11.04.34:254][751]LogModuleManager: Shutting down and abandoning module Analytics (111)
-[2015.04.20-11.04.34:254][751]LogModuleManager: Shutting down and abandoning module AITestSuite (110)
-[2015.04.20-11.04.34:255][751]LogModuleManager: Shutting down and abandoning module GameplayDebugger (109)
-[2015.04.20-11.04.34:255][751]LogModuleManager: Shutting down and abandoning module AIModule (108)
-[2015.04.20-11.04.34:255][751]LogModuleManager: Shutting down and abandoning module ProfilerService (107)
-[2015.04.20-11.04.34:412][751]LogModuleManager: Shutting down and abandoning module TaskGraph (106)
-[2015.04.20-11.04.34:413][751]LogModuleManager: Shutting down and abandoning module SlateRemote (105)
-[2015.04.20-11.04.34:413][751]LogModuleManager: Shutting down and abandoning module ScriptEditorPlugin (104)
-[2015.04.20-11.04.34:413][751]LogModuleManager: Shutting down and abandoning module CustomMeshComponent (103)
-[2015.04.20-11.04.34:413][751]LogModuleManager: Shutting down and abandoning module CableComponent (102)
-[2015.04.20-11.04.34:414][751]LogModuleManager: Shutting down and abandoning module MessagingDebugger (101)
-[2015.04.20-11.04.34:414][751]LogModuleManager: Shutting down and abandoning module MediaPlayerEditor (100)
-[2015.04.20-11.04.34:414][751]LogModuleManager: Shutting down and abandoning module SpeedTreeImporter (99)
-[2015.04.20-11.04.34:414][751]LogModuleManager: Shutting down and abandoning module PluginsEditor (98)
-[2015.04.20-11.04.34:415][751]LogModuleManager: Shutting down and abandoning module MainFrame (97)
-[2015.04.20-11.04.34:415][751]LogModuleManager: Shutting down and abandoning module EpicSurvey (96)
-[2015.04.20-11.04.34:415][751]LogModuleManager: Shutting down and abandoning module DesktopPlatform (95)
-[2015.04.20-11.04.34:415][751]LogModuleManager: Shutting down and abandoning module DirectoryWatcher (94)
-[2015.04.20-11.04.34:416][751]LogModuleManager: Shutting down and abandoning module HotReload (93)
-[2015.04.20-11.04.34:416][751]LogModuleManager: Shutting down and abandoning module VisualStudioSourceCodeAccess (92)
-[2015.04.20-11.04.34:416][751]LogModuleManager: Shutting down and abandoning module UObjectPlugin (91)
-[2015.04.20-11.04.34:417][751]LogModuleManager: Shutting down and abandoning module SubversionSourceControl (90)
-[2015.04.20-11.04.34:417][751]LogModuleManager: Shutting down and abandoning module PerforceSourceControl (89)
-[2015.04.20-11.04.34:417][751]LogModuleManager: Shutting down and abandoning module SourceControl (88)
-[2015.04.20-11.04.34:417][751]LogModuleManager: Shutting down and abandoning module GitSourceControl (87)
-[2015.04.20-11.04.34:417][751]LogModuleManager: Shutting down and abandoning module BlankPlugin (86)
-[2015.04.20-11.04.34:418][751]LogModuleManager: Shutting down and abandoning module PaperTiledImporter (85)
-[2015.04.20-11.04.34:418][751]LogModuleManager: Shutting down and abandoning module PaperJsonImporter (84)
-[2015.04.20-11.04.34:418][751]LogModuleManager: Shutting down and abandoning module ContentBrowser (83)
-[2015.04.20-11.04.34:419][751]LogModuleManager: Shutting down and abandoning module Paper2DEditor (82)
-[2015.04.20-11.04.34:419][751]LogModuleManager: Shutting down and abandoning module TowardsTheLight (81)
-[2015.04.20-11.04.34:419][751]LogModuleManager: Shutting down and abandoning module ScriptPlugin (80)
-[2015.04.20-11.04.34:420][751]LogModuleManager: Shutting down and abandoning module UdpMessaging (79)
-[2015.04.20-11.04.34:522][751]LogModuleManager: Shutting down and abandoning module Paper2D (78)
-[2015.04.20-11.04.34:522][751]LogModuleManager: Shutting down and abandoning module WindowsMoviePlayer (77)
-[2015.04.20-11.04.34:522][751]LogModuleManager: Shutting down and abandoning module Media (76)
-[2015.04.20-11.04.34:522][751]LogModuleManager: Shutting down and abandoning module WmfMedia (75)
-[2015.04.20-11.04.34:523][751]LogModuleManager: Shutting down and abandoning module OnlineBlueprintSupport (74)
-[2015.04.20-11.04.34:523][751]LogModuleManager: Shutting down and abandoning module PropertyEditor (73)
-[2015.04.20-11.04.34:523][751]LogModuleManager: Shutting down and abandoning module BehaviorTreeEditor (72)
-[2015.04.20-11.04.34:523][751]LogModuleManager: Shutting down and abandoning module FunctionalTesting (71)
-[2015.04.20-11.04.34:524][751]LogModuleManager: Shutting down and abandoning module CollisionAnalyzer (70)
-[2015.04.20-11.04.34:524][751]LogModuleManager: Shutting down and abandoning module WorkspaceMenuStructure (69)
-[2015.04.20-11.04.34:524][751]LogModuleManager: Shutting down and abandoning module MessageLog (68)
-[2015.04.20-11.04.34:524][751]LogModuleManager: Shutting down and abandoning module Sequencer (67)
-[2015.04.20-11.04.34:525][751]LogModuleManager: Shutting down and abandoning module AssetTools (66)
-[2015.04.20-11.04.34:525][751]LogModuleManager: Shutting down and abandoning module UMGEditor (65)
-[2015.04.20-11.04.34:525][751]LogModuleManager: Shutting down and abandoning module UMG (64)
-[2015.04.20-11.04.34:525][751]LogModuleManager: Shutting down and abandoning module Slate (63)
-[2015.04.20-11.04.34:525][751]LogModuleManager: Shutting down and abandoning module EditorStyle (62)
-[2015.04.20-11.04.34:529][751]LogModuleManager: Shutting down and abandoning module SessionServices (61)
-[2015.04.20-11.04.34:529][751]LogModuleManager: Shutting down and abandoning module SourceCodeAccess (60)
-[2015.04.20-11.04.34:530][751]LogModuleManager: Shutting down and abandoning module HeadMountedDisplay (59)
-[2015.04.20-11.04.34:530][751]LogModuleManager: Shutting down and abandoning module XAudio2 (58)
-[2015.04.20-11.04.34:530][751]LogModuleManager: Shutting down and abandoning module Networking (56)
-[2015.04.20-11.04.34:530][751]LogModuleManager: Shutting down and abandoning module Core (55)
-[2015.04.20-11.04.34:531][751]LogModuleManager: Shutting down and abandoning module KismetCompiler (54)
-[2015.04.20-11.04.34:531][751]LogModuleManager: Shutting down and abandoning module PhysXFormats (53)
-[2015.04.20-11.04.34:531][751]LogModuleManager: Shutting down and abandoning module MeshUtilities (52)
-[2015.04.20-11.04.34:531][751]LogModuleManager: Shutting down and abandoning module DerivedDataCache (51)
-[2015.04.20-11.04.34:564][751]LogDerivedDataCache: Shutdown
-[2015.04.20-11.04.34:564][751]LogModuleManager: Shutting down and abandoning module ShaderFormatOpenGL (50)
-[2015.04.20-11.04.34:565][751]LogModuleManager: Shutting down and abandoning module ShaderFormatD3D (49)
-[2015.04.20-11.04.34:565][751]LogModuleManager: Shutting down and abandoning module MetalShaderFormat (48)
-[2015.04.20-11.04.34:565][751]LogModuleManager: Shutting down and abandoning module TextureFormatUncompressed (47)
-[2015.04.20-11.04.34:565][751]LogModuleManager: Shutting down and abandoning module TextureFormatPVR (46)
-[2015.04.20-11.04.34:566][751]LogModuleManager: Shutting down and abandoning module TextureFormatIntelISPCTexComp (45)
-[2015.04.20-11.04.34:566][751]LogModuleManager: Shutting down and abandoning module TextureFormatDXT (44)
-[2015.04.20-11.04.34:566][751]LogModuleManager: Shutting down and abandoning module ImageWrapper (43)
-[2015.04.20-11.04.34:566][751]LogModuleManager: Shutting down and abandoning module TextureFormatASTC (42)
-[2015.04.20-11.04.34:566][751]LogModuleManager: Shutting down and abandoning module TextureFormatAndroid (41)
-[2015.04.20-11.04.34:567][751]LogModuleManager: Shutting down and abandoning module AudioFormatOpus (40)
-[2015.04.20-11.04.34:567][751]LogModuleManager: Shutting down and abandoning module AudioFormatOgg (39)
-[2015.04.20-11.04.34:567][751]LogModuleManager: Shutting down and abandoning module AudioFormatADPCM (38)
-[2015.04.20-11.04.34:567][751]LogModuleManager: Shutting down and abandoning module LinuxTargetPlatform (37)
-[2015.04.20-11.04.34:567][751]LogModuleManager: Shutting down and abandoning module LinuxServerTargetPlatform (36)
-[2015.04.20-11.04.34:568][751]LogModuleManager: Shutting down and abandoning module LinuxNoEditorTargetPlatform (35)
-[2015.04.20-11.04.34:568][751]LogModuleManager: Shutting down and abandoning module Messaging (34)
-[2015.04.20-11.04.34:568][751]LogModuleManager: Shutting down and abandoning module IOSTargetPlatform (33)
-[2015.04.20-11.04.34:568][751]LogModuleManager: Shutting down and abandoning module HTML5TargetPlatform (32)
-[2015.04.20-11.04.34:568][751]LogModuleManager: Shutting down and abandoning module Android_PVRTCTargetPlatform (31)
-[2015.04.20-11.04.34:569][751]LogModuleManager: Shutting down and abandoning module Android_ETC2TargetPlatform (30)
-[2015.04.20-11.04.34:569][751]LogModuleManager: Shutting down and abandoning module Android_ETC1TargetPlatform (29)
-[2015.04.20-11.04.34:569][751]LogModuleManager: Shutting down and abandoning module Android_ES31TargetPlatform (28)
-[2015.04.20-11.04.34:569][751]LogModuleManager: Shutting down and abandoning module Android_DXTTargetPlatform (27)
-[2015.04.20-11.04.34:570][751]LogModuleManager: Shutting down and abandoning module Android_ATCTargetPlatform (26)
-[2015.04.20-11.04.34:570][751]LogModuleManager: Shutting down and abandoning module AndroidTargetPlatform (25)
-[2015.04.20-11.04.34:570][751]LogModuleManager: Shutting down and abandoning module WindowsTargetPlatform (24)
-[2015.04.20-11.04.34:570][751]LogModuleManager: Shutting down and abandoning module WindowsServerTargetPlatform (23)
-[2015.04.20-11.04.34:570][751]LogModuleManager: Shutting down and abandoning module WindowsNoEditorTargetPlatform (22)
-[2015.04.20-11.04.34:571][751]LogModuleManager: Shutting down and abandoning module WindowsClientTargetPlatform (21)
-[2015.04.20-11.04.34:571][751]LogModuleManager: Shutting down and abandoning module TargetPlatform (20)
-[2015.04.20-11.04.34:571][751]LogModuleManager: Shutting down and abandoning module InputCore (19)
-[2015.04.20-11.04.34:571][751]LogModuleManager: Shutting down and abandoning module Settings (18)
-[2015.04.20-11.04.34:571][751]LogModuleManager: Shutting down and abandoning module OnlineSubsystem (16)
-[2015.04.20-11.04.34:572][751]LogModuleManager: Shutting down and abandoning module OculusRift (15)
-[2015.04.20-11.04.34:572][751]LogModuleManager: Shutting down and abandoning module ExampleDeviceProfileSelector (14)
-[2015.04.20-11.04.34:572][751]LogModuleManager: Shutting down and abandoning module TextureCompressor (13)
-[2015.04.20-11.04.34:573][751]LogModuleManager: Shutting down and abandoning module ShaderCore (12)
-[2015.04.20-11.04.34:573][751]LogModuleManager: Shutting down and abandoning module Landscape (11)
-[2015.04.20-11.04.34:573][751]LogModuleManager: Shutting down and abandoning module SlateRHIRenderer (10)
-[2015.04.20-11.04.34:576][751]LogModuleManager: Shutting down and abandoning module OpenGLDrv (9)
-[2015.04.20-11.04.34:576][751]LogModuleManager: Shutting down and abandoning module D3D11RHI (8)
-[2015.04.20-11.04.34:576][751]LogModuleManager: Shutting down and abandoning module Renderer (7)
-[2015.04.20-11.04.34:577][751]LogModuleManager: Shutting down and abandoning module Engine (6)
-[2015.04.20-11.04.34:577][751]LogModuleManager: Shutting down and abandoning module CoreUObject (5)
-[2015.04.20-11.04.34:577][751]LogModuleManager: Shutting down and abandoning module NetworkFile (4)
-[2015.04.20-11.04.34:577][751]LogModuleManager: Shutting down and abandoning module StreamingFile (3)
-[2015.04.20-11.04.34:577][751]LogModuleManager: Shutting down and abandoning module SandboxFile (2)
-[2015.04.20-11.04.34:578][751]LogModuleManager: Shutting down and abandoning module PakFile (1)
-[2015.04.20-11.04.34:580][751]LogExit: Exiting.
-[2015.04.20-11.04.34:584][751]Log file closed, 04/20/15 13:04:34
+[2015.04.20-15.13.57:554][  0]LogContentStreaming: Texture pool size is 0.000000MB
+[2015.04.20-15.14.00:191][  0]LogTargetPlatformManager:Display: Building Assets For Windows
+[2015.04.20-15.14.01:096][  0]LogTargetPlatformManager:Display: Building Assets For Windows
+[2015.04.20-15.14.01:194][  0]LogDerivedDataCache:Display: Max Cache Size: 512 MB
+[2015.04.20-15.14.01:242][  0]LogDerivedDataCache: Loaded boot cache 0.05s 39MB C:/Users/Manuel Cruz/AppData/Local/UnrealEngine/4.7/DerivedDataCache/Boot.ddc.
+[2015.04.20-15.14.01:242][  0]LogDerivedDataCache:Display: Loaded Boot cache: C:/Users/Manuel Cruz/AppData/Local/UnrealEngine/4.7/DerivedDataCache/Boot.ddc
+[2015.04.20-15.14.01:243][  0]LogDerivedDataCache: FDerivedDataBackendGraph:  Pak pak cache file D:/master_videojuegos/proyecto/TowardTheLight/TowardsTheLight/DerivedDataCache/DDC.ddp not found, will not use a pak cache.
+[2015.04.20-15.14.01:243][  0]LogDerivedDataCache: Unable to find inner node Pak for hierarchical cache Hierarchy.
+[2015.04.20-15.14.01:351][  0]LogDerivedDataCache:Display: Pak cache opened for reading ../../../Engine/DerivedDataCache/Compressed.ddp.
+[2015.04.20-15.14.01:365][  0]LogDerivedDataCache: Using Local data cache path C:/Users/Manuel Cruz/AppData/Local/UnrealEngine/Common/DerivedDataCache: Writable
+[2015.04.20-15.14.01:696][  0]LogMeshUtilities: No automatic mesh reduction module available
+[2015.04.20-15.14.01:697][  0]LogMeshUtilities: No automatic mesh merging module available
+[2015.04.20-15.14.02:186][  0]LogInit: WinSock: version 1.1 (2.2), MaxSocks=32767, MaxUdp=65467
+[2015.04.20-15.14.02:362][  0]LogSlate:Warning: Failed to load font data from '../../../Engine/Content/Slate/Fonts/Roboto-Italic.ttf'
+[2015.04.20-15.14.03:752][  0]UdpMessaging: Initializing bridge on interface 0.0.0.0:0 to multicast group 230.0.0.1:6666.
+[2015.04.20-15.14.04:201][  0]SourceControl: Información El control de código fuente está desactivado
+[2015.04.20-15.14.04:202][  0]SourceControl: Información El control de código fuente está desactivado
+[2015.04.20-15.14.04:202][  0]SourceControl: Información El control de código fuente está desactivado
+[2015.04.20-15.14.04:202][  0]LogSourceControl: RunCommandInternalRaw: 'git version'
+[2015.04.20-15.14.04:203][  0]LogSourceControl: RunCommandInternalRaw: ExecProcess ReturnCode=2 OutResults=''
+[2015.04.20-15.14.04:220][  0]SourceControl: Información El control de código fuente está desactivado
+[2015.04.20-15.14.04:685][  0]LogObj: 24251 objects as part of root set at end of initial load.
+[2015.04.20-15.14.04:686][  0]LogUObjectAllocator: 5152600 out of 0 bytes used by permanent object pool.
+[2015.04.20-15.14.04:804][  0]LogEngine: Initializing Engine...
+[2015.04.20-15.14.06:999][  0]LogInit: XAudio2 using 'Altavoces (Realtek High Definition Audio)' : 2 channels at 48 kHz using 32 bits per sample (channel mask 0x3)
+[2015.04.20-15.14.07:033][  0]LogInit: FAudioDevice initialized.
+[2015.04.20-15.14.07:100][  0]LogAIModule: Creating AISystem for world NewWorld
+[2015.04.20-15.14.07:125][  0]LogDerivedDataCache: Saved boot cache 0.02s 39MB C:/Users/Manuel Cruz/AppData/Local/UnrealEngine/4.7/DerivedDataCache/Boot.ddc.
+[2015.04.20-15.14.07:129][  0]LogInit: Texture streaming: Enabled
+[2015.04.20-15.14.07:254][  0]LogAnalytics: Creating configured Analytics provider AnalyticsET
+[2015.04.20-15.14.07:254][  0]LogAnalytics: ET APIKey = Rocket.Release. APIServer = http://et2.epicgames.com/ET2/. AppVersion = 4.7.5-2503383+++depot+UE4-Releases+4.7
+[2015.04.20-15.14.07:255][  0]LogAnalytics: ET APIKey = Rocket.Release. DataRouterUploadURL = https://datarouter-public-service-gamedev.ol.epicgames.net/datarouter/api/v1/public/data. AppVersion = 4.7.5-2503383+++depot+UE4-Releases+4.7
+[2015.04.20-15.14.07:255][  0]LogAnalytics: SetUserId cf3e962b4f6b803c9f3bfc8f9d3c5aa6|fb4b5d7a798346e4b2a57627c6ace3fa|5cb3378a-ab04-48dc-b237-dc85636457fe
+[2015.04.20-15.14.07:256][  0]LogAnalytics: AnalyticsET::StartSession [Rocket.Release]
+[2015.04.20-15.14.07:293][  0]LogInit: Transaction tracking system initialized
+[2015.04.20-15.14.07:704][  0]BlueprintLog: New page: Cargar el editor
+[2015.04.20-15.14.07:765][  0]LogAssetRegistry: FAssetRegistry took 0.0111 seconds to start up
+[2015.04.20-15.14.07:766][  0]LogDirectoryWatcher:Warning: Failed to begin reading directory changes for ../../../Engine/Plugins/Experimental/CharacterAI/Content/. Error: 0
+[2015.04.20-15.14.08:680][  0]LogTargetPlatformManager:Display: Building Assets For Windows
+[2015.04.20-15.14.09:177][  0]LogTargetPlatformManager:Display: Building Assets For Windows
+[2015.04.20-15.14.09:755][  0]LogSlate:Warning: Failed to load font data from '../../../Engine/Content/Editor/Slate/Fonts/Roboto-Regular.ttf'
+[2015.04.20-15.14.09:756][  0]LogSlate:Warning: Failed to load font data from '../../../Engine/Content/Editor/Slate/Fonts/Roboto-Bold.ttf'
+[2015.04.20-15.14.09:797][  0]LogConsoleResponse:Display: 
+[2015.04.20-15.14.09:971][  0]LogCook:Display: Done creating registry. It took  0.00s.
+[2015.04.20-15.14.10:319][  0]SourceControl: Información El control de código fuente está desactivado
+[2015.04.20-15.14.10:319][  0]Cmd: MAP LOAD FILE="../../../Engine/Content/Maps/Templates/Template_Default.umap" TEMPLATE=1 SHOWPROGRESS=1 FEATURELEVEL=3
+[2015.04.20-15.14.10:320][  0]LightingResults: New page: Diseñar la iluminación
+[2015.04.20-15.14.10:342][  0]MapCheck: New page: Revisión del mapa
+[2015.04.20-15.14.10:343][  0]LightingResults: New page: Diseñar la iluminación
+[2015.04.20-15.14.10:350][  0]LogParticles: Destroying 0 GPU particle simulations for FXSystem 0x00000032116FB380
+[2015.04.20-15.14.11:231][  0]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
+[2015.04.20-15.14.11:238][  0]LogAIModule: Creating AISystem for world Untitled_1
+[2015.04.20-15.14.11:239][  0]Cmd: MAP CHECKDEP
+[2015.04.20-15.14.11:239][  0]MapCheck: New page: Untitled_1 - 20/4/2015 19:14:11
+[2015.04.20-15.14.11:409][  0]MapCheck: Información Map check complete: 0 Error(s), 0 Warning(s), took 168,857ms to complete.
+[2015.04.20-15.14.11:409][  0]LogFileHelpers: Loading map 'Template_Default' took 1.090
+[2015.04.20-15.14.11:641][  0]LogCollectionManager: Loaded 0 collections in 0.002787 seconds
+[2015.04.20-15.14.11:662][  0]LogContentBrowser: Native class hierarchy populated in 0.0212 seconds. Added 1700 classes and 263 folders.
+[2015.04.20-15.14.11:754][  0]LogContentBrowser: Native class hierarchy updated for 'SceneOutliner' in 0.0111 seconds. Added 1 classes and 2 folders.
+[2015.04.20-15.14.11:864][  0]LogCrashTracker: Crashtracker disabled due to settings.
+[2015.04.20-15.14.11:866][  0]LogSlate:Warning: Failed to load font data from 'Veranda'
+[2015.04.20-15.14.11:872][  0]LogUObjectGlobals:Warning: Error al encontrar el objeto 'Class Ninguno.'
+[2015.04.20-15.14.11:920][  0]LogLoad: Full Startup: 17.46 seconds (BP compile: 0.12 seconds)
+[2015.04.20-15.14.11:941][  0]LogContentBrowser:Verbose: The content browser source was changed by the sources view to '/Game/Levels'
+[2015.04.20-15.14.12:117][  0]LogRenderer:Warning: Reallocating scene render targets to support 32x32 (Frame:2).
+[2015.04.20-15.14.12:215][  0]LogRenderer:Warning: Reallocating scene render targets to support 880x440 (Frame:4).
+[2015.04.20-15.14.12:525][  4]LogAssetRegistry: Asset discovery search completed in 4.7714 seconds
+[2015.04.20-15.14.26:541][834]LogLinker:Warning: No puede encontrar el archivo '/Game/SideScroller/Ch

@@ -3,9 +3,12 @@
 #include "TowardsTheLight.h"
 #include "OviCameraActor.h"
 
+AOviCameraActor::AOviCameraActor(){
+  Auto
+}
+
 void AOviCameraActor::BeginPlay(){
   Super::BeginPlay();
   
   //AutoPossessPlayer = EAutoReceiveInput::Player0;
-//  FActorIterator<your_class> ActorItr(GetWorld()), ConstructorHelpers::FObjectFinder<your_class> object(name)
 }

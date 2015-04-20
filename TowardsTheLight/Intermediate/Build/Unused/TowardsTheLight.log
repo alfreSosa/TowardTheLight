@@ -1,26 +1,10 @@
-﻿Compilación iniciada a las 20/04/2015 12:51:38.
-     1>Proyecto "C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" en el nodo 2 (Build destinos).
+﻿Compilación iniciada a las 20/04/2015 17:13:45.
+     1>Proyecto "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" en el nodo 2 (Build destinos).
      1>Build:
-         "C:\Program Files\Epic Games\4.7\Engine\Build\BatchFiles\Build.bat" TowardsTheLightEditor Win64 DebugGame "C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\TowardsTheLight.uproject" -rocket
-         Parsing headers for TowardsTheLightEditor
-         Reflection code generated for TowardsTheLightEditor
-         Performing 10 actions (4 in parallel)
-         [3/10] Resource TowardsTheLight.rc
-         [2/10] Resource ModuleVersionResource.rc.inl
-         PCH.TowardsTheLight.TowardsTheLight.h.cpp
-         TowardsTheLight.generated.cpp
-         MyGameMode.cpp
-         TowardsTheLightGameMode.cpp
-         OviCameraActor.cpp
-         OviCharacter.cpp
-         TowardsTheLight.cpp
-         [10/10] Link UE4Editor-TowardsTheLight-Win64-DebugGame.dll
-            Creando biblioteca C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\DebugGame\UE4Editor-TowardsTheLight-Win64-DebugGame.lib y objeto C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\DebugGame\UE4Editor-TowardsTheLight-Win64-DebugGame.exp
-         -------- End Detailed Actions Stats -----------------------------------------------------------
-         Cumulative action seconds (8 processors): 0,00 building projects, 22,87 compiling, 0,00 creating app bundles, 0,00 generating debug info, 0,84 linking, 0,00 other
-         UBT execution time: 31,96 seconds
-     1>Compilación del proyecto terminada "C:\Users\Souusek\Documents\GitHub\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" (Build destinos).
+         "C:\Program Files\Epic Games\4.7\Engine\Build\BatchFiles\Build.bat" TowardsTheLightEditor Win64 Development "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\TowardsTheLight.uproject" -rocket
+         Target is up to date.
+     1>Compilación del proyecto terminada "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" (Build destinos).
 
 Compilación correcta.
 
-Tiempo transcurrido 00:00:32.22
+Tiempo transcurrido 00:00:07.63

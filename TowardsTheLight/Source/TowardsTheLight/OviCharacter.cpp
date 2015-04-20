@@ -26,6 +26,9 @@ AOviCharacter::AOviCharacter(){
 // Called when the game starts or when spawned
 void AOviCharacter::BeginPlay(){
   Super::BeginPlay();
+
+  this->Tags.Add("Player");
+
   m_limit = FVector::DotProduct(GetActorLocation(), GetActorForwardVector());
   m_limit = abs(m_limit);
 }
