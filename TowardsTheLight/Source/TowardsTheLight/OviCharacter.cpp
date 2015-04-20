@@ -48,7 +48,7 @@ void AOviCharacter::Tick(float DeltaTime){
       rot.Yaw += 90;
     m_state = States::LEFT;
   }
-  else{
+  else if (!m_left && !m_right) {
     value = 0;
     if (m_state == States::RIGHT)
       rot.Yaw += 90;
@@ -64,7 +64,7 @@ void AOviCharacter::Tick(float DeltaTime){
   {
   GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Some variable values: x: %f, y: %f, z: %f "), forward.X, forward.Y, forward.Z));
   }*/
-
+  bPressedJump = (m_left && m_right);
   AddMovementInput(FVector(value, value, value) * forward, 1);
 
   float dotForward = FVector::DotProduct(GetActorLocation(), forward);
