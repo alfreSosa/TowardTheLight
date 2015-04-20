@@ -1,10 +1,19 @@
-﻿Compilación iniciada a las 20/04/2015 17:13:45.
-     1>Proyecto "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" en el nodo 2 (Build destinos).
+﻿Build started 20/04/2015 17:31:00.
+     1>Project "C:\Users\alfredo.sosa\Downloads\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" on node 2 (Build target(s)).
      1>Build:
-         "C:\Program Files\Epic Games\4.7\Engine\Build\BatchFiles\Build.bat" TowardsTheLightEditor Win64 Development "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\TowardsTheLight.uproject" -rocket
-         Target is up to date.
-     1>Compilación del proyecto terminada "D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" (Build destinos).
+         "C:\Program Files\Epic Games\4.7\Engine\Build\BatchFiles\Build.bat" TowardsTheLightEditor Win64 DebugGame "C:\Users\alfredo.sosa\Downloads\TowardTheLight\TowardsTheLight\TowardsTheLight.uproject" -rocket
+         Parsing headers for TowardsTheLightEditor
+         Reflection code generated for TowardsTheLightEditor
+         Performing 3 actions (4 in parallel)
+         OviCameraActor.cpp
+         TowardsTheLight.generated.cpp
+         [3/3] Link UE4Editor-TowardsTheLight-Win64-DebugGame.dll
+            Creating library C:\Users\alfredo.sosa\Downloads\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\DebugGame\UE4Editor-TowardsTheLight-Win64-DebugGame.lib and object C:\Users\alfredo.sosa\Downloads\TowardTheLight\TowardsTheLight\Intermediate\Build\Win64\TowardsTheLightEditor\DebugGame\UE4Editor-TowardsTheLight-Win64-DebugGame.exp
+         -------- End Detailed Actions Stats -----------------------------------------------------------
+         Cumulative action seconds (8 processors): 0,00 building projects, 0,51 compiling, 0,00 creating app bundles, 0,00 generating debug info, 1,92 linking, 0,00 other
+         UBT execution time: 9,96 seconds
+     1>Done Building Project "C:\Users\alfredo.sosa\Downloads\TowardTheLight\TowardsTheLight\Intermediate\ProjectFiles\TowardsTheLight.vcxproj" (Build target(s)).
 
-Compilación correcta.
+Build succeeded.
 
-Tiempo transcurrido 00:00:07.63
+Time Elapsed 00:00:10.28

@@ -353,7 +353,7 @@ C:\Program Files\Epic Games\4.7\Engine\Plugins\ScriptGeneratorPlugin\Source\Scri
 C:\Program Files\Epic Games\4.7\Engine\Plugins\ScriptPlugin\Source\ScriptEditorPlugin\ScriptEditorPlugin.Build.cs
 C:\Program Files\Epic Games\4.7\Engine\Plugins\ScriptPlugin\Source\ScriptPlugin\ScriptPlugin.Build.cs
 C:\Program Files\Epic Games\4.7\Engine\Plugins\Slate\SlateRemote\Source\SlateRemote\SlateRemote.Build.cs
-D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Source\TowardsTheLight\TowardsTheLight.Build.cs
-D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Source\TowardsTheLight.Target.cs
-D:\master_videojuegos\proyecto\TowardTheLight\TowardsTheLight\Source\TowardsTheLightEditor.Target.cs
-rget.cs
+C:\Users\alfredo.sosa\Downloads\TowardTheLight\TowardsTheLight\Source\TowardsTheLight\TowardsTheLight.Build.cs
+C:\Users\alfredo.sosa\Downloads\TowardTheLight\TowardsTheLight\Source\TowardsTheLight.Target.cs
+C:\Users\alfredo.sosa\Downloads\TowardTheLight\TowardsTheLight\Source\TowardsTheLightEditor.Target.cs
+t.cs
