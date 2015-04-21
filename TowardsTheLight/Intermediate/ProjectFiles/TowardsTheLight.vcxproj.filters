@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\TowardsTheLight.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{79E422DE-5EF1-4B81-ACBF-F2A39A5CFCC9}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\TowardsTheLight.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\TowardsTheLightEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{B66F9A23-3B07-40E7-90B4-60A764B30601}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\TowardsTheLight">
+      <UniqueIdentifier>{AFF64995-8ABF-4767-AB1F-36C6FDA4ACAD}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\TowardsTheLight\TowardsTheLight.Build.cs">
+      <Filter>Source\TowardsTheLight</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\TowardsTheLight\TowardsTheLight.cpp">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\TowardsTheLight\TowardsTheLight.h">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\TowardsTheLight\TowardsTheLightGameMode.cpp">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\TowardsTheLight\TowardsTheLightGameMode.h">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClInclude>
+    <Filter Include="Source\TowardsTheLight\Resources">
+      <UniqueIdentifier>{41E8AA72-B35C-465C-B247-8A6609730420}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\TowardsTheLight\Resources\Windows">
+      <UniqueIdentifier>{27A8B0AC-4896-4BE9-975B-F5576657A876}</UniqueIdentifier>
+    </Filter>
+    <ResourceCompile Include="..\..\Source\TowardsTheLight\Resources\Windows\TowardsTheLight.rc">
+      <Filter>Source\TowardsTheLight\Resources\Windows</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\TowardsTheLight\OviCharacter.h">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\MyGameMode.h">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\OviCameraActor.h">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\TowardsTheLight\OviCharacter.cpp">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\MyGameMode.cpp">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\OviCameraActor.cpp">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
