@@ -2,20 +2,20 @@
 
 #include "TowardsTheLight.h"
 #include "OviCameraActor.h"
+#include "OviCharacter.h"
 
 void AOviCameraActor::BeginPlay(){
   Super::BeginPlay();
   
   //AutoPossessPlayer = EAutoReceiveInput::Player0;
 
-  //var playerObjs : GameObject[];
-  //playerObjs = GameObject.FindGameObjectsWithTag("Player");
+  m_player = NULL;
+  for (TActorIterator< AOviCharacter > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
+    if (ActorItr->ActorHasTag("Player")){
+      m_player = (AOviCharacter*)*ActorItr;
+      break;
+    }
+  }
 
-  //TActorIterator< AActor > ActorItr = TActorIterator< AActor >(GetWorld());
-
-  //for (TActorIterator< AActor > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
-  //  if (ActorItr-> == TEXT("table")){
-  //    m_pTable = (AStaticMeshActor*)*StaticMeshItr;
-  //  }
-  //}
+  SetActorLocation(FVector(1500, 1500, 1500));
 }
