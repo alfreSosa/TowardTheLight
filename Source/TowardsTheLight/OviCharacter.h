@@ -43,5 +43,5 @@ private:
   bool m_isJumping;
   States m_state;
   float m_limit;
-  FVector m_jumpOrig;
+  float m_jumpDistance;
 };

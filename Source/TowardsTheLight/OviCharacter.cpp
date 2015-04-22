@@ -18,6 +18,7 @@ AOviCharacter::AOviCharacter(){
   m_state = States::STOP;
   m_limit = 0;
   m_isJumping = false;
+  m_jumpDistance = 0;
 
   FName *name = new FName("player", EFindName::FNAME_Add);
   FName f = GetFName();
@@ -64,24 +65,23 @@ void AOviCharacter::Tick(float DeltaTime){
   {
   GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Some variable values: x: %f, y: %f, z: %f "), forward.X, forward.Y, forward.Z));
   }*/
- /* FVector up = GetActorUpVector();
-  FVector vertical = FVector::ZeroVector;
-
+  FVector up = GetActorUpVector();
+  up.X = (up.X != 1 && up.X != -1) ? 0 : up.X;
+  up.Y = (up.Y != 1 && up.Y != -1) ? 0 : up.Y;
+  up.Z = (up.Z != 1 && up.Z != -1) ? 0 : up.Z;
   if (m_left && m_right)
-    vertical = FVector(value, value, value) * up;*/
-  //{
-  //  m_isJumping = true;
-  //  m_jumpOrig = GetActorLocation();
-  //}
+  {
+	  m_jumpDistance += 100;
+	  if (m_jumpDistance < 201){
+		  FVector loc = GetActorLocation();
+		  loc += 100 * up;
+		  SetActorLocation(loc);
+	  }
+  }
 
-  //if (m_isJumping)
-  //{
-  //  FVector loc = GetActorLocation();
-  //  float speed = 10;
-  //  loc += FVector(speed, speed, speed) * GetActorUpVector();
-  //  SetActorLocation(loc);
-  //}
-
+  forward.X = (forward.X != 1 && forward.X != -1) ? 0 : forward.X;
+  forward.Y = (forward.Y != 1 && forward.Y != -1) ? 0 : forward.Y;
+  forward.Z = (forward.Z != 1 && forward.Z != -1) ? 0 : forward.Z;
   AddMovementInput(FVector(value, value, value) * forward, 1);
 
   float dotForward = FVector::DotProduct(GetActorLocation(), forward);
@@ -91,7 +91,7 @@ void AOviCharacter::Tick(float DeltaTime){
   else if (dotForward > m_limit && m_state == States::LEFT)
     rot.Yaw += 90;
 
-  bPressedJump = (m_left && m_right);
+  //bPressedJump = (m_left && m_right);
   /*if (m_left && m_right)
     Jump();*/
 
