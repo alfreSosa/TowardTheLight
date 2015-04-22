@@ -28,10 +28,8 @@ void AOviCameraActor::BeginPlay(){
     }
   }
 
-
   m_limit = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorForwardVector());
   m_limit = abs(m_limit) - Padding;
-
 }
 
 
