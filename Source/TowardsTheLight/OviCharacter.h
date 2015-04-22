@@ -40,6 +40,8 @@ public:
 private:
   bool m_right;
   bool m_left;
+  bool m_isJumping;
   States m_state;
   float m_limit;
+  FVector m_jumpOrig;
 };
