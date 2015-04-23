@@ -10,7 +10,7 @@ class TOWARDSTHELIGHT_API AOviCameraActor : public ACameraActor
 {
   GENERATED_BODY()
 
-  class AOviCharacter *m_player;
+  class APlayerOvi *m_player;
   float m_limit;
   float m_sqrt2, m_sqrt3;
 

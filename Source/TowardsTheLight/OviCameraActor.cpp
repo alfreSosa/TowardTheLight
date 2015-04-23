@@ -2,7 +2,7 @@
 
 #include "TowardsTheLight.h"
 #include "OviCameraActor.h"
-#include "OviCharacter.h"
+#include "PlayerOvi.h"
 
 AOviCameraActor::AOviCameraActor(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
   // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -21,9 +21,9 @@ void AOviCameraActor::BeginPlay(){
   //AutoPossessPlayer = EAutoReceiveInput::Player0;
 
   m_player = NULL;
-  for (TActorIterator< AOviCharacter > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
+  for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
     if (ActorItr->ActorHasTag("Player")){
-      m_player = (AOviCharacter*)*ActorItr;
+		m_player = (APlayerOvi*)*ActorItr;
       break;
     }
   }

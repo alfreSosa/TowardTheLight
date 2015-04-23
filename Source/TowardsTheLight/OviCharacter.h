@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "GameFramework/Character.h"
+#include "GameFramework/Pawn.h"
 #include "OviCharacter.generated.h"
 
 UCLASS()
