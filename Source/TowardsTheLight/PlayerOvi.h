@@ -23,6 +23,9 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+
+	UFUNCTION()
+	virtual void OnBeginOverlap(AActor *other,UPrimitiveComponent *other2, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& sweepresult);
 	//sets right flag when key is pressed
 	UFUNCTION()
 		void OnStartRight();

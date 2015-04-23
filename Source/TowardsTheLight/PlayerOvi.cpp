@@ -71,8 +71,17 @@ APlayerOvi::APlayerOvi()
 	FName f = GetFName();
 	JumpSpeed = MovementSpeed = 300.0f;
 	MaxJumpHeight = 150.0f;
+	CapsuleComponent->bGenerateOverlapEvents = true;
+	CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &APlayerOvi::OnBeginOverlap);
 }
 
+void  APlayerOvi::OnBeginOverlap(AActor *other, UPrimitiveComponent *other2, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& sweepresult)
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Some variable")));
+	}
+}
 void APlayerOvi::BeginPlay()
 {
 	Super::BeginPlay();
@@ -123,7 +132,7 @@ void APlayerOvi::Tick( float DeltaTime )
 			location += JumpSpeed * 2 * DeltaTime * up;
 	}
 	
-	//location -= JumpSpeed * DeltaTime * up;
+	location -= JumpSpeed * DeltaTime * up;
 	
 
 	float dotForward = FVector::DotProduct(GetActorLocation(), forward);

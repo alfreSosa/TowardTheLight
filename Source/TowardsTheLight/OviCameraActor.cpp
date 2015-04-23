@@ -20,6 +20,7 @@ void AOviCameraActor::BeginPlay(){
   
   //AutoPossessPlayer = EAutoReceiveInput::Player0;
 
+  GetAutoActivatePlayerIndex();
   m_player = NULL;
   for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
     if (ActorItr->ActorHasTag("Player")){
