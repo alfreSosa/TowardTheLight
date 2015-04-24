@@ -14,8 +14,8 @@ class TOWARDSTHELIGHT_API AOviCameraActor : public ACameraActor
   float m_limit;
   float m_sqrt2, m_sqrt3;
 
-  void setPosition();
-  void setOrientation();
+  void SetPosition();
+  void SetOrientation();
 public:
   AOviCameraActor(const FObjectInitializer& ObjectInitializer);  // Our added constructor
 

@@ -61,6 +61,12 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\PlayerOvi.h">
       <Filter>Source\TowardsTheLight</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\OviCameraManager.h">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\OviPlayerController.h">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\OviCharacter.cpp">
@@ -73,6 +79,12 @@
       <Filter>Source\TowardsTheLight</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\PlayerOvi.cpp">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\OviCameraManager.cpp">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\OviPlayerController.cpp">
       <Filter>Source\TowardsTheLight</Filter>
     </ClCompile>
   </ItemGroup>
