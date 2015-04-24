@@ -23,10 +23,9 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
-
-	UFUNCTION()
-	virtual void OnBeginOverlap(AActor *other,UPrimitiveComponent *other2, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& sweepresult);
-	//sets right flag when key is pressed
+  void ReceiveActorBeginOverlap(AActor * OtherActor) override;
+  void ReceiveActorEndOverlap(AActor * OtherActor) override;
+  //sets right flag when key is pressed
 	UFUNCTION()
 		void OnStartRight();
 	//clears right flag when key is released
@@ -40,19 +39,17 @@ public:
 		void OnStopLeft();
 
 	/** The CapsuleComponent being used for movement collision (by CharacterMovement). Always treated as being vertically aligned in simple collision check functions. */
-	DEPRECATED_FORGAME(4.6, "CapsuleComponent should not be accessed directly, please use GetCapsuleComponent() function instead. CapsuleComponent will soon be private and your code will not compile.")
-		UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UCapsuleComponent* CapsuleComponent;
+  UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	  class UCapsuleComponent* CapsuleComponent;
 	/** The main skeletal mesh associated with this Character (optional sub-object). */
-	DEPRECATED_FORGAME(4.6, "Mesh should not be accessed directly, please use GetMesh() function instead. Mesh will soon be private and your code will not compile.")
-		UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class USkeletalMeshComponent* Mesh;
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	  class USkeletalMeshComponent* Mesh;
 
 #if WITH_EDITORONLY_DATA
-	DEPRECATED_FORGAME(4.6, "ArrowComponent should not be accessed directly, please use GetArrowComponent() function instead. ArrowComponent will soon be private and your code will not compile.")
-		UPROPERTY()
-	class UArrowComponent* ArrowComponent;
+	UPROPERTY()
+	  class UArrowComponent* ArrowComponent;
 #endif
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float MovementSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
@@ -63,6 +60,7 @@ private:
 	bool m_right;
 	bool m_left;
 	bool m_isJumping;
+  bool m_hasLanded;
 	States m_state;
 	float m_limit;
 	float m_jumpDistance;

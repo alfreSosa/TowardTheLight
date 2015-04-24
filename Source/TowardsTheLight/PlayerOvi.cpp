@@ -30,8 +30,9 @@ APlayerOvi::APlayerOvi()
 
 	CapsuleComponent->CanCharacterStepUpOn = ECB_No;
 	CapsuleComponent->bShouldUpdatePhysicsVolume = true;
-	CapsuleComponent->bCheckAsyncSceneOnMove = false;
+	CapsuleComponent->bCheckAsyncSceneOnMove = false; 
 	CapsuleComponent->bCanEverAffectNavigation = false;
+  CapsuleComponent->bGenerateOverlapEvents = true;
 	RootComponent = CapsuleComponent;
 
 
@@ -58,35 +59,44 @@ APlayerOvi::APlayerOvi()
 		Mesh->AttachParent = CapsuleComponent;
 		static FName CollisionProfileName(TEXT("CharacterMesh"));
 		Mesh->SetCollisionProfileName(CollisionProfileName);
-		Mesh->bGenerateOverlapEvents = false;
+		Mesh->bGenerateOverlapEvents = true;
 		Mesh->bCanEverAffectNavigation = false;
 	}
 
 	m_state = States::STOP;
 	m_limit = 0;
 	m_isJumping = false;
-	m_jumpDistance = 0;
+  m_jumpDistance = 0; 
+  m_hasLanded = false;
 
 	FName *name = new FName("player", EFindName::FNAME_Add);
 	FName f = GetFName();
 	JumpSpeed = MovementSpeed = 300.0f;
 	MaxJumpHeight = 150.0f;
-	CapsuleComponent->bGenerateOverlapEvents = true;
-	CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &APlayerOvi::OnBeginOverlap);
+	
 }
 
-void  APlayerOvi::OnBeginOverlap(AActor *other, UPrimitiveComponent *other2, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& sweepresult)
+
+void APlayerOvi::ReceiveActorBeginOverlap(AActor * OtherActor)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Some variable")));
-	}
+  if (OtherActor){
+    m_hasLanded = true;
+    m_isJumping = false;
+    m_jumpDistance = 0.0f;
+  }
 }
+
+void APlayerOvi::ReceiveActorEndOverlap(AActor * OtherActor)
+{
+  /*if (OtherActor)
+    m_hasLanded = false;*/
+}
+
 void APlayerOvi::BeginPlay()
 {
 	Super::BeginPlay();
+ 
 	this->Tags.Add("Player");
-
 	m_limit = FVector::DotProduct(GetActorLocation(), GetActorForwardVector());
 	m_limit = abs(m_limit);
 	
@@ -95,14 +105,16 @@ void APlayerOvi::BeginPlay()
 void APlayerOvi::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
-	float value = 1;
+	float value = 0;
 	FRotator rot = GetActorRotation();
 	if (m_right && !m_left) {
+    value = 1;
 		if (m_state != States::RIGHT)
 			rot.Yaw -= 90;
 		m_state = States::RIGHT;
 	}
 	else if (m_left && !m_right) {
+    value = 1;
 		if (m_state != States::LEFT)
 			rot.Yaw += 90;
 		m_state = States::LEFT;
@@ -115,35 +127,46 @@ void APlayerOvi::Tick( float DeltaTime )
 			rot.Yaw -= 90;
 
 		m_state = States::STOP;
-	}
-	SetActorRotation(rot);
-	FVector forward = GetActorForwardVector();
-	FVector up = GetActorUpVector();
+  }
+  
+  SetActorRotation(rot);
+
+  FVector forward = GetActorForwardVector();
+  FVector up = GetActorUpVector();
+
+  float dotForward = FVector::DotProduct(GetActorLocation(), forward);
+
+  if (dotForward > m_limit && m_state == States::RIGHT)
+    rot.Yaw -= 90;
+  else if (dotForward > m_limit && m_state == States::LEFT)
+    rot.Yaw += 90;
+
+	SetActorRotation(rot); // El orden influye, primero roto, luego muevo
+	
 
 	FVector location = GetActorLocation();
 	location += MovementSpeed * DeltaTime * value * forward;
+  //SetActorLocation(location);
 
-	if (m_left && m_right && !m_isJumping)
-		m_isJumping = true;
+  if (m_left && m_right && !m_isJumping){
+    m_isJumping = true;
+    m_jumpDistance = 0.0f;
+    m_hasLanded = false;
+  }
 
 	if (m_isJumping) {
 		m_jumpDistance += JumpSpeed * DeltaTime;
 		if (m_jumpDistance < MaxJumpHeight)
 			location += JumpSpeed * 2 * DeltaTime * up;
 	}
+
+  if (!m_hasLanded)
+	  location -= JumpSpeed * DeltaTime * up;
 	
-	location -= JumpSpeed * DeltaTime * up;
-	
+  SetActorLocation(location);
 
-	float dotForward = FVector::DotProduct(GetActorLocation(), forward);
 
-	if (dotForward > m_limit && m_state == States::RIGHT)
-		rot.Yaw -= 90;
-	else if (dotForward > m_limit && m_state == States::LEFT)
-		rot.Yaw += 90;
 
-	SetActorRotation(rot);
-	SetActorLocation(location);
 }
 
 void APlayerOvi::SetupPlayerInputComponent(class UInputComponent* InputComponent) {
