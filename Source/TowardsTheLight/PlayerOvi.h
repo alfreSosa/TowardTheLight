@@ -57,12 +57,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float MaxJumpHeight;
 private:
+
+  void CalculateOrientation();
+  void CalculateGravity(float DeltaTime);
+  void DoJump(float DeltaTime);
+  void DoMovement(float DeltaTime, float value);
 	bool m_right;
 	bool m_left;
 	bool m_isJumping;
   bool m_hasLanded;
+  bool m_enabledGravity;
 	States m_state;
 	float m_limit;
 	float m_jumpDistance;
+  FVector lastPosition;
 	
 };
