@@ -79,7 +79,12 @@ APlayerOvi::APlayerOvi()
 void APlayerOvi::ReceiveActorBeginOverlap(AActor * OtherActor)
 {
   if (OtherActor){
-    SetActorLocation(lastPosition);
+    FVector loc = GetActorLocation();
+    FVector up = GetActorUpVector() * lastPosition;
+    loc.X = (up.X != 0) ? up.X : loc.X;
+    loc.Y = (up.Y = 0) ? up.Y : loc.Y;
+    loc.Z = (up.Z != 0) ? up.Z : loc.Z;
+    SetActorLocation(loc);
     m_hasLanded = true;
     m_isJumping = false;
     m_jumpDistance = 0.0f; 
@@ -88,8 +93,8 @@ void APlayerOvi::ReceiveActorBeginOverlap(AActor * OtherActor)
 
 void APlayerOvi::ReceiveActorEndOverlap(AActor * OtherActor)
 {
-  if (OtherActor)
-    m_hasLanded = false;
+  /*if (OtherActor)
+    m_hasLanded = false;*/
 }
 
 void APlayerOvi::BeginPlay()
@@ -150,9 +155,8 @@ void APlayerOvi::CalculateGravity(float DeltaTime)
 {
   FVector up = GetActorUpVector();
   FVector location = GetActorLocation();
-  if (!m_hasLanded)
-    location -= JumpSpeed * DeltaTime * up;
 
+  location -= JumpSpeed * DeltaTime * up;
   SetActorLocation(location);
 }
 
