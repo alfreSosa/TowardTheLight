@@ -3,6 +3,3 @@
 #include "TowardsTheLight.h"
 #include "TowardsTheLightGameMode.h"
 
-
-
-

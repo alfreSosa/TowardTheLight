@@ -35,11 +35,11 @@ void AOviCameraActor::BeginPlay(){
 
 
 void AOviCameraActor::Tick(float DeltaSeconds){
-  setPosition();
-  setOrientation();
+  SetPosition();
+  SetOrientation();
 }
 
-void AOviCameraActor::setPosition(){
+void AOviCameraActor::SetPosition(){
   FVector pos = m_player->GetActorLocation();
   if (pos.X > m_limit)
     pos.X = CameraDistance;
@@ -84,7 +84,7 @@ void AOviCameraActor::setPosition(){
   SetActorLocation(pos);
 }
 
-void AOviCameraActor::setOrientation(){
+void AOviCameraActor::SetOrientation(){
   FVector dir = m_player->GetActorLocation() - GetActorLocation();
   FRotator newRot = FRotationMatrix::MakeFromX(dir).Rotator();
 
