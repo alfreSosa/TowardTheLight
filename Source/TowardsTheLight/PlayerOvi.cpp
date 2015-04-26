@@ -22,7 +22,7 @@ APlayerOvi::APlayerOvi()
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
 
-	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(ACharacter::CapsuleComponentName);
+	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
 	CapsuleComponent->InitCapsuleSize(34.0f, 88.0f);
 
 	static FName CollisionProfileName(TEXT("Pawn"));
@@ -46,7 +46,7 @@ APlayerOvi::APlayerOvi()
 	}
 #endif // WITH_EDITORONLY_DATA
 
-	Mesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(ACharacter::MeshComponentName);
+  Mesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalComponent"));
 	if (Mesh) {
 		Mesh->AlwaysLoadOnClient = true;
 		Mesh->AlwaysLoadOnServer = true;
@@ -73,22 +73,14 @@ APlayerOvi::APlayerOvi()
 	FName f = GetFName();
 	JumpSpeed = MovementSpeed = 300.0f;
 	MaxJumpHeight = 150.0f;
+  collisionActor = NULL;
 }
 
 
 void APlayerOvi::ReceiveActorBeginOverlap(AActor * OtherActor)
 {
-  if (OtherActor){
-    FVector loc = GetActorLocation();
-    FVector up = GetActorUpVector() * lastPosition;
-    loc.X = (up.X != 0) ? up.X : loc.X;
-    loc.Y = (up.Y = 0) ? up.Y : loc.Y;
-    loc.Z = (up.Z != 0) ? up.Z : loc.Z;
-    SetActorLocation(loc);
-    m_hasLanded = true;
-    m_isJumping = false;
-    m_jumpDistance = 0.0f; 
-  }
+  /*if (OtherActor)
+    SetActorLocation(lastPosition);*/
 }
 
 void APlayerOvi::ReceiveActorEndOverlap(AActor * OtherActor)
@@ -108,6 +100,72 @@ void APlayerOvi::BeginPlay()
 	
 }
 
+void APlayerOvi::CheckCollision()
+{
+  FHitResult OutTraceResult;
+
+  // Calculate the start location for trace  
+  FVector StartTrace = GetActorLocation();
+  FVector StartTraceTop = GetActorLocation() + GetActorUpVector() * 86.0f;
+  FVector StartTraceBottom = GetActorLocation() - GetActorUpVector() * 80.0f;
+
+  // Calculate endpoint of trace  
+  const FVector EndTraceDown = StartTrace - GetActorUpVector() * 88.0f; //half height capsule
+  const FVector EndTraceUp = StartTrace + GetActorUpVector() * 88.0f; //half height capsule
+  //horizontal
+  const FVector EndTraceTop = StartTraceTop + GetActorForwardVector() * 32.0f; //radious capsule
+  const FVector EndTraceBottom = StartTraceBottom + GetActorForwardVector() * 32.0f; //radious capsule
+
+  // Setup the trace query  
+  static FName FireTraceIdent = FName(TEXT("WeaponTrace"));
+  FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
+  TraceParams.bTraceAsyncScene = true;
+
+  // Perform the trace  
+  bool collisionDown = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceDown, COLLISION_PLAYER, TraceParams);
+  bool collisionUp = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceUp, COLLISION_PLAYER, TraceParams);
+
+  bool collisionTop = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceTop, EndTraceTop, COLLISION_PLAYER, TraceParams);
+  bool collisionBottom = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceBottom, EndTraceBottom, COLLISION_PLAYER, TraceParams);
+
+  if (collisionDown)
+  {
+    //collisionActor = OutTraceResult.Actor.Get();
+    FVector loc = GetActorLocation();
+    FVector up = GetActorUpVector() * lastPosition;
+    loc.X = (FMath::Abs(up.X) <= 0.01) ? loc.X : up.X;
+    loc.Y = (FMath::Abs(up.Y) <= 0.01) ? loc.Y : up.Y;
+    loc.Z = (FMath::Abs(up.Z) <= 0.01) ? loc.Z : up.Z;
+    SetActorLocation(loc);
+    m_hasLanded = true;
+    m_isJumping = false;
+    m_jumpDistance = 0.0f;
+  }
+  if (collisionUp)
+  {
+    FVector loc = GetActorLocation();
+    FVector up = GetActorUpVector() * lastPosition;
+    loc.X = (FMath::Abs(up.X) <= 0.01) ? loc.X : up.X;
+    loc.Y = (FMath::Abs(up.Y) <= 0.01) ? loc.Y : up.Y;
+    loc.Z = (FMath::Abs(up.Z) <= 0.01) ? loc.Z : up.Z;
+    SetActorLocation(loc);
+    m_isJumping = false;
+    m_jumpDistance = 0.0f;
+  }
+  if (collisionTop || collisionBottom)
+  {
+    FVector loc = GetActorLocation();
+    FVector forward = GetActorForwardVector() * lastPosition;
+    loc.X = (FMath::Abs(forward.X) <= 0.01) ? loc.X : forward.X;
+    loc.Y = (FMath::Abs(forward.Y) <= 0.01) ? loc.Y : forward.Y;
+    loc.Z = (FMath::Abs(forward.Z) <= 0.01) ? loc.Z : forward.Z;
+    SetActorLocation(lastPosition);
+    m_isJumping = false;
+    m_jumpDistance = 0.0f;
+  }
+
+}
+
 void APlayerOvi::CalculateOrientation()
 {
   FRotator rot = GetActorRotation();
@@ -122,12 +180,8 @@ void APlayerOvi::CalculateOrientation()
     rot.Yaw += 90;
 
   /*Para rotaciones verticales*/
-  //float dotUp = FVector::DotProduct(GetActorLocation(), up);
+  float dotUp = FVector::DotProduct(GetActorLocation(), up);
 
-  //if (dotUp > m_limit && m_state == States::RIGHT)
-  //  rot.Yaw -= 90;
-  //else if (dotUp > m_limit && m_state == States::LEFT)
-  //  rot.Yaw += 90;
   SetActorRotation(rot);
 }
 
@@ -202,7 +256,7 @@ void APlayerOvi::Tick( float DeltaTime )
   DoMovement(DeltaTime, value);
   DoJump(DeltaTime);
   CalculateGravity(DeltaTime);
- 
+  CheckCollision();
 }
 
 void APlayerOvi::SetupPlayerInputComponent(class UInputComponent* InputComponent) {

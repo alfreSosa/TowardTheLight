@@ -55,6 +55,7 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\OviCharacter.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\OviPlayerController.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\PlayerOvi.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\StaticPlatform.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\TowardsTheLight.cpp" />
     <ClInclude Include="..\..\Source\TowardsTheLight\MyGameMode.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\OviCameraActor.h" />
@@ -62,6 +63,7 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\OviCharacter.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\OviPlayerController.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\PlayerOvi.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\StaticPlatform.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\TowardsTheLight.h" />
     <ClCompile Include="..\..\Source\TowardsTheLight\TowardsTheLightGameMode.cpp" />
     <ClInclude Include="..\..\Source\TowardsTheLight\TowardsTheLightGameMode.h" />

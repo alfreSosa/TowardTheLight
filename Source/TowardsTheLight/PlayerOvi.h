@@ -5,6 +5,7 @@
 #include "GameFramework/Pawn.h"
 #include "PlayerOvi.generated.h"
 
+#define COLLISION_PLAYER        ECC_GameTraceChannel1  
 UCLASS()
 class TOWARDSTHELIGHT_API APlayerOvi : public APawn
 {
@@ -25,6 +26,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
   void ReceiveActorBeginOverlap(AActor * OtherActor) override;
   void ReceiveActorEndOverlap(AActor * OtherActor) override;
+  AActor *GetCollisionActor() { return collisionActor; }
+  bool IsJumping() { return m_isJumping; }
+  FVector GetLastPosition() { return lastPosition; }
   //sets right flag when key is pressed
 	UFUNCTION()
 		void OnStartRight();
@@ -41,7 +45,7 @@ public:
 	/** The CapsuleComponent being used for movement collision (by CharacterMovement). Always treated as being vertically aligned in simple collision check functions. */
   UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	  class UCapsuleComponent* CapsuleComponent;
-	/** The main skeletal mesh associated with this Character (optional sub-object). */
+    /** The main skeletal mesh associated with this Character (optional sub-object). */
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	  class USkeletalMeshComponent* Mesh;
 
@@ -57,11 +61,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float MaxJumpHeight;
 private:
-
   void CalculateOrientation();
   void CalculateGravity(float DeltaTime);
   void DoJump(float DeltaTime);
   void DoMovement(float DeltaTime, float value);
+  void CheckCollision();
+
 	bool m_right;
 	bool m_left;
 	bool m_isJumping;
@@ -71,5 +76,5 @@ private:
 	float m_limit;
 	float m_jumpDistance;
   FVector lastPosition;
-	
+  AActor *collisionActor;
 };
