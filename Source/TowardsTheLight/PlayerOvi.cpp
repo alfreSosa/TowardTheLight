@@ -65,8 +65,9 @@ APlayerOvi::APlayerOvi()
 
 	m_state = States::STOP;
 	m_limit = 0;
+  m_jumpDistance = 0;
 	m_isJumping = false;
-  m_jumpDistance = 0; 
+  m_doJump = false;
   m_hasLanded = false; 
   m_enabledGravity = true;
 	FName *name = new FName("player", EFindName::FNAME_Add);
@@ -182,6 +183,13 @@ void APlayerOvi::CalculateOrientation()
 
   /*Para rotaciones verticales*/
   float dotUp = FVector::DotProduct(GetActorLocation(), up);
+  float val = 0;
+
+  if (dotUp > m_limit || dotUp < -m_limit) {
+    bool toUp = dotUp > m_limit;
+    val = (toUp) ? 90 : -90;
+    rot.Pitch += val;
+  }
 
   SetActorRotation(rot);
 }
@@ -191,7 +199,7 @@ void APlayerOvi::DoJump(float DeltaTime)
   FVector up = GetActorUpVector();
   FVector location = GetActorLocation();
 
-  if (m_left && m_right && !m_isJumping){
+  if (m_doJump && !m_isJumping){
     m_isJumping = true;
     m_jumpDistance = 0.0f;
     m_hasLanded = false;
@@ -232,19 +240,22 @@ void APlayerOvi::Tick( float DeltaTime )
 	float value = 0;
 	FRotator rot = GetActorRotation();
 	if (m_right && !m_left) {
+    m_doJump = false;
     value = 1;
 		if (m_state != States::RIGHT)
 			rot.Yaw -= 90;
 		m_state = States::RIGHT;
 	}
 	else if (m_left && !m_right) {
+    m_doJump = false;
     value = 1;
 		if (m_state != States::LEFT)
 			rot.Yaw += 90;
 		m_state = States::LEFT;
 	}
 	else if (!m_left && !m_right) {
-		value = 0;
+    m_doJump = false;
+    value = 0;
 		if (m_state == States::RIGHT)
 			rot.Yaw += 90;
 		if (m_state == States::LEFT)
@@ -253,6 +264,7 @@ void APlayerOvi::Tick( float DeltaTime )
 		m_state = States::STOP;
   }
   else{
+    m_doJump =  true;
     if (m_state == States::RIGHT || m_state == States::LEFT)
       value = 1;
   }

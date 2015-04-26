@@ -69,6 +69,7 @@ private:
 
 	bool m_right;
 	bool m_left;
+  bool m_doJump;
 	bool m_isJumping;
   bool m_hasLanded;
   bool m_enabledGravity;
