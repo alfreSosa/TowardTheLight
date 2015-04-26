@@ -96,7 +96,7 @@ void APlayerOvi::BeginPlay()
 	this->Tags.Add("Player");
 	m_limit = FVector::DotProduct(GetActorLocation(), GetActorForwardVector());
 	m_limit = abs(m_limit);
-  lastPosition = GetActorLocation();
+  //lastPosition = GetActorLocation();
 	
 }
 
@@ -115,6 +115,7 @@ void APlayerOvi::CheckCollision()
   //horizontal
   const FVector EndTraceTop = StartTraceTop + GetActorForwardVector() * 32.0f; //radious capsule
   const FVector EndTraceBottom = StartTraceBottom + GetActorForwardVector() * 32.0f; //radious capsule
+  const FVector EndTraceMidle = StartTrace + GetActorForwardVector() * 32.0f; //radious capsule
 
   // Setup the trace query  
   static FName FireTraceIdent = FName(TEXT("WeaponTrace"));
@@ -127,9 +128,11 @@ void APlayerOvi::CheckCollision()
 
   bool collisionTop = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceTop, EndTraceTop, COLLISION_PLAYER, TraceParams);
   bool collisionBottom = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceBottom, EndTraceBottom, COLLISION_PLAYER, TraceParams);
+  bool collisionMidle = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceMidle, COLLISION_PLAYER, TraceParams);
 
   if (collisionDown)
   {
+   
     //collisionActor = OutTraceResult.Actor.Get();
     FVector loc = GetActorLocation();
     FVector up = GetActorUpVector() * lastPosition;
@@ -152,16 +155,14 @@ void APlayerOvi::CheckCollision()
     m_isJumping = false;
     m_jumpDistance = 0.0f;
   }
-  if (collisionTop || collisionBottom)
+  if (collisionTop || collisionBottom || collisionMidle)
   {
     FVector loc = GetActorLocation();
     FVector forward = GetActorForwardVector() * lastPosition;
     loc.X = (FMath::Abs(forward.X) <= 0.01) ? loc.X : forward.X;
     loc.Y = (FMath::Abs(forward.Y) <= 0.01) ? loc.Y : forward.Y;
     loc.Z = (FMath::Abs(forward.Z) <= 0.01) ? loc.Z : forward.Z;
-    SetActorLocation(lastPosition);
-    m_isJumping = false;
-    m_jumpDistance = 0.0f;
+    SetActorLocation(loc);
   }
 
 }
@@ -198,8 +199,9 @@ void APlayerOvi::DoJump(float DeltaTime)
 
   if (m_isJumping) {
     m_jumpDistance += JumpSpeed * DeltaTime;
-    if (m_jumpDistance < MaxJumpHeight)
+    if (m_jumpDistance < MaxJumpHeight){
       location += JumpSpeed * 2 * DeltaTime * up;
+    }
   }
   SetActorLocation(location);
    
@@ -249,6 +251,10 @@ void APlayerOvi::Tick( float DeltaTime )
 			rot.Yaw -= 90;
 
 		m_state = States::STOP;
+  }
+  else{
+    if (m_state == States::RIGHT || m_state == States::LEFT)
+      value = 1;
   }
   SetActorRotation(rot);
 
