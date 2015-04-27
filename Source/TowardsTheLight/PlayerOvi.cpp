@@ -133,14 +133,21 @@ void APlayerOvi::CheckCollision()
 
   if (collisionDown)
   {
-   
-    //collisionActor = OutTraceResult.Actor.Get();
     FVector loc = GetActorLocation();
-    FVector up = GetActorUpVector() * lastPosition;
-    loc.X = (FMath::Abs(up.X) <= 0.01) ? loc.X : up.X;
-    loc.Y = (FMath::Abs(up.Y) <= 0.01) ? loc.Y : up.Y;
-    loc.Z = (FMath::Abs(up.Z) <= 0.01) ? loc.Z : up.Z;
+    FVector absUp = FVector::ZeroVector;
+    FVector up = GetActorUpVector();
+
+    absUp.X = (FMath::Abs(up.X) <= 0.01) ? 0 : 1;
+    absUp.Y = (FMath::Abs(up.Y) <= 0.01) ? 0 : 1;
+    absUp.Z = (FMath::Abs(up.Z) <= 0.01) ? 0 : 1;
+
+    FVector upPosition = absUp * lastPosition;
+
+    loc.X = (FMath::Abs(upPosition.X) <= 0.01) ? loc.X : upPosition.X;
+    loc.Y = (FMath::Abs(upPosition.Y) <= 0.01) ? loc.Y : upPosition.Y;
+    loc.Z = (FMath::Abs(upPosition.Z) <= 0.01) ? loc.Z : upPosition.Z;
     SetActorLocation(loc);
+
     m_hasLanded = true;
     m_isJumping = false;
     m_jumpDistance = 0.0f;
@@ -148,10 +155,20 @@ void APlayerOvi::CheckCollision()
   if (collisionUp)
   {
     FVector loc = GetActorLocation();
-    FVector up = GetActorUpVector() * lastPosition;
-    loc.X = (FMath::Abs(up.X) <= 0.01) ? loc.X : up.X;
-    loc.Y = (FMath::Abs(up.Y) <= 0.01) ? loc.Y : up.Y;
-    loc.Z = (FMath::Abs(up.Z) <= 0.01) ? loc.Z : up.Z;
+
+    FVector absUp = FVector::ZeroVector;
+    FVector up = GetActorUpVector();
+
+    absUp.X = (FMath::Abs(up.X) <= 0.01) ? 0 : 1;
+    absUp.Y = (FMath::Abs(up.Y) <= 0.01) ? 0 : 1;
+    absUp.Z = (FMath::Abs(up.Z) <= 0.01) ? 0 : 1;
+
+    FVector upPosition = absUp * lastPosition;
+
+
+    loc.X = (FMath::Abs(upPosition.X) <= 0.01) ? loc.X : upPosition.X;
+    loc.Y = (FMath::Abs(upPosition.Y) <= 0.01) ? loc.Y : upPosition.Y;
+    loc.Z = (FMath::Abs(upPosition.Z) <= 0.01) ? loc.Z : upPosition.Z;
     SetActorLocation(loc);
     m_isJumping = false;
     m_jumpDistance = 0.0f;
@@ -159,14 +176,20 @@ void APlayerOvi::CheckCollision()
   if (collisionTop || collisionBottom || collisionMidle)
   {
     FVector loc = GetActorLocation();
-	
-    FVector forward = GetActorForwardVector() * lastPosition;
-	if (m_state == States::LEFT)
-		forward *= -1;
+    FVector absForward = FVector::ZeroVector;
+    FVector forward = GetActorForwardVector();
 
-    loc.X = (FMath::Abs(forward.X) <= 0.01) ? loc.X : forward.X;
-    loc.Y = (FMath::Abs(forward.Y) <= 0.01) ? loc.Y : forward.Y;
-    loc.Z = (FMath::Abs(forward.Z) <= 0.01) ? loc.Z : forward.Z;
+    absForward.X = (FMath::Abs(forward.X) <= 0.01) ? 0 : 1;
+    absForward.Y = (FMath::Abs(forward.Y) <= 0.01) ? 0 : 1;
+    absForward.Z = (FMath::Abs(forward.Z) <= 0.01) ? 0 : 1;
+
+    FVector forPosition = absForward * lastPosition;
+    if (m_state == States::LEFT)
+	    forward *= -1;
+
+    loc.X = (FMath::Abs(forPosition.X) <= 0.01) ? loc.X : forPosition.X;
+    loc.Y = (FMath::Abs(forPosition.Y) <= 0.01) ? loc.Y : forPosition.Y;
+    loc.Z = (FMath::Abs(forPosition.Z) <= 0.01) ? loc.Z : forPosition.Z;
     SetActorLocation(loc);
   }
 
@@ -184,9 +207,11 @@ void APlayerOvi::CalculateOrientation()
 	  FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(-90));
 	  FQuat q2 = rot.Quaternion() * quat;
 	  rot = q2.Rotator();
+
 	  //rot.Yaw -= 90;
   }
-  else if (dotForward > m_limit && m_state == States::LEFT) {
+  
+  if (dotForward > m_limit && m_state == States::LEFT) {
 	  FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(90));
 	  FQuat q2 = rot.Quaternion() * quat;
 	  rot = q2.Rotator();
@@ -198,24 +223,29 @@ void APlayerOvi::CalculateOrientation()
   float val = 0;
 
   if (dotUp > m_limit || dotUp < -m_limit) {
-    bool toUp = dotUp > m_limit;
-    val = (toUp) ? 90 : -90;
-	
+    bool toUp = dotUp > m_limit;	
 	FQuat quat;
 	
-	if (m_state == States::STOP)
-		quat = FQuat(GetActorRightVector(), FMath::DegreesToRadians(val));
-	else if (m_state == States::LEFT)
-		quat = FQuat(GetActorForwardVector(), FMath::DegreesToRadians(val));
-	else if (m_state == States::RIGHT)
-		quat = FQuat(GetActorForwardVector(), FMath::DegreesToRadians(val));
+  if (m_state == States::STOP) {
+    val = (toUp) ? 90 : -90;
+    quat = FQuat(GetActorRightVector(), FMath::DegreesToRadians(val));
+  }
+  else if (m_state == States::LEFT) {
+    val = (toUp) ? 90 : -90;
+    quat = FQuat(GetActorForwardVector(), FMath::DegreesToRadians(val));
+  }
+  else if (m_state == States::RIGHT) {
+    val = (toUp) ? -90 : 90;
+    quat = FQuat(GetActorForwardVector(), FMath::DegreesToRadians(val));
+  }
 
 	FQuat q2 = rot.Quaternion() * quat;
 	rot = q2.Rotator();
     //rot.Pitch += val;
   }
+  AjustPosition();
+  SetActorRotation(rot);
 
-  SetActorRelativeRotation(rot);
 }
 
 void APlayerOvi::DoJump(float DeltaTime)
@@ -309,13 +339,35 @@ void APlayerOvi::Tick( float DeltaTime )
       value = 1;
   }
   
-  SetActorRelativeRotation(rot);
+  SetActorRotation(rot);
 
   CalculateOrientation();
   DoMovement(DeltaTime, value);
   DoJump(DeltaTime);
   CalculateGravity(DeltaTime);
   CheckCollision();
+  //AjustPosition();
+}
+
+void APlayerOvi::AjustPosition(){
+  FVector location = GetActorLocation();
+
+  if (location.X > m_limit)
+    location.X = m_limit;
+  else if (location.X < -m_limit)
+    location.X = -m_limit;
+
+  if (location.Y > m_limit)
+    location.Y = m_limit;
+  else if (location.Y < -m_limit)
+    location.Y = -m_limit;
+
+  if (location.Z > m_limit)
+    location.Z = m_limit;
+  else if (location.Z < -m_limit)
+    location.Z = -m_limit;
+
+  SetActorLocation(location);
 }
 
 void APlayerOvi::SetupPlayerInputComponent(class UInputComponent* InputComponent) {

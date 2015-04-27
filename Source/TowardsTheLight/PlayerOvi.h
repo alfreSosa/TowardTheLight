@@ -66,6 +66,7 @@ private:
   void DoJump(float DeltaTime);
   void DoMovement(float DeltaTime, float value);
   void CheckCollision();
+  void AjustPosition();
 
 	bool m_right;
 	bool m_left;
