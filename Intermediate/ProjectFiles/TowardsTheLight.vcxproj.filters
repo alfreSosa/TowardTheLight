@@ -49,9 +49,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\TowardsTheLight\OviCharacter.h">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\TowardsTheLight\MyGameMode.h">
       <Filter>Source\TowardsTheLight</Filter>
     </ClInclude>
@@ -72,9 +69,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\TowardsTheLight\OviCharacter.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\MyGameMode.cpp">
       <Filter>Source\TowardsTheLight</Filter>
     </ClCompile>

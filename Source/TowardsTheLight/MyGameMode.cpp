@@ -2,11 +2,11 @@
 
 #include "TowardsTheLight.h"
 #include "MyGameMode.h"
-#include "OviCharacter.h"
+#include "PlayerOvi.h"
 #include "OviPlayerController.h"
 
 AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
-  DefaultPawnClass = AOviCharacter::StaticClass();
+  DefaultPawnClass = APlayerOvi::StaticClass();
   PlayerControllerClass = AOviPlayerController::StaticClass();
   
 }
