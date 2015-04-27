@@ -119,7 +119,7 @@ void APlayerOvi::CheckCollision()
   const FVector EndTraceMidle = StartTrace + GetActorForwardVector() * 32.0f; //radious capsule
 
   // Setup the trace query  
-  static FName FireTraceIdent = FName(TEXT("WeaponTrace"));
+  static FName FireTraceIdent = FName(TEXT("ColliderTrace"));
   FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
   TraceParams.bTraceAsyncScene = true;
 
@@ -159,7 +159,11 @@ void APlayerOvi::CheckCollision()
   if (collisionTop || collisionBottom || collisionMidle)
   {
     FVector loc = GetActorLocation();
+	
     FVector forward = GetActorForwardVector() * lastPosition;
+	if (m_state == States::LEFT)
+		forward *= -1;
+
     loc.X = (FMath::Abs(forward.X) <= 0.01) ? loc.X : forward.X;
     loc.Y = (FMath::Abs(forward.Y) <= 0.01) ? loc.Y : forward.Y;
     loc.Z = (FMath::Abs(forward.Z) <= 0.01) ? loc.Z : forward.Z;
@@ -176,10 +180,18 @@ void APlayerOvi::CalculateOrientation()
 
   float dotForward = FVector::DotProduct(GetActorLocation(), forward);
 
-  if (dotForward > m_limit && m_state == States::RIGHT)
-    rot.Yaw -= 90;
-  else if (dotForward > m_limit && m_state == States::LEFT)
-    rot.Yaw += 90;
+  if (dotForward > m_limit && m_state == States::RIGHT) {
+	  FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(-90));
+	  FQuat q2 = rot.Quaternion() * quat;
+	  rot = q2.Rotator();
+	  //rot.Yaw -= 90;
+  }
+  else if (dotForward > m_limit && m_state == States::LEFT) {
+	  FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(90));
+	  FQuat q2 = rot.Quaternion() * quat;
+	  rot = q2.Rotator();
+	  //  rot.Yaw += 90;
+  }
 
   /*Para rotaciones verticales*/
   float dotUp = FVector::DotProduct(GetActorLocation(), up);
@@ -188,10 +200,22 @@ void APlayerOvi::CalculateOrientation()
   if (dotUp > m_limit || dotUp < -m_limit) {
     bool toUp = dotUp > m_limit;
     val = (toUp) ? 90 : -90;
-    rot.Pitch += val;
+	
+	FQuat quat;
+	
+	if (m_state == States::STOP)
+		quat = FQuat(GetActorRightVector(), FMath::DegreesToRadians(val));
+	else if (m_state == States::LEFT)
+		quat = FQuat(GetActorForwardVector(), FMath::DegreesToRadians(val));
+	else if (m_state == States::RIGHT)
+		quat = FQuat(GetActorForwardVector(), FMath::DegreesToRadians(val));
+
+	FQuat q2 = rot.Quaternion() * quat;
+	rot = q2.Rotator();
+    //rot.Pitch += val;
   }
 
-  SetActorRotation(rot);
+  SetActorRelativeRotation(rot);
 }
 
 void APlayerOvi::DoJump(float DeltaTime)
@@ -236,30 +260,46 @@ void  APlayerOvi::DoMovement(float DeltaTime, float value)
 void APlayerOvi::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
-  lastPosition = GetActorLocation();
+    lastPosition = GetActorLocation();
 	float value = 0;
 	FRotator rot = GetActorRotation();
 	if (m_right && !m_left) {
-    m_doJump = false;
-    value = 1;
-		if (m_state != States::RIGHT)
-			rot.Yaw -= 90;
+		m_doJump = false;
+		value = 1;
+		if (m_state != States::RIGHT) {
+			FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(-90));
+			FQuat q2 = rot.Quaternion() * quat;
+			rot = q2.Rotator();
+			//rot.Yaw -= 90;
+		}
 		m_state = States::RIGHT;
 	}
 	else if (m_left && !m_right) {
-    m_doJump = false;
-    value = 1;
-		if (m_state != States::LEFT)
-			rot.Yaw += 90;
+		m_doJump = false;
+		value = 1;
+		if (m_state != States::LEFT) {
+			FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(90));
+			FQuat q2 = rot.Quaternion() * quat;
+			rot = q2.Rotator();
+			//rot.Yaw += 90;
+		}
 		m_state = States::LEFT;
 	}
 	else if (!m_left && !m_right) {
-    m_doJump = false;
-    value = 0;
-		if (m_state == States::RIGHT)
-			rot.Yaw += 90;
-		if (m_state == States::LEFT)
-			rot.Yaw -= 90;
+		m_doJump = false;
+		value = 0;
+		if (m_state == States::RIGHT) {
+			FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(90));
+			FQuat q2 = rot.Quaternion() * quat;
+			rot = q2.Rotator();
+			//rot.Yaw += 90;
+		}
+		if (m_state == States::LEFT) {
+			FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(-90));
+			FQuat q2 = rot.Quaternion() * quat;
+			rot = q2.Rotator();
+			//rot.Yaw -= 90;
+		}
 
 		m_state = States::STOP;
   }
@@ -268,7 +308,8 @@ void APlayerOvi::Tick( float DeltaTime )
     if (m_state == States::RIGHT || m_state == States::LEFT)
       value = 1;
   }
-  SetActorRotation(rot);
+  
+  SetActorRelativeRotation(rot);
 
   CalculateOrientation();
   DoMovement(DeltaTime, value);
