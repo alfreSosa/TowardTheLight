@@ -7,4 +7,5 @@
 
 AOviPlayerController::AOviPlayerController(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer){
   PlayerCameraManagerClass = AOviCameraManager::StaticClass();
+  //UTouchInterface *f =  CurrentTouchInterface;
 }
