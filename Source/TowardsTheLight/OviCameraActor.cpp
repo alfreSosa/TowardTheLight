@@ -3,6 +3,9 @@
 #include "TowardsTheLight.h"
 #include "OviCameraActor.h"
 #include "PlayerOvi.h"
+#include "OviPlayerController.h"
+//#include "Kismet/KismetMathLibrary.h"
+
 
 AOviCameraActor::AOviCameraActor(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
   // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -31,6 +34,12 @@ void AOviCameraActor::BeginPlay(){
 
   m_limit = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorForwardVector());
   m_limit = abs(m_limit) - Padding;
+
+
+
+  AOviPlayerController* oviPlayerController = (AOviPlayerController* )GetWorld()->GetFirstPlayerController();
+  if (oviPlayerController)
+    oviPlayerController->SetViewTarget(this);
 }
 
 
@@ -86,10 +95,13 @@ void AOviCameraActor::SetPosition(){
 
 void AOviCameraActor::SetOrientation(){
   FVector dir = m_player->GetActorLocation() - GetActorLocation();
+  dir.Normalize();
   FRotator newRot = FRotationMatrix::MakeFromX(dir).Rotator();
+  
+  //FRotator PlayerRot = UKismetMathLibrary::FindLookAtRotation(this->GetActorLocation(), m_player->GetActorLocation());
 
+  
   //revisar para cuando cambie a las caras superior e inferior
-
 
   SetActorRotation(newRot);
 }
