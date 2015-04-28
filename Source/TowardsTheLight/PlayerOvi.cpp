@@ -80,14 +80,12 @@ APlayerOvi::APlayerOvi()
 
 void APlayerOvi::ReceiveActorBeginOverlap(AActor * OtherActor)
 {
-  /*if (OtherActor)
-    SetActorLocation(lastPosition);*/
+
 }
 
 void APlayerOvi::ReceiveActorEndOverlap(AActor * OtherActor)
 {
-  /*if (OtherActor)
-    m_hasLanded = false;*/
+
 }
 
 void APlayerOvi::BeginPlay()
@@ -96,9 +94,7 @@ void APlayerOvi::BeginPlay()
  
 	this->Tags.Add("Player");
 	m_limit = FVector::DotProduct(GetActorLocation(), GetActorForwardVector());
-	m_limit = abs(m_limit);
-  //lastPosition = GetActorLocation();
-	
+	m_limit = abs(m_limit);	
 }
 
 void APlayerOvi::CheckCollision()
@@ -203,17 +199,12 @@ void APlayerOvi::CalculateOrientation()
 
   if (dotForward > m_limit && m_state == States::RIGHT) {
 	  FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(-90));
-	  FQuat q2 = rot.Quaternion() * quat;
-	  rot = q2.Rotator();
-
-	  //rot.Yaw -= 90;
+	  AddActorLocalRotation(quat.Rotator());
   }
   
   if (dotForward > m_limit && m_state == States::LEFT) {
 	  FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(90));
-	  FQuat q2 = rot.Quaternion() * quat;
-	  rot = q2.Rotator();
-	  //  rot.Yaw += 90;
+	  AddActorLocalRotation(quat.Rotator());
   }
 
   /*Para rotaciones verticales*/
@@ -236,13 +227,10 @@ void APlayerOvi::CalculateOrientation()
       val = (toUp) ? -90 : 90;
       quat = FQuat(GetActorForwardVector(), FMath::DegreesToRadians(val));
     }
-
-    FQuat q2 = rot.Quaternion() * quat;
-    rot = q2.Rotator();
-    //rot.Pitch += val;
+	AddActorLocalRotation(quat.Rotator());
   }
+
   AjustPosition();
-  SetActorRelativeRotation(rot);
 
 }
 
@@ -287,8 +275,9 @@ void  APlayerOvi::DoMovement(float DeltaTime, float value)
 
 void APlayerOvi::Tick( float DeltaTime )
 {
-	Super::Tick( DeltaTime );
+  Super::Tick( DeltaTime );
   lastPosition = GetActorLocation();
+  //para debugear
   FVector r = GetActorRightVector();
   FVector u = GetActorUpVector();
   FVector f = GetActorForwardVector();
@@ -299,9 +288,7 @@ void APlayerOvi::Tick( float DeltaTime )
 		value = 1;
 		if (m_state != States::RIGHT) {
 			FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(-90));
-			FQuat q2 = rot.Quaternion() * quat;
-			rot = q2.Rotator();
-			//rot.Yaw -= 90;
+			AddActorLocalRotation(quat.Rotator());
 		}
 		m_state = States::RIGHT;
 	}
@@ -310,9 +297,7 @@ void APlayerOvi::Tick( float DeltaTime )
 		value = 1;
 		if (m_state != States::LEFT) {
 			FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(90));
-			FQuat q2 = rot.Quaternion() * quat;
-			rot = q2.Rotator();
-			//rot.Yaw += 90;
+			AddActorLocalRotation(quat.Rotator());
 		}
 		m_state = States::LEFT;
 	}
@@ -321,15 +306,11 @@ void APlayerOvi::Tick( float DeltaTime )
 		value = 0;
 		if (m_state == States::RIGHT) {
 			FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(90));
-			FQuat q2 = rot.Quaternion() * quat;
-			rot = q2.Rotator();
-			//rot.Yaw += 90;
+			AddActorLocalRotation(quat.Rotator());
 		}
 		if (m_state == States::LEFT) {
 			FQuat quat(GetActorUpVector(), FMath::DegreesToRadians(-90));
-			FQuat q2 = rot.Quaternion() * quat;
-			rot = q2.Rotator();
-			//rot.Yaw -= 90;
+			AddActorLocalRotation(quat.Rotator());
 		}
 
 		m_state = States::STOP;
@@ -339,8 +320,6 @@ void APlayerOvi::Tick( float DeltaTime )
     if (m_state == States::RIGHT || m_state == States::LEFT)
       value = 1;
   }
-  
-  SetActorRelativeRotation(rot);
 
   DoMovement(DeltaTime, value);
   DoJump(DeltaTime);
