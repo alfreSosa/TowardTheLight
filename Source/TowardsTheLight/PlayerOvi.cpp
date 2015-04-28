@@ -184,8 +184,6 @@ void APlayerOvi::CheckCollision()
     absForward.Z = (FMath::Abs(forward.Z) <= 0.01) ? 0 : 1;
 
     FVector forPosition = absForward * lastPosition;
-    if (m_state == States::LEFT)
-	    forward *= -1;
 
     loc.X = (FMath::Abs(forPosition.X) <= 0.01) ? loc.X : forPosition.X;
     loc.Y = (FMath::Abs(forPosition.Y) <= 0.01) ? loc.Y : forPosition.Y;
@@ -224,27 +222,27 @@ void APlayerOvi::CalculateOrientation()
 
   if (dotUp > m_limit || dotUp < -m_limit) {
     bool toUp = dotUp > m_limit;	
-	FQuat quat;
+    FQuat quat;
 	
-  if (m_state == States::STOP) {
-    val = (toUp) ? 90 : -90;
-    quat = FQuat(GetActorRightVector(), FMath::DegreesToRadians(val));
-  }
-  else if (m_state == States::LEFT) {
-    val = (toUp) ? 90 : -90;
-    quat = FQuat(GetActorForwardVector(), FMath::DegreesToRadians(val));
-  }
-  else if (m_state == States::RIGHT) {
-    val = (toUp) ? -90 : 90;
-    quat = FQuat(GetActorForwardVector(), FMath::DegreesToRadians(val));
-  }
+    if (m_state == States::STOP) {
+      val = (toUp) ? 90 : -90;
+      quat = FQuat(GetActorRightVector(), FMath::DegreesToRadians(val));
+    }
+    else if (m_state == States::LEFT) {
+      val = (toUp) ? -90 : 90;
+      quat = FQuat(GetActorForwardVector(), FMath::DegreesToRadians(val));
+    }
+    else if (m_state == States::RIGHT) {
+      val = (toUp) ? -90 : 90;
+      quat = FQuat(GetActorForwardVector(), FMath::DegreesToRadians(val));
+    }
 
-	FQuat q2 = rot.Quaternion() * quat;
-	rot = q2.Rotator();
+    FQuat q2 = rot.Quaternion() * quat;
+    rot = q2.Rotator();
     //rot.Pitch += val;
   }
   AjustPosition();
-  SetActorRotation(rot);
+  SetActorRelativeRotation(rot);
 
 }
 
@@ -290,7 +288,10 @@ void  APlayerOvi::DoMovement(float DeltaTime, float value)
 void APlayerOvi::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
-    lastPosition = GetActorLocation();
+  lastPosition = GetActorLocation();
+  FVector r = GetActorRightVector();
+  FVector u = GetActorUpVector();
+  FVector f = GetActorForwardVector();
 	float value = 0;
 	FRotator rot = GetActorRotation();
 	if (m_right && !m_left) {
@@ -339,12 +340,12 @@ void APlayerOvi::Tick( float DeltaTime )
       value = 1;
   }
   
-  SetActorRotation(rot);
+  SetActorRelativeRotation(rot);
 
-  CalculateOrientation();
   DoMovement(DeltaTime, value);
   DoJump(DeltaTime);
   CalculateGravity(DeltaTime);
+  CalculateOrientation();
   CheckCollision();
   //AjustPosition();
 }
