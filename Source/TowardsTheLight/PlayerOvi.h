@@ -24,11 +24,12 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
-  void ReceiveActorBeginOverlap(AActor * OtherActor) override;
-  void ReceiveActorEndOverlap(AActor * OtherActor) override;
-  AActor *GetCollisionActor() { return collisionActor; }
-  bool IsJumping() { return m_isJumping; }
-  FVector GetLastPosition() { return lastPosition; }
+	void ReceiveActorBeginOverlap(AActor * OtherActor) override;
+	void ReceiveActorEndOverlap(AActor * OtherActor) override;
+	
+	AActor *GetCollisionActor() { return collisionActor; }
+	bool IsJumping() { return m_isJumping; }
+	FVector GetLastPosition() { return lastPosition; }
   //sets right flag when key is pressed
 	UFUNCTION()
 		void OnStartRight();
@@ -41,6 +42,9 @@ public:
 	//clears left flag when key is released
 	UFUNCTION()
 		void OnStopLeft();
+
+	void TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location);
+	void TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location);
 
 	/** The CapsuleComponent being used for movement collision (by CharacterMovement). Always treated as being vertically aligned in simple collision check functions. */
   UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -80,4 +84,5 @@ private:
 	float m_jumpDistance;
   FVector lastPosition;
   AActor *collisionActor;
+  FVector2D  m_viewportCenter;
 };
