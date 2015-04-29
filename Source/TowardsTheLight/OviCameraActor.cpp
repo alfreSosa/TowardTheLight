@@ -5,6 +5,7 @@
 #include "PlayerOvi.h"
 #include "OviPlayerController.h"
 
+//#include "Kismet/KismetMathLibrary.h"
 
 AOviCameraActor::AOviCameraActor(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
   // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -39,6 +40,7 @@ void AOviCameraActor::BeginPlay(){
   AOviPlayerController* oviPlayerController = (AOviPlayerController* )GetWorld()->GetFirstPlayerController();
   if (oviPlayerController)
     oviPlayerController->SetViewTarget(this);
+
 }
 
 
@@ -94,10 +96,35 @@ void AOviCameraActor::SetPosition(){
 
 void AOviCameraActor::SetOrientation(){
   FVector dir = m_player->GetActorLocation() - this->GetActorLocation();
-  dir.Normalize();
-  //FRotator newRot = FRotationMatrix::MakeFromX(dir).Rotator();
-  //this->SetActorRotation(newRot);
-  
 
-  this->SetActorRotation(dir.Rotation());
+
+
+
+  //sol 1
+  dir.Normalize();
+  FRotator rotX = FRotationMatrix::MakeFromX(dir).Rotator();
+  this->SetActorRotation(rotX);
+  
+  //sol 2
+  //this->SetActorRotation(dir.Rotation());
+
+  //int s = this->GetActorUpVector().X + this->GetActorUpVector().Y + this->GetActorUpVector().Z;
+  //s = abs(s);
+
+  //if (s == 1){
+  //  for (int i = 0; i < 4; i++){
+  //    if (!FVector::Parallel(m_player->GetActorUpVector(), this->GetActorUpVector())){
+  //      SetActorRelativeRotation(FRotator::MakeFromEuler(FVector(90, 0, 0)));
+  //    }
+  //    else
+  //      break;
+  //  }
+  //}
+
+
+
+
+  //sol 3 - error de linker
+  //FRotator PlayerRot = UKismetMathLibrary::FindLookAtRotation(this->GetActorLocation(), m_player->GetActorLocation());
+  //this->SetActorRotation(PlayerRot);
 }
