@@ -4,7 +4,6 @@
 #include "OviCameraActor.h"
 #include "PlayerOvi.h"
 #include "OviPlayerController.h"
-//#include "Kismet/KismetMathLibrary.h"
 
 
 AOviCameraActor::AOviCameraActor(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
@@ -94,14 +93,11 @@ void AOviCameraActor::SetPosition(){
 }
 
 void AOviCameraActor::SetOrientation(){
-  FVector dir = m_player->GetActorLocation() - GetActorLocation();
+  FVector dir = m_player->GetActorLocation() - this->GetActorLocation();
   dir.Normalize();
-  FRotator newRot = FRotationMatrix::MakeFromX(dir).Rotator();
+  //FRotator newRot = FRotationMatrix::MakeFromX(dir).Rotator();
+  //this->SetActorRotation(newRot);
   
-  //FRotator PlayerRot = UKismetMathLibrary::FindLookAtRotation(this->GetActorLocation(), m_player->GetActorLocation());
 
-  
-  //revisar para cuando cambie a las caras superior e inferior
-
-  SetActorRotation(newRot);
+  this->SetActorRotation(dir.Rotation());
 }
