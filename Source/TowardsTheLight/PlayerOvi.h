@@ -68,6 +68,7 @@ private:
   void CheckCollision();
   void AjustPosition();
 
+  FVector m_rotation;
 	bool m_right;
 	bool m_left;
   bool m_doJump;
