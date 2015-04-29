@@ -99,7 +99,6 @@ void AOviCameraActor::SetOrientation(){
 
 
 
-
   //sol 1
   dir.Normalize();
   FRotator rotX = FRotationMatrix::MakeFromX(dir).Rotator();
