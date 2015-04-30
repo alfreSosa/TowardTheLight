@@ -13,7 +13,8 @@ AOviCameraActor::AOviCameraActor(const class FObjectInitializer& ObjectInitializ
 
   //setting
   Padding = 100;
-  CameraDistance = 1500;
+  DistanceCameraToPlayer = 500;
+  CameraSpeed = 50;
   m_sqrt2 = FMath::Sqrt(2);
   m_sqrt3 = FMath::Sqrt(3);
 }
@@ -21,101 +22,82 @@ AOviCameraActor::AOviCameraActor(const class FObjectInitializer& ObjectInitializ
 void AOviCameraActor::BeginPlay(){
   Super::BeginPlay();
   
-  //AutoPossessPlayer = EAutoReceiveInput::Player0;
-
   GetAutoActivatePlayerIndex();
   m_player = NULL;
   for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
     if (ActorItr->ActorHasTag("Player")){
-		m_player = (APlayerOvi*)*ActorItr;
+		  m_player = (APlayerOvi*)*ActorItr;
       break;
     }
   }
 
-  m_limit = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorForwardVector());
-  m_limit = abs(m_limit) - Padding;
-
-
+  float limit = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorForwardVector());
+  m_limitPadding = abs(limit) - Padding;
+  m_cameraDistance = abs(limit) + DistanceCameraToPlayer;
 
   AOviPlayerController* oviPlayerController = (AOviPlayerController* )GetWorld()->GetFirstPlayerController();
   if (oviPlayerController)
     oviPlayerController->SetViewTarget(this);
-
 }
 
 
 void AOviCameraActor::Tick(float DeltaSeconds){
-  SetPosition();
+  SetPosition(DeltaSeconds);
   SetOrientation();
 }
 
-void AOviCameraActor::SetPosition(){
-  FVector pos = m_player->GetActorLocation();
-  if (pos.X > m_limit)
-    pos.X = CameraDistance;
-  else if (pos.X < -m_limit)
-    pos.X = -CameraDistance;
+void AOviCameraActor::SetPosition(float DeltaSeconds){
+  FVector finalPos = m_player->GetActorLocation();
+  if (finalPos.X > m_limitPadding)
+    finalPos.X += DistanceCameraToPlayer;
+  else if (finalPos.X < -m_limitPadding)
+    finalPos.X += -DistanceCameraToPlayer;
 
-  if (pos.Y > m_limit)
-    pos.Y = CameraDistance;
-  else if (pos.Y < -m_limit)
-    pos.Y = -CameraDistance;
+  if (finalPos.Y > m_limitPadding)
+    finalPos.Y += DistanceCameraToPlayer;
+  else if (finalPos.Y < -m_limitPadding)
+    finalPos.Y += -DistanceCameraToPlayer;
 
-  if (pos.Z > m_limit)
-    pos.Z = CameraDistance;
-  else if (pos.Z < -m_limit)
-    pos.Z = -CameraDistance;
+  if (finalPos.Z > m_limitPadding)
+    finalPos.Z += DistanceCameraToPlayer;
+  else if (finalPos.Z < -m_limitPadding)
+    finalPos.Z += -DistanceCameraToPlayer;
 
-  FVector absPos(pos.GetAbs());
+  FVector absFinalPos(finalPos.GetAbs());
 
-  if (absPos.X == CameraDistance && absPos.Y == CameraDistance && absPos.Z == CameraDistance) {
-    pos = pos / m_sqrt3;
-    //m_lerp = true;
+  if (absFinalPos.X >= m_cameraDistance && absFinalPos.Y >= m_cameraDistance && absFinalPos.Z >= m_cameraDistance) {
+    finalPos = finalPos / m_sqrt3;
   }
-  else if (absPos.X == CameraDistance && absPos.Y == CameraDistance) {
-    pos.X = pos.X / m_sqrt2;
-    pos.Y = pos.Y / m_sqrt2;
-    //m_lerp = true;
+  else if (absFinalPos.X >= m_cameraDistance && absFinalPos.Y >= m_cameraDistance) {
+    finalPos.X = finalPos.X / m_sqrt2;
+    finalPos.Y = finalPos.Y / m_sqrt2;
   }
-  else if (absPos.X == CameraDistance && absPos.Z == CameraDistance) {
-    pos.X = pos.X / m_sqrt2;
-    pos.Z = pos.Z / m_sqrt2;
-    //m_lerp = true;
+  else if (absFinalPos.X >= m_cameraDistance && absFinalPos.Z >= m_cameraDistance) {
+    finalPos.X = finalPos.X / m_sqrt2;
+    finalPos.Z = finalPos.Z / m_sqrt2;
   }
-  else if (absPos.Y == CameraDistance && absPos.Z == CameraDistance) {
-    pos.Y = pos.Y / m_sqrt2;
-    pos.Z = pos.Z / m_sqrt2;
-    //m_lerp = true;
+  else if (absFinalPos.Y >= m_cameraDistance && absFinalPos.Z >= m_cameraDistance) {
+    finalPos.Y = finalPos.Y / m_sqrt2;
+    finalPos.Z = finalPos.Z / m_sqrt2;
   }
-  //else {
-  //  m_lerp = false;
-  //}
 
-  SetActorLocation(pos);
+  FVector currentPos = this->GetActorLocation();
+
+  SetActorLocation(FMath::Lerp(finalPos, currentPos, CameraSpeed * DeltaSeconds));
 }
 
 void AOviCameraActor::SetOrientation(){
   FVector forward = m_player->GetActorLocation() - this->GetActorLocation();
   forward.Normalize();
-  FVector side = FVector::CrossProduct(forward, m_player->GetActorUpVector());
+  FVector side = FVector::CrossProduct(m_player->GetActorUpVector(), forward);
   side.Normalize();
 
-  FRotator rot = FRotationMatrix::MakeFromXY(forward, -side).Rotator();
+  FRotator rot = FRotationMatrix::MakeFromXY(forward, side).Rotator();
   this->SetActorRotation(rot);
 
-
+  //FVector side = FVector::CrossProduct(forward, m_player->GetActorUpVector());
+  //side.Normalize();
   //FVector up = FVector::CrossProduct(side, forward);
-
   //FRotator rot = FRotationMatrix::MakeFromXZ(forward, up).Rotator();
   //this->SetActorRotation(rot);
-
-
-
-  //if (GEngine)
-  //{
-  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("player up: x: %f, y: %f, z: %f "), m_player->GetActorUpVector().X, m_player->GetActorUpVector().Y, m_player->GetActorUpVector().Z));
-  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("camara forward: x: %f, y: %f, z: %f "), forward.X, forward.Y, forward.Z));
-  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("camara up: x: %f, y: %f, z: %f "), GetActorUpVector().X, GetActorUpVector().Y, GetActorUpVector().Z));
-  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("up: x: %f, y: %f, z: %f "), up.X, up.Y, up.Z));
-  //}
 }

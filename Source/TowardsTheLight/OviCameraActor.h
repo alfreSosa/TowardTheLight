@@ -11,10 +11,11 @@ class TOWARDSTHELIGHT_API AOviCameraActor : public ACameraActor
   GENERATED_BODY()
 
   class APlayerOvi *m_player;
-  float m_limit;
+  float m_limitPadding;
+  float m_cameraDistance;
   float m_sqrt2, m_sqrt3;
 
-  void SetPosition();
+  void SetPosition(float DeltaSeconds);
   void SetOrientation();
 public:
   AOviCameraActor(const FObjectInitializer& ObjectInitializer);  // Our added constructor
@@ -25,9 +26,10 @@ public:
   // Called every frame
   virtual void Tick(float DeltaSeconds) override;
 	
-
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ConfigCamera)
-  float Padding;
+    float Padding;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ConfigCamera)
-  float CameraDistance;
+    float DistanceCameraToPlayer;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ConfigCamera)
+    float CameraSpeed;
 };
