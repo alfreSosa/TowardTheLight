@@ -24,12 +24,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
-	void ReceiveActorBeginOverlap(AActor * OtherActor) override;
-	void ReceiveActorEndOverlap(AActor * OtherActor) override;
-	
-	AActor *GetCollisionActor() { return collisionActor; }
-	bool IsJumping() { return m_isJumping; }
-	FVector GetLastPosition() { return lastPosition; }
+
   //sets right flag when key is pressed
 	UFUNCTION()
 		void OnStartRight();
@@ -71,19 +66,20 @@ private:
   void DoMovement(float DeltaTime, float value);
   void CheckCollision();
   void AjustPosition();
+  void Rotate(const FVector& rotation);
 
   FVector m_rotation;
   FVector m_lastRotation;
+  States m_state;
 	bool m_right;
 	bool m_left;
   bool m_doJump;
 	bool m_isJumping;
   bool m_hasLanded;
+  bool m_headCollision;
   bool m_enabledGravity;
-	States m_state;
 	float m_limit;
 	float m_jumpDistance;
-  FVector lastPosition;
-  AActor *collisionActor;
+  FVector m_lastPosition;
   FVector2D  m_viewportCenter;
 };

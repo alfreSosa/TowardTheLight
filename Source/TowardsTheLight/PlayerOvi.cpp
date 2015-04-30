@@ -13,8 +13,7 @@ GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Som
 
 /*************************************/
 
-APlayerOvi::APlayerOvi()
-{
+APlayerOvi::APlayerOvi() {
 	PrimaryActorTick.bCanEverTick = true;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
@@ -66,27 +65,15 @@ APlayerOvi::APlayerOvi()
 	m_state = States::STOP;
 	m_limit = 0;
   m_jumpDistance = 0;
-	m_isJumping = false;
-  m_doJump = false;
-  m_hasLanded = false; 
+	m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
   m_enabledGravity = true;
+  JumpSpeed = MovementSpeed = 300.0f;
+  MaxJumpHeight = 150.0f;
+  m_rotation = FVector::ZeroVector;
+
 	FName *name = new FName("player", EFindName::FNAME_Add);
 	FName f = GetFName();
-	JumpSpeed = MovementSpeed = 300.0f;
-	MaxJumpHeight = 150.0f;
-  collisionActor = NULL;
-  m_rotation = FVector::ZeroVector;
-}
-
-
-void APlayerOvi::ReceiveActorBeginOverlap(AActor * OtherActor)
-{
-
-}
-
-void APlayerOvi::ReceiveActorEndOverlap(AActor * OtherActor)
-{
-
+	
 }
 
 void APlayerOvi::BeginPlay()
@@ -114,7 +101,7 @@ void APlayerOvi::CheckCollision()
   FVector StartTraceBottom = GetActorLocation() - GetActorUpVector() * 80.0f;
 
   // Calculate endpoint of trace  
-  const FVector EndTraceDown = StartTrace - GetActorUpVector() * 88.0f; //half height capsule
+  const FVector EndTraceDown = StartTrace - GetActorUpVector() * 88.0f; //half height capsule //REVISAR
   const FVector EndTraceUp = StartTrace + GetActorUpVector() * 88.0f; //half height capsule
   //horizontal
   const FVector EndTraceTop = StartTraceTop + GetActorForwardVector() * 32.0f; //radious capsule
@@ -126,7 +113,6 @@ void APlayerOvi::CheckCollision()
   FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
   TraceParams.bTraceAsyncScene = true;
 
-  // Perform the trace  
   bool collisionDown = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceDown, COLLISION_PLAYER, TraceParams);
   bool collisionUp = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceUp, COLLISION_PLAYER, TraceParams);
 
@@ -134,8 +120,7 @@ void APlayerOvi::CheckCollision()
   bool collisionBottom = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceBottom, EndTraceBottom, COLLISION_PLAYER, TraceParams);
   bool collisionMidle = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceMidle, COLLISION_PLAYER, TraceParams);
 
-  if (collisionDown)
-  {
+  if (collisionDown) {
     FVector loc = GetActorLocation();
     FVector absUp = FVector::ZeroVector;
     FVector up = GetActorUpVector();
@@ -144,7 +129,7 @@ void APlayerOvi::CheckCollision()
     absUp.Y = (FMath::Abs(up.Y) <= 0.01) ? 0 : 1;
     absUp.Z = (FMath::Abs(up.Z) <= 0.01) ? 0 : 1;
 
-    FVector upPosition = absUp * lastPosition;
+    FVector upPosition = absUp * m_lastPosition;
 
     loc.X = (FMath::Abs(upPosition.X) <= 0.01) ? loc.X : upPosition.X;
     loc.Y = (FMath::Abs(upPosition.Y) <= 0.01) ? loc.Y : upPosition.Y;
@@ -152,11 +137,9 @@ void APlayerOvi::CheckCollision()
     SetActorLocation(loc);
 
     m_hasLanded = true;
-    m_isJumping = false;
-    m_jumpDistance = 0.0f;
   }
-  if (collisionUp)
-  {
+
+  if (collisionUp) {
     FVector loc = GetActorLocation();
 
     FVector absUp = FVector::ZeroVector;
@@ -166,18 +149,17 @@ void APlayerOvi::CheckCollision()
     absUp.Y = (FMath::Abs(up.Y) <= 0.01) ? 0 : 1;
     absUp.Z = (FMath::Abs(up.Z) <= 0.01) ? 0 : 1;
 
-    FVector upPosition = absUp * lastPosition;
+    FVector upPosition = absUp * m_lastPosition;
 
 
     loc.X = (FMath::Abs(upPosition.X) <= 0.01) ? loc.X : upPosition.X;
     loc.Y = (FMath::Abs(upPosition.Y) <= 0.01) ? loc.Y : upPosition.Y;
     loc.Z = (FMath::Abs(upPosition.Z) <= 0.01) ? loc.Z : upPosition.Z;
     SetActorLocation(loc);
-    m_isJumping = false;
-    m_jumpDistance = 0.0f;
+    m_headCollision = true;
   }
-  if (collisionTop || collisionBottom || collisionMidle)
-  {
+
+  if (collisionTop || collisionBottom || collisionMidle) {
     FVector loc = GetActorLocation();
     FVector absForward = FVector::ZeroVector;
     FVector forward = GetActorForwardVector();
@@ -186,47 +168,29 @@ void APlayerOvi::CheckCollision()
     absForward.Y = (FMath::Abs(forward.Y) <= 0.01) ? 0 : 1;
     absForward.Z = (FMath::Abs(forward.Z) <= 0.01) ? 0 : 1;
 
-    FVector forPosition = absForward * lastPosition;
+    FVector forPosition = absForward * m_lastPosition;
 
     loc.X = (FMath::Abs(forPosition.X) <= 0.01) ? loc.X : forPosition.X;
     loc.Y = (FMath::Abs(forPosition.Y) <= 0.01) ? loc.Y : forPosition.Y;
     loc.Z = (FMath::Abs(forPosition.Z) <= 0.01) ? loc.Z : forPosition.Z;
     SetActorLocation(loc);
   }
-
 }
 
 void APlayerOvi::CalculateOrientation()
 {
   FVector forward = GetActorForwardVector();
   FVector up = GetActorUpVector();
-  FTransform transform = GetTransform();
 
   float dotForward = FVector::DotProduct(GetActorLocation(), forward);
 
-  if (dotForward > m_limit && m_state == States::RIGHT) {
-      //m_rotation -= up * 90;
-      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, -90));
-      transform.SetRotation(q);
-      SetActorTransform(transform);
-      if (GEngine)
-      {
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("RIGHT TRANSITION")));
-      }
-  }
-  
-  if (dotForward > m_limit && m_state == States::LEFT) {
-      //m_rotation += up * 90;
-      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 90));
-      transform.SetRotation(q);
-      SetActorTransform(transform);
-      if (GEngine)
-      {
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("LEFT TRANSITION")));
-      }
-  }
+  if (dotForward > m_limit && m_state == States::RIGHT) 
+      Rotate(FVector(0, 0, -90));
 
-  /*Para rotaciones verticales*/
+  
+  if (dotForward > m_limit && m_state == States::LEFT)
+      Rotate(FVector(0, 0, 90));
+
   float dotUp = FVector::DotProduct(GetActorLocation(), up);
   float val = 0;
 
@@ -234,24 +198,13 @@ void APlayerOvi::CalculateOrientation()
     bool toUp = dotUp > m_limit;	
 
     val = (toUp) ? 90 : -90;
-    //m_rotation.Y += val;
-    if (m_state == States::STOP) {
-      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, val, 0));
-      transform.SetRotation(q);
-    }
-    else if (m_state == States::RIGHT) {
-      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(-val, 0, 0));
-      transform.SetRotation(q);
-    }
-    else if (m_state == States::LEFT) {
-      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(val, 0, 0));
-      transform.SetRotation(q);
-    }
-    SetActorTransform(transform);
-    if (GEngine)
-    {
-      GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UP TRANSITION")));
-    }
+
+    if (m_state == States::STOP)
+      Rotate(FVector(0, val, 0));
+    else if (m_state == States::RIGHT)
+      Rotate(FVector(-val, 0, 0));
+    else if (m_state == States::LEFT)
+      Rotate(FVector(val, 0, 0));
   }
 
   AjustPosition();
@@ -263,18 +216,24 @@ void APlayerOvi::DoJump(float DeltaTime)
   FVector up = GetActorUpVector();
   FVector location = GetActorLocation();
 
-  if (m_doJump && !m_isJumping){
-    m_isJumping = true;
-    m_jumpDistance = 0.0f;
-    m_hasLanded = false;
+  if (m_hasLanded && !m_doJump) {
+    m_isJumping = false;
+    m_jumpDistance = 0.0;
+    m_headCollision = false;
   }
 
-  if (m_isJumping) {
-    m_jumpDistance += JumpSpeed * DeltaTime;
-    if (m_jumpDistance < MaxJumpHeight){
-      location += JumpSpeed * 2 * DeltaTime * up;
-    }
+  if (m_doJump && !m_isJumping) {
+    m_hasLanded = false;
+    m_isJumping = true;
+    m_headCollision = false;
   }
+
+  if (m_isJumping && !m_headCollision) {
+    m_jumpDistance += JumpSpeed * DeltaTime;
+    if (m_jumpDistance < MaxJumpHeight)
+      location += JumpSpeed * 2 * DeltaTime * up;
+  }
+
   SetActorLocation(location);
    
 }
@@ -300,72 +259,54 @@ void  APlayerOvi::DoMovement(float DeltaTime, float value)
 void APlayerOvi::Tick( float DeltaTime )
 {
   Super::Tick( DeltaTime );
-  lastPosition = GetActorLocation();
+  m_lastPosition = GetActorLocation();
 	float value = 0;
   FVector up = GetActorUpVector();
   FVector forward = GetActorForwardVector();
-  FTransform transform = GetTransform();
+
 	if (m_right && !m_left) {
 		m_doJump = false;
 		value = 1;
+
     if (m_state != States::RIGHT)
-    {
-      //m_rotation -= up * 90;
-      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0,0,-90));
-      transform.SetRotation(q);
-      SetActorTransform(transform);
-    }
+      Rotate(FVector(0, 0, -90));
 
 		m_state = States::RIGHT;
 	}
 	else if (m_left && !m_right) {
 		m_doJump = false;
 		value = 1;
-    if (m_state != States::LEFT) {
-      //m_rotation += up * 90;
-      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 90));
-      transform.SetRotation(q);
-      SetActorTransform(transform);
-    }
+    if (m_state != States::LEFT)
+      Rotate(FVector(0, 0, 90));
+
 		m_state = States::LEFT;
 	}
 	else if (!m_left && !m_right) {
 		m_doJump = false;
 		value = 0;
 
-    if (m_state == States::RIGHT){
-      //m_rotation += up * 90;
-      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 90));
-      transform.SetRotation(q);
-      SetActorTransform(transform);
-    }
+    if (m_state == States::RIGHT)
+      Rotate(FVector(0, 0, 90));
 
-    if (m_state == States::LEFT){
-      //m_rotation -= up * 90;
-      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, -90));
-      transform.SetRotation(q);
-      SetActorTransform(transform);
-    }
+    if (m_state == States::LEFT)
+      Rotate(FVector(0, 0, -90));
  
 		m_state = States::STOP;
   }
-  else{
+  else {
     m_doJump =  true;
     if (m_state == States::RIGHT || m_state == States::LEFT)
       value = 1;
   }
-
-  //SetActorRelativeRotation(FRotator::MakeFromEuler(m_rotation));
 
   DoMovement(DeltaTime, value);
   DoJump(DeltaTime);
   CalculateGravity(DeltaTime);
   CalculateOrientation();
   CheckCollision();
-  //AjustPosition();
 }
 
-void APlayerOvi::AjustPosition(){
+void APlayerOvi::AjustPosition() {
   FVector location = GetActorLocation();
 
   if (location.X > m_limit)
@@ -396,27 +337,22 @@ void APlayerOvi::SetupPlayerInputComponent(class UInputComponent* InputComponent
 	InputComponent->BindTouch(EInputEvent::IE_Released, this, &APlayerOvi::TouchEnd);
 }
 
-void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location)
-{
-	// only fire for first finger down
+void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location) {
+
 	if (Location.X > m_viewportCenter.X)
 		m_right = true;
 	if (Location.X < m_viewportCenter.X)
 		m_left = true;
 
-	if (GEngine)
-	{
+	if (GEngine) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("TOUCH")));
 	}
 }
 
-void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location)
-{
-
+void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location) {
 	m_right = false;
 	m_left = false;
-	if (GEngine)
-	{
+	if (GEngine) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("TOUCH END")));
 	}
 }
@@ -436,4 +372,11 @@ void APlayerOvi::OnStartLeft() {
 
 void APlayerOvi::OnStopLeft() {
 	m_left = false;
+}
+
+void APlayerOvi::Rotate(const FVector& rotation) {
+  FTransform transform = GetTransform();
+  FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(rotation);
+  transform.SetRotation(q);
+  SetActorTransform(transform);
 }
