@@ -73,6 +73,7 @@ private:
   void AjustPosition();
 
   FVector m_rotation;
+  FVector m_lastRotation;
 	bool m_right;
 	bool m_left;
   bool m_doJump;

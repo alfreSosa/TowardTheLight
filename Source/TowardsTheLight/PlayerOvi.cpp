@@ -96,7 +96,8 @@ void APlayerOvi::BeginPlay()
 	this->Tags.Add("Player");
 	m_limit = FVector::DotProduct(GetActorLocation(), GetActorForwardVector());
 	m_limit = abs(m_limit);	
-    m_rotation = GetActorRotation().Euler();
+  m_rotation = GetActorRotation().Euler();
+  m_lastRotation = FVector::ZeroVector;
 	const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
 	m_viewportCenter = FVector2D(ViewportSize.X / 2, ViewportSize.Y / 2);
 	
@@ -199,17 +200,30 @@ void APlayerOvi::CalculateOrientation()
 {
   FVector forward = GetActorForwardVector();
   FVector up = GetActorUpVector();
+  FTransform transform = GetTransform();
 
   float dotForward = FVector::DotProduct(GetActorLocation(), forward);
 
   if (dotForward > m_limit && m_state == States::RIGHT) {
-    m_rotation.Z -= 90;
-    SetActorRelativeRotation(FRotator::MakeFromEuler(m_rotation));
+      //m_rotation -= up * 90;
+      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, -90));
+      transform.SetRotation(q);
+      SetActorTransform(transform);
+      if (GEngine)
+      {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("RIGHT TRANSITION")));
+      }
   }
   
   if (dotForward > m_limit && m_state == States::LEFT) {
-    m_rotation.Z += 90;
-    SetActorRelativeRotation(FRotator::MakeFromEuler(m_rotation));
+      //m_rotation += up * 90;
+      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 90));
+      transform.SetRotation(q);
+      SetActorTransform(transform);
+      if (GEngine)
+      {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("LEFT TRANSITION")));
+      }
   }
 
   /*Para rotaciones verticales*/
@@ -219,19 +233,25 @@ void APlayerOvi::CalculateOrientation()
   if (dotUp > m_limit || dotUp < -m_limit) {
     bool toUp = dotUp > m_limit;	
 
+    val = (toUp) ? 90 : -90;
+    //m_rotation.Y += val;
     if (m_state == States::STOP) {
-      val = (toUp) ? 90 : -90;
-      m_rotation.Y += val;
-    }
-    /*else if (m_state == States::LEFT) {
-      val = (toUp) ? 90 : -90;
-      m_rotation.Y += val;
+      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, val, 0));
+      transform.SetRotation(q);
     }
     else if (m_state == States::RIGHT) {
-      val = (toUp) ? 90 : -90;
-      m_rotation.Y += val;
-    }*/
-    SetActorRelativeRotation(FRotator::MakeFromEuler(m_rotation));
+      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(-val, 0, 0));
+      transform.SetRotation(q);
+    }
+    else if (m_state == States::LEFT) {
+      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(val, 0, 0));
+      transform.SetRotation(q);
+    }
+    SetActorTransform(transform);
+    if (GEngine)
+    {
+      GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("UP TRANSITION")));
+    }
   }
 
   AjustPosition();
@@ -283,33 +303,50 @@ void APlayerOvi::Tick( float DeltaTime )
   lastPosition = GetActorLocation();
 	float value = 0;
   FVector up = GetActorUpVector();
-
+  FVector forward = GetActorForwardVector();
+  FTransform transform = GetTransform();
 	if (m_right && !m_left) {
 		m_doJump = false;
 		value = 1;
     if (m_state != States::RIGHT)
-      m_rotation.Z -= 90;
+    {
+      //m_rotation -= up * 90;
+      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0,0,-90));
+      transform.SetRotation(q);
+      SetActorTransform(transform);
+    }
 
 		m_state = States::RIGHT;
 	}
 	else if (m_left && !m_right) {
 		m_doJump = false;
 		value = 1;
-		if (m_state != States::LEFT)
-      m_rotation.Z +=90;
-
+    if (m_state != States::LEFT) {
+      //m_rotation += up * 90;
+      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 90));
+      transform.SetRotation(q);
+      SetActorTransform(transform);
+    }
 		m_state = States::LEFT;
 	}
 	else if (!m_left && !m_right) {
 		m_doJump = false;
 		value = 0;
 
-		if (m_state == States::RIGHT) 
-      m_rotation.Z += 90;
+    if (m_state == States::RIGHT){
+      //m_rotation += up * 90;
+      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 90));
+      transform.SetRotation(q);
+      SetActorTransform(transform);
+    }
 
-		if (m_state == States::LEFT)
-      m_rotation.Z -= 90;
-
+    if (m_state == States::LEFT){
+      //m_rotation -= up * 90;
+      FQuat q = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, -90));
+      transform.SetRotation(q);
+      SetActorTransform(transform);
+    }
+ 
 		m_state = States::STOP;
   }
   else{
@@ -318,7 +355,7 @@ void APlayerOvi::Tick( float DeltaTime )
       value = 1;
   }
 
-  SetActorRelativeRotation(FRotator::MakeFromEuler(m_rotation));
+  //SetActorRelativeRotation(FRotator::MakeFromEuler(m_rotation));
 
   DoMovement(DeltaTime, value);
   DoJump(DeltaTime);
