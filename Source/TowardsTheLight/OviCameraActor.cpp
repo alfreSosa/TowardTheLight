@@ -95,35 +95,27 @@ void AOviCameraActor::SetPosition(){
 }
 
 void AOviCameraActor::SetOrientation(){
-  FVector dir = m_player->GetActorLocation() - this->GetActorLocation();
+  FVector forward = m_player->GetActorLocation() - this->GetActorLocation();
+  forward.Normalize();
+  FVector side = FVector::CrossProduct(forward, m_player->GetActorUpVector());
+  side.Normalize();
+
+  FRotator rot = FRotationMatrix::MakeFromXY(forward, -side).Rotator();
+  this->SetActorRotation(rot);
+
+
+  //FVector up = FVector::CrossProduct(side, forward);
+
+  //FRotator rot = FRotationMatrix::MakeFromXZ(forward, up).Rotator();
+  //this->SetActorRotation(rot);
 
 
 
-  //sol 1
-  dir.Normalize();
-  FRotator rotX = FRotationMatrix::MakeFromX(dir).Rotator();
-  this->SetActorRotation(rotX);
-  
-  //sol 2
-  //this->SetActorRotation(dir.Rotation());
-
-  //int s = this->GetActorUpVector().X + this->GetActorUpVector().Y + this->GetActorUpVector().Z;
-  //s = abs(s);
-
-  //if (s == 1){
-  //  for (int i = 0; i < 4; i++){
-  //    if (!FVector::Parallel(m_player->GetActorUpVector(), this->GetActorUpVector())){
-  //      SetActorRelativeRotation(FRotator::MakeFromEuler(FVector(90, 0, 0)));
-  //    }
-  //    else
-  //      break;
-  //  }
+  //if (GEngine)
+  //{
+  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("player up: x: %f, y: %f, z: %f "), m_player->GetActorUpVector().X, m_player->GetActorUpVector().Y, m_player->GetActorUpVector().Z));
+  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("camara forward: x: %f, y: %f, z: %f "), forward.X, forward.Y, forward.Z));
+  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("camara up: x: %f, y: %f, z: %f "), GetActorUpVector().X, GetActorUpVector().Y, GetActorUpVector().Z));
+  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("up: x: %f, y: %f, z: %f "), up.X, up.Y, up.Z));
   //}
-
-
-
-
-  //sol 3 - error de linker
-  //FRotator PlayerRot = UKismetMathLibrary::FindLookAtRotation(this->GetActorLocation(), m_player->GetActorLocation());
-  //this->SetActorRotation(PlayerRot);
 }
