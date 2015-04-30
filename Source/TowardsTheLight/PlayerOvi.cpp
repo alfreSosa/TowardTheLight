@@ -97,16 +97,19 @@ void APlayerOvi::CheckCollision()
 
   // Calculate the start location for trace  
   FVector StartTrace = GetActorLocation();
-  FVector StartTraceTop = GetActorLocation() + GetActorUpVector() * 86.0f;
-  FVector StartTraceBottom = GetActorLocation() - GetActorUpVector() * 80.0f;
+
+  float capsuleHeight = CapsuleComponent->GetScaledCapsuleHalfHeight();
+  float capsuleRadious = CapsuleComponent->GetScaledCapsuleRadius();
+  FVector StartTraceTop = GetActorLocation() + GetActorUpVector() * (capsuleHeight - 2.0f);
+  FVector StartTraceBottom = GetActorLocation() - GetActorUpVector() * (capsuleHeight - 10.0f);
 
   // Calculate endpoint of trace  
-  const FVector EndTraceDown = StartTrace - GetActorUpVector() * 88.0f; //half height capsule //REVISAR
-  const FVector EndTraceUp = StartTrace + GetActorUpVector() * 88.0f; //half height capsule
+  const FVector EndTraceDown = StartTrace - GetActorUpVector() * capsuleHeight;
+  const FVector EndTraceUp = StartTrace + GetActorUpVector() * capsuleHeight;
   //horizontal
-  const FVector EndTraceTop = StartTraceTop + GetActorForwardVector() * 32.0f; //radious capsule
-  const FVector EndTraceBottom = StartTraceBottom + GetActorForwardVector() * 32.0f; //radious capsule
-  const FVector EndTraceMidle = StartTrace + GetActorForwardVector() * 32.0f; //radious capsule
+  const FVector EndTraceTop = StartTraceTop + GetActorForwardVector() * capsuleRadious;
+  const FVector EndTraceBottom = StartTraceBottom + GetActorForwardVector() * capsuleRadious;
+  const FVector EndTraceMidle = StartTrace + GetActorForwardVector() * capsuleRadious;
 
   // Setup the trace query  
   static FName FireTraceIdent = FName(TEXT("ColliderTrace"));
