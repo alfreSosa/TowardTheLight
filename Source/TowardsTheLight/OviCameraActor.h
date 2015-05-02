@@ -10,12 +10,16 @@ class TOWARDSTHELIGHT_API AOviCameraActor : public ACameraActor
 {
   GENERATED_BODY()
 
+  //const float MAX_CAMERA_SPEED = 100;
+
   class APlayerOvi *m_player;
+  float m_limitWorld;
   float m_limitPadding;
   float m_cameraDistance;
-  float m_sqrt2, m_sqrt3;
+  float m_ruleOfThree;
+  //float m_deltaLerp;
 
-  void SetPosition(float DeltaSeconds);
+  void SetPosition();
   void SetOrientation();
 public:
   AOviCameraActor(const FObjectInitializer& ObjectInitializer);  // Our added constructor

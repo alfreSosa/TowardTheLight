@@ -5,18 +5,14 @@
 #include "PlayerOvi.h"
 #include "OviPlayerController.h"
 
-//#include "Kismet/KismetMathLibrary.h"
-
 AOviCameraActor::AOviCameraActor(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
   // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
   PrimaryActorTick.bCanEverTick = true;
 
   //setting
-  Padding = 100;
+  Padding = 200;
   DistanceCameraToPlayer = 500;
-  CameraSpeed = 50;
-  m_sqrt2 = FMath::Sqrt(2);
-  m_sqrt3 = FMath::Sqrt(3);
+  //CameraSpeed = 50;
 }
 
 void AOviCameraActor::BeginPlay(){
@@ -31,9 +27,17 @@ void AOviCameraActor::BeginPlay(){
     }
   }
 
-  float limit = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorForwardVector());
-  m_limitPadding = abs(limit) - Padding;
-  m_cameraDistance = abs(limit) + DistanceCameraToPlayer;
+  m_limitWorld = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorForwardVector());
+  m_limitPadding = abs(m_limitWorld) - Padding;
+  m_cameraDistance = abs(m_limitWorld) + DistanceCameraToPlayer;
+  m_ruleOfThree = (m_cameraDistance - m_limitPadding) / (m_limitWorld - m_limitPadding);
+
+  //if (CameraSpeed < 0)
+  //  CameraSpeed = 0;
+  //if (CameraSpeed > MAX_CAMERA_SPEED)
+  //  CameraSpeed = MAX_CAMERA_SPEED;
+
+  //m_deltaLerp = CameraSpeed / MAX_CAMERA_SPEED;
 
   AOviPlayerController* oviPlayerController = (AOviPlayerController* )GetWorld()->GetFirstPlayerController();
   if (oviPlayerController)
@@ -42,48 +46,76 @@ void AOviCameraActor::BeginPlay(){
 
 
 void AOviCameraActor::Tick(float DeltaSeconds){
-  SetPosition(DeltaSeconds);
+  SetPosition();
   SetOrientation();
 }
 
-void AOviCameraActor::SetPosition(float DeltaSeconds){
+void AOviCameraActor::SetPosition(){
+  // TRY LERP
+  //FVector finalPos = m_player->GetActorLocation();
+  //if (finalPos.X > m_limitPadding)
+  //  finalPos.X = m_cameraDistance;
+  //else if (finalPos.X < -m_limitPadding)
+  //  finalPos.X = -m_cameraDistance;
+
+  //if (finalPos.Y > m_limitPadding)
+  //  finalPos.Y = m_cameraDistance;
+  //else if (finalPos.Y < -m_limitPadding)
+  //  finalPos.Y = -m_cameraDistance;
+
+  //if (finalPos.Z > m_limitPadding)
+  //  finalPos.Z = m_cameraDistance;
+  //else if (finalPos.Z < -m_limitPadding)
+  //  finalPos.Z = -m_cameraDistance;
+
+  //FVector absFinalPos(finalPos.GetAbs());
+
+  //if (absFinalPos.X == m_cameraDistance && absFinalPos.Y == m_cameraDistance && absFinalPos.Z == m_cameraDistance) {
+  //  finalPos = finalPos / 1.2;
+  //}
+  //else if (absFinalPos.X == m_cameraDistance && absFinalPos.Y == m_cameraDistance) {
+  //  finalPos.X = finalPos.X / 1.1;
+  //  finalPos.Y = finalPos.Y / 1.1;
+  //}
+  //else if (absFinalPos.X == m_cameraDistance && absFinalPos.Z == m_cameraDistance) {
+  //  finalPos.X = finalPos.X / 1.1;
+  //  finalPos.Z = finalPos.Z / 1.1;
+  //}
+  //else if (absFinalPos.Y == m_cameraDistance && absFinalPos.Z == m_cameraDistance) {
+  //  finalPos.Y = finalPos.Y / 1.1;
+  //  finalPos.Z = finalPos.Z / 1.1;
+  //}
+
+  //FVector currentPos = this->GetActorLocation();
+
+  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("delta: %f "), m_deltaLerp));
+
+  //SetActorLocation(FMath::Lerp(currentPos, finalPos, m_deltaLerp));
+
+
+  // TRY RULE OF THREE
   FVector finalPos = m_player->GetActorLocation();
+  FVector dist(0, 0, 0);
   if (finalPos.X > m_limitPadding)
-    finalPos.X += DistanceCameraToPlayer;
+    dist.X = finalPos.X - m_limitPadding;
   else if (finalPos.X < -m_limitPadding)
-    finalPos.X += -DistanceCameraToPlayer;
+    dist.X = finalPos.X + m_limitPadding;
 
   if (finalPos.Y > m_limitPadding)
-    finalPos.Y += DistanceCameraToPlayer;
+    dist.Y = finalPos.Y - m_limitPadding;
   else if (finalPos.Y < -m_limitPadding)
-    finalPos.Y += -DistanceCameraToPlayer;
+    dist.Y = finalPos.Y + m_limitPadding;
 
   if (finalPos.Z > m_limitPadding)
-    finalPos.Z += DistanceCameraToPlayer;
+    dist.Z = finalPos.Z - m_limitPadding;
   else if (finalPos.Z < -m_limitPadding)
-    finalPos.Z += -DistanceCameraToPlayer;
+    dist.Z = finalPos.Z + m_limitPadding;
 
-  FVector absFinalPos(finalPos.GetAbs());
+  finalPos += dist * m_ruleOfThree;
 
-  if (absFinalPos.X >= m_cameraDistance && absFinalPos.Y >= m_cameraDistance && absFinalPos.Z >= m_cameraDistance) {
-    finalPos = finalPos / m_sqrt3;
-  }
-  else if (absFinalPos.X >= m_cameraDistance && absFinalPos.Y >= m_cameraDistance) {
-    finalPos.X = finalPos.X / m_sqrt2;
-    finalPos.Y = finalPos.Y / m_sqrt2;
-  }
-  else if (absFinalPos.X >= m_cameraDistance && absFinalPos.Z >= m_cameraDistance) {
-    finalPos.X = finalPos.X / m_sqrt2;
-    finalPos.Z = finalPos.Z / m_sqrt2;
-  }
-  else if (absFinalPos.Y >= m_cameraDistance && absFinalPos.Z >= m_cameraDistance) {
-    finalPos.Y = finalPos.Y / m_sqrt2;
-    finalPos.Z = finalPos.Z / m_sqrt2;
-  }
+  SetActorLocation(finalPos);
 
-  FVector currentPos = this->GetActorLocation();
 
-  SetActorLocation(FMath::Lerp(finalPos, currentPos, CameraSpeed * DeltaSeconds));
 }
 
 void AOviCameraActor::SetOrientation(){
@@ -94,10 +126,4 @@ void AOviCameraActor::SetOrientation(){
 
   FRotator rot = FRotationMatrix::MakeFromXY(forward, side).Rotator();
   this->SetActorRotation(rot);
-
-  //FVector side = FVector::CrossProduct(forward, m_player->GetActorUpVector());
-  //side.Normalize();
-  //FVector up = FVector::CrossProduct(side, forward);
-  //FRotator rot = FRotationMatrix::MakeFromXZ(forward, up).Rotator();
-  //this->SetActorRotation(rot);
 }
