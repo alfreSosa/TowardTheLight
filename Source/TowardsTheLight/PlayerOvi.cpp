@@ -141,6 +141,9 @@ void APlayerOvi::CheckCollision()
 
     m_hasLanded = true;
   }
+  else {
+    m_hasLanded = false;
+  }
 
   if (collisionUp) {
     FVector loc = GetActorLocation();
@@ -225,7 +228,7 @@ void APlayerOvi::DoJump(float DeltaTime)
     m_headCollision = false;
   }
 
-  if (m_doJump && !m_isJumping) {
+  if (m_doJump && !m_isJumping && m_hasLanded) {
     m_hasLanded = false;
     m_isJumping = true;
     m_headCollision = false;
