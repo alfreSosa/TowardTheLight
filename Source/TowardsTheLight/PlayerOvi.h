@@ -60,9 +60,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float MaxJumpHeight;
 private:
-
   const int m_frameToMove = 5;
+
   void InputManager();
+  float  UpdateState();
   void CalculateOrientation();
   void CalculateGravity(float DeltaTime);
   void DoJump(float DeltaTime);
@@ -87,5 +88,7 @@ private:
 	float m_jumpDistance;
   FVector m_lastPosition;
   FVector2D  m_viewportCenter;
+  ETouchIndex::Type m_fingerIndexRight;
+  ETouchIndex::Type m_fingerIndexLeft;
 
 };

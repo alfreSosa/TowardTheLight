@@ -20,7 +20,7 @@ APlayerOvi::APlayerOvi() {
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
-
+  
 	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
 	CapsuleComponent->InitCapsuleSize(34.0f, 88.0f);
 
@@ -87,134 +87,145 @@ void APlayerOvi::BeginPlay()
   m_rotation = GetActorRotation().Euler();
   m_lastRotation = FVector::ZeroVector;
 	const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
-	m_viewportCenter = FVector2D(ViewportSize.X / 2, ViewportSize.Y / 2);
-	
+  //m_viewportCenter = FVector2D(ViewportSize.X / 2, ViewportSize.Y / 2);
+  m_viewportCenter = FVector2D(500, 500);
+  //REVISAR
+  //mobilepreview devuelve 0,0
+  CheckCollision();
+  m_fingerIndexRight = m_fingerIndexLeft = ETouchIndex::Touch10;
 }
 
-void APlayerOvi::CheckCollision()
+/*****************************
+He encontrado estas funciones, que parecian interesante
+ - SetTickableWhenPaused( bool bTickableWhenPaused )
+ - ShouldTickIfViewportsOnly()
+ ******************************/
+void APlayerOvi::Tick(float DeltaTime)
 {
+  Super::Tick(DeltaTime);
 
-  FHitResult OutTraceResult;
-
-  // Calculate the start location for trace  
-  FVector StartTrace = GetActorLocation();
-
-  float capsuleHeight = CapsuleComponent->GetScaledCapsuleHalfHeight();
-  float capsuleRadious = CapsuleComponent->GetScaledCapsuleRadius();
-  FVector StartTraceTop = GetActorLocation() + GetActorUpVector() * (capsuleHeight - 2.0f);
-  FVector StartTraceBottom = GetActorLocation() - GetActorUpVector() * (capsuleHeight - 10.0f);
-
-  // Calculate endpoint of trace  
-  const FVector EndTraceDown = StartTrace - GetActorUpVector() * capsuleHeight;
-  const FVector EndTraceUp = StartTrace + GetActorUpVector() * capsuleHeight;
-  //horizontal
-  const FVector EndTraceTop = StartTraceTop + GetActorForwardVector() * capsuleRadious;
-  const FVector EndTraceBottom = StartTraceBottom + GetActorForwardVector() * capsuleRadious;
-  const FVector EndTraceMidle = StartTrace + GetActorForwardVector() * capsuleRadious;
-
-  // Setup the trace query  
-  static FName FireTraceIdent = FName(TEXT("ColliderTrace"));
-  FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
-  TraceParams.bTraceAsyncScene = true;
-
-  bool collisionDown = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceDown, COLLISION_PLAYER, TraceParams);
-  bool collisionUp = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceUp, COLLISION_PLAYER, TraceParams);
-
-  bool collisionTop = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceTop, EndTraceTop, COLLISION_PLAYER, TraceParams);
-  bool collisionBottom = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceBottom, EndTraceBottom, COLLISION_PLAYER, TraceParams);
-  bool collisionMidle = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceMidle, COLLISION_PLAYER, TraceParams);
-
-  if (collisionDown) {
-    FVector loc = GetActorLocation();
-    FVector absUp = FVector::ZeroVector;
-    FVector up = GetActorUpVector();
-
-    absUp.X = (FMath::Abs(up.X) <= 0.01) ? 0 : 1;
-    absUp.Y = (FMath::Abs(up.Y) <= 0.01) ? 0 : 1;
-    absUp.Z = (FMath::Abs(up.Z) <= 0.01) ? 0 : 1;
-
-    FVector upPosition = absUp * m_lastPosition;
-
-    loc.X = (FMath::Abs(upPosition.X) <= 0.01) ? loc.X : upPosition.X;
-    loc.Y = (FMath::Abs(upPosition.Y) <= 0.01) ? loc.Y : upPosition.Y;
-    loc.Z = (FMath::Abs(upPosition.Z) <= 0.01) ? loc.Z : upPosition.Z;
-    SetActorLocation(loc);
-
-    m_hasLanded = true;
-  }
-  else {
-    m_hasLanded = false;
-  }
-
-  if (collisionUp) {
-    FVector loc = GetActorLocation();
-
-    FVector absUp = FVector::ZeroVector;
-    FVector up = GetActorUpVector();
-
-    absUp.X = (FMath::Abs(up.X) <= 0.01) ? 0 : 1;
-    absUp.Y = (FMath::Abs(up.Y) <= 0.01) ? 0 : 1;
-    absUp.Z = (FMath::Abs(up.Z) <= 0.01) ? 0 : 1;
-
-    FVector upPosition = absUp * m_lastPosition;
-
-
-    loc.X = (FMath::Abs(upPosition.X) <= 0.01) ? loc.X : upPosition.X;
-    loc.Y = (FMath::Abs(upPosition.Y) <= 0.01) ? loc.Y : upPosition.Y;
-    loc.Z = (FMath::Abs(upPosition.Z) <= 0.01) ? loc.Z : upPosition.Z;
-    SetActorLocation(loc);
-    m_headCollision = true;
-  }
-
-  if (collisionTop || collisionBottom || collisionMidle) {
-    FVector loc = GetActorLocation();
-    FVector absForward = FVector::ZeroVector;
-    FVector forward = GetActorForwardVector();
-
-    absForward.X = (FMath::Abs(forward.X) <= 0.01) ? 0 : 1;
-    absForward.Y = (FMath::Abs(forward.Y) <= 0.01) ? 0 : 1;
-    absForward.Z = (FMath::Abs(forward.Z) <= 0.01) ? 0 : 1;
-
-    FVector forPosition = absForward * m_lastPosition;
-
-    loc.X = (FMath::Abs(forPosition.X) <= 0.01) ? loc.X : forPosition.X;
-    loc.Y = (FMath::Abs(forPosition.Y) <= 0.01) ? loc.Y : forPosition.Y;
-    loc.Z = (FMath::Abs(forPosition.Z) <= 0.01) ? loc.Z : forPosition.Z;
-    SetActorLocation(loc);
-  }
+  InputManager();
+  float value = UpdateState();
+  DoMovement(DeltaTime, value);
+  DoJump(DeltaTime);
+  CalculateGravity(DeltaTime);
+  CalculateOrientation();
+  CheckCollision();
 }
 
-void APlayerOvi::CalculateOrientation()
-{
-  FVector forward = GetActorForwardVector();
+float APlayerOvi::UpdateState() {
+  m_lastPosition = GetActorLocation();
+  float value = 0;
   FVector up = GetActorUpVector();
+  FVector forward = GetActorForwardVector();
 
-  float dotForward = FVector::DotProduct(GetActorLocation(), forward);
-
-  if (dotForward > m_limit && m_state == States::RIGHT) 
+  if (m_right > m_frameToMove && m_left <= m_frameToMove) {
+    m_doJump = false;
+    value = 1;
+    if (m_state != States::RIGHT)
       Rotate(FVector(0, 0, -90));
 
-  
-  if (dotForward > m_limit && m_state == States::LEFT)
+    m_state = States::RIGHT;
+  }
+  else if (m_left > m_frameToMove && m_right <= m_frameToMove) {
+    m_doJump = false;
+    value = 1;
+    if (m_state != States::LEFT)
       Rotate(FVector(0, 0, 90));
 
-  float dotUp = FVector::DotProduct(GetActorLocation(), up);
-  float val = 0;
+    m_state = States::LEFT;
+  }
+  else if (m_left <= m_frameToMove && m_right <= m_frameToMove) {
+    m_doJump = false;
+    value = 0;
+    if (m_state == States::RIGHT)
+      Rotate(FVector(0, 0, 90));
 
-  if (dotUp > m_limit || dotUp < -m_limit) {
-    bool toUp = dotUp > m_limit;	
+    if (m_state == States::LEFT)
+      Rotate(FVector(0, 0, -90));
 
-    val = (toUp) ? 90 : -90;
+    m_state = States::STOP;
+  }
+  else {
+    m_doJump = true;
+    if (m_state == States::RIGHT || m_state == States::LEFT)
+      value = 1;
+  }
+  return value;
+}
 
-    if (m_state == States::STOP)
-      Rotate(FVector(0, val, 0));
-    else if (m_state == States::RIGHT)
-      Rotate(FVector(-val, 0, 0));
-    else if (m_state == States::LEFT)
-      Rotate(FVector(val, 0, 0));
+void APlayerOvi::SetupPlayerInputComponent(class UInputComponent* InputComponent) {
+  Super::SetupPlayerInputComponent(InputComponent);
+  InputComponent->BindAction("MoveRight", IE_Pressed, this, &APlayerOvi::OnStartRight);
+  InputComponent->BindAction("MoveRight", IE_Released, this, &APlayerOvi::OnStopRight);
+  InputComponent->BindAction("MoveLeft", IE_Pressed, this, &APlayerOvi::OnStartLeft);
+  InputComponent->BindAction("MoveLeft", IE_Released, this, &APlayerOvi::OnStopLeft);
+  InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &APlayerOvi::TouchStarted);
+  InputComponent->BindTouch(EInputEvent::IE_Released, this, &APlayerOvi::TouchEnd);
+}
+
+void APlayerOvi::InputManager()
+{
+  m_right = (m_startRight) ? m_right + 1 : 0;
+  m_left = (m_startLeft) ? m_left + 1 : 0;
+}
+void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location) {
+
+  if (Location.X > m_viewportCenter.X) {
+    m_startRight = true;
+    m_fingerIndexRight = FingerIndex;
+
+  }
+  else if (Location.X < m_viewportCenter.X) {
+    m_startLeft = true;
+    m_fingerIndexLeft = FingerIndex;
+
   }
 
-  AjustPosition();
+  if (GEngine) {
+    if (FingerIndex != ETouchIndex::Touch1 && FingerIndex != ETouchIndex::Touch2)
+      GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Efinferindex > 2")));
+  }
+}
+
+void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location) {
+  if (FingerIndex == m_fingerIndexRight) {
+    m_startRight = false;
+    m_fingerIndexRight = ETouchIndex::Touch10;
+  }
+  else if (FingerIndex == m_fingerIndexLeft) {
+    m_startLeft = false;
+    m_fingerIndexLeft = ETouchIndex::Touch10;
+
+  }
+  if (GEngine) {
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("TOUCH END")));
+  }
+}
+
+
+void APlayerOvi::OnStartRight() {
+  m_startRight = true;
+}
+
+void APlayerOvi::OnStopRight() {
+  m_startRight = false;
+}
+
+void APlayerOvi::OnStartLeft() {
+  m_startLeft = true;
+}
+
+void APlayerOvi::OnStopLeft() {
+  m_startLeft = false;
+}
+
+void  APlayerOvi::DoMovement(float DeltaTime, float value)
+{
+  FVector forward = GetActorForwardVector();
+  FVector location = GetActorLocation();
+  location += MovementSpeed * DeltaTime * value * forward;
+  SetActorLocation(location);
 
 }
 
@@ -254,68 +265,39 @@ void APlayerOvi::CalculateGravity(float DeltaTime)
   SetActorLocation(location);
 }
 
-void  APlayerOvi::DoMovement(float DeltaTime, float value)
+void APlayerOvi::CalculateOrientation()
 {
   FVector forward = GetActorForwardVector();
-  FVector location = GetActorLocation();
-  location += MovementSpeed * DeltaTime * value * forward;
-  SetActorLocation(location);
-
-}
-
-void APlayerOvi::Tick( float DeltaTime )
-{
-  Super::Tick( DeltaTime );
-
-  InputManager();
-
-  m_lastPosition = GetActorLocation();
-	float value = 0;
   FVector up = GetActorUpVector();
-  FVector forward = GetActorForwardVector();
 
-	if (m_right > m_frameToMove && m_left <= m_frameToMove) {
-		m_doJump = false;
-		value = 1;
+  float dotForward = FVector::DotProduct(GetActorLocation(), forward);
 
-    if (m_state != States::RIGHT)
-      Rotate(FVector(0, 0, -90));
+  if (dotForward > m_limit && m_state == States::RIGHT)
+    Rotate(FVector(0, 0, -90));
 
-		m_state = States::RIGHT;
-	}
-	else if (m_left > m_frameToMove && m_right <= m_frameToMove) {
-		m_doJump = false;
-		value = 1;
-    if (m_state != States::LEFT)
-      Rotate(FVector(0, 0, 90));
 
-		m_state = States::LEFT;
-	}
-  else if (m_left <= m_frameToMove && m_right <= m_frameToMove) {
-		m_doJump = false;
-		value = 0;
+  if (dotForward > m_limit && m_state == States::LEFT)
+    Rotate(FVector(0, 0, 90));
 
-    if (m_state == States::RIGHT)
-      Rotate(FVector(0, 0, 90));
+  float dotUp = FVector::DotProduct(GetActorLocation(), up);
+  float val = 0;
 
-    if (m_state == States::LEFT)
-      Rotate(FVector(0, 0, -90));
- 
-		m_state = States::STOP;
-  }
-  else {
-    m_doJump =  true;
-    if (m_state == States::RIGHT || m_state == States::LEFT)
-      value = 1;
+  if (dotUp > m_limit || dotUp < -m_limit) {
+    bool toUp = dotUp > m_limit;
+
+    val = (toUp) ? 90 : -90;
+
+    if (m_state == States::STOP)
+      Rotate(FVector(0, val, 0));
+    else if (m_state == States::RIGHT)
+      Rotate(FVector(-val, 0, 0));
+    else if (m_state == States::LEFT)
+      Rotate(FVector(val, 0, 0));
   }
 
-  DoMovement(DeltaTime, value);
-  DoJump(DeltaTime);
-  CalculateGravity(DeltaTime);
-  CalculateOrientation();
-  CheckCollision();
+  AjustPosition();
+
 }
-
 void APlayerOvi::AjustPosition() {
   FVector location = GetActorLocation();
 
@@ -337,57 +319,103 @@ void APlayerOvi::AjustPosition() {
   SetActorLocation(location);
 }
 
-void APlayerOvi::SetupPlayerInputComponent(class UInputComponent* InputComponent) {
-	Super::SetupPlayerInputComponent(InputComponent);
-	InputComponent->BindAction("MoveRight", IE_Pressed, this, &APlayerOvi::OnStartRight);
-	InputComponent->BindAction("MoveRight", IE_Released, this, &APlayerOvi::OnStopRight);
-	InputComponent->BindAction("MoveLeft", IE_Pressed, this, &APlayerOvi::OnStartLeft);
-	InputComponent->BindAction("MoveLeft", IE_Released, this, &APlayerOvi::OnStopLeft);
-	InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &APlayerOvi::TouchStarted);
-	InputComponent->BindTouch(EInputEvent::IE_Released, this, &APlayerOvi::TouchEnd);
-}
-
-void APlayerOvi::InputManager()
+void APlayerOvi::CheckCollision()
 {
-  m_right = (m_startRight) ? m_right + 1 : 0;
-  m_left = (m_startLeft) ? m_left + 1 : 0;
-}
-void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location) {
 
-	if (Location.X > m_viewportCenter.X)
-    m_startRight = true;
-	if (Location.X < m_viewportCenter.X)
-    m_startLeft = true;
+  FHitResult OutTraceResult;
 
-	if (GEngine) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("TOUCH")));
-	}
-}
+  // Calculate the start location for trace  
+  FVector StartTrace = GetActorLocation();
 
-void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location) {
-  m_startRight = false;
-  m_startRight = false;
+  float capsuleHeight = CapsuleComponent->GetScaledCapsuleHalfHeight();
+  float capsuleRadious = CapsuleComponent->GetScaledCapsuleRadius();
+  FVector StartTraceTop = GetActorLocation() + GetActorUpVector() * (capsuleHeight - 2.0f); // REVISAR ESTAS COSTANTES
+  FVector StartTraceBottom = GetActorLocation() - GetActorUpVector() * (capsuleHeight - 10.0f);
 
-	if (GEngine) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("TOUCH END")));
-	}
-}
-	
+  FVector StartTraceLeft = StartTrace - GetActorRightVector() * capsuleRadious; //REVISAR:ESTOS ESTAN MAL En movimiento no valen eso o poner dos mas
+  FVector StartTraceRigth = StartTrace + GetActorRightVector() * capsuleRadious;
 
-void APlayerOvi::OnStartRight() {
-  m_startRight = true;
-}
+  // Calculate endpoint of trace  
+  const FVector EndTraceDown = StartTrace - GetActorUpVector() * capsuleHeight;
+  const FVector EndTraceUp = StartTrace + GetActorUpVector() * capsuleHeight;
+  //horizontal
+  const FVector EndTraceTop = StartTraceTop + GetActorForwardVector() * capsuleRadious;
+  const FVector EndTraceBottom = StartTraceBottom + GetActorForwardVector() * capsuleRadious;
+  const FVector EndTraceMidle = StartTrace + GetActorForwardVector() * capsuleRadious;
 
-void APlayerOvi::OnStopRight() {
-  m_startRight = false;
-}
+  // Setup the trace query  
+  static FName FireTraceIdent = FName(TEXT("ColliderTrace"));
+  FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
+  TraceParams.bTraceAsyncScene = true;
 
-void APlayerOvi::OnStartLeft() {
-  m_startLeft = true;
-}
+  bool collisionDown = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceDown, COLLISION_PLAYER, TraceParams);
+  bool collisionDownLeft = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeft, EndTraceDown, COLLISION_PLAYER, TraceParams);
+  bool collisionDownRight = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigth, EndTraceDown, COLLISION_PLAYER, TraceParams);
+  bool collisionUp = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceUp, COLLISION_PLAYER, TraceParams);
+  bool collisionUpLeft = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeft, EndTraceUp, COLLISION_PLAYER, TraceParams);
+  bool collisionUpRight = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigth, EndTraceUp, COLLISION_PLAYER, TraceParams);
 
-void APlayerOvi::OnStopLeft() {
-  m_startLeft = false;
+  bool collisionTop = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceTop, EndTraceTop, COLLISION_PLAYER, TraceParams);
+  bool collisionBottom = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceBottom, EndTraceBottom, COLLISION_PLAYER, TraceParams);
+  bool collisionMidle = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceMidle, COLLISION_PLAYER, TraceParams);
+
+  if (collisionDown || collisionDownLeft || collisionDownRight) {
+    FVector loc = GetActorLocation();
+    FVector absUp = FVector::ZeroVector;
+    FVector up = GetActorUpVector();
+
+    absUp.X = (FMath::Abs(up.X) <= 0.01) ? 0 : 1;
+    absUp.Y = (FMath::Abs(up.Y) <= 0.01) ? 0 : 1;
+    absUp.Z = (FMath::Abs(up.Z) <= 0.01) ? 0 : 1;
+
+    FVector upPosition = absUp * m_lastPosition;
+
+    loc.X = (FMath::Abs(upPosition.X) <= 0.01) ? loc.X : upPosition.X;
+    loc.Y = (FMath::Abs(upPosition.Y) <= 0.01) ? loc.Y : upPosition.Y;
+    loc.Z = (FMath::Abs(upPosition.Z) <= 0.01) ? loc.Z : upPosition.Z;
+    SetActorLocation(loc);
+    m_hasLanded = true;
+  }
+  else {
+    m_hasLanded = false;
+  }
+
+  if (collisionUp || collisionUpLeft || collisionUpRight) {
+    FVector loc = GetActorLocation();
+
+    FVector absUp = FVector::ZeroVector;
+    FVector up = GetActorUpVector();
+
+    absUp.X = (FMath::Abs(up.X) <= 0.01) ? 0 : 1;
+    absUp.Y = (FMath::Abs(up.Y) <= 0.01) ? 0 : 1;
+    absUp.Z = (FMath::Abs(up.Z) <= 0.01) ? 0 : 1;
+
+    FVector upPosition = absUp * m_lastPosition;
+
+
+    loc.X = (FMath::Abs(upPosition.X) <= 0.01) ? loc.X : upPosition.X;
+    loc.Y = (FMath::Abs(upPosition.Y) <= 0.01) ? loc.Y : upPosition.Y;
+    loc.Z = (FMath::Abs(upPosition.Z) <= 0.01) ? loc.Z : upPosition.Z;
+    SetActorLocation(loc);
+    m_headCollision = true;
+  }
+
+  if (collisionTop || collisionBottom || collisionMidle) {
+    FVector loc = GetActorLocation();
+    FVector absForward = FVector::ZeroVector;
+    FVector forward = GetActorForwardVector();
+
+    absForward.X = (FMath::Abs(forward.X) <= 0.01) ? 0 : 1;
+    absForward.Y = (FMath::Abs(forward.Y) <= 0.01) ? 0 : 1;
+    absForward.Z = (FMath::Abs(forward.Z) <= 0.01) ? 0 : 1;
+
+    FVector forPosition = absForward * m_lastPosition;
+
+    loc.X = (FMath::Abs(forPosition.X) <= 0.01) ? loc.X : forPosition.X;
+    loc.Y = (FMath::Abs(forPosition.Y) <= 0.01) ? loc.Y : forPosition.Y;
+    loc.Z = (FMath::Abs(forPosition.Z) <= 0.01) ? loc.Z : forPosition.Z;
+    SetActorLocation(loc);
+  }
 }
 
 void APlayerOvi::Rotate(const FVector& rotation) {
