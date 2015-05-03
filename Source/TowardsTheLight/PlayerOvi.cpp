@@ -65,6 +65,7 @@ APlayerOvi::APlayerOvi() {
 	m_state = States::STOP;
 	m_limit = 0;
   m_jumpDistance = 0;
+  m_right = m_left = 0;
 	m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
   m_enabledGravity = true;
   JumpSpeed = MovementSpeed = 300.0f;
@@ -265,12 +266,15 @@ void  APlayerOvi::DoMovement(float DeltaTime, float value)
 void APlayerOvi::Tick( float DeltaTime )
 {
   Super::Tick( DeltaTime );
+
+  InputManager();
+
   m_lastPosition = GetActorLocation();
 	float value = 0;
   FVector up = GetActorUpVector();
   FVector forward = GetActorForwardVector();
 
-	if (m_right && !m_left) {
+	if (m_right > m_frameToMove && m_left <= m_frameToMove) {
 		m_doJump = false;
 		value = 1;
 
@@ -279,7 +283,7 @@ void APlayerOvi::Tick( float DeltaTime )
 
 		m_state = States::RIGHT;
 	}
-	else if (m_left && !m_right) {
+	else if (m_left > m_frameToMove && m_right <= m_frameToMove) {
 		m_doJump = false;
 		value = 1;
     if (m_state != States::LEFT)
@@ -287,7 +291,7 @@ void APlayerOvi::Tick( float DeltaTime )
 
 		m_state = States::LEFT;
 	}
-	else if (!m_left && !m_right) {
+  else if (m_left <= m_frameToMove && m_right <= m_frameToMove) {
 		m_doJump = false;
 		value = 0;
 
@@ -343,12 +347,17 @@ void APlayerOvi::SetupPlayerInputComponent(class UInputComponent* InputComponent
 	InputComponent->BindTouch(EInputEvent::IE_Released, this, &APlayerOvi::TouchEnd);
 }
 
+void APlayerOvi::InputManager()
+{
+  m_right = (m_startRight) ? m_right + 1 : 0;
+  m_left = (m_startLeft) ? m_left + 1 : 0;
+}
 void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location) {
 
 	if (Location.X > m_viewportCenter.X)
-		m_right = true;
+    m_startRight = true;
 	if (Location.X < m_viewportCenter.X)
-		m_left = true;
+    m_startLeft = true;
 
 	if (GEngine) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("TOUCH")));
@@ -356,8 +365,9 @@ void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector
 }
 
 void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location) {
-	m_right = false;
-	m_left = false;
+  m_startRight = false;
+  m_startRight = false;
+
 	if (GEngine) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("TOUCH END")));
 	}
@@ -365,19 +375,19 @@ void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Loc
 	
 
 void APlayerOvi::OnStartRight() {
-	m_right = true;
+  m_startRight = true;
 }
 
 void APlayerOvi::OnStopRight() {
-	m_right = false;
+  m_startRight = false;
 }
 
 void APlayerOvi::OnStartLeft() {
-	m_left = true;
+  m_startLeft = true;
 }
 
 void APlayerOvi::OnStopLeft() {
-	m_left = false;
+  m_startLeft = false;
 }
 
 void APlayerOvi::Rotate(const FVector& rotation) {
