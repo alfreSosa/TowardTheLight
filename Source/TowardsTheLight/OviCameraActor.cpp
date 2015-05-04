@@ -111,11 +111,15 @@ void AOviCameraActor::SetPosition(){
   else if (finalPos.Z < -m_limitPadding)
     dist.Z = finalPos.Z + m_limitPadding;
 
-  finalPos += dist * m_ruleOfThree;
+  //con zoom out
+  //finalPos += dist * m_ruleOfThree;
+
+  //siempre el mismo tamaño
+  dist *= m_ruleOfThree;
+  dist.Normalize();
+  finalPos += dist * DistanceCameraToPlayer;
 
   SetActorLocation(finalPos);
-
-
 }
 
 void AOviCameraActor::SetOrientation(){
