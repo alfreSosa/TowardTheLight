@@ -332,10 +332,10 @@ void APlayerOvi::CheckCollision()
   FVector StartTraceTop = GetActorLocation() + GetActorUpVector() * (capsuleHeight - 2.0f); // REVISAR ESTAS COSTANTES
   FVector StartTraceBottom = GetActorLocation() - GetActorUpVector() * (capsuleHeight - 10.0f);
 
-  FVector StartTraceLeft = StartTrace - GetActorRightVector() * capsuleRadious;
-  FVector StartTraceRigth = StartTrace + GetActorRightVector() * capsuleRadious;
-  FVector StartTraceLeftF = StartTrace - GetActorForwardVector() * capsuleRadious;
-  FVector StartTraceRigthF = StartTrace + GetActorForwardVector() * capsuleRadious;
+  FVector StartTraceLeft = StartTrace - GetActorRightVector() * (capsuleRadious - 10.0f);
+  FVector StartTraceRigth = StartTrace + GetActorRightVector() * (capsuleRadious - 10.0f);
+  FVector StartTraceLeftF = StartTrace - GetActorForwardVector() * (capsuleRadious - 10.0f);
+  FVector StartTraceRigthF = StartTrace + GetActorForwardVector() * (capsuleRadious - 10.0f);
 
   // Calculate endpoint of trace  
   const FVector EndTraceDown = StartTrace - GetActorUpVector() * capsuleHeight;

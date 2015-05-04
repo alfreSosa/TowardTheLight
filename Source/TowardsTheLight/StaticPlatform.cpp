@@ -26,20 +26,4 @@ void AStaticPlatform::Tick( float DeltaTime )
 
 }
 
-void AStaticPlatform::ReceiveActorBeginOverlap(AActor * OtherActor)
-{
-  /*if (OtherActor)
-    if (OtherActor->ActorHasTag("player"))
-    {
-      APlayerOvi *ovi = dynamic_cast<APlayerOvi *>(OtherActor);
-      if (ovi)
-      {
-        AActor *downCol = ovi->GetCollisionActor();
-        if (downCol){
-          if (downCol != this)
-            ovi->SetActorLocation(ovi->GetLastPosition());
-        }
-      }
-    }*/
-}
 
