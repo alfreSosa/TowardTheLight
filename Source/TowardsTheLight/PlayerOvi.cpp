@@ -332,12 +332,23 @@ void APlayerOvi::CheckCollision()
   FVector StartTraceTop = GetActorLocation() + GetActorUpVector() * (capsuleHeight - 2.0f); // REVISAR ESTAS COSTANTES
   FVector StartTraceBottom = GetActorLocation() - GetActorUpVector() * (capsuleHeight - 10.0f);
 
-  FVector StartTraceLeft = StartTrace - GetActorRightVector() * capsuleRadious; //REVISAR:ESTOS ESTAN MAL En movimiento no valen eso o poner dos mas
+  FVector StartTraceLeft = StartTrace - GetActorRightVector() * capsuleRadious;
   FVector StartTraceRigth = StartTrace + GetActorRightVector() * capsuleRadious;
+  FVector StartTraceLeftF = StartTrace - GetActorForwardVector() * capsuleRadious;
+  FVector StartTraceRigthF = StartTrace + GetActorForwardVector() * capsuleRadious;
 
   // Calculate endpoint of trace  
   const FVector EndTraceDown = StartTrace - GetActorUpVector() * capsuleHeight;
+  const FVector EndTraceDownLeft = StartTraceLeft - GetActorUpVector() * capsuleHeight;
+  const FVector EndTraceDownRight = StartTraceRigth - GetActorUpVector() * capsuleHeight;
+  const FVector EndTraceDownLeftF = StartTraceLeftF - GetActorUpVector() * capsuleHeight;
+  const FVector EndTraceDownRightF = StartTraceRigthF - GetActorUpVector() * capsuleHeight;
+
   const FVector EndTraceUp = StartTrace + GetActorUpVector() * capsuleHeight;
+  const FVector EndTraceUpLeft = StartTraceLeft + GetActorUpVector() * capsuleHeight;
+  const FVector EndTraceUpRight = StartTraceRigth + GetActorUpVector() * capsuleHeight;
+  const FVector EndTraceUpLeftF = StartTraceLeftF + GetActorUpVector() * capsuleHeight;
+  const FVector EndTraceUpRightF = StartTraceRigthF + GetActorUpVector() * capsuleHeight;
   //horizontal
   const FVector EndTraceTop = StartTraceTop + GetActorForwardVector() * capsuleRadious;
   const FVector EndTraceBottom = StartTraceBottom + GetActorForwardVector() * capsuleRadious;
@@ -349,17 +360,22 @@ void APlayerOvi::CheckCollision()
   TraceParams.bTraceAsyncScene = true;
 
   bool collisionDown = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceDown, COLLISION_PLAYER, TraceParams);
-  bool collisionDownLeft = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeft, EndTraceDown, COLLISION_PLAYER, TraceParams);
-  bool collisionDownRight = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigth, EndTraceDown, COLLISION_PLAYER, TraceParams);
+  bool collisionDownLeft = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeft, EndTraceDownLeft, COLLISION_PLAYER, TraceParams);
+  bool collisionDownRight = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigth, EndTraceDownRight, COLLISION_PLAYER, TraceParams);
+  bool collisionDownLeftF = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeftF, EndTraceDownLeftF, COLLISION_PLAYER, TraceParams);
+  bool collisionDownRightF = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigthF, EndTraceDownRightF, COLLISION_PLAYER, TraceParams);
+
   bool collisionUp = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceUp, COLLISION_PLAYER, TraceParams);
-  bool collisionUpLeft = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeft, EndTraceUp, COLLISION_PLAYER, TraceParams);
-  bool collisionUpRight = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigth, EndTraceUp, COLLISION_PLAYER, TraceParams);
+  bool collisionUpLeft = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeft, EndTraceUpLeft, COLLISION_PLAYER, TraceParams);
+  bool collisionUpRight = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigth, EndTraceUpRight, COLLISION_PLAYER, TraceParams);
+  bool collisionUpLeftF = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeftF, EndTraceUpLeftF, COLLISION_PLAYER, TraceParams);
+  bool collisionUpRightF = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigthF, EndTraceUpRightF, COLLISION_PLAYER, TraceParams);
 
   bool collisionTop = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceTop, EndTraceTop, COLLISION_PLAYER, TraceParams);
   bool collisionBottom = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceBottom, EndTraceBottom, COLLISION_PLAYER, TraceParams);
   bool collisionMidle = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceMidle, COLLISION_PLAYER, TraceParams);
 
-  if (collisionDown || collisionDownLeft || collisionDownRight) {
+  if (collisionDown || collisionDownLeft || collisionDownRight || collisionDownLeftF || collisionDownRightF) {
     FVector loc = GetActorLocation();
     FVector absUp = FVector::ZeroVector;
     FVector up = GetActorUpVector();
@@ -380,7 +396,7 @@ void APlayerOvi::CheckCollision()
     m_hasLanded = false;
   }
 
-  if (collisionUp || collisionUpLeft || collisionUpRight) {
+  if (collisionUp || collisionUpLeft || collisionUpRight || collisionUpLeftF || collisionUpRightF) {
     FVector loc = GetActorLocation();
 
     FVector absUp = FVector::ZeroVector;
