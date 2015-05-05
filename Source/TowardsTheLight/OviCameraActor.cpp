@@ -11,7 +11,7 @@ AOviCameraActor::AOviCameraActor(const class FObjectInitializer& ObjectInitializ
 
   //setting
   Padding = 200;
-  DistanceCameraToPlayer = 500;
+  DistanceCameraToPlayer = 800;
 }
 
 void AOviCameraActor::BeginPlay(){
