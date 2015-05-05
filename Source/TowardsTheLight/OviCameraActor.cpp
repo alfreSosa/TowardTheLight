@@ -12,88 +12,39 @@ AOviCameraActor::AOviCameraActor(const class FObjectInitializer& ObjectInitializ
   //setting
   Padding = 200;
   DistanceCameraToPlayer = 500;
-  //CameraSpeed = 50;
 }
 
 void AOviCameraActor::BeginPlay(){
   Super::BeginPlay();
-  
-  GetAutoActivatePlayerIndex();
+
   m_player = NULL;
-  for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
-    if (ActorItr->ActorHasTag("Player")){
-		  m_player = (APlayerOvi*)*ActorItr;
-      break;
-    }
-  }
-
-  m_limitWorld = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorForwardVector());
-  m_limitPadding = abs(m_limitWorld) - Padding;
-  m_cameraDistance = abs(m_limitWorld) + DistanceCameraToPlayer;
-  m_ruleOfThree = (m_cameraDistance - m_limitPadding) / (m_limitWorld - m_limitPadding);
-
-  //if (CameraSpeed < 0)
-  //  CameraSpeed = 0;
-  //if (CameraSpeed > MAX_CAMERA_SPEED)
-  //  CameraSpeed = MAX_CAMERA_SPEED;
-
-  //m_deltaLerp = CameraSpeed / MAX_CAMERA_SPEED;
-
-  AOviPlayerController* oviPlayerController = (AOviPlayerController* )GetWorld()->GetFirstPlayerController();
-  if (oviPlayerController)
-    oviPlayerController->SetViewTarget(this);
 }
 
-
 void AOviCameraActor::Tick(float DeltaSeconds){
-  SetPosition();
-  SetOrientation();
+  if (!m_player)
+    for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
+      if (ActorItr->ActorHasTag("Player")){
+        m_player = (APlayerOvi*)*ActorItr;
+        m_limitWorld = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorForwardVector());
+        m_limitPadding = abs(m_limitWorld) - Padding;
+        m_cameraDistance = abs(m_limitWorld) + DistanceCameraToPlayer;
+        m_ruleOfThree = (m_cameraDistance - m_limitPadding) / (m_limitWorld - m_limitPadding);
+
+        AOviPlayerController* oviPlayerController = (AOviPlayerController*)GetWorld()->GetFirstPlayerController();
+        if (oviPlayerController)
+          oviPlayerController->SetViewTarget(this);
+
+        break;
+      }
+    }
+
+  if (m_player){
+    SetPosition();
+    SetOrientation();
+  }
 }
 
 void AOviCameraActor::SetPosition(){
-  // TRY LERP
-  //FVector finalPos = m_player->GetActorLocation();
-  //if (finalPos.X > m_limitPadding)
-  //  finalPos.X = m_cameraDistance;
-  //else if (finalPos.X < -m_limitPadding)
-  //  finalPos.X = -m_cameraDistance;
-
-  //if (finalPos.Y > m_limitPadding)
-  //  finalPos.Y = m_cameraDistance;
-  //else if (finalPos.Y < -m_limitPadding)
-  //  finalPos.Y = -m_cameraDistance;
-
-  //if (finalPos.Z > m_limitPadding)
-  //  finalPos.Z = m_cameraDistance;
-  //else if (finalPos.Z < -m_limitPadding)
-  //  finalPos.Z = -m_cameraDistance;
-
-  //FVector absFinalPos(finalPos.GetAbs());
-
-  //if (absFinalPos.X == m_cameraDistance && absFinalPos.Y == m_cameraDistance && absFinalPos.Z == m_cameraDistance) {
-  //  finalPos = finalPos / 1.2;
-  //}
-  //else if (absFinalPos.X == m_cameraDistance && absFinalPos.Y == m_cameraDistance) {
-  //  finalPos.X = finalPos.X / 1.1;
-  //  finalPos.Y = finalPos.Y / 1.1;
-  //}
-  //else if (absFinalPos.X == m_cameraDistance && absFinalPos.Z == m_cameraDistance) {
-  //  finalPos.X = finalPos.X / 1.1;
-  //  finalPos.Z = finalPos.Z / 1.1;
-  //}
-  //else if (absFinalPos.Y == m_cameraDistance && absFinalPos.Z == m_cameraDistance) {
-  //  finalPos.Y = finalPos.Y / 1.1;
-  //  finalPos.Z = finalPos.Z / 1.1;
-  //}
-
-  //FVector currentPos = this->GetActorLocation();
-
-  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("delta: %f "), m_deltaLerp));
-
-  //SetActorLocation(FMath::Lerp(currentPos, finalPos, m_deltaLerp));
-
-
-  // TRY RULE OF THREE
   FVector finalPos = m_player->GetActorLocation();
   FVector dist(0, 0, 0);
   if (finalPos.X > m_limitPadding)
@@ -111,10 +62,6 @@ void AOviCameraActor::SetPosition(){
   else if (finalPos.Z < -m_limitPadding)
     dist.Z = finalPos.Z + m_limitPadding;
 
-  //con zoom out
-  //finalPos += dist * m_ruleOfThree;
-
-  //siempre el mismo tamaño
   dist *= m_ruleOfThree;
   dist.Normalize();
   finalPos += dist * DistanceCameraToPlayer;
