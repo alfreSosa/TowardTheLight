@@ -43,6 +43,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\TowardsTheLight\Tower.cpp" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\Tower.h" />
     <None Include="..\..\TowardsTheLight.uproject" />
     <None Include="..\..\Source\TowardsTheLight.Target.cs" />
     <None Include="..\..\Source\TowardsTheLightEditor.Target.cs" />

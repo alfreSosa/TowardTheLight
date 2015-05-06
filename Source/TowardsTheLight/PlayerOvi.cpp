@@ -60,8 +60,10 @@ APlayerOvi::APlayerOvi() {
 		Mesh->SetCollisionProfileName(CollisionProfileName);
 		Mesh->bGenerateOverlapEvents = true;
 		Mesh->bCanEverAffectNavigation = false;
-    Mesh->SetRelativeLocation(FVector(0, 0, -95));
-    Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, -90)));
+    Mesh->SetRelativeLocation(FVector(0, 0, 0));
+    Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 180)));
+    Mesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5));
+
 
 	}
 
@@ -314,7 +316,7 @@ void APlayerOvi::CheckCollision(){
 
   // Calculate the start location for trace  
   FVector StartTrace = m_lastPosition;
-  FVector StartTraceTop = StartTrace + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding); // REVISAR ESTAS COSTANTES
+  FVector StartTraceTop = StartTrace + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding);
   FVector StartTraceBottom = StartTrace - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding);
 
   FVector StartTraceLeft = StartTrace + GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
@@ -324,7 +326,7 @@ void APlayerOvi::CheckCollision(){
 
   // Calculate endpoint of trace  
   FVector difPositionUp = (GetActorLocation() - m_lastPosition) * AbsVector(GetActorUpVector());
-  FVector difPositionForward = (GetActorLocation() - GetActorLocation()) * AbsVector(GetActorForwardVector());
+  FVector difPositionForward = (GetActorLocation() - m_lastPosition) * AbsVector(GetActorForwardVector());
 
   const FVector EndTraceDown = StartTrace + difPositionUp - GetActorUpVector() * m_capsuleHeight;
   const FVector EndTraceDownLeft = StartTraceLeft + difPositionUp - GetActorUpVector() * m_capsuleHeight;
@@ -362,7 +364,7 @@ void APlayerOvi::CheckCollision(){
   bool collisionUp = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceUp, COLLISION_PLAYER, TraceParams);
   //DrawDebugLine(GetWorld(), StartTrace, EndTraceUp, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   bool collisionUpLeft = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeft, EndTraceUpLeft, COLLISION_PLAYER, TraceParams);
-  //DrawDebugLine(GetWorld(), StartTraceLeft, EndTraceUpLeft, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+ //DrawDebugLine(GetWorld(), StartTraceLeft, EndTraceUpLeft, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   bool collisionUpRight = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigth, EndTraceUpRight, COLLISION_PLAYER, TraceParams);
   //DrawDebugLine(GetWorld(), StartTraceRigth, EndTraceUpRight, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
  
