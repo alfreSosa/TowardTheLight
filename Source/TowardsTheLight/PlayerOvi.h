@@ -69,6 +69,7 @@ private:
   void CheckCollision();
   void AjustPosition();
   void Rotate(const FVector& rotation);
+  FVector AbsVector(const FVector& vector);
 
   FVector m_rotation;
   FVector m_lastRotation;
