@@ -5,7 +5,15 @@
 #include "GameFramework/Pawn.h"
 #include "PlayerOvi.generated.h"
 
-#define COLLISION_PLAYER        ECC_GameTraceChannel1  
+#define COLLISION_PLAYER        ECC_GameTraceChannel1 
+const float PADDING_COLLISION_PERCENT = 0.1f;
+const float DEFAULT_CAPSULE_RADIOUS = 34.0f;
+const float DEFAULT_CAPSULE_HEIGHT = 100.0f;
+const float DEFAULT_JUMP_TRANSITION = 50.0f;
+const float DEFAULT_MOVEMENT_SPEED = 300.0f;
+const float DEFAULT_JUMP_HEIGHT = 250.0f;
+
+
 UCLASS()
 class TOWARDSTHELIGHT_API APlayerOvi : public APawn
 {
@@ -70,9 +78,8 @@ private:
   void AjustPosition();
   void Rotate(const FVector& rotation);
   FVector AbsVector(const FVector& vector);
+  FVector RecalculateLocation(FVector direction, FVector Location);
 
-  FVector m_rotation;
-  FVector m_lastRotation;
   States m_state;
 	int m_right;
 	int m_left;
@@ -85,6 +92,10 @@ private:
   bool m_enabledGravity;
 	float m_limit;
 	float m_jumpDistance;
+  float m_capsuleHeight;
+  float m_capsuleRadious;
+  float m_capsuleHeightPadding;
+  float m_capsuleRadiousPadding;
   FVector m_lastPosition;
   ETouchIndex::Type m_fingerIndexRight;
   ETouchIndex::Type m_fingerIndexLeft;

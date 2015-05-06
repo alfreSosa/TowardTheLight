@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "TowardsTheLight.h"
 #include "PlayerOvi.h"
 
@@ -22,7 +20,7 @@ APlayerOvi::APlayerOvi() {
 	bUseControllerRotationYaw = false;
   
 	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
-	CapsuleComponent->InitCapsuleSize(34.0f, 88.0f);
+  CapsuleComponent->InitCapsuleSize(DEFAULT_CAPSULE_RADIOUS, DEFAULT_CAPSULE_HEIGHT);
 
 	static FName CollisionProfileName(TEXT("Pawn"));
 	CapsuleComponent->SetCollisionProfileName(CollisionProfileName);
@@ -32,6 +30,8 @@ APlayerOvi::APlayerOvi() {
 	CapsuleComponent->bCheckAsyncSceneOnMove = false; 
 	CapsuleComponent->bCanEverAffectNavigation = false;
   CapsuleComponent->bGenerateOverlapEvents = true;
+  //Fijamos por defecto la rotacion de la capsula para que el forward este de cara a la camara
+  CapsuleComponent->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, -180)));
 	RootComponent = CapsuleComponent;
 
 
@@ -60,6 +60,9 @@ APlayerOvi::APlayerOvi() {
 		Mesh->SetCollisionProfileName(CollisionProfileName);
 		Mesh->bGenerateOverlapEvents = true;
 		Mesh->bCanEverAffectNavigation = false;
+    Mesh->SetRelativeLocation(FVector(0, 0, -95));
+    Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, -90)));
+
 	}
 
 	m_state = States::STOP;
@@ -68,12 +71,13 @@ APlayerOvi::APlayerOvi() {
   m_right = m_left = 0;
 	m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
   m_enabledGravity = true;
-  JumpSpeed = MovementSpeed = 300.0f;
-  MaxJumpHeight = 150.0f;
-  m_rotation = FVector::ZeroVector;
+  JumpSpeed = MovementSpeed = DEFAULT_MOVEMENT_SPEED;
+  MaxJumpHeight = DEFAULT_JUMP_HEIGHT;
+  m_capsuleHeight = DEFAULT_CAPSULE_HEIGHT;
+  m_capsuleRadious = DEFAULT_CAPSULE_RADIOUS;
+  m_capsuleHeightPadding = m_capsuleHeight * PADDING_COLLISION_PERCENT;
+  m_capsuleRadiousPadding = m_capsuleRadious * PADDING_COLLISION_PERCENT;
 
-	//FName *name = new FName("player", EFindName::FNAME_Add);
-	//FName f = GetFName();
 }
 
 void APlayerOvi::BeginPlay(){
@@ -82,17 +86,15 @@ void APlayerOvi::BeginPlay(){
 	this->Tags.Add("Player");
 	m_limit = FVector::DotProduct(GetActorLocation(), GetActorForwardVector());
 	m_limit = abs(m_limit);	
-  m_rotation = GetActorRotation().Euler();
-  m_lastRotation = FVector::ZeroVector;
 	const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
   m_fingerIndexRight = m_fingerIndexLeft = ETouchIndex::Touch10;
+  //GetCaspuleValues
+  m_capsuleHeight = CapsuleComponent->GetScaledCapsuleHalfHeight();
+  m_capsuleRadious = CapsuleComponent->GetScaledCapsuleRadius();
+  m_capsuleHeightPadding = m_capsuleHeight * PADDING_COLLISION_PERCENT;
+  m_capsuleRadiousPadding = m_capsuleRadious * PADDING_COLLISION_PERCENT;
 }
 
-/*****************************
-He encontrado estas funciones, que parecian interesante
- - SetTickableWhenPaused( bool bTickableWhenPaused )
- - ShouldTickIfViewportsOnly()
- ******************************/
 void APlayerOvi::Tick(float DeltaTime){
   Super::Tick(DeltaTime);
 
@@ -271,6 +273,9 @@ void APlayerOvi::CalculateOrientation(){
     bool toUp = dotUp > m_limit;
 
     val = (toUp) ? 90 : -90;
+    
+    if (toUp && m_isJumping)
+      m_jumpDistance -= DEFAULT_JUMP_TRANSITION;
 
     if (m_state == States::STOP)
       Rotate(FVector(0, val, 0));
@@ -307,38 +312,35 @@ void APlayerOvi::AjustPosition() {
 void APlayerOvi::CheckCollision(){
   FHitResult OutTraceResult;
 
-  //GetCaspuleValues
-  float capsuleHeight = CapsuleComponent->GetScaledCapsuleHalfHeight();
-  float capsuleRadious = CapsuleComponent->GetScaledCapsuleRadius();
   // Calculate the start location for trace  
   FVector StartTrace = m_lastPosition;
-  FVector StartTraceTop = StartTrace + GetActorUpVector() * (capsuleHeight - 10.0f); // REVISAR ESTAS COSTANTES
-  FVector StartTraceBottom = StartTrace - GetActorUpVector() * (capsuleHeight - 10.0f);
+  FVector StartTraceTop = StartTrace + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding); // REVISAR ESTAS COSTANTES
+  FVector StartTraceBottom = StartTrace - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding);
 
-  FVector StartTraceLeft = StartTrace - GetActorRightVector() * (capsuleRadious - 15.0f);
-  FVector StartTraceRigth = StartTrace + GetActorRightVector() * (capsuleRadious - 15.0f);
-  FVector StartTraceLeftF = StartTrace - GetActorForwardVector() * (capsuleRadious - 15.0f);
-  FVector StartTraceRigthF = StartTrace + GetActorForwardVector() * (capsuleRadious - 15.0f);
+  FVector StartTraceLeft = StartTrace - GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
+  FVector StartTraceRigth = StartTrace + GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
+  FVector StartTraceLeftF = StartTrace - GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
+  FVector StartTraceRigthF = StartTrace + GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
 
   // Calculate endpoint of trace  
   FVector difPositionUp = (GetActorLocation() - m_lastPosition) * AbsVector(GetActorUpVector());
   FVector difPositionForward = (GetActorLocation() - GetActorLocation()) * AbsVector(GetActorForwardVector());
 
-  const FVector EndTraceDown = StartTrace + difPositionUp - GetActorUpVector() * capsuleHeight;
-  const FVector EndTraceDownLeft = StartTraceLeft + difPositionUp - GetActorUpVector() * capsuleHeight;
-  const FVector EndTraceDownRight = StartTraceRigth + difPositionUp - GetActorUpVector() * capsuleHeight;
-  const FVector EndTraceDownLeftF = StartTraceLeftF + difPositionUp - GetActorUpVector() * capsuleHeight;
-  const FVector EndTraceDownRightF = StartTraceRigthF + difPositionUp - GetActorUpVector() * capsuleHeight;
+  const FVector EndTraceDown = StartTrace + difPositionUp - GetActorUpVector() * m_capsuleHeight;
+  const FVector EndTraceDownLeft = StartTraceLeft + difPositionUp - GetActorUpVector() * m_capsuleHeight;
+  const FVector EndTraceDownRight = StartTraceRigth + difPositionUp - GetActorUpVector() * m_capsuleHeight;
+  const FVector EndTraceDownLeftF = StartTraceLeftF + difPositionUp - GetActorUpVector() * m_capsuleHeight;
+  const FVector EndTraceDownRightF = StartTraceRigthF + difPositionUp - GetActorUpVector() * m_capsuleHeight;
 
-  const FVector EndTraceUp = StartTrace + difPositionUp + GetActorUpVector() * capsuleHeight;
-  const FVector EndTraceUpLeft = StartTraceLeft + difPositionUp + GetActorUpVector() * capsuleHeight;
-  const FVector EndTraceUpRight = StartTraceRigth + difPositionUp + GetActorUpVector() * capsuleHeight;
-  const FVector EndTraceUpLeftF = StartTraceLeftF + difPositionUp + GetActorUpVector() * capsuleHeight;
-  const FVector EndTraceUpRightF = StartTraceRigthF + difPositionUp + GetActorUpVector() * capsuleHeight;
+  const FVector EndTraceUp = StartTrace + difPositionUp + GetActorUpVector() * m_capsuleHeight;
+  const FVector EndTraceUpLeft = StartTraceLeft + difPositionUp + GetActorUpVector() * m_capsuleHeight;
+  const FVector EndTraceUpRight = StartTraceRigth + difPositionUp + GetActorUpVector() * m_capsuleHeight;
+  const FVector EndTraceUpLeftF = StartTraceLeftF + difPositionUp + GetActorUpVector() * m_capsuleHeight;
+  const FVector EndTraceUpRightF = StartTraceRigthF + difPositionUp + GetActorUpVector() * m_capsuleHeight;
   //horizontal
-  const FVector EndTraceTop = StartTraceTop + difPositionForward + GetActorForwardVector() * capsuleRadious;
-  const FVector EndTraceBottom = StartTraceBottom + difPositionForward + GetActorForwardVector() * capsuleRadious;
-  const FVector EndTraceMidle = StartTrace + difPositionForward + GetActorForwardVector() * capsuleRadious;
+  const FVector EndTraceTop = StartTraceTop + difPositionForward + GetActorForwardVector() * m_capsuleRadious;
+  const FVector EndTraceBottom = StartTraceBottom + difPositionForward + GetActorForwardVector() * m_capsuleRadious;
+  const FVector EndTraceMidle = StartTrace + difPositionForward + GetActorForwardVector() * m_capsuleRadious;
 
   // Setup the trace query  
   static FName FireTraceIdent = FName(TEXT("ColliderTrace"));
@@ -346,65 +348,25 @@ void APlayerOvi::CheckCollision(){
   TraceParams.bTraceAsyncScene = true;
 
   bool collisionDown = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceDown, COLLISION_PLAYER, TraceParams);
-  DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-
+ // DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   bool collisionDownLeft = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeft, EndTraceDownLeft, COLLISION_PLAYER, TraceParams);
-  DrawDebugLine(GetWorld(), StartTraceLeft, EndTraceDownLeft, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-
   bool collisionDownRight = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigth, EndTraceDownRight, COLLISION_PLAYER, TraceParams);
-  DrawDebugLine(GetWorld(), StartTraceRigth, EndTraceDownRight, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-
   bool collisionDownLeftF = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeftF, EndTraceDownLeftF, COLLISION_PLAYER, TraceParams);
-  DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceDownLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-
   bool collisionDownRightF = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigthF, EndTraceDownRightF, COLLISION_PLAYER, TraceParams);
-  DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceDownRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
-  
-  
-  
   bool collisionUp = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceUp, COLLISION_PLAYER, TraceParams);
-  //DrawDebugLine(GetWorld(), StartTrace, EndTraceUp, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-
   bool collisionUpLeft = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeft, EndTraceUpLeft, COLLISION_PLAYER, TraceParams);
-  //DrawDebugLine(GetWorld(), StartTraceLeft, EndTraceUpLeft, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-
   bool collisionUpRight = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigth, EndTraceUpRight, COLLISION_PLAYER, TraceParams);
-  //DrawDebugLine(GetWorld(), StartTraceRigth, EndTraceUpRight, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-
   bool collisionUpLeftF = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeftF, EndTraceUpLeftF, COLLISION_PLAYER, TraceParams);
-  //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceUpLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-
   bool collisionUpRightF = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigthF, EndTraceUpRightF, COLLISION_PLAYER, TraceParams);
-  //DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceUpRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-
-  
   
   bool collisionTop = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceTop, EndTraceTop, COLLISION_PLAYER, TraceParams);
-  DrawDebugLine(GetWorld(), StartTraceTop, EndTraceTop, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-  
   bool collisionBottom = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceBottom, EndTraceBottom, COLLISION_PLAYER, TraceParams);
-  DrawDebugLine(GetWorld(), StartTraceBottom, EndTraceBottom, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-  
   bool collisionMidle = GetWorld()->LineTraceSingle(OutTraceResult, StartTrace, EndTraceMidle, COLLISION_PLAYER, TraceParams);
-  DrawDebugLine(GetWorld(), StartTrace, EndTraceMidle, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
 
   if (collisionDown || collisionDownLeft || collisionDownRight || collisionDownLeftF || collisionDownRightF) {
-    FVector loc = GetActorLocation();
-    FVector absUp = FVector::ZeroVector;
-    FVector up = GetActorUpVector();
-
-    absUp.X = (FMath::Abs(up.X) <= 0.01) ? 0 : 1;
-    absUp.Y = (FMath::Abs(up.Y) <= 0.01) ? 0 : 1;
-    absUp.Z = (FMath::Abs(up.Z) <= 0.01) ? 0 : 1;
-
-    FVector upPosition = absUp * m_lastPosition;
-
-    loc.X = (FMath::Abs(upPosition.X) <= 0.01) ? loc.X : upPosition.X;
-    loc.Y = (FMath::Abs(upPosition.Y) <= 0.01) ? loc.Y : upPosition.Y;
-    loc.Z = (FMath::Abs(upPosition.Z) <= 0.01) ? loc.Z : upPosition.Z;
-    SetActorLocation(loc);
+    SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation()));
     m_hasLanded = true;
   }
   else {
@@ -412,42 +374,12 @@ void APlayerOvi::CheckCollision(){
   }
 
   if (collisionUp || collisionUpLeft || collisionUpRight || collisionUpLeftF || collisionUpRightF) {
-    FVector loc = GetActorLocation();
-
-    FVector absUp = FVector::ZeroVector;
-    FVector up = GetActorUpVector();
-
-    absUp.X = (FMath::Abs(up.X) <= 0.01) ? 0 : 1;
-    absUp.Y = (FMath::Abs(up.Y) <= 0.01) ? 0 : 1;
-    absUp.Z = (FMath::Abs(up.Z) <= 0.01) ? 0 : 1;
-
-    FVector upPosition = absUp * m_lastPosition;
-
-
-    loc.X = (FMath::Abs(upPosition.X) <= 0.01) ? loc.X : upPosition.X;
-    loc.Y = (FMath::Abs(upPosition.Y) <= 0.01) ? loc.Y : upPosition.Y;
-    loc.Z = (FMath::Abs(upPosition.Z) <= 0.01) ? loc.Z : upPosition.Z;
-    SetActorLocation(loc);
+    SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation()));
     m_headCollision = true;
-    
   }
 
-  if (collisionTop || collisionBottom || collisionMidle) {
-    FVector loc = GetActorLocation();
-    FVector absForward = FVector::ZeroVector;
-    FVector forward = GetActorForwardVector();
-
-    absForward.X = (FMath::Abs(forward.X) <= 0.01) ? 0 : 1;
-    absForward.Y = (FMath::Abs(forward.Y) <= 0.01) ? 0 : 1;
-    absForward.Z = (FMath::Abs(forward.Z) <= 0.01) ? 0 : 1;
-
-    FVector forPosition = absForward * m_lastPosition;
-
-    loc.X = (FMath::Abs(forPosition.X) <= 0.01) ? loc.X : forPosition.X;
-    loc.Y = (FMath::Abs(forPosition.Y) <= 0.01) ? loc.Y : forPosition.Y;
-    loc.Z = (FMath::Abs(forPosition.Z) <= 0.01) ? loc.Z : forPosition.Z;
-    SetActorLocation(loc);
-  }
+  if (collisionTop || collisionBottom || collisionMidle)
+    SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation()));
 }
 
 void APlayerOvi::Rotate(const FVector& rotation) {
@@ -466,4 +398,24 @@ FVector APlayerOvi::AbsVector(const FVector& vector) {
 
   return absVector;
 }
+
+FVector APlayerOvi::RecalculateLocation(FVector direction, FVector Location)
+{
+  FVector loc = Location;
+  FVector absDirection = FVector::ZeroVector;
+  FVector dir = direction;
+
+  absDirection.X = (FMath::Abs(dir.X) <= 0.01) ? 0 : 1;
+  absDirection.Y = (FMath::Abs(dir.Y) <= 0.01) ? 0 : 1;
+  absDirection.Z = (FMath::Abs(dir.Z) <= 0.01) ? 0 : 1;
+
+  FVector nPos = absDirection * m_lastPosition;
+
+  loc.X = (FMath::Abs(nPos.X) <= 0.01) ? loc.X : nPos.X;
+  loc.Y = (FMath::Abs(nPos.Y) <= 0.01) ? loc.Y : nPos.Y;
+  loc.Z = (FMath::Abs(nPos.Z) <= 0.01) ? loc.Z : nPos.Z;
+
+  return loc;
+}
+
 
