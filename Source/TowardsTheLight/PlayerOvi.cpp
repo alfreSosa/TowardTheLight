@@ -31,7 +31,7 @@ APlayerOvi::APlayerOvi() {
 	CapsuleComponent->bCanEverAffectNavigation = false;
   CapsuleComponent->bGenerateOverlapEvents = true;
   //Fijamos por defecto la rotacion de la capsula para que el forward este de cara a la camara
-  CapsuleComponent->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, -180)));
+  CapsuleComponent->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
   CapsuleComponent->SetCapsuleHalfHeight(95);
 	RootComponent = CapsuleComponent;
 
@@ -67,11 +67,11 @@ APlayerOvi::APlayerOvi() {
 
 	}
 
-	m_state = States::STOP;
+	m_state = States::RIGHT;
 	m_limit = 0;
   m_jumpDistance = 0;
   m_right = m_left = 0;
-	m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
+  m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
   m_enabledGravity = true;
   JumpSpeed = MovementSpeed = DEFAULT_MOVEMENT_SPEED;
   MaxJumpHeight = DEFAULT_JUMP_HEIGHT;
@@ -84,9 +84,15 @@ APlayerOvi::APlayerOvi() {
 
 void APlayerOvi::BeginPlay(){
 	Super::BeginPlay();
- 
+
+  float dotForward = FVector::DotProduct(FVector(1,1,1), GetActorForwardVector());
+  if (dotForward < 0)
+    m_state = States::LEFT;
+  else
+    m_state = States::RIGHT;
+
 	this->Tags.Add("Player");
-	m_limit = FVector::DotProduct(GetActorLocation(), GetActorForwardVector());
+	m_limit = FVector::DotProduct(GetActorLocation(), GetActorRightVector());
 	m_limit = abs(m_limit);	
 	const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
   m_fingerIndexRight = m_fingerIndexLeft = ETouchIndex::Touch10;
@@ -118,26 +124,26 @@ float APlayerOvi::UpdateState() {
   if (m_right > m_frameToMove && m_left <= m_frameToMove) {
     value = 1;
     if (m_state != States::RIGHT)
-      Rotate(FVector(0, 0, -90));
+      Rotate(FVector(0, 0, -180));
 
     m_state = States::RIGHT;
   }
   else if (m_left > m_frameToMove && m_right <= m_frameToMove) {
     value = 1;
     if (m_state != States::LEFT)
-      Rotate(FVector(0, 0, 90));
+      Rotate(FVector(0, 0, 180));
 
     m_state = States::LEFT;
   }
   else if (m_left <= m_frameToMove && m_right <= m_frameToMove) {
     value = 0;
-    if (m_state == States::RIGHT)
+    /*if (m_state == States::RIGHT)
       Rotate(FVector(0, 0, 90));
 
     if (m_state == States::LEFT)
       Rotate(FVector(0, 0, -90));
-
-    m_state = States::STOP;
+*/
+    //m_state = States::STOP;
   }
   else {
     if (m_state == States::RIGHT || m_state == States::LEFT)
