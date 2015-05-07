@@ -9,8 +9,9 @@ UCLASS()
 class TOWARDSTHELIGHT_API ATower : public APawn
 {
 	GENERATED_BODY()
-	
-  UBoxComponent *m_trigger;
+
+    UPROPERTY()
+    UBoxComponent *m_trigger;
 public:	
 	// Sets default values for this actor's properties
 	ATower();
@@ -27,6 +28,8 @@ public:
   UPROPERTY()
     UStaticMeshComponent* Entrance;
 	
+
+
   void RegisterDelegate();
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

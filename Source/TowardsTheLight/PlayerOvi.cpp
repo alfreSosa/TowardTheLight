@@ -178,10 +178,10 @@ void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector
     m_fingerIndexLeft = FingerIndex;
   }
 
-  if (GEngine) {
-    if (FingerIndex != ETouchIndex::Touch1 && FingerIndex != ETouchIndex::Touch2)
-      GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Efinferindex > 2")));
-  }
+  //if (GEngine) {
+  //  if (FingerIndex != ETouchIndex::Touch1 && FingerIndex != ETouchIndex::Touch2)
+  //    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Efinferindex > 2")));
+  //}
 }
 
 void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location) {
@@ -194,9 +194,9 @@ void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Loc
     m_fingerIndexLeft = ETouchIndex::Touch10;
 
   }
-  if (GEngine) {
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("TOUCH END")));
-  }
+  //if (GEngine) {
+  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("TOUCH END")));
+  //}
 }
 
 

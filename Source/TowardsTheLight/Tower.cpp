@@ -8,6 +8,7 @@ ATower::ATower() {
   PrimaryActorTick.bCanEverTick = true;
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
+  Body->SetWorldScale3D(FVector(2.5, 2.5, 2.5));
   Body->AttachTo(RootComponent);
 
   Entrance = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Entrance"));
@@ -15,8 +16,8 @@ ATower::ATower() {
 
   m_trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
   m_trigger->AttachTo(Entrance);
-  m_trigger->bHiddenInGame = true;
-  //m_trigger->SetWorldScale3D(FVector(0.5, 0.5, 0.5));
+  m_trigger->bHiddenInGame = false;
+  m_trigger->SetWorldScale3D(FVector(0.5, 0.5, 0.5));
   m_trigger->bGenerateOverlapEvents = true;
 }
 
@@ -30,7 +31,6 @@ void ATower::BeginPlay() {
 // Called every frame
 void ATower::Tick( float DeltaTime ) {
 	Super::Tick( DeltaTime );
-
 }
 
 void ATower::RegisterDelegate() {
@@ -41,7 +41,8 @@ void ATower::RegisterDelegate() {
 
 void ATower::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
   if (OtherActor->ActorHasTag("Player")){
-    if (OtherActor->GetActorUpVector() == Entrance->GetUpVector()){
+    FVector dif = OtherActor->GetActorUpVector() - Entrance->GetUpVector();
+    if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05){
       if (GEngine)
       {
         GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("VICTORIA!!!!")));
