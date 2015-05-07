@@ -79,7 +79,7 @@ private:
   void AjustPosition();
   void Rotate(const FVector& rotation);
   FVector AbsVector(const FVector& vector);
-  FVector RecalculateLocation(FVector direction, FVector Location);
+  FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation);
 
   States m_state;
 	int m_right;
