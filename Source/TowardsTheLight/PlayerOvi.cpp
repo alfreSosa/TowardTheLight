@@ -32,8 +32,8 @@ APlayerOvi::APlayerOvi() {
   CapsuleComponent->bGenerateOverlapEvents = true;
   //Fijamos por defecto la rotacion de la capsula para que el forward este de cara a la camara
   CapsuleComponent->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, -180)));
+  CapsuleComponent->SetCapsuleHalfHeight(95);
 	RootComponent = CapsuleComponent;
-
 
 #if WITH_EDITORONLY_DATA
 	ArrowComponent = CreateEditorOnlyDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
@@ -61,7 +61,7 @@ APlayerOvi::APlayerOvi() {
 		Mesh->bGenerateOverlapEvents = true;
 		Mesh->bCanEverAffectNavigation = false;
     Mesh->SetRelativeLocation(FVector(0, 0, 0));
-    Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 180)));
+    Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
     Mesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5));
 
 
