@@ -32,7 +32,7 @@ APlayerOvi::APlayerOvi() {
   CapsuleComponent->bGenerateOverlapEvents = true;
   //Fijamos por defecto la rotacion de la capsula para que el forward este de cara a la camara
   CapsuleComponent->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
-  CapsuleComponent->SetCapsuleHalfHeight(95);
+  CapsuleComponent->SetCapsuleHalfHeight(DEFAULT_CAPSULE_HEIGHT);
 	RootComponent = CapsuleComponent;
 
 #if WITH_EDITORONLY_DATA

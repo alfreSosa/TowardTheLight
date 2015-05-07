@@ -26,7 +26,7 @@ void AOviCameraActor::Tick(float DeltaSeconds){
     for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
       if (ActorItr->ActorHasTag("Player")){
         m_player = (APlayerOvi*)*ActorItr;
-        m_limitWorld = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorForwardVector());
+        m_limitWorld = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorRightVector());
         m_limitPadding = abs(m_limitWorld) - Padding;
         m_cameraDistance = abs(m_limitWorld) + DistanceCameraToPlayer;
         m_ruleOfThree = (m_cameraDistance - m_limitPadding) / (m_limitWorld - m_limitPadding);
