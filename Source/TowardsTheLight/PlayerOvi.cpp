@@ -353,37 +353,38 @@ void APlayerOvi::CheckCollision() {
   //REVISAR
   //RECORTAR RAYOS QUE NO SIRVEN
 
-  bool collisionDown = GetWorld()->LineTraceSingle(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_PLAYER, TraceParams);
+  bool collisionDown = GetWorld()->LineTraceSingle(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_PLAYER, TraceParams) && OutTraceResultDown.Actor->ActorHasTag("Platform");
   //DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   //bool collisionDownLeft = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeft, EndTraceDownLeft, COLLISION_PLAYER, TraceParams);
   //DrawDebugLine(GetWorld(), StartTraceLeft, EndTraceDownLeft, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   //bool collisionDownRight = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigth, EndTraceDownRight, COLLISION_PLAYER, TraceParams);
   //DrawDebugLine(GetWorld(), StartTraceRigth, EndTraceDownRight, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
  
-  bool collisionDownLeftF = GetWorld()->LineTraceSingle(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_PLAYER, TraceParams);
+  bool collisionDownLeftF = GetWorld()->LineTraceSingle(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_PLAYER, TraceParams) && OutTraceResultDownLeftF.Actor->ActorHasTag("Platform");
   //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceDownLeftF, FColor(0.0f, 0.f, 1.0f, 1.f), false, 10.f);
-  bool collisionDownRightF = GetWorld()->LineTraceSingle(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_PLAYER, TraceParams);
+  bool collisionDownRightF = GetWorld()->LineTraceSingle(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_PLAYER, TraceParams) && OutTraceResultDownRigthF.Actor->ActorHasTag("Platform");
   //DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceDownRightF, FColor(0.0f, 0.f, 1.0f, 1.f), false, 10.f);
 
-  bool collisionUp = GetWorld()->LineTraceSingle(OutTraceResultUp, StartTrace, EndTraceUp, COLLISION_PLAYER, TraceParams);
+  bool collisionUp = GetWorld()->LineTraceSingle(OutTraceResultUp, StartTrace, EndTraceUp, COLLISION_PLAYER, TraceParams) && OutTraceResultUp.Actor->ActorHasTag("Platform");
   //DrawDebugLine(GetWorld(), StartTrace, EndTraceUp, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   //bool collisionUpLeft = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceLeft, EndTraceUpLeft, COLLISION_PLAYER, TraceParams);
   //DrawDebugLine(GetWorld(), StartTraceLeft, EndTraceUpLeft, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   //bool collisionUpRight = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigth, EndTraceUpRight, COLLISION_PLAYER, TraceParams);
   //DrawDebugLine(GetWorld(), StartTraceRigth, EndTraceUpRight, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
  
-  bool collisionUpLeftF = GetWorld()->LineTraceSingle(OutTraceResultUpLeftF, StartTraceLeftF, EndTraceUpLeftF, COLLISION_PLAYER, TraceParams);
+  bool collisionUpLeftF = GetWorld()->LineTraceSingle(OutTraceResultUpLeftF, StartTraceLeftF, EndTraceUpLeftF, COLLISION_PLAYER, TraceParams) && OutTraceResultUpLeftF.Actor->ActorHasTag("Platform");
   //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceUpLeftF, FColor(0.0f, 1.0f, 0.f, 1.f), false, 10.f);
-  bool collisionUpRightF = GetWorld()->LineTraceSingle(OutTraceResultUpRigthF, StartTraceRigthF, EndTraceUpRightF, COLLISION_PLAYER, TraceParams);
+  bool collisionUpRightF = GetWorld()->LineTraceSingle(OutTraceResultUpRigthF, StartTraceRigthF, EndTraceUpRightF, COLLISION_PLAYER, TraceParams) && OutTraceResultUpRigthF.Actor->ActorHasTag("Platform");
   //DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceUpRightF, FColor(0.0f, 1.0f, 0.f, 1.f), false, 10.f);
 
-  bool collisionTop = GetWorld()->LineTraceSingle(OutTraceResultTop, StartTraceTop, EndTraceTop, COLLISION_PLAYER, TraceParams);
+  bool collisionTop = GetWorld()->LineTraceSingle(OutTraceResultTop, StartTraceTop, EndTraceTop, COLLISION_PLAYER, TraceParams) && OutTraceResultTop.Actor->ActorHasTag("Platform");
   //DrawDebugLine(GetWorld(), StartTraceTop, EndTraceTop, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-  bool collisionBottom = GetWorld()->LineTraceSingle(OutTraceResultBottom, StartTraceBottom, EndTraceBottom, COLLISION_PLAYER, TraceParams);
+  bool collisionBottom = GetWorld()->LineTraceSingle(OutTraceResultBottom, StartTraceBottom, EndTraceBottom, COLLISION_PLAYER, TraceParams) && OutTraceResultBottom.Actor->ActorHasTag("Platform");
   //DrawDebugLine(GetWorld(), StartTraceBottom, EndTraceBottom, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-  bool collisionMidle = GetWorld()->LineTraceSingle(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_PLAYER, TraceParams);
+  bool collisionMidle = GetWorld()->LineTraceSingle(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_PLAYER, TraceParams) && OutTraceResultMiddle.Actor->ActorHasTag("Platform");
   //DrawDebugLine(GetWorld(), StartTrace, EndTraceMidle, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
+  //this->Tags.Add("Platform");
 
   if (collisionDown || collisionDownLeftF || collisionDownRightF) {
 
@@ -448,8 +449,14 @@ FVector APlayerOvi::RecalculateLocation(FVector Direction, FVector Location, FVe
   absDirection.X = (FMath::Abs(dir.X) <= 0.01) ? 0 : 1;
   absDirection.Y = (FMath::Abs(dir.Y) <= 0.01) ? 0 : 1;
   absDirection.Z = (FMath::Abs(dir.Z) <= 0.01) ? 0 : 1;
+  FVector a = (absDirection * Location);
+  FVector b = (absDirection * CapsuleComponent->GetScaledCapsuleHalfHeight());
+  FVector c = (absDirection * HitLocation);
 
-  FVector nPos = absDirection * m_lastPosition;
+  FVector difLocHit = m_lastPosition - ((a + b) - c);
+  FVector nPos;
+  //Lo dejo asi y sigo con los tag, que esty poco insparao.
+  nPos = (absDirection * m_lastPosition);
 
   loc.X = (FMath::Abs(nPos.X) <= 0.01) ? loc.X : nPos.X;
   loc.Y = (FMath::Abs(nPos.Y) <= 0.01) ? loc.Y : nPos.Y;

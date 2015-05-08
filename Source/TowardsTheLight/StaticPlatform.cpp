@@ -6,10 +6,10 @@
 
 AStaticPlatform::AStaticPlatform()
 {
-  PrimaryActorTick.bCanEverTick = true;
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
   OurVisibleComponent->AttachTo(RootComponent);
+  this->Tags.Add("Platform");
 }
 
 // Called when the game starts or when spawned
@@ -19,11 +19,5 @@ void AStaticPlatform::BeginPlay()
 	
 }
 
-// Called every frame
-void AStaticPlatform::Tick( float DeltaTime )
-{
-	Super::Tick( DeltaTime );
-
-}
 
 

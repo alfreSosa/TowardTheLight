@@ -13,7 +13,6 @@ class TOWARDSTHELIGHT_API AStaticPlatform : public AActor
 public:	
 	AStaticPlatform();
 	virtual void BeginPlay() override;
-	virtual void Tick( float DeltaSeconds ) override;
 
   UPROPERTY()
     USceneComponent* OurVisibleComponent;
