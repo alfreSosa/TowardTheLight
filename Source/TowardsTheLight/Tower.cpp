@@ -6,10 +6,10 @@
 // Sets default values
 ATower::ATower() {
   PrimaryActorTick.bCanEverTick = true;
-  RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-  Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
-  Body->SetWorldScale3D(FVector(2.5, 2.5, 2.5));
-  Body->AttachTo(RootComponent);
+  RootComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
+  RootComponent->SetWorldScale3D(FVector(2.5, 2.5, 2.5));
+  RootComponent = Body;
+  this->Tags.Add("Platform");
 
   Entrance = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Entrance"));
   Entrance->AttachTo(RootComponent);

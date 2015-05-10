@@ -11,7 +11,7 @@ const float PADDING_COLLISION_PERCENT_RADIOUS = 0.5f; //HABRA QUE AJUSTARLO A LA
 const float DEFAULT_CAPSULE_RADIOUS = 25.0f;
 const float DEFAULT_CAPSULE_HEIGHT = 95.0f;
 const float DEFAULT_JUMP_TRANSITION = 100.0f;
-const float DEFAULT_MOVEMENT_SPEED = 500.0;
+const float DEFAULT_MOVEMENT_SPEED = 600.0f;
 const float DEFAULT_JUMP_HEIGHT = 350.0f;
 
 
@@ -46,6 +46,12 @@ public:
 	//clears left flag when key is released
 	UFUNCTION()
 		void OnStopLeft();
+  //sets jump flag when key is pressed
+  UFUNCTION()
+    void OnStartJump();
+  //clears jump flag when key is released
+  UFUNCTION()
+    void OnStopJump();
 
 	void TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location);
@@ -62,6 +68,8 @@ public:
 	  class UArrowComponent* ArrowComponent;
 #endif
 
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputControl)
+    float MarginInput;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float MovementSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
@@ -69,7 +77,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float MaxJumpHeight;
 private:
-  void InputManager();
   float UpdateState();
   void CalculateOrientation();
   void CalculateGravity(float DeltaTime);
@@ -82,10 +89,8 @@ private:
   FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation);
 
   States m_state;
-	int m_right;
-	int m_left;
-  bool m_startRight;
-  bool m_startLeft;
+	bool m_right;
+	bool m_left;
   bool m_doJump;
 	bool m_isJumping;
   bool m_hasLanded;
@@ -98,8 +103,10 @@ private:
   float m_capsuleHeightPadding;
   float m_capsuleRadiousPadding;
   FVector m_lastPosition;
-  ETouchIndex::Type m_fingerIndexRight;
-  ETouchIndex::Type m_fingerIndexLeft;
 
-  const int m_frameToMove = 2;
+  float m_semiWidthViewPort;
+  FVector m_initialTouch;
+  ETouchIndex::Type m_fingerIndexMovement;
+  ETouchIndex::Type m_fingerIndexJump;
+
 };

@@ -12,65 +12,63 @@ GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Som
 /*************************************/
 
 APlayerOvi::APlayerOvi() {
-	PrimaryActorTick.bCanEverTick = true;
-	AutoPossessPlayer = EAutoReceiveInput::Player0;
+  PrimaryActorTick.bCanEverTick = true;
+  AutoPossessPlayer = EAutoReceiveInput::Player0;
 
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationRoll = false;
-	bUseControllerRotationYaw = false;
-  
-	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
+  bUseControllerRotationPitch = false;
+  bUseControllerRotationRoll = false;
+  bUseControllerRotationYaw = false;
+
+  CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
   CapsuleComponent->InitCapsuleSize(DEFAULT_CAPSULE_RADIOUS, DEFAULT_CAPSULE_HEIGHT);
 
-	static FName CollisionProfileName(TEXT("Pawn"));
-	CapsuleComponent->SetCollisionProfileName(CollisionProfileName);
+  static FName CollisionProfileName(TEXT("Pawn"));
+  CapsuleComponent->SetCollisionProfileName(CollisionProfileName);
 
-	CapsuleComponent->CanCharacterStepUpOn = ECB_No;
-	CapsuleComponent->bShouldUpdatePhysicsVolume = true;
-	CapsuleComponent->bCheckAsyncSceneOnMove = false; 
-	CapsuleComponent->bCanEverAffectNavigation = false;
+  CapsuleComponent->CanCharacterStepUpOn = ECB_No;
+  CapsuleComponent->bShouldUpdatePhysicsVolume = true;
+  CapsuleComponent->bCheckAsyncSceneOnMove = false;
+  CapsuleComponent->bCanEverAffectNavigation = false;
   CapsuleComponent->bGenerateOverlapEvents = true;
   //Fijamos por defecto la rotacion de la capsula para que el forward este de cara a la camara
   CapsuleComponent->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
   CapsuleComponent->SetCapsuleHalfHeight(DEFAULT_CAPSULE_HEIGHT);
-	RootComponent = CapsuleComponent;
+  RootComponent = CapsuleComponent;
 
 #if WITH_EDITORONLY_DATA
-	ArrowComponent = CreateEditorOnlyDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
-	if (ArrowComponent) {
-		ArrowComponent->ArrowColor = FColor(150, 200, 255);
-		ArrowComponent->bTreatAsASprite = true;
-		ArrowComponent->AttachParent = CapsuleComponent;
-		ArrowComponent->bIsScreenSizeScaled = true;
-	}
+  ArrowComponent = CreateEditorOnlyDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
+  if (ArrowComponent) {
+    ArrowComponent->ArrowColor = FColor(150, 200, 255);
+    ArrowComponent->bTreatAsASprite = true;
+    ArrowComponent->AttachParent = CapsuleComponent;
+    ArrowComponent->bIsScreenSizeScaled = true;
+  }
 #endif // WITH_EDITORONLY_DATA
 
   Mesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalComponent"));
-	if (Mesh) {
-		Mesh->AlwaysLoadOnClient = true;
-		Mesh->AlwaysLoadOnServer = true;
-		Mesh->bOwnerNoSee = false;
-		Mesh->MeshComponentUpdateFlag = EMeshComponentUpdateFlag::AlwaysTickPose;
-		Mesh->bCastDynamicShadow = true;
-		Mesh->bAffectDynamicIndirectLighting = true;
-		Mesh->PrimaryComponentTick.TickGroup = TG_PrePhysics;
-		Mesh->bChartDistanceFactor = true;
-		Mesh->AttachParent = CapsuleComponent;
-		static FName CollisionProfileName(TEXT("CharacterMesh"));
-		Mesh->SetCollisionProfileName(CollisionProfileName);
-		Mesh->bGenerateOverlapEvents = true;
-		Mesh->bCanEverAffectNavigation = false;
+  if (Mesh) {
+    Mesh->AlwaysLoadOnClient = true;
+    Mesh->AlwaysLoadOnServer = true;
+    Mesh->bOwnerNoSee = false;
+    Mesh->MeshComponentUpdateFlag = EMeshComponentUpdateFlag::AlwaysTickPose;
+    Mesh->bCastDynamicShadow = true;
+    Mesh->bAffectDynamicIndirectLighting = true;
+    Mesh->PrimaryComponentTick.TickGroup = TG_PrePhysics;
+    Mesh->bChartDistanceFactor = true;
+    Mesh->AttachParent = CapsuleComponent;
+    static FName CollisionProfileName(TEXT("CharacterMesh"));
+    Mesh->SetCollisionProfileName(CollisionProfileName);
+    Mesh->bGenerateOverlapEvents = true;
+    Mesh->bCanEverAffectNavigation = false;
     Mesh->SetRelativeLocation(FVector(0, 0, 0));
     Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
     Mesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5));
+  }
 
-
-	}
-
-	m_state = States::RIGHT;
-	m_limit = 0;
+  m_state = States::RIGHT;
+  m_limit = 0;
   m_jumpDistance = 0;
-  m_right = m_left = 0;
+  m_right = m_left = false;
   m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
   m_enabledGravity = true;
   JumpSpeed = MovementSpeed = DEFAULT_MOVEMENT_SPEED;
@@ -80,22 +78,26 @@ APlayerOvi::APlayerOvi() {
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_COLLISION_PERCENT;
   m_capsuleRadiousPadding = m_capsuleRadious * PADDING_COLLISION_PERCENT_RADIOUS;
 
+  m_semiWidthViewPort = 0;
+  m_initialTouch = FVector(0);
+  m_fingerIndexMovement = ETouchIndex::Touch10;
+  m_fingerIndexJump = ETouchIndex::Touch10;
+  MarginInput = 50;
 }
 
 void APlayerOvi::BeginPlay(){
-	Super::BeginPlay();
+  Super::BeginPlay();
 
-  float dotForward = FVector::DotProduct(FVector(1,1,1), GetActorForwardVector());
+  float dotForward = FVector::DotProduct(FVector(1, 1, 1), GetActorForwardVector());
   if (dotForward < 0)
     m_state = States::LEFT;
   else
     m_state = States::RIGHT;
 
-	this->Tags.Add("Player");
-	m_limit = FVector::DotProduct(GetActorLocation(), GetActorRightVector());
-	m_limit = abs(m_limit);	
-	const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
-  m_fingerIndexRight = m_fingerIndexLeft = ETouchIndex::Touch10;
+  this->Tags.Add("Player");
+  m_limit = FVector::DotProduct(GetActorLocation(), GetActorRightVector());
+  m_limit = abs(m_limit);
+
   //GetCaspuleValues
   m_capsuleHeight = CapsuleComponent->GetScaledCapsuleHalfHeight();
   m_capsuleRadious = CapsuleComponent->GetScaledCapsuleRadius();
@@ -106,7 +108,9 @@ void APlayerOvi::BeginPlay(){
 void APlayerOvi::Tick(float DeltaTime){
   Super::Tick(DeltaTime);
 
-  InputManager();
+  if (m_semiWidthViewPort == 0)
+    m_semiWidthViewPort = GEngine->GameViewport->Viewport->GetSizeXY().X / 2;
+
   float value = UpdateState();
   DoMovement(DeltaTime, value);
   DoJump(DeltaTime);
@@ -121,21 +125,21 @@ float APlayerOvi::UpdateState() {
   FVector up = GetActorUpVector();
   FVector forward = GetActorForwardVector();
 
-  if (m_right > m_frameToMove && m_left <= m_frameToMove) {
+  if (m_right){
     value = 1;
     if (m_state != States::RIGHT)
       Rotate(FVector(0, 0, -180));
 
     m_state = States::RIGHT;
   }
-  else if (m_left > m_frameToMove && m_right <= m_frameToMove) {
+  else if (m_left){
     value = 1;
     if (m_state != States::LEFT)
       Rotate(FVector(0, 0, 180));
 
     m_state = States::LEFT;
   }
-  else if (m_left <= m_frameToMove && m_right <= m_frameToMove) {
+  else if (!m_left && !m_right) {
     value = 0;
   }
   else {
@@ -151,60 +155,82 @@ void APlayerOvi::SetupPlayerInputComponent(class UInputComponent* InputComponent
   InputComponent->BindAction("MoveRight", IE_Released, this, &APlayerOvi::OnStopRight);
   InputComponent->BindAction("MoveLeft", IE_Pressed, this, &APlayerOvi::OnStartLeft);
   InputComponent->BindAction("MoveLeft", IE_Released, this, &APlayerOvi::OnStopLeft);
+  InputComponent->BindAction("Jump", IE_Pressed, this, &APlayerOvi::OnStartJump);
+  InputComponent->BindAction("Jump", IE_Released, this, &APlayerOvi::OnStopJump);
+
   InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &APlayerOvi::TouchStarted);
+  InputComponent->BindTouch(EInputEvent::IE_Repeat, this, &APlayerOvi::TouchStarted);
   InputComponent->BindTouch(EInputEvent::IE_Released, this, &APlayerOvi::TouchEnd);
 }
 
-void APlayerOvi::InputManager(){
-  m_right = (m_startRight) ? m_right + 1 : 0;
-  m_left = (m_startLeft) ? m_left + 1 : 0;
-
-  m_doJump = false;
-  if (m_right && m_left)
-    m_doJump = true;
-}
-
 void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location) {
-  FVector loc = Location;
-  loc.Normalize();
-
-  if (loc.X > 0.5) {
-    m_startRight = true;
-    m_fingerIndexRight = FingerIndex;
+  if (Location.X > m_semiWidthViewPort) { //JUMP
+    OnStartJump();
+    m_fingerIndexJump = FingerIndex;
+    //if (!nearGear)
+    //  OnStartJump();
+    //else{
+    //  puntero a nearGear->doAction();
+    //}
   }
-  else if (loc.X < 0.5) {
-    m_startLeft = true;
-    m_fingerIndexLeft = FingerIndex;
+  else { //MOVEMENT SWIPE
+    if (m_initialTouch == FVector(0)){ //initial touch
+      m_initialTouch = Location;
+      m_fingerIndexMovement = FingerIndex;
+    }
+    if (m_fingerIndexMovement == FingerIndex){
+      if (Location.X > m_initialTouch.X + MarginInput){ //right swipe
+        OnStartRight();
+        OnStopLeft();
+      }
+      else if (Location.X < m_initialTouch.X - MarginInput){ //left swipe
+        OnStartLeft();
+        OnStopRight();
+      }
+      else{ //no movement
+        OnStopRight();
+        OnStopLeft();
+      }
+    }
   }
 }
 
 void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location) {
-  if (FingerIndex == m_fingerIndexRight) {
-    m_startRight = false;
-    m_fingerIndexRight = ETouchIndex::Touch10;
+  if (FingerIndex == m_fingerIndexJump){
+    OnStopJump();
+    m_fingerIndexJump = ETouchIndex::Touch10;
   }
-  else if (FingerIndex == m_fingerIndexLeft) {
-    m_startLeft = false;
-    m_fingerIndexLeft = ETouchIndex::Touch10;
 
+  if (FingerIndex == m_fingerIndexMovement){
+    m_initialTouch = FVector(0);
+    m_fingerIndexMovement = ETouchIndex::Touch10;
+    OnStopRight();
+    OnStopLeft();
   }
 }
 
-
 void APlayerOvi::OnStartRight() {
-  m_startRight = true;
+  m_right = true;
 }
 
 void APlayerOvi::OnStopRight() {
-  m_startRight = false;
+  m_right = false;
 }
 
 void APlayerOvi::OnStartLeft() {
-  m_startLeft = true;
+  m_left = true;
 }
 
 void APlayerOvi::OnStopLeft() {
-  m_startLeft = false;
+  m_left = false;
+}
+
+void APlayerOvi::OnStartJump() {
+  m_doJump = true;
+}
+
+void APlayerOvi::OnStopJump() {
+  m_doJump = false;
 }
 
 void  APlayerOvi::DoMovement(float DeltaTime, float value){
@@ -215,9 +241,6 @@ void  APlayerOvi::DoMovement(float DeltaTime, float value){
 }
 
 void APlayerOvi::DoJump(float DeltaTime){
-  FVector up = GetActorUpVector();
-  FVector location = GetActorLocation();
-
   if (m_hasLanded && !m_doJump) {
     m_isJumping = false;
     m_jumpDistance = 0.0;
@@ -228,7 +251,11 @@ void APlayerOvi::DoJump(float DeltaTime){
     m_hasLanded = false;
     m_isJumping = true;
     m_headCollision = false;
+    m_doJump = false;
   }
+
+  FVector up = GetActorUpVector();
+  FVector location = GetActorLocation();
 
   if (m_isJumping && !m_headCollision) {
     m_jumpDistance += JumpSpeed * DeltaTime;
@@ -266,7 +293,7 @@ void APlayerOvi::CalculateOrientation(){
     bool toUp = dotUp > m_limit;
 
     val = (toUp) ? 90 : -90;
-    
+
     if (toUp && m_isJumping)
       m_jumpDistance -= DEFAULT_JUMP_TRANSITION;
 
@@ -314,7 +341,7 @@ void APlayerOvi::CheckCollision() {
   FHitResult OutTraceResultTop;
   FHitResult OutTraceResultMiddle;
   FHitResult OutTraceResultBottom;
-  
+
 
   // Calculate the start location for trace  
   FVector StartTrace = m_lastPosition;
@@ -359,7 +386,7 @@ void APlayerOvi::CheckCollision() {
   //DrawDebugLine(GetWorld(), StartTraceLeft, EndTraceDownLeft, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   //bool collisionDownRight = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigth, EndTraceDownRight, COLLISION_PLAYER, TraceParams);
   //DrawDebugLine(GetWorld(), StartTraceRigth, EndTraceDownRight, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
- 
+
   bool collisionDownLeftF = GetWorld()->LineTraceSingle(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_PLAYER, TraceParams) && OutTraceResultDownLeftF.Actor->ActorHasTag("Platform");
   //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceDownLeftF, FColor(0.0f, 0.f, 1.0f, 1.f), false, 10.f);
   bool collisionDownRightF = GetWorld()->LineTraceSingle(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_PLAYER, TraceParams) && OutTraceResultDownRigthF.Actor->ActorHasTag("Platform");
@@ -371,7 +398,7 @@ void APlayerOvi::CheckCollision() {
   //DrawDebugLine(GetWorld(), StartTraceLeft, EndTraceUpLeft, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   //bool collisionUpRight = GetWorld()->LineTraceSingle(OutTraceResult, StartTraceRigth, EndTraceUpRight, COLLISION_PLAYER, TraceParams);
   //DrawDebugLine(GetWorld(), StartTraceRigth, EndTraceUpRight, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
- 
+
   bool collisionUpLeftF = GetWorld()->LineTraceSingle(OutTraceResultUpLeftF, StartTraceLeftF, EndTraceUpLeftF, COLLISION_PLAYER, TraceParams) && OutTraceResultUpLeftF.Actor->ActorHasTag("Platform");
   //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceUpLeftF, FColor(0.0f, 1.0f, 0.f, 1.f), false, 10.f);
   bool collisionUpRightF = GetWorld()->LineTraceSingle(OutTraceResultUpRigthF, StartTraceRigthF, EndTraceUpRightF, COLLISION_PLAYER, TraceParams) && OutTraceResultUpRigthF.Actor->ActorHasTag("Platform");

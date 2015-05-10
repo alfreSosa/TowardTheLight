@@ -2,7 +2,6 @@
 
 #include "TowardsTheLight.h"
 #include "StaticPlatform.h"
-#include "PlayerOvi.h"
 
 AStaticPlatform::AStaticPlatform()
 {
