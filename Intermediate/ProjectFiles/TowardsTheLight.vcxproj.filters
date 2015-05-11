@@ -67,6 +67,9 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\Tower.h">
       <Filter>Source\TowardsTheLight</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\PickableItem.h">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\MyGameMode.cpp">
@@ -85,6 +88,9 @@
       <Filter>Source\TowardsTheLight</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\Tower.cpp">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp">
       <Filter>Source\TowardsTheLight</Filter>
     </ClCompile>
   </ItemGroup>
