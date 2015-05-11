@@ -35,7 +35,7 @@
 *.sdf
 
 # Binary Files
-Binaries/*
+Binaries/Win64/*.pdb
 
 # Builds
 #Build/*
