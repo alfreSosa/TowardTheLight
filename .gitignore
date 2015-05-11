@@ -11,7 +11,8 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
+#*.dll
+Source/TowardsTheLight/Resources/*
 
 # Fortran module files
 *.mod
