@@ -14,6 +14,13 @@ class TOWARDSTHELIGHT_API AMyGameMode : public AGameMode
 	GENERATED_BODY()
 
   AMyGameMode(const FObjectInitializer& ObjectInitializer);  // Our added constructor
-	
+  UFUNCTION()
+    void AddPoints(float points);
+  UFUNCTION()
+    void OrbPicked();
+
+private:
+  float m_actualPoints;
+  float m_countOrbs;
 };
 

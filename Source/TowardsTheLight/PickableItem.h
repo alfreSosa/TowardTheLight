@@ -23,5 +23,9 @@ public:
 
   UPROPERTY()
     USceneComponent* OurVisibleComponent;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputControl)
+    float Points;
+private:
+  const float DEFAULT_POINTS = 100.0f;
 	
 };
