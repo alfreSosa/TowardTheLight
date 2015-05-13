@@ -26,8 +26,15 @@ void APickableItem::ReceiveActorBeginOverlap(AActor* OtherActor)
   if (OtherActor->ActorHasTag("Player")) {
     GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Item Picked")));
     this->SetActorEnableCollision(false);
+    PrimaryActorTick.bCanEverTick = false;
     SetActorLocation(FVector(0, 0, 0));
-    //AMyGameMode game;
+    AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+    if (gameMode) {
+      gameMode->AddPoints(this->Points);
+      if (IsOrb)
+        gameMode->OrbPicked();
+
+    }
   }
 }
 

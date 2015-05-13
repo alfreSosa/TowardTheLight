@@ -70,6 +70,27 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\PickableItem.h">
       <Filter>Source\TowardsTheLight</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\document.h">
+      <Filter>Source\TowardsTheLight\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\filestream.h">
+      <Filter>Source\TowardsTheLight\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\prettywriter.h">
+      <Filter>Source\TowardsTheLight\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\rapidjson.h">
+      <Filter>Source\TowardsTheLight\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\reader.h">
+      <Filter>Source\TowardsTheLight\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\stringbuffer.h">
+      <Filter>Source\TowardsTheLight\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\writer.h">
+      <Filter>Source\TowardsTheLight\rapidjson</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\MyGameMode.cpp">
@@ -93,5 +114,10 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp">
       <Filter>Source\TowardsTheLight</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source\TowardsTheLight\rapidjson">
+      <UniqueIdentifier>{6939d62d-1c3f-446b-b9ca-7e076cd1d2c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
