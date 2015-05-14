@@ -2,6 +2,8 @@
 
 #include "TowardsTheLight.h"
 #include "PickableItem.h"
+#include "MyGameMode.h"
+
 
 
 // Sets default values
@@ -13,6 +15,9 @@ APickableItem::APickableItem()
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
   OurVisibleComponent->AttachTo(RootComponent);
   this->SetActorEnableCollision(true);
+  //Crear luz y sacar a parametro el valor de la luz
+  Points = DEFAULT_POINTS;
+
 
 }
 
@@ -20,7 +25,16 @@ void APickableItem::ReceiveActorBeginOverlap(AActor* OtherActor)
 {
   if (OtherActor->ActorHasTag("Player")) {
     GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Item Picked")));
-    //sumar y destruir
+    this->SetActorEnableCollision(false);
+    PrimaryActorTick.bCanEverTick = false;
+    SetActorLocation(FVector(0, 0, 0));
+    AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+    if (gameMode) {
+      gameMode->AddPoints(this->Points);
+      if (IsOrb)
+        gameMode->OrbPicked();
+
+    }
   }
 }
 
