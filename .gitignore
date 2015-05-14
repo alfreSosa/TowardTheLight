@@ -38,7 +38,7 @@ Source/TowardsTheLight/Resources/*
 # Binary Files
 Binaries/Win64/*.pdb
 Binaries/Win64/*DebugGame.dll
-
+Binaries/Android/*
 
 # Builds
 #Build/*
