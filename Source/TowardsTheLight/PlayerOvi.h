@@ -6,7 +6,7 @@
 #include "PlayerOvi.generated.h"
 
 #define COLLISION_PLAYER        ECC_GameTraceChannel1 
-const float PADDING_COLLISION_PERCENT = 0;
+const float PADDING_COLLISION_PERCENT = 0.1f;
 const float PADDING_COLLISION_PERCENT_RADIOUS = 0.5f; //HABRA QUE AJUSTARLO A LA MALLA
 const float DEFAULT_CAPSULE_RADIOUS = 25.0f;
 const float DEFAULT_CAPSULE_HEIGHT = 95.0f;

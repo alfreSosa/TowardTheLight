@@ -15,7 +15,6 @@ APickableItem::APickableItem()
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
   OurVisibleComponent->AttachTo(RootComponent);
   this->SetActorEnableCollision(true);
-  //Crear luz y sacar a parametro el valor de la luz
   Points = DEFAULT_POINTS;
 
 
