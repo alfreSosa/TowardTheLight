@@ -9,12 +9,12 @@ AMobilePlatform::AMobilePlatform() {
   this->SetActorEnableCollision(true);
 
   //setting
-  RightDistance = 0.f;
-  LeftDistance = 0.f;
-  RightDelay = 0.f;
-  LeftDelay = 0.f;
+  RightDistance = 100.f;
+  LeftDistance = 100.f;
+  RightDelay = 1.f;
+  LeftDelay = 1.f;
   Speed = 100.f;
-  InitialDelay = 0.f;
+  InitialDelay = 1.f;
 
   //private variables
   m_timer = 0;
@@ -101,8 +101,9 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
 }
 
 void AMobilePlatform::ReceiveActorBeginOverlap(AActor* OtherActor) {
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("collision!!!!!")));
   if (OtherActor->ActorHasTag("Player")) {
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("collision!!!!!")));
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("player!!!!!")));
     //this->SetActorEnableCollision(false);
     //PrimaryActorTick.bCanEverTick = false;
     //SetActorLocation(FVector(0, 0, 0));
