@@ -21,7 +21,7 @@ class TOWARDSTHELIGHT_API APlayerOvi : public APawn
 	GENERATED_BODY()
 
 public:
-	enum States { STOP, RIGHT, LEFT };
+	enum States { RIGHT, LEFT };
 	// Sets default values for this pawn's properties
 	APlayerOvi();
 

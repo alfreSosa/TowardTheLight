@@ -9,7 +9,7 @@
 *.pch
 
 # Compiled Dynamic libraries
-*.so  //fichero necesario
+*.so  #comentar esta linea cuando se resuelva lo del fichero mayor de 100Megas
 *.dylib
 #*.dll
 Source/TowardsTheLight/Resources/*
@@ -38,7 +38,9 @@ Source/TowardsTheLight/Resources/*
 # Binary Files
 Binaries/Win64/*.pdb
 Binaries/Win64/*DebugGame.dll
-Binaries/Android/*
+Binaries/Android/*.apk
+Binaries/Android/*.bat
+Binaries/Android/*.obb
 
 # Builds
 #Build/*

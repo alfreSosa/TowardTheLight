@@ -5,7 +5,7 @@
 
 // Sets default values
 ATower::ATower() {
-  PrimaryActorTick.bCanEverTick = true;
+//  PrimaryActorTick.bCanEverTick = true;
   RootComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
   RootComponent->SetWorldScale3D(FVector(2.5, 2.5, 2.5));
   RootComponent = Body;
@@ -28,10 +28,10 @@ void ATower::BeginPlay() {
   RegisterDelegate();
 }
 
-// Called every frame
-void ATower::Tick( float DeltaTime ) {
-	Super::Tick( DeltaTime );
-}
+//// Called every frame
+//void ATower::Tick( float DeltaTime ) {
+//	Super::Tick( DeltaTime );
+//}
 
 void ATower::RegisterDelegate() {
   if (!m_trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &ATower::OnBeginTriggerOverlap)) {

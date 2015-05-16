@@ -43,8 +43,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\TowardsTheLight\MobilePlatform.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Tower.cpp" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\MobilePlatform.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\PickableItem.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\document.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\filestream.h" />

@@ -127,25 +127,23 @@ float APlayerOvi::UpdateState() {
 
   if (m_right){
     value = 1;
-    if (m_state != States::RIGHT)
+    if (m_state != States::RIGHT){
       Rotate(FVector(0, 0, -180));
-
-    m_state = States::RIGHT;
+      m_state = States::RIGHT;
+    }
+    
   }
   else if (m_left){
     value = 1;
-    if (m_state != States::LEFT)
+    if (m_state != States::LEFT){
       Rotate(FVector(0, 0, 180));
-
-    m_state = States::LEFT;
+      m_state = States::LEFT;
+    }
   }
-  else if (!m_left && !m_right) {
+  else{
     value = 0;
   }
-  else {
-    if (m_state == States::RIGHT || m_state == States::LEFT)
-      value = 1;
-  }
+
   return value;
 }
 
@@ -297,9 +295,7 @@ void APlayerOvi::CalculateOrientation(){
     if (toUp && m_isJumping)
       m_jumpDistance -= DEFAULT_JUMP_TRANSITION;
 
-    if (m_state == States::STOP)
-      Rotate(FVector(0, val, 0));
-    else if (m_state == States::RIGHT)
+    if (m_state == States::RIGHT)
       Rotate(FVector(-val, 0, 0));
     else if (m_state == States::LEFT)
       Rotate(FVector(val, 0, 0));
