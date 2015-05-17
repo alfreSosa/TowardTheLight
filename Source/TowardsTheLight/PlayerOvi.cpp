@@ -56,7 +56,7 @@ APlayerOvi::APlayerOvi() {
     Mesh->PrimaryComponentTick.TickGroup = TG_PrePhysics;
     Mesh->bChartDistanceFactor = true;
     Mesh->AttachParent = CapsuleComponent;
-    static FName CollisionProfileName(TEXT("CharacterMesh"));
+    static FName CollisionProfileName(TEXT("OverlapAll"));
     Mesh->SetCollisionProfileName(CollisionProfileName);
     Mesh->bGenerateOverlapEvents = true;
     Mesh->bCanEverAffectNavigation = false;
