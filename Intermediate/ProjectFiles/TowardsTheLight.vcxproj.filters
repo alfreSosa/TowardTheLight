@@ -100,6 +100,9 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\MobileEnemy.h">
       <Filter>Source\TowardsTheLight</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\StaticEnemy.h">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\MyGameMode.cpp">
@@ -130,6 +133,9 @@
       <Filter>Source\TowardsTheLight\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\MobileEnemy.cpp">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\StaticEnemy.cpp">
       <Filter>Source\TowardsTheLight</Filter>
     </ClCompile>
   </ItemGroup>
