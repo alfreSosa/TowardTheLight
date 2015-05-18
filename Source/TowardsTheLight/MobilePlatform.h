@@ -33,17 +33,17 @@ public:
   virtual void Tick(float DeltaSeconds) override;
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
 
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MobilePlatform)
+  UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float RightDistance;
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MobilePlatform)
+  UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float LeftDistance;
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MobilePlatform)
+  UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float RightDelay;
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MobilePlatform)
+  UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float LeftDelay;
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MobilePlatform)
+  UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float Speed;
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MobilePlatform)
+  UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float InitialDelay;
 
 };

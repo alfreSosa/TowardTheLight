@@ -2,10 +2,10 @@
 
 #include "TowardsTheLight.h"
 #include "Tower.h"
+#include "MyGameMode.h"
 
 // Sets default values
 ATower::ATower() {
-//  PrimaryActorTick.bCanEverTick = true;
   RootComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
   RootComponent->SetWorldScale3D(FVector(2.5, 2.5, 2.5));
   RootComponent = Body;
@@ -28,11 +28,6 @@ void ATower::BeginPlay() {
   RegisterDelegate();
 }
 
-//// Called every frame
-//void ATower::Tick( float DeltaTime ) {
-//	Super::Tick( DeltaTime );
-//}
-
 void ATower::RegisterDelegate() {
   if (!m_trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &ATower::OnBeginTriggerOverlap)) {
     m_trigger->OnComponentBeginOverlap.AddDynamic(this, &ATower::OnBeginTriggerOverlap);
@@ -46,10 +41,9 @@ void ATower::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveCom
     dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
     dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
     if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05){
-      if (GEngine)
-      {
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("VICTORIA!!!!")));
-      }
+      AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+      if (gameMode)
+        gameMode->EndGame(AMyGameMode::VICTORY);
     }
   }
 }
