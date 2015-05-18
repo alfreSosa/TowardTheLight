@@ -10,8 +10,8 @@ class TOWARDSTHELIGHT_API ATower : public APawn
 {
 	GENERATED_BODY()
 
-    UPROPERTY()
-    UBoxComponent *m_trigger;
+  UPROPERTY()
+    UBoxComponent *Trigger;
 public:	
 	// Sets default values for this actor's properties
 	ATower();

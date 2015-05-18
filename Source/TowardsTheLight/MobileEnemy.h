@@ -13,10 +13,11 @@ class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
 {
 	GENERATED_BODY()
 	
-    float m_timer;
+  float m_timer;
   float m_totalDistance;
   float m_currentDistance;
   FVector m_rightVector;
+  bool m_initMovement;
 
   enum state{
     INITIAL_DELAY,
@@ -26,8 +27,10 @@ class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
     LEFT_DELAY,
   }m_state;
 
+  UPROPERTY()
+    UBoxComponent *Trigger;
+
   void doMovement(float DeltaSeconds);
-	
 public:
   AMobileEnemy();
   virtual void BeginPlay() override;
@@ -45,5 +48,11 @@ public:
     float Speed;
   UPROPERTY(EditAnywhere, Category = MobileEnemy)
     float InitialDelay;
+  UPROPERTY(EditAnywhere, Category = MobileEnemy)
+    bool HasTrigger;
 
+  void RegisterDelegate();
+  UFUNCTION()
+    void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
 };

@@ -15,11 +15,19 @@ AMobileEnemy::AMobileEnemy() {
   LeftDelay = 1.f;
   Speed = 100.f;
   InitialDelay = 1.f;
+  HasTrigger = false;
 
   //private variables
   m_timer = 0;
   m_state = INITIAL_DELAY;
   m_currentDistance = 0;
+  m_initMovement = false;
+
+  //trigger
+  Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
+  Trigger->AttachTo(RootComponent);
+  Trigger->bHiddenInGame = true;
+  Trigger->bGenerateOverlapEvents = true;
 }
 
 
@@ -27,12 +35,15 @@ void AMobileEnemy::BeginPlay() {
   Super::BeginPlay();
 
   m_totalDistance = RightDistance;
+
+  RegisterDelegate();
 }
 
 void AMobileEnemy::Tick(float DeltaSeconds) {
   Super::BeginPlay();
 
-  doMovement(DeltaSeconds);
+  if (!HasTrigger || (HasTrigger && m_initMovement))
+    doMovement(DeltaSeconds);
 }
 
 void AMobileEnemy::doMovement(float DeltaSeconds){
@@ -109,4 +120,21 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
   }
 }
 
+void AMobileEnemy::RegisterDelegate() {
+  if (!Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AMobileEnemy::OnBeginTriggerOverlap)) {
+    Trigger->OnComponentBeginOverlap.AddDynamic(this, &AMobileEnemy::OnBeginTriggerOverlap);
+  }
+}
 
+void AMobileEnemy::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+  if (OtherActor->ActorHasTag("Player")){
+    m_initMovement = true;
+  }
+}
+
+void AMobileEnemy::EndPlay(const EEndPlayReason::Type EndPlayReason){
+  if (Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AMobileEnemy::OnBeginTriggerOverlap))  {
+    Trigger->OnComponentBeginOverlap.RemoveDynamic(this, &AMobileEnemy::OnBeginTriggerOverlap);
+  }
+  Super::EndPlay(EndPlayReason);
+}

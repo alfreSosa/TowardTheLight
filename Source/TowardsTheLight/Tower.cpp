@@ -14,11 +14,11 @@ ATower::ATower() {
   Entrance = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Entrance"));
   Entrance->AttachTo(RootComponent);
 
-  m_trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
-  m_trigger->AttachTo(Entrance);
-  m_trigger->bHiddenInGame = false;
-  m_trigger->SetWorldScale3D(FVector(0.5, 0.5, 0.5));
-  m_trigger->bGenerateOverlapEvents = true;
+  Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
+  Trigger->AttachTo(Entrance);
+  Trigger->bHiddenInGame = true;
+  Trigger->SetWorldScale3D(FVector(0.5, 0.5, 0.5));
+  Trigger->bGenerateOverlapEvents = true;
 }
 
 // Called when the game starts or when spawned
@@ -29,8 +29,8 @@ void ATower::BeginPlay() {
 }
 
 void ATower::RegisterDelegate() {
-  if (!m_trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &ATower::OnBeginTriggerOverlap)) {
-    m_trigger->OnComponentBeginOverlap.AddDynamic(this, &ATower::OnBeginTriggerOverlap);
+  if (!Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &ATower::OnBeginTriggerOverlap)) {
+    Trigger->OnComponentBeginOverlap.AddDynamic(this, &ATower::OnBeginTriggerOverlap);
   }
 }
 
@@ -49,8 +49,8 @@ void ATower::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveCom
 }
 
 void ATower::EndPlay(const EEndPlayReason::Type EndPlayReason){
-  if (m_trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &ATower::OnBeginTriggerOverlap))  {
-    m_trigger->OnComponentBeginOverlap.RemoveDynamic(this, &ATower::OnBeginTriggerOverlap);
+  if (Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &ATower::OnBeginTriggerOverlap))  {
+    Trigger->OnComponentBeginOverlap.RemoveDynamic(this, &ATower::OnBeginTriggerOverlap);
   }
   Super::EndPlay(EndPlayReason);
 }
