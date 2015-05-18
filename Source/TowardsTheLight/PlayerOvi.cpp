@@ -417,7 +417,7 @@ void APlayerOvi::CheckCollision() {
   
 
   if (collisionTop || collisionBottom || collisionMidle) {
-    FVector loc = GetActorLocation();
+   /* FVector loc = GetActorLocation();
     FVector absDirection = FVector::ZeroVector;
     FVector dir = GetActorForwardVector();
 
@@ -432,7 +432,13 @@ void APlayerOvi::CheckCollision() {
     loc.Y = (FMath::Abs(nPos.Y) <= 0.01) ? loc.Y : nPos.Y;
     loc.Z = (FMath::Abs(nPos.Z) <= 0.01) ? loc.Z : nPos.Z;
 
-    SetActorLocation(loc);
+    SetActorLocation(loc);*/
+    if (collisionTop)
+      SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultTop.Location, m_capsuleRadious));
+    else if (collisionBottom)
+      SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultBottom.Location, m_capsuleRadious));
+    else if (collisionMidle)
+      SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultMiddle.Location, m_capsuleRadious));
   }
 }
 

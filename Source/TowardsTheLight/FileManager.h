@@ -1,8 +1,6 @@
 
 #pragma once
 
-#include "GameFramework/Actor.h"
-
 class FileManager {
 public:
   const FString FILE_PATH = "Content/Levels/Levels.json";
