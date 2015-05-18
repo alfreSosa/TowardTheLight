@@ -43,9 +43,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\TowardsTheLight\FileManager.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\MobilePlatform.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Tower.cpp" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\FileManager.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\MobilePlatform.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\PickableItem.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\document.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\filestream.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\prettywriter.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\rapidjson.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\reader.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\stringbuffer.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\writer.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Tower.h" />
     <None Include="..\..\TowardsTheLight.uproject" />
     <None Include="..\..\Source\TowardsTheLight.Target.cs" />

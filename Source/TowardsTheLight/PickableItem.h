@@ -18,10 +18,16 @@ public:
 	virtual void BeginPlay() override;
 	
 	// Called every frame
-	virtual void Tick( float DeltaSeconds ) override;
+	//virtual void Tick( float DeltaSeconds ) override;
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
 
   UPROPERTY()
     USceneComponent* OurVisibleComponent;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputControl)
+    float Points;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputControl)
+    bool IsOrb;
+private:
+  const float DEFAULT_POINTS = 100.0f;
 	
 };
