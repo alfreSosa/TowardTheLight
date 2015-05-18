@@ -14,8 +14,8 @@ AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Su
   PlayerControllerClass = AOviPlayerController::StaticClass();
   m_countOrbs = m_actualPoints = 0;
   FileManager::Instance()->ReadData();
-  
-//  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FileManager::Instance()->GetData()); //lee el fichero
+  if (GEngine)
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FileManager::Instance()->GetData()); //lee el fichero
 }
 
 void AMyGameMode::AddPoints(float points) {
