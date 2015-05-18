@@ -10,12 +10,14 @@
 FString FilePath = "Content/Levels/Levels.json";
 
 AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
+  PrimaryActorTick.bCanEverTick = true;
+
   DefaultPawnClass = APlayerOvi::StaticClass();
   PlayerControllerClass = AOviPlayerController::StaticClass();
   m_countOrbs = m_actualPoints = 0;
-  //FileManager::Instance()->ReadData();
-  //if (GEngine)
-  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FileManager::Instance()->GetData()); //lee el fichero
+  FileManager::Instance()->ReadData();
+  if (GEngine)
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FileManager::Instance()->GetData()); //lee el fichero
 }
 
 void AMyGameMode::AddPoints(float points) {
