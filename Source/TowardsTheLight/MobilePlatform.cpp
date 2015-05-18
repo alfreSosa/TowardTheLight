@@ -35,6 +35,7 @@ void AMobilePlatform::Tick(float DeltaSeconds) {
 }
 
 void AMobilePlatform::doMovement(float DeltaSeconds){
+  m_movement = FVector(0);
   switch (m_state){
   case INITIAL_DELAY:
     if (m_timer < InitialDelay)
@@ -51,9 +52,11 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
       dist = m_totalDistance - m_currentDistance;
 
     if (m_currentDistance < m_totalDistance){
+      m_movement = dist * m_rightVector;
+
       m_currentDistance += dist;
       FVector location = GetActorLocation();
-      location += dist * m_rightVector;
+      location += m_movement;
       SetActorLocation(location);
     }
     else{
@@ -70,9 +73,11 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
       dist = m_totalDistance - m_currentDistance;
 
     if (m_currentDistance < m_totalDistance){
+      m_movement = dist * -m_rightVector;
+
       m_currentDistance += dist;
       FVector location = GetActorLocation();
-      location += dist * -m_rightVector;
+      location += m_movement;
       SetActorLocation(location);
     }
     else{
@@ -100,19 +105,24 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
   }
 }
 
-void AMobilePlatform::ReceiveActorBeginOverlap(AActor* OtherActor) {
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("collision!!!!!")));
-  if (OtherActor->ActorHasTag("Player")) {
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("player!!!!!")));
-    //this->SetActorEnableCollision(false);
-    //PrimaryActorTick.bCanEverTick = false;
-    //SetActorLocation(FVector(0, 0, 0));
-    //AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
-    //if (gameMode) {
-    //  gameMode->AddPoints(this->Points);
-    //  if (IsOrb)
-    //    gameMode->OrbPicked();
+//ESTO YA NO HARIA FALTA(CREO)
+//void AMobilePlatform::ReceiveActorBeginOverlap(AActor* OtherActor) {
+//  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("collision!!!!!")));
+//  if (OtherActor->ActorHasTag("Player")) {
+//    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("player!!!!!")));
+//    //this->SetActorEnableCollision(false);
+//    //PrimaryActorTick.bCanEverTick = false;
+//    //SetActorLocation(FVector(0, 0, 0));
+//    //AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+//    //if (gameMode) {
+//    //  gameMode->AddPoints(this->Points);
+//    //  if (IsOrb)
+//    //    gameMode->OrbPicked();
+//
+//    //}
+//  }
+//}
 
-    //}
-  }
+FVector AMobilePlatform::GetPlatformMovement() const{
+  return m_movement;
 }

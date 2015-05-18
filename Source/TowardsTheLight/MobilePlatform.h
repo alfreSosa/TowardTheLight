@@ -17,6 +17,7 @@ class TOWARDSTHELIGHT_API AMobilePlatform : public AStaticPlatform
   float m_totalDistance;
   float m_currentDistance;
   FVector m_rightVector;
+  FVector m_movement;
 
   enum state{
     INITIAL_DELAY,
@@ -31,7 +32,7 @@ public:
   AMobilePlatform();
   virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;
-  virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
+  //virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
 
   UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float RightDistance;
@@ -46,4 +47,5 @@ public:
   UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float InitialDelay;
 
+  FVector GetPlatformMovement() const;
 };
