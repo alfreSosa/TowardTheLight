@@ -4,7 +4,7 @@
 #include "MobileEnemy.h"
 
 
-AMobileEnemy::AMobilePlatform() {
+AMobileEnemy::AMobileEnemy() {
   PrimaryActorTick.bCanEverTick = true;
   this->SetActorEnableCollision(true);
 
@@ -64,7 +64,7 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
         m_totalDistance += LeftDistance;
     }
   }
-                break;
+    break;
   case TO_LEFT:{
     float dist = Speed * DeltaSeconds;
     if (m_totalDistance - m_currentDistance < dist)
@@ -81,13 +81,17 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
       m_currentDistance = 0;
     }
   }
-               break;
+    break;
   case RIGHT_DELAY:
     if (m_timer < RightDelay)
       m_timer += DeltaSeconds;
     else{
       m_timer = 0;
       m_state = TO_LEFT;
+      FTransform transform = GetTransform();
+      FQuat quat = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 180));
+      transform.SetRotation(quat);
+      SetActorTransform(transform);
     }
     break;
   case LEFT_DELAY:
@@ -96,6 +100,10 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
     else{
       m_timer = 0;
       m_state = TO_RIGHT;
+      FTransform transform = GetTransform();
+      FQuat quat = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 180));
+      transform.SetRotation(quat);
+      SetActorTransform(transform);
     }
     break;
   }
