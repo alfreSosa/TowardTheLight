@@ -13,15 +13,25 @@ class TOWARDSTHELIGHT_API AMobilePlatform : public AStaticPlatform
 {
   GENERATED_BODY()
   
-  float m_rightPosition;
-  float m_leftPosition;
-  float m_initialTimer;
-  float m_direction;
+  float m_timer;
+  float m_totalDistance;
+  float m_currentDistance;
+  FVector m_rightVector;
 
+  enum state{
+    INITIAL_DELAY,
+    TO_RIGHT,
+    TO_LEFT,
+    RIGHT_DELAY,
+    LEFT_DELAY,
+  }m_state;
+
+  void doMovement(float DeltaSeconds);
 public:
   AMobilePlatform();
   virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;
+  virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MobilePlatform)
     float RightDistance;
@@ -35,4 +45,5 @@ public:
     float Speed;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MobilePlatform)
     float InitialDelay;
+
 };
