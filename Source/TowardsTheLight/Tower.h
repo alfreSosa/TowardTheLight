@@ -20,7 +20,7 @@ public:
 	virtual void BeginPlay() override;
 	
 	// Called every frame
-	virtual void Tick( float DeltaSeconds ) override;
+	//virtual void Tick( float DeltaSeconds ) override;
 
   UPROPERTY()
     UStaticMeshComponent* Body;
@@ -28,8 +28,6 @@ public:
   UPROPERTY()
     UStaticMeshComponent* Entrance;
 	
-
-
   void RegisterDelegate();
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

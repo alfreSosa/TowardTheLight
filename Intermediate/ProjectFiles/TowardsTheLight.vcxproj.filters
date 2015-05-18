@@ -91,6 +91,12 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\writer.h">
       <Filter>Source\TowardsTheLight\rapidjson</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\MobilePlatform.h">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\FileManager.h">
+      <Filter>Source\TowardsTheLight\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\MyGameMode.cpp">
@@ -114,10 +120,19 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp">
       <Filter>Source\TowardsTheLight</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\MobilePlatform.cpp">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\FileManager.cpp">
+      <Filter>Source\TowardsTheLight\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source\TowardsTheLight\rapidjson">
       <UniqueIdentifier>{6939d62d-1c3f-446b-b9ca-7e076cd1d2c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\TowardsTheLight\Utils">
+      <UniqueIdentifier>{7850546f-b42a-4656-8e49-a7e7b5962071}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
