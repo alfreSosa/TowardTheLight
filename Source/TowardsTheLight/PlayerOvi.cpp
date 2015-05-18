@@ -417,11 +417,11 @@ void APlayerOvi::CheckCollision() {
     m_hasLanded = false;
     if (collisionUp || collisionUpLeftF || collisionUpRightF) {
       if (collisionUp)
-        SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUp.Location, m_capsuleHeight));
+        SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUp.Location, m_capsuleHeight + CAPSULE_RADIOUS_PADDING));
       else if (collisionUpLeftF)
-        SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpLeftF.Location, m_capsuleHeight));
+        SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpLeftF.Location, m_capsuleHeight + CAPSULE_RADIOUS_PADDING));
       else if (collisionUpRightF)
-        SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpRigthF.Location, m_capsuleHeight));
+        SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpRigthF.Location, m_capsuleHeight + CAPSULE_RADIOUS_PADDING));
 
       m_headCollision = true;
     }
