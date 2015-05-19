@@ -94,7 +94,13 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\MobilePlatform.h">
       <Filter>Source\TowardsTheLight</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\FileManager.h">
+    <ClInclude Include="..\..\Source\TowardsTheLight\MobileEnemy.h">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\StaticEnemy.h">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h">
       <Filter>Source\TowardsTheLight\Utils</Filter>
     </ClInclude>
   </ItemGroup>
@@ -123,7 +129,13 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\MobilePlatform.cpp">
       <Filter>Source\TowardsTheLight</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\TowardsTheLight\FileManager.cpp">
+    <ClCompile Include="..\..\Source\TowardsTheLight\MobileEnemy.cpp">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\StaticEnemy.cpp">
+      <Filter>Source\TowardsTheLight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\GameDataManager.cpp">
       <Filter>Source\TowardsTheLight\Utils</Filter>
     </ClCompile>
   </ItemGroup>

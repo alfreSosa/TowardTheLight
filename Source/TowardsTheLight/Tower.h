@@ -10,8 +10,8 @@ class TOWARDSTHELIGHT_API ATower : public APawn
 {
 	GENERATED_BODY()
 
-    UPROPERTY()
-    UBoxComponent *m_trigger;
+  UPROPERTY()
+    UBoxComponent *Trigger;
 public:	
 	// Sets default values for this actor's properties
 	ATower();
@@ -19,13 +19,10 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	// Called every frame
-	//virtual void Tick( float DeltaSeconds ) override;
-
-  UPROPERTY()
+  UPROPERTY(EditAnywhere)
     UStaticMeshComponent* Body;
 
-  UPROPERTY()
+  UPROPERTY(EditAnywhere)
     UStaticMeshComponent* Entrance;
 	
   void RegisterDelegate();

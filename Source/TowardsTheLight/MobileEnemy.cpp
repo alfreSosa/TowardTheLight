@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TowardsTheLight.h"
-#include "MobilePlatform.h"
+#include "MobileEnemy.h"
 
 
-AMobilePlatform::AMobilePlatform() {
+AMobileEnemy::AMobileEnemy() {
   PrimaryActorTick.bCanEverTick = true;
   this->SetActorEnableCollision(true);
 
@@ -15,27 +15,39 @@ AMobilePlatform::AMobilePlatform() {
   LeftDelay = 1.f;
   Speed = 100.f;
   InitialDelay = 1.f;
+  HasTrigger = false;
 
   //private variables
   m_timer = 0;
   m_state = INITIAL_DELAY;
   m_currentDistance = 0;
+  m_initMovement = false;
 
+  //trigger
+  Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
+  Trigger->SetCollisionProfileName(FName(TEXT("OverlapOnlyPawn")));
+  Trigger->AttachTo(RootComponent);
+  Trigger->bHiddenInGame = true;
+  Trigger->bGenerateOverlapEvents = true;
 }
 
-void AMobilePlatform::BeginPlay() {
+
+void AMobileEnemy::BeginPlay() {
   Super::BeginPlay();
-  this->Tags.Add("MobilePlatform");
+
   m_totalDistance = RightDistance;
+
+  RegisterDelegate();
 }
 
-void AMobilePlatform::Tick(float DeltaSeconds) {
-  Super::BeginPlay();
-  doMovement(DeltaSeconds);
+void AMobileEnemy::Tick(float DeltaSeconds) {
+  Super::Tick(DeltaSeconds);
+
+  if (!HasTrigger || (HasTrigger && m_initMovement))
+    doMovement(DeltaSeconds);
 }
 
-void AMobilePlatform::doMovement(float DeltaSeconds){
-  m_movement = FVector(0);
+void AMobileEnemy::doMovement(float DeltaSeconds){
   switch (m_state){
   case INITIAL_DELAY:
     if (m_timer < InitialDelay)
@@ -52,11 +64,9 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
       dist = m_totalDistance - m_currentDistance;
 
     if (m_currentDistance < m_totalDistance){
-      m_movement = dist * m_rightVector;
-
       m_currentDistance += dist;
       FVector location = GetActorLocation();
-      location += m_movement;
+      location += dist * m_rightVector;
       SetActorLocation(location);
     }
     else{
@@ -73,11 +83,9 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
       dist = m_totalDistance - m_currentDistance;
 
     if (m_currentDistance < m_totalDistance){
-      m_movement = dist * -m_rightVector;
-
       m_currentDistance += dist;
       FVector location = GetActorLocation();
-      location += m_movement;
+      location += dist * -m_rightVector;
       SetActorLocation(location);
     }
     else{
@@ -92,6 +100,10 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
     else{
       m_timer = 0;
       m_state = TO_LEFT;
+      FTransform transform = GetTransform();
+      FQuat quat = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 180));
+      transform.SetRotation(quat);
+      SetActorTransform(transform);
     }
     break;
   case LEFT_DELAY:
@@ -100,29 +112,30 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
     else{
       m_timer = 0;
       m_state = TO_RIGHT;
+      FTransform transform = GetTransform();
+      FQuat quat = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 180));
+      transform.SetRotation(quat);
+      SetActorTransform(transform);
     }
     break;
   }
 }
 
-//ESTO YA NO HARIA FALTA(CREO)
-//void AMobilePlatform::ReceiveActorBeginOverlap(AActor* OtherActor) {
-//  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("collision!!!!!")));
-//  if (OtherActor->ActorHasTag("Player")) {
-//    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("player!!!!!")));
-//    //this->SetActorEnableCollision(false);
-//    //PrimaryActorTick.bCanEverTick = false;
-//    //SetActorLocation(FVector(0, 0, 0));
-//    //AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
-//    //if (gameMode) {
-//    //  gameMode->AddPoints(this->Points);
-//    //  if (IsOrb)
-//    //    gameMode->OrbPicked();
-//
-//    //}
-//  }
-//}
+void AMobileEnemy::RegisterDelegate() {
+  if (!Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AMobileEnemy::OnBeginTriggerOverlap)) {
+    Trigger->OnComponentBeginOverlap.AddDynamic(this, &AMobileEnemy::OnBeginTriggerOverlap);
+  }
+}
 
-FVector AMobilePlatform::GetPlatformMovement() const{
-  return m_movement;
+void AMobileEnemy::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+  if (OtherActor->ActorHasTag("Player")){
+    m_initMovement = true;
+  }
+}
+
+void AMobileEnemy::EndPlay(const EEndPlayReason::Type EndPlayReason){
+  if (Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AMobileEnemy::OnBeginTriggerOverlap))  {
+    Trigger->OnComponentBeginOverlap.RemoveDynamic(this, &AMobileEnemy::OnBeginTriggerOverlap);
+  }
+  Super::EndPlay(EndPlayReason);
 }

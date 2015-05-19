@@ -43,11 +43,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\TowardsTheLight\FileManager.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\GameDataManager.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\MobileEnemy.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\MobilePlatform.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\StaticEnemy.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Tower.cpp" />
-    <ClInclude Include="..\..\Source\TowardsTheLight\FileManager.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\MobileEnemy.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\MobilePlatform.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\PickableItem.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\document.h" />
@@ -57,6 +60,7 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\reader.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\stringbuffer.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\writer.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\StaticEnemy.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Tower.h" />
     <None Include="..\..\TowardsTheLight.uproject" />
     <None Include="..\..\Source\TowardsTheLight.Target.cs" />

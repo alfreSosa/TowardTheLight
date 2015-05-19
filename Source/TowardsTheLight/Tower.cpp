@@ -2,10 +2,10 @@
 
 #include "TowardsTheLight.h"
 #include "Tower.h"
+#include "MyGameMode.h"
 
 // Sets default values
 ATower::ATower() {
-//  PrimaryActorTick.bCanEverTick = true;
   RootComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
   RootComponent->SetWorldScale3D(FVector(2.5, 2.5, 2.5));
   RootComponent = Body;
@@ -14,11 +14,11 @@ ATower::ATower() {
   Entrance = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Entrance"));
   Entrance->AttachTo(RootComponent);
 
-  m_trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
-  m_trigger->AttachTo(Entrance);
-  m_trigger->bHiddenInGame = false;
-  m_trigger->SetWorldScale3D(FVector(0.5, 0.5, 0.5));
-  m_trigger->bGenerateOverlapEvents = true;
+  Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
+  Trigger->AttachTo(Entrance);
+  Trigger->bHiddenInGame = true;
+  Trigger->SetWorldScale3D(FVector(0.5, 0.5, 0.5));
+  Trigger->bGenerateOverlapEvents = true;
 }
 
 // Called when the game starts or when spawned
@@ -28,14 +28,9 @@ void ATower::BeginPlay() {
   RegisterDelegate();
 }
 
-//// Called every frame
-//void ATower::Tick( float DeltaTime ) {
-//	Super::Tick( DeltaTime );
-//}
-
 void ATower::RegisterDelegate() {
-  if (!m_trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &ATower::OnBeginTriggerOverlap)) {
-    m_trigger->OnComponentBeginOverlap.AddDynamic(this, &ATower::OnBeginTriggerOverlap);
+  if (!Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &ATower::OnBeginTriggerOverlap)) {
+    Trigger->OnComponentBeginOverlap.AddDynamic(this, &ATower::OnBeginTriggerOverlap);
   }
 }
 
@@ -46,17 +41,16 @@ void ATower::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveCom
     dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
     dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
     if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05){
-      if (GEngine)
-      {
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("VICTORIA!!!!")));
-      }
+      AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+      if (gameMode)
+        gameMode->EndGame(AMyGameMode::VICTORY);
     }
   }
 }
 
 void ATower::EndPlay(const EEndPlayReason::Type EndPlayReason){
-  if (m_trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &ATower::OnBeginTriggerOverlap))  {
-    m_trigger->OnComponentBeginOverlap.RemoveDynamic(this, &ATower::OnBeginTriggerOverlap);
+  if (Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &ATower::OnBeginTriggerOverlap))  {
+    Trigger->OnComponentBeginOverlap.RemoveDynamic(this, &ATower::OnBeginTriggerOverlap);
   }
   Super::EndPlay(EndPlayReason);
 }
