@@ -20,17 +20,17 @@ AMobilePlatform::AMobilePlatform() {
   m_timer = 0;
   m_state = INITIAL_DELAY;
   m_currentDistance = 0;
+
 }
 
 void AMobilePlatform::BeginPlay() {
   Super::BeginPlay();
-
+  this->Tags.Add("MobilePlatform");
   m_totalDistance = RightDistance;
 }
 
 void AMobilePlatform::Tick(float DeltaSeconds) {
   Super::BeginPlay();
-
   doMovement(DeltaSeconds);
 }
 

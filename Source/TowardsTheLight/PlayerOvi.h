@@ -84,6 +84,7 @@ private:
   void DoJump(float DeltaTime);
   void DoMovement(float DeltaTime, float value);
   void CheckCollision();
+  void CheckMobilePlatform();
   void AjustPosition();
   void Rotate(const FVector& rotation);
   FVector AbsVector(const FVector& vector);
