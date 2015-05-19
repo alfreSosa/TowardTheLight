@@ -41,7 +41,7 @@ void AMobileEnemy::BeginPlay() {
 }
 
 void AMobileEnemy::Tick(float DeltaSeconds) {
-  Super::BeginPlay();
+  Super::Tick(DeltaSeconds);
 
   if (!HasTrigger || (HasTrigger && m_initMovement))
     doMovement(DeltaSeconds);

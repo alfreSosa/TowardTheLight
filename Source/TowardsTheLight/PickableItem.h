@@ -19,11 +19,11 @@ public:
 	
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
 
-  UPROPERTY()
+  UPROPERTY(EditAnywhere)
     USceneComponent* OurVisibleComponent;
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputControl)
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PickableItem)
     float Points;
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputControl)
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PickableItem)
     bool IsOrb;
 private:
   const float DEFAULT_POINTS = 100.0f;
