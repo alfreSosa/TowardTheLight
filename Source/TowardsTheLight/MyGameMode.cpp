@@ -4,7 +4,7 @@
 #include "MyGameMode.h"
 #include "PlayerOvi.h"
 #include "OviPlayerController.h"
-#include "FileManager.h"
+#include "GameDataManager.h"
 #include "rapidjson/rapidjson.h"
 
 FString FilePath = "Content/Levels/Levels.json";
@@ -15,9 +15,9 @@ AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Su
   DefaultPawnClass = APlayerOvi::StaticClass();
   PlayerControllerClass = AOviPlayerController::StaticClass();
   m_countOrbs = m_actualPoints = 0;
-  FileManager::Instance()->ReadData();
+  GameDataManager::Instance()->ReadData();
   if (GEngine)
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FileManager::Instance()->GetData()); //lee el fichero
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GameDataManager::Instance()->GetData()); //lee el fichero
 }
 
 void AMyGameMode::AddPoints(float points) {

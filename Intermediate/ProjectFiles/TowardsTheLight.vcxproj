@@ -43,13 +43,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\TowardsTheLight\FileManager.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\GameDataManager.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\MobileEnemy.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\MobilePlatform.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\StaticEnemy.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Tower.cpp" />
-    <ClInclude Include="..\..\Source\TowardsTheLight\FileManager.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\MobileEnemy.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\MobilePlatform.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\PickableItem.h" />
