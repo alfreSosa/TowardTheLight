@@ -25,6 +25,7 @@ AMobileEnemy::AMobileEnemy() {
 
   //trigger
   Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
+  Trigger->SetCollisionProfileName(FName(TEXT("OverlapOnlyPawn")));
   Trigger->AttachTo(RootComponent);
   Trigger->bHiddenInGame = true;
   Trigger->bGenerateOverlapEvents = true;
