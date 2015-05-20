@@ -66,6 +66,12 @@ APlayerOvi::APlayerOvi() {
     Mesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5));
   }
 
+  Stick = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Stick"));
+  Stick->AttachTo(Mesh);
+
+ /* StickLight = CreateDefaultSubobject<ULightComponentBase>(TEXT("StickLight"));
+  StickLight->AttachTo(Stick);*/
+
   m_state = States::RIGHT;
   m_limit = 0;
   m_jumpDistance = 0;
