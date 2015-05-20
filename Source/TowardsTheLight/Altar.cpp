@@ -9,7 +9,7 @@ AAltar::AAltar()
 {
 	PrimaryActorTick.bCanEverTick = true;
   this->SetActorEnableCollision(true);
-  //this->Tags.Add("Platform");
+  this->Tags.Add("Platform");
 
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
