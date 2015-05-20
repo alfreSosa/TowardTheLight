@@ -70,8 +70,6 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\PickableItem.h">
       <Filter>Source\TowardsTheLight</Filter>
     </ClInclude>
-<<<<<<< HEAD
-=======
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\document.h">
       <Filter>Source\TowardsTheLight\rapidjson</Filter>
     </ClInclude>
@@ -108,7 +106,6 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\Altar.h">
       <Filter>Source\TowardsTheLight</Filter>
     </ClInclude>
->>>>>>> 742ca054506ccc07176a70c0bf14b1bdde0feb24
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\MyGameMode.cpp">
@@ -148,8 +145,6 @@
       <Filter>Source\TowardsTheLight</Filter>
     </ClCompile>
   </ItemGroup>
-<<<<<<< HEAD
-=======
   <ItemGroup>
     <Filter Include="Source\TowardsTheLight\rapidjson">
       <UniqueIdentifier>{6939d62d-1c3f-446b-b9ca-7e076cd1d2c7}</UniqueIdentifier>
@@ -158,5 +153,4 @@
       <UniqueIdentifier>{7850546f-b42a-4656-8e49-a7e7b5962071}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
->>>>>>> 742ca054506ccc07176a70c0bf14b1bdde0feb24
 </Project>
