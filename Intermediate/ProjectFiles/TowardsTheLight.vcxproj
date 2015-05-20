@@ -55,8 +55,6 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\MobileEnemy.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\MobilePlatform.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\PickableItem.h" />
-<<<<<<< HEAD
-=======
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\document.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\filestream.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\prettywriter.h" />
@@ -65,7 +63,6 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\stringbuffer.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\writer.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\StaticEnemy.h" />
->>>>>>> acbe53ae9c50350e661dee4b0e097188643d2549
     <ClInclude Include="..\..\Source\TowardsTheLight\Tower.h" />
     <None Include="..\..\TowardsTheLight.uproject" />
     <None Include="..\..\Source\TowardsTheLight.Target.cs" />
