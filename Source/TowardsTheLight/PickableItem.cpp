@@ -2,8 +2,6 @@
 
 #include "TowardsTheLight.h"
 #include "PickableItem.h"
-#include "MyGameMode.h"
-
 
 
 // Sets default values
@@ -12,12 +10,23 @@ APickableItem::APickableItem() {
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
   OurVisibleComponent->AttachTo(RootComponent);
   this->SetActorEnableCollision(true);
+<<<<<<< HEAD
+=======
   Points = DEFAULT_POINTS;
+<<<<<<< HEAD
+
+>>>>>>> 742ca054506ccc07176a70c0bf14b1bdde0feb24
+
+=======
+>>>>>>> acbe53ae9c50350e661dee4b0e097188643d2549
 }
 
 void APickableItem::ReceiveActorBeginOverlap(AActor* OtherActor) {
   if (OtherActor->ActorHasTag("Player")) {
     GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Item Picked")));
+<<<<<<< HEAD
+    //sumar y destruir
+=======
     this->SetActorEnableCollision(false);
     SetActorLocation(FVector(0, 0, 0));
     AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
@@ -26,6 +35,7 @@ void APickableItem::ReceiveActorBeginOverlap(AActor* OtherActor) {
       if (IsOrb)
         gameMode->OrbPicked();
     }
+>>>>>>> 742ca054506ccc07176a70c0bf14b1bdde0feb24
   }
 }
 

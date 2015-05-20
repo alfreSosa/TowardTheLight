@@ -9,7 +9,10 @@
 *.pch
 
 # Compiled Dynamic libraries
+<<<<<<< HEAD
+=======
 #comentar esta linea cuando se resuelva lo del fichero mayor de 100Megas
+>>>>>>> 742ca054506ccc07176a70c0bf14b1bdde0feb24
 *.so
 *.dylib
 #*.dll
@@ -38,6 +41,8 @@ Source/TowardsTheLight/Resources/*
 
 # Binary Files
 Binaries/Win64/*.pdb
+<<<<<<< HEAD
+=======
 Binaries/Win64/*DebugGame.dll
 #comentar esta linea cuando se resuelva lo del fichero mayor de 100Megas
 Binaries/Android/*
@@ -45,6 +50,7 @@ Binaries/Android/*
 #Binaries/Android/*.bat #descomentar esta linea cuando se resuelva lo del fichero mayor de 100Megas
 #Binaries/Android/*.obb #descomentar esta linea cuando se resuelva lo del fichero mayor de 100Megas
 
+>>>>>>> 742ca054506ccc07176a70c0bf14b1bdde0feb24
 
 # Builds
 #Build/*

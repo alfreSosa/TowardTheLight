@@ -13,6 +13,10 @@ class TOWARDSTHELIGHT_API AMyGameMode : public AGameMode
 {
 	GENERATED_BODY()
 
+<<<<<<< HEAD
+  AMyGameMode(const FObjectInitializer& ObjectInitializer);  // Our added constructor
+	
+=======
 public:
   enum EndGameType { VICTORY, DEFEAT, WITHDRAWAL };
 
@@ -30,5 +34,6 @@ public:
 private:
   float m_actualPoints;
   float m_countOrbs;
+>>>>>>> acbe53ae9c50350e661dee4b0e097188643d2549
 };
 
