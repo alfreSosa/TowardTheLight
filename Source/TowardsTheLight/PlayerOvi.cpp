@@ -170,7 +170,7 @@ void APlayerOvi::SetupPlayerInputComponent(class UInputComponent* InputComponent
 }
 
 void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location) {
-  if (Location.X > m_semiWidthViewPort) { //JUMP
+  if (Location.X > m_semiWidthViewPort && m_fingerIndexMovement != FingerIndex) { //JUMP
     OnStartJump();
     m_fingerIndexJump = FingerIndex;
     //if (!nearGear)
@@ -638,20 +638,8 @@ FVector APlayerOvi::RecalculateLocation(FVector Direction, FVector Location, FVe
   absDirection.Z = (FMath::Abs(dir.Z) <= 0.01) ? 0 : 1;
 
   FVector a = (absDirection * HitLocation) - (Direction * size);
-<<<<<<< HEAD
-  FVector b = (absDirection * m_lastPosition) + (Direction * size);
-  FVector c = AbsVector(b) - AbsVector(a);
-  double dot = FVector::DotProduct(absDirection, c);
-  FVector nPos;
-  if (dot <= 0)
-    nPos = (absDirection * a);
-  else
-    nPos = (absDirection * m_lastPosition);
- 
-=======
   FVector nPos = (absDirection * a);
   
->>>>>>> 742ca054506ccc07176a70c0bf14b1bdde0feb24
   loc.X = (FMath::Abs(nPos.X) <= 0.01) ? loc.X : nPos.X;
   loc.Y = (FMath::Abs(nPos.Y) <= 0.01) ? loc.Y : nPos.Y;
   loc.Z = (FMath::Abs(nPos.Z) <= 0.01) ? loc.Z : nPos.Z;
