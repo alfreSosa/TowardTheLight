@@ -1,17 +1,32 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
 #include "TowardsTheLight.h"
-#include "FileManager.h"
+#include "GameDataManager.h"
 #include "CoreMisc.h"
 
-FileManager* FileManager::mInstance = nullptr;
+GameDataManager* GameDataManager::mInstance = nullptr;
 
-void FileManager::ReadData() {
+GameDataManager::GameDataManager()
+{
+  m_data = "";
+  m_allowWrite = true;
+}
+
+GameDataManager::~GameDataManager()
+{
+  m_data = "";
+  m_allowWrite = false;
+}
+
+
+void GameDataManager::ReadData() {
 
   FString GameDir = FPaths::GameDir();
   FString CompleteFilePath = GameDir + FILE_PATH;
   FFileHelper::LoadFileToString(m_data, *CompleteFilePath);
 }
 
-bool FileManager::WriteData(FString data) {
+bool GameDataManager::WriteData(FString data) {
   if (m_allowWrite)
   {
     FString GameDir = FPaths::GameDir();

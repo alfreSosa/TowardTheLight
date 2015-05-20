@@ -17,11 +17,18 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	// Called every frame
-	//virtual void Tick( float DeltaSeconds ) override;
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
 
-  UPROPERTY()
+  UPROPERTY(EditAnywhere)
     USceneComponent* OurVisibleComponent;
+<<<<<<< HEAD
+=======
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PickableItem)
+    float Points;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PickableItem)
+    bool IsOrb;
+private:
+  const float DEFAULT_POINTS = 100.0f;
+>>>>>>> acbe53ae9c50350e661dee4b0e097188643d2549
 	
 };
