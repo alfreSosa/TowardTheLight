@@ -78,8 +78,12 @@ APlayerOvi::APlayerOvi() {
   m_right = m_left = false;
   m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
   m_enabledGravity = true;
-  JumpSpeed = MovementSpeed = DEFAULT_MOVEMENT_SPEED;
+  
+  GravitySpeed = MaxJumpSpeed = MovementSpeed = DEFAULT_MOVEMENT_SPEED;
   MaxJumpHeight = DEFAULT_JUMP_HEIGHT;
+  m_actualJumpSpeed = 0.0f;
+  AccelerationJump = DEFAULT_JUMP_ACC;
+  
   m_capsuleHeight = DEFAULT_CAPSULE_HEIGHT;
   m_capsuleRadious = DEFAULT_CAPSULE_RADIOUS;
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_COLLISION_PERCENT;
@@ -90,6 +94,8 @@ APlayerOvi::APlayerOvi() {
   m_fingerIndexMovement = ETouchIndex::Touch10;
   m_fingerIndexJump = ETouchIndex::Touch10;
   MarginInput = 50;
+  
+  
 }
 
 void APlayerOvi::BeginPlay(){
@@ -264,9 +270,10 @@ void APlayerOvi::DoJump(float DeltaTime){
   FVector location = GetActorLocation();
 
   if (m_isJumping && !m_headCollision) {
-    m_jumpDistance += JumpSpeed * DeltaTime;
+    m_actualAccJump += AccelerationJump * DeltaTime;
+    m_jumpDistance += MaxJumpSpeed * DeltaTime;
     if (m_jumpDistance < MaxJumpHeight)
-      location += JumpSpeed * 2 * DeltaTime * up;
+      location += MaxJumpSpeed * 2 * DeltaTime * up;
   }
 
   SetActorLocation(location);
@@ -276,7 +283,7 @@ void APlayerOvi::CalculateGravity(float DeltaTime){
   FVector up = GetActorUpVector();
   FVector location = GetActorLocation();
 
-  location -= JumpSpeed * DeltaTime * up;
+  location -= MaxJumpSpeed * DeltaTime * up;
   SetActorLocation(location);
 }
 
