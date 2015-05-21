@@ -11,10 +11,11 @@ const float PADDING_COLLISION_PERCENT_RADIOUS = 0.5f; //HABRA QUE AJUSTARLO A LA
 const float DEFAULT_CAPSULE_RADIOUS = 30.0f;
 const float CAPSULE_RADIOUS_PADDING = 5.0f;
 const float DEFAULT_CAPSULE_HEIGHT = 95.0f;
-const float DEFAULT_JUMP_TRANSITION = 200.0f;
 
-const float DEFAULT_MOVEMENT_SPEED = 1000.0f;
-const float DEFAULT_JUMP_ACC = 2000.0f;
+const float DEFAULT_SPEED_TRANSITION = 200.0f;
+const float DEFAULT_MOVEMENT_SPEED = 600.0f;
+const float DEFAULT_JUMP_SPEED = 1000.0f;
+const float DEFAULT_JUMP_ACC = 1500.0f;
 
 
 UCLASS()
@@ -84,6 +85,8 @@ public:
 		float JumpSpeed;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
     float AccelerationJump;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+    float SpeedIncrementInTransition;
 
 private:
   float UpdateState();

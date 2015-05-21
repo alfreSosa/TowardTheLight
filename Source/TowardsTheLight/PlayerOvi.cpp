@@ -74,13 +74,12 @@ APlayerOvi::APlayerOvi() {
 
   m_state = States::RIGHT;
   m_limit = 0;
-  //m_jumpDistance = 0;
   m_right = m_left = false;
   m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
   m_enabledGravity = true;
   
-  JumpSpeed = MovementSpeed = DEFAULT_MOVEMENT_SPEED;
-  //MaxJumpHeight = DEFAULT_JUMP_HEIGHT;
+  JumpSpeed = DEFAULT_JUMP_SPEED;
+  MovementSpeed = DEFAULT_MOVEMENT_SPEED;
   m_actualJumpSpeed = JumpSpeed;
   AccelerationJump = DEFAULT_JUMP_ACC;
   
@@ -94,7 +93,7 @@ APlayerOvi::APlayerOvi() {
   m_fingerIndexMovement = ETouchIndex::Touch10;
   m_fingerIndexJump = ETouchIndex::Touch10;
   MarginInput = 50;
-  
+  SpeedIncrementInTransition = DEFAULT_SPEED_TRANSITION;
   
 }
 
@@ -268,6 +267,8 @@ void APlayerOvi::DoJump(float DeltaTime){
   FVector up = GetActorUpVector();
   FVector location = GetActorLocation();
 
+  // movimiento uniformemente acelerado con aceleración AccelerationJump caidas libres
+  // http://es.wikipedia.org/wiki/Ca%C3%ADda_libre
   if (m_isJumping && !m_headCollision) {
     if (m_actualJumpSpeed > 0) {
       m_actualJumpSpeed -= AccelerationJump * DeltaTime;
@@ -319,8 +320,8 @@ void APlayerOvi::CalculateOrientation(){
 
     val = (toUp) ? 90 : -90;
 
-   /* if (toUp && m_isJumping)
-      m_jumpDistance -= DEFAULT_JUMP_TRANSITION;*/
+    if (toUp && m_isJumping)
+        m_actualJumpSpeed += SpeedIncrementInTransition;
 
     if (m_state == States::RIGHT)
       Rotate(FVector(-val, 0, 0));
@@ -524,6 +525,7 @@ void APlayerOvi::CheckCollision() {
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownRigthF[i].Location, -m_capsuleHeight));
     }
     m_hasLanded = true;
+    m_actualJumpSpeed = JumpSpeed;
   }
   else {
     m_hasLanded = false;
@@ -547,6 +549,7 @@ void APlayerOvi::CheckCollision() {
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpRigthF[i].Location, m_capsuleHeight));
       }
       m_headCollision = true;
+      m_actualJumpSpeed = 0.0f;
     }
   }
 }
