@@ -74,14 +74,14 @@ APlayerOvi::APlayerOvi() {
 
   m_state = States::RIGHT;
   m_limit = 0;
-  m_jumpDistance = 0;
+  //m_jumpDistance = 0;
   m_right = m_left = false;
   m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
   m_enabledGravity = true;
   
-  GravitySpeed = MaxJumpSpeed = MovementSpeed = DEFAULT_MOVEMENT_SPEED;
-  MaxJumpHeight = DEFAULT_JUMP_HEIGHT;
-  m_actualJumpSpeed = 0.0f;
+  JumpSpeed = MovementSpeed = DEFAULT_MOVEMENT_SPEED;
+  //MaxJumpHeight = DEFAULT_JUMP_HEIGHT;
+  m_actualJumpSpeed = JumpSpeed;
   AccelerationJump = DEFAULT_JUMP_ACC;
   
   m_capsuleHeight = DEFAULT_CAPSULE_HEIGHT;
@@ -255,7 +255,6 @@ void  APlayerOvi::DoMovement(float DeltaTime, float value){
 void APlayerOvi::DoJump(float DeltaTime){
   if (m_hasLanded && !m_doJump) {
     m_isJumping = false;
-    m_jumpDistance = 0.0;
     m_headCollision = false;
   }
 
@@ -270,10 +269,16 @@ void APlayerOvi::DoJump(float DeltaTime){
   FVector location = GetActorLocation();
 
   if (m_isJumping && !m_headCollision) {
-    m_actualAccJump += AccelerationJump * DeltaTime;
-    m_jumpDistance += MaxJumpSpeed * DeltaTime;
-    if (m_jumpDistance < MaxJumpHeight)
-      location += MaxJumpSpeed * 2 * DeltaTime * up;
+    if (m_actualJumpSpeed > 0) {
+      m_actualJumpSpeed -= AccelerationJump * DeltaTime;
+      m_enabledGravity = false;
+      location += m_actualJumpSpeed * DeltaTime * up;
+    }
+    else {
+      m_isJumping = false;
+    }
+  } else {
+    m_enabledGravity = true;
   }
 
   SetActorLocation(location);
@@ -283,8 +288,15 @@ void APlayerOvi::CalculateGravity(float DeltaTime){
   FVector up = GetActorUpVector();
   FVector location = GetActorLocation();
 
-  location -= MaxJumpSpeed * DeltaTime * up;
-  SetActorLocation(location);
+  if (m_enabledGravity) {
+    if (m_actualJumpSpeed < JumpSpeed)
+      m_actualJumpSpeed += AccelerationJump * DeltaTime;
+    else{
+      m_actualJumpSpeed = JumpSpeed;
+    }
+    location -= m_actualJumpSpeed * DeltaTime * up;
+    SetActorLocation(location);
+  }
 }
 
 void APlayerOvi::CalculateOrientation(){
@@ -307,8 +319,8 @@ void APlayerOvi::CalculateOrientation(){
 
     val = (toUp) ? 90 : -90;
 
-    if (toUp && m_isJumping)
-      m_jumpDistance -= DEFAULT_JUMP_TRANSITION;
+   /* if (toUp && m_isJumping)
+      m_jumpDistance -= DEFAULT_JUMP_TRANSITION;*/
 
     if (m_state == States::RIGHT)
       Rotate(FVector(-val, 0, 0));

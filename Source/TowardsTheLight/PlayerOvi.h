@@ -13,9 +13,8 @@ const float CAPSULE_RADIOUS_PADDING = 5.0f;
 const float DEFAULT_CAPSULE_HEIGHT = 95.0f;
 const float DEFAULT_JUMP_TRANSITION = 200.0f;
 
-const float DEFAULT_MOVEMENT_SPEED = 600.0f;
-const float DEFAULT_JUMP_HEIGHT = 350.0f;
-const float DEFAULT_JUMP_ACC = 100.0f;
+const float DEFAULT_MOVEMENT_SPEED = 1000.0f;
+const float DEFAULT_JUMP_ACC = 2000.0f;
 
 
 UCLASS()
@@ -82,13 +81,9 @@ public:
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float MovementSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
-		float MaxJumpSpeed;
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
-    float GravitySpeed;
+		float JumpSpeed;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
     float AccelerationJump;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
-		float MaxJumpHeight;
 
 private:
   float UpdateState();
@@ -112,9 +107,10 @@ private:
   bool m_headCollision;
   bool m_enabledGravity;
 	float m_limit;
-	float m_jumpDistance;
+
   float m_actualAccJump;
   float m_actualJumpSpeed;
+
   float m_capsuleHeight;
   float m_capsuleRadious;
   float m_capsuleHeightPadding;
