@@ -94,6 +94,8 @@ APlayerOvi::APlayerOvi() {
   m_fingerIndexJump = ETouchIndex::Touch10;
   MarginInput = 50.f;
   m_stateInput = States::STOP;
+  m_isInJumpTransition = false;
+  m_transitionDistance = 0.0f;
   //SpeedIncrementInTransition = DEFAULT_SPEED_TRANSITION;
   
 }
@@ -284,7 +286,14 @@ void APlayerOvi::DoJump(float DeltaTime){
   // movimiento uniformemente acelerado con aceleración AccelerationJump caidas libres
   if (m_isJumping && !m_headCollision) {
     if (m_actualJumpSpeed > 0) {
-      m_actualJumpSpeed -= AccelerationJump * DeltaTime;
+      if (!m_isInJumpTransition){
+        m_actualJumpSpeed -= AccelerationJump * DeltaTime;
+      }
+      else {
+        m_transitionDistance += m_actualJumpSpeed * DeltaTime;
+        if (m_transitionDistance >= 200.0f)
+          m_isInJumpTransition = false;
+      }
       m_enabledGravity = false;
       location += m_actualJumpSpeed * DeltaTime * up;
     }
@@ -334,9 +343,8 @@ void APlayerOvi::CalculateOrientation(){
     val = (toUp) ? 90 : -90;
 
     if (toUp && m_isJumping) {
-      float v = FMath::Abs(200.0f - AccelerationJump * 0.5);
-      if (m_actualJumpSpeed - v >= 0.0f)
-        m_actualJumpSpeed += v;
+      m_isInJumpTransition = true;
+      m_transitionDistance = 0.0f;
     }
 
     if (m_state == States::RIGHT)

@@ -109,11 +109,12 @@ private:
   bool m_hasLanded;
   bool m_headCollision;
   bool m_enabledGravity;
+  bool m_isInJumpTransition;
 	float m_limit;
 
   float m_actualAccJump;
   float m_actualJumpSpeed;
-
+  float m_transitionDistance;
   float m_capsuleHeight;
   float m_capsuleRadious;
   float m_capsuleHeightPadding;
