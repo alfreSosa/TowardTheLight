@@ -7,7 +7,7 @@
 #include "GameDataManager.h"
 #include "rapidjson/rapidjson.h"
 
-FString FilePath = "Content/Levels/Levels.json";
+//FString FilePath = "Content/Levels/Levels.json";
 
 AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
   PrimaryActorTick.bCanEverTick = true;

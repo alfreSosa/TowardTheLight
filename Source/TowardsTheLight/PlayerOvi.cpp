@@ -74,22 +74,30 @@ APlayerOvi::APlayerOvi() {
 
   m_state = States::RIGHT;
   m_limit = 0;
-  m_jumpDistance = 0;
   m_right = m_left = false;
   m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
   m_enabledGravity = true;
-  JumpSpeed = MovementSpeed = DEFAULT_MOVEMENT_SPEED;
-  MaxJumpHeight = DEFAULT_JUMP_HEIGHT;
+  
+  JumpSpeed = DEFAULT_JUMP_SPEED;
+  MovementSpeed = DEFAULT_MOVEMENT_SPEED;
+  m_actualJumpSpeed = JumpSpeed;
+  AccelerationJump = DEFAULT_JUMP_ACC;
+  
   m_capsuleHeight = DEFAULT_CAPSULE_HEIGHT;
   m_capsuleRadious = DEFAULT_CAPSULE_RADIOUS;
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_COLLISION_PERCENT;
   m_capsuleRadiousPadding = m_capsuleRadious * PADDING_COLLISION_PERCENT_RADIOUS;
 
-  m_semiWidthViewPort = 0;
-  m_initialTouch = FVector(0);
+  m_semiWidthViewPort = 0.f;
+  m_centerTouchX = 0.f;
   m_fingerIndexMovement = ETouchIndex::Touch10;
   m_fingerIndexJump = ETouchIndex::Touch10;
-  MarginInput = 50;
+  MarginInput = 50.f;
+  m_stateInput = States::STOP;
+  m_isInJumpTransition = false;
+  m_transitionDistance = 0.0f;
+  //SpeedIncrementInTransition = DEFAULT_SPEED_TRANSITION;
+  
 }
 
 void APlayerOvi::BeginPlay(){
@@ -180,22 +188,35 @@ void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector
     //}
   }
   else { //MOVEMENT SWIPE
-    if (m_initialTouch == FVector(0)){ //initial touch
-      m_initialTouch = Location;
+    if (m_centerTouchX == 0){ //initial touch
+      m_centerTouchX = Location.X;
       m_fingerIndexMovement = FingerIndex;
     }
     if (m_fingerIndexMovement == FingerIndex){
-      if (Location.X > m_initialTouch.X + MarginInput){ //right swipe
+      if (Location.X > m_centerTouchX + MarginInput){ //right swipe
+        OnStartRight();
+        OnStopLeft();
+        m_centerTouchX = Location.X - MarginInput;
+        m_stateInput = States::RIGHT;
+      }
+      else if (Location.X < m_centerTouchX - MarginInput){ //left swipe
+        OnStartLeft();
+        OnStopRight();
+        m_centerTouchX = Location.X + MarginInput;
+        m_stateInput = States::LEFT;
+      }
+      else if (Location.X > m_centerTouchX && m_stateInput == States::RIGHT){ //right swipe
         OnStartRight();
         OnStopLeft();
       }
-      else if (Location.X < m_initialTouch.X - MarginInput){ //left swipe
+      else if (Location.X < m_centerTouchX && m_stateInput == States::LEFT){ //left swipe
         OnStartLeft();
         OnStopRight();
       }
       else{ //no movement
         OnStopRight();
         OnStopLeft();
+        m_stateInput = States::STOP;
       }
     }
   }
@@ -208,7 +229,7 @@ void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Loc
   }
 
   if (FingerIndex == m_fingerIndexMovement){
-    m_initialTouch = FVector(0);
+    m_centerTouchX = 0.f;
     m_fingerIndexMovement = ETouchIndex::Touch10;
     OnStopRight();
     OnStopLeft();
@@ -249,7 +270,6 @@ void  APlayerOvi::DoMovement(float DeltaTime, float value){
 void APlayerOvi::DoJump(float DeltaTime){
   if (m_hasLanded && !m_doJump) {
     m_isJumping = false;
-    m_jumpDistance = 0.0;
     m_headCollision = false;
   }
 
@@ -263,10 +283,25 @@ void APlayerOvi::DoJump(float DeltaTime){
   FVector up = GetActorUpVector();
   FVector location = GetActorLocation();
 
+  // movimiento uniformemente acelerado con aceleración AccelerationJump caidas libres
   if (m_isJumping && !m_headCollision) {
-    m_jumpDistance += JumpSpeed * DeltaTime;
-    if (m_jumpDistance < MaxJumpHeight)
-      location += JumpSpeed * 2 * DeltaTime * up;
+    if (m_actualJumpSpeed > 0) {
+      if (!m_isInJumpTransition){
+        m_actualJumpSpeed -= AccelerationJump * DeltaTime;
+      }
+      else {
+        m_transitionDistance += m_actualJumpSpeed * DeltaTime;
+        if (m_transitionDistance >= 200.0f)
+          m_isInJumpTransition = false;
+      }
+      m_enabledGravity = false;
+      location += m_actualJumpSpeed * DeltaTime * up;
+    }
+    else {
+      m_isJumping = false;
+    }
+  } else {
+    m_enabledGravity = true;
   }
 
   SetActorLocation(location);
@@ -276,8 +311,15 @@ void APlayerOvi::CalculateGravity(float DeltaTime){
   FVector up = GetActorUpVector();
   FVector location = GetActorLocation();
 
-  location -= JumpSpeed * DeltaTime * up;
-  SetActorLocation(location);
+  if (m_enabledGravity) {
+    if (m_actualJumpSpeed < JumpSpeed)
+      m_actualJumpSpeed += AccelerationJump * DeltaTime;
+    else{
+      m_actualJumpSpeed = JumpSpeed;
+    }
+    location -= m_actualJumpSpeed * DeltaTime * up;
+    SetActorLocation(location);
+  }
 }
 
 void APlayerOvi::CalculateOrientation(){
@@ -300,8 +342,10 @@ void APlayerOvi::CalculateOrientation(){
 
     val = (toUp) ? 90 : -90;
 
-    if (toUp && m_isJumping)
-      m_jumpDistance -= DEFAULT_JUMP_TRANSITION;
+    if (toUp && m_isJumping) {
+      m_isInJumpTransition = true;
+      m_transitionDistance = 0.0f;
+    }
 
     if (m_state == States::RIGHT)
       Rotate(FVector(-val, 0, 0));
@@ -505,6 +549,7 @@ void APlayerOvi::CheckCollision() {
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownRigthF[i].Location, -m_capsuleHeight));
     }
     m_hasLanded = true;
+    m_actualJumpSpeed = JumpSpeed;
   }
   else {
     m_hasLanded = false;
@@ -528,6 +573,7 @@ void APlayerOvi::CheckCollision() {
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpRigthF[i].Location, m_capsuleHeight));
       }
       m_headCollision = true;
+      m_actualJumpSpeed = 0.0f;
     }
   }
 }
