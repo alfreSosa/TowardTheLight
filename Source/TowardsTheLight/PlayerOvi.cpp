@@ -88,11 +88,12 @@ APlayerOvi::APlayerOvi() {
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_COLLISION_PERCENT;
   m_capsuleRadiousPadding = m_capsuleRadious * PADDING_COLLISION_PERCENT_RADIOUS;
 
-  m_semiWidthViewPort = 0;
-  m_initialTouch = FVector(0);
+  m_semiWidthViewPort = 0.f;
+  m_centerTouchX = 0.f;
   m_fingerIndexMovement = ETouchIndex::Touch10;
   m_fingerIndexJump = ETouchIndex::Touch10;
-  MarginInput = 50;
+  MarginInput = 50.f;
+  m_stateInput = States::STOP;
   //SpeedIncrementInTransition = DEFAULT_SPEED_TRANSITION;
   
 }
@@ -185,22 +186,35 @@ void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector
     //}
   }
   else { //MOVEMENT SWIPE
-    if (m_initialTouch == FVector(0)){ //initial touch
-      m_initialTouch = Location;
+    if (m_centerTouchX == 0){ //initial touch
+      m_centerTouchX = Location.X;
       m_fingerIndexMovement = FingerIndex;
     }
     if (m_fingerIndexMovement == FingerIndex){
-      if (Location.X > m_initialTouch.X + MarginInput){ //right swipe
+      if (Location.X > m_centerTouchX + MarginInput){ //right swipe
+        OnStartRight();
+        OnStopLeft();
+        m_centerTouchX = Location.X - MarginInput;
+        m_stateInput = States::RIGHT;
+      }
+      else if (Location.X < m_centerTouchX - MarginInput){ //left swipe
+        OnStartLeft();
+        OnStopRight();
+        m_centerTouchX = Location.X + MarginInput;
+        m_stateInput = States::LEFT;
+      }
+      else if (Location.X > m_centerTouchX && m_stateInput == States::RIGHT){ //right swipe
         OnStartRight();
         OnStopLeft();
       }
-      else if (Location.X < m_initialTouch.X - MarginInput){ //left swipe
+      else if (Location.X < m_centerTouchX && m_stateInput == States::LEFT){ //left swipe
         OnStartLeft();
         OnStopRight();
       }
       else{ //no movement
         OnStopRight();
         OnStopLeft();
+        m_stateInput = States::STOP;
       }
     }
   }
@@ -213,7 +227,7 @@ void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Loc
   }
 
   if (FingerIndex == m_fingerIndexMovement){
-    m_initialTouch = FVector(0);
+    m_centerTouchX = 0.f;
     m_fingerIndexMovement = ETouchIndex::Touch10;
     OnStopRight();
     OnStopLeft();

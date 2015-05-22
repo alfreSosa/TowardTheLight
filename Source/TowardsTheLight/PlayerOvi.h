@@ -24,7 +24,7 @@ class TOWARDSTHELIGHT_API APlayerOvi : public APawn
 	GENERATED_BODY()
 
 public:
-	enum States { RIGHT, LEFT };
+	enum States { RIGHT, LEFT, STOP};
 	// Sets default values for this pawn's properties
 	APlayerOvi();
 
@@ -121,8 +121,8 @@ private:
   FVector m_lastPosition;
 
   float m_semiWidthViewPort;
-  FVector m_initialTouch;
+  float m_centerTouchX;
+  States m_stateInput;
   ETouchIndex::Type m_fingerIndexMovement;
   ETouchIndex::Type m_fingerIndexJump;
-
 };
