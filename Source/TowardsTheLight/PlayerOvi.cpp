@@ -341,10 +341,10 @@ void APlayerOvi::CalculateOrientation(){
 
     val = (toUp) ? 90 : -90;
 
-    if (toUp && m_isJumping) {
+    /*if (toUp && m_isJumping) {
       m_isInJumpTransition = true;
       m_transitionDistance = 0.0f;
-    }
+    }*/
 
     if (m_state == States::RIGHT)
       Rotate(FVector(-val, 0, 0));
