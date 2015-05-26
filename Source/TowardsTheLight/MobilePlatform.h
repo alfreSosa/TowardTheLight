@@ -13,6 +13,7 @@ class TOWARDSTHELIGHT_API AMobilePlatform : public AStaticPlatform
 {
   GENERATED_BODY()
   
+  class APlayerOvi *m_player;
   float m_timer;
   float m_totalDistance;
   float m_currentDistance;
@@ -32,7 +33,6 @@ public:
   AMobilePlatform();
   virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;
-  //virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
 
   UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float RightDistance;
@@ -47,5 +47,5 @@ public:
   UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float InitialDelay;
 
-  FVector GetPlatformMovement() const;
+  //FVector GetPlatformMovement() const;
 };
