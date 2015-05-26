@@ -42,6 +42,8 @@ LevelData GameDataManager::ReadLevelData(FString levelName){
   //Quitar el inicio por defecto
   levelName.RemoveFromStart(FString("UEDPIE_0_"));
 
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_data);
+
   if (!doc.HasParseError())
     if (doc.IsObject())
       if (doc.HasMember("levels"))
@@ -66,12 +68,16 @@ LevelData GameDataManager::ReadLevelData(FString levelName){
                     return ret;
                   }
         }
-
+  
+  // si no lo ha encontrado en el fichero, devuelve un struct con el nombre y el resto de parámetros por defecto.
+  // cuando se llame a la función WriteLevelData, si no existe el bloque, se añadirá al fichero
+  ret.name = levelName;
   return ret;
 }
 
 
-bool GameDataManager::WriteLevelData(LevelData data){
+
+void GameDataManager::WriteLevelData(LevelData data){
   Document doc;
   doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
 
@@ -82,7 +88,7 @@ bool GameDataManager::WriteLevelData(LevelData data){
         if (doc["levels"].IsArray()){
           SizeType numLevels = doc["levels"].Size();
           Value &levels = doc["levels"];
-          for (SizeType i = 0; i < numLevels; i++)
+          for (SizeType i = 0; i < numLevels; i++){
             if (levels[i].IsObject())
               if (levels[i].HasMember("name"))
                 if (levels[i]["name"].IsString())
@@ -99,15 +105,26 @@ bool GameDataManager::WriteLevelData(LevelData data){
                     success = true;
                     break;
                   }
+          }
+
+
+          if (!success){ //añadir el nuevo bloque
+            Document::AllocatorType& allocator = doc.GetAllocator();
+
+            Value lvl(kObjectType);
+            char* n = TCHAR_TO_ANSI(*data.name);
+            lvl.AddMember("name", n, allocator);
+            lvl.AddMember("orbs", data.orbs, allocator);
+            lvl.AddMember("points", data.points, allocator);     
+
+            levels.PushBack(lvl, allocator);
+          }
         }
 
-  if (success){
-    StringBuffer buffer;
-    Writer<StringBuffer> writer(buffer);
-    doc.Accept(writer);
-    m_data = buffer.GetString();
+  StringBuffer buffer;
+  Writer<StringBuffer> writer(buffer);
+  doc.Accept(writer);
+  m_data = buffer.GetString();
 
-    return SavedGame();
-  }
-  return false;
+  SavedGame();
 }

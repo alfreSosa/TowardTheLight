@@ -1,14 +1,1 @@
-{
-	"general":
-	{
-		"sound": true
-	},
-	"levels":
-	[
-		{
-		"name": "DevelopmentLevel",
-		"orbs": 0,
-		"points": 0
-		}
-	]
-}
+{"general":{"sound":true},"levels":[]}

@@ -20,7 +20,7 @@ public:
   bool SavedGame();
 
   LevelData ReadLevelData(FString levelName);
-  bool WriteLevelData(LevelData data);
+  void WriteLevelData(LevelData data);
 
 protected:
   GameDataManager();
