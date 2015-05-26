@@ -66,10 +66,10 @@ public:
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	  class USkeletalMeshComponent* Mesh;
 
-  UPROPERTY(EditAnywhere, Category = Player)
+ /* UPROPERTY(EditAnywhere, Category = Player)
       USceneComponent* Stick;
   UPROPERTY(EditAnywhere, Category = Player)
-    USceneComponent* StickLight;
+    USceneComponent* StickLight;*/
 
 #if WITH_EDITORONLY_DATA
 	UPROPERTY()

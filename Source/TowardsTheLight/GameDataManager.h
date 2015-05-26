@@ -2,26 +2,35 @@
 
 #pragma once
 
+#include "rapidjson/document.h"
+
+struct LevelData{
+  int id = -1;
+  FString name = "";
+  unsigned int orbs = 0;
+  float points = 0;
+};
+
 /**
  * 
  */
-class TOWARDSTHELIGHT_API GameDataManager
-{
-
+class TOWARDSTHELIGHT_API GameDataManager {
 public:
-  const FString FILE_PATH = "Content/Levels/Levels.json";
-  static GameDataManager* Instance() { if (mInstance == 0) mInstance = new GameDataManager(); return mInstance; }
+  static GameDataManager* Instance() { if (m_instance == 0) m_instance = new GameDataManager(); return m_instance; }
   void AllowWrite(bool allow) { m_allowWrite = allow; }
-  void ReadData();
-  bool WriteData(FString data);
-  FString GetData() { return m_data; }
+
+  bool SavedGame();
+
+  LevelData ReadLevelData(int id);
+  bool WriteLevelData(LevelData data);
+
 protected:
   GameDataManager();
   ~GameDataManager();
+
 private:
-  static GameDataManager* mInstance;
+  FString m_filePath = "Content/StorageFiles/saved.json";
+  static GameDataManager* m_instance;
   bool m_allowWrite;
   FString m_data;
-public:
-
 };
