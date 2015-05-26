@@ -479,24 +479,20 @@ void APlayerOvi::CheckCollision() {
   if (collisionTop || collisionBottom || collisionMidle) {
 
     if (collisionTop) {
-      if (collisionBody) {
-        int size = OutTraceResultTop.Num();
-        for (int i = 0; i < size; i++)
-          if (OutTraceResultTop[i].GetActor()->ActorHasTag("Platform")) {
-            SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultTop[i].Location, m_capsuleRadious));
-            break;
-          }
-      }
+      int size = OutTraceResultTop.Num();
+      for (int i = 0; i < size; i++)
+        if (OutTraceResultTop[i].GetActor()->ActorHasTag("Platform")) {
+          SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultTop[i].Location, m_capsuleRadious));
+          break;
+        }
     }
     else if (collisionBottom) {
-      if (collisionLegs) {
-        int size = OutTraceResultBottom.Num();
-        for (int i = 0; i < size; i++)
-          if (OutTraceResultBottom[i].GetActor()->ActorHasTag("Platform")) {
-            SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultBottom[i].Location, m_capsuleRadious));
-            break;
-          }
-      }
+      int size = OutTraceResultBottom.Num();
+      for (int i = 0; i < size; i++)
+        if (OutTraceResultBottom[i].GetActor()->ActorHasTag("Platform")) {
+          SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultBottom[i].Location, m_capsuleRadious));
+          break;
+        }
     }
     else if (collisionMidle) {
       int size = OutTraceResultMiddle.Num();
@@ -587,12 +583,15 @@ void APlayerOvi::CheckCollision() {
         }
     }
     else if (collisionDownLeftF) {
-      int size = OutTraceResultDownLeftF.Num();
-      for (int i = 0; i < size; i++)
-        if (OutTraceResultDownLeftF[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
-          break;
-        }
+      if (collisionBottom == collisionLegs) {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("bottom:%d | legs:%d"), collisionBottom, collisionLegs));
+        int size = OutTraceResultDownLeftF.Num();
+        for (int i = 0; i < size; i++)
+          if (OutTraceResultDownLeftF[i].GetActor()->ActorHasTag("Platform")) {
+            SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
+            break;
+          }
+      }
     }
     else if (collisionDownRightF) {
       int size = OutTraceResultDownRigthF.Num();
