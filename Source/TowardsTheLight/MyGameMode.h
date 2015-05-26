@@ -29,6 +29,6 @@ public:
   bool LoadJason(FString SaveDirectory, FString FileName, FString SaveText, bool AllowOverWriting);
 private:
   float m_actualPoints;
-  float m_countOrbs;
+  unsigned int m_countOrbs;
 };
 

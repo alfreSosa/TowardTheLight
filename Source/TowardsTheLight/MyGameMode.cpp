@@ -21,7 +21,7 @@ void AMyGameMode::AddPoints(float points) {
 
 void AMyGameMode::OrbPicked() {
   m_countOrbs++;
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Orbs: %f"), m_countOrbs));
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Orbs: %d"), m_countOrbs));
 }
 
 void AMyGameMode::EndGame(EndGameType type) {
@@ -29,22 +29,32 @@ void AMyGameMode::EndGame(EndGameType type) {
   case VICTORY:{
     GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("VICTORY!!!!")));
 
-    int ID = 0;
-    LevelData data = GameDataManager::Instance()->ReadLevelData(ID);
-    //if (GEngine)
-    //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GameDataManager::Instance()->GetData()); //lee el fichero
+    LevelData data = GameDataManager::Instance()->ReadLevelData(GetWorld()->GetMapName());
+    //si la puntuacion actual es mejor que la que hay en el fichero, hay que almacenarla 
+    bool write = false;
+    if (m_countOrbs > data.orbs){
+      data.orbs = m_countOrbs;
+      write = true;
+    }
+    if (m_actualPoints > data.points){
+      data.points = m_actualPoints;
+      write = true;
+    }
+    if (write)
+      GameDataManager::Instance()->WriteLevelData(data);
 
-    //si la puntuacion actual es mejor que la que hay en el fichero, hay que almacenarla
-
+    //terminar la partida. volver al menú
   }
     break;
   case DEFEAT:
     GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("DEFEAT!!!!")));
 
+    //terminar la partida. volver al menú
     break;
   case WITHDRAWAL:
     GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("WITHDRAWAL!!!!")));
 
+    //terminar la partida. volver al menú
     break;
   }
 }

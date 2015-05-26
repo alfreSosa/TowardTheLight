@@ -4,8 +4,6 @@
 #include "PickableItem.h"
 #include "MyGameMode.h"
 
-
-
 // Sets default values
 APickableItem::APickableItem() {
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
