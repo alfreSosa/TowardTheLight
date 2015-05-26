@@ -566,7 +566,7 @@ void APlayerOvi::CheckCollision() {
   //DrawDebugLine(GetWorld(), StartTrace, EndTraceUp, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   bool collisionUp = OutTraceResultUp.Num() > 0;
   GetWorld()->LineTraceMulti(OutTraceResultUpLeftF, StartTraceLeftF, EndTraceUpLeftF, COLLISION_PLAYER, TraceParams, ResponseParam);
-  //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceUpLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceUpLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   bool collisionUpLeftF = OutTraceResultUp.Num() > 0;
   GetWorld()->LineTraceMulti(OutTraceResultUpRigthF, StartTraceRigthF, EndTraceUpRightF, COLLISION_PLAYER, TraceParams, ResponseParam);
   //DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceUpRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
@@ -584,7 +584,6 @@ void APlayerOvi::CheckCollision() {
     }
     else if (collisionDownLeftF) {
       if (collisionBottom == collisionLegs) {
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("bottom:%d | legs:%d"), collisionBottom, collisionLegs));
         int size = OutTraceResultDownLeftF.Num();
         for (int i = 0; i < size; i++)
           if (OutTraceResultDownLeftF[i].GetActor()->ActorHasTag("Platform")) {
@@ -616,12 +615,14 @@ void APlayerOvi::CheckCollision() {
           }
       }
       else if (collisionUpLeftF) {
-        int size = OutTraceResultUpLeftF.Num();
-        for (int i = 0; i < size; i++) 
-          if (OutTraceResultUpLeftF[i].GetActor()->ActorHasTag("Platform")) {
+        if (collisionTop == collisionBody) {
+          int size = OutTraceResultUpLeftF.Num();
+          for (int i = 0; i < size; i++)
+            if (OutTraceResultUpLeftF[i].GetActor()->ActorHasTag("Platform")) {
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpLeftF[i].Location, m_capsuleHeight));
             break;
-          }
+            }
+        }
       }
       else if (collisionUpRightF) {
         int size = OutTraceResultUpRigthF.Num();
