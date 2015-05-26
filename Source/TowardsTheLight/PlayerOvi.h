@@ -7,6 +7,7 @@
 
 #define COLLISION_PLAYER        ECC_GameTraceChannel1 
 const float PADDING_COLLISION_PERCENT = 0.05f;
+const float PADDING_COLLISION_PERCENT_FEET = 0.15f;
 const float PADDING_COLLISION_PERCENT_RADIOUS = 0.5f; //HABRA QUE AJUSTARLO A LA MALLA
 const float DEFAULT_CAPSULE_RADIOUS = 30.0f;
 const float CAPSULE_RADIOUS_PADDING = 5.0f;
@@ -118,6 +119,7 @@ private:
   float m_capsuleHeight;
   float m_capsuleRadious;
   float m_capsuleHeightPadding;
+  float m_capsuleHeightPaddingFeet;
   float m_capsuleRadiousPadding;
   FVector m_lastPosition;
 
