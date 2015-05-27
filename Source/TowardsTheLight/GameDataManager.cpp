@@ -4,6 +4,7 @@
 #include "GameDataManager.h"
 #include "CoreMisc.h"
 
+#include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
@@ -18,8 +19,23 @@ GameDataManager* GameDataManager::Instance() {
 }
 
 GameDataManager::GameDataManager() {
-  m_filePath = FPaths::GameDir() + m_filePath;
-  FFileHelper::LoadFileToString(m_data, *m_filePath);
+  m_filePath = FPaths::GameContentDir() + m_filePath;
+  bool open = FFileHelper::LoadFileToString(m_data, *m_filePath);
+  
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FULL_PATH")));
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_filePath);
+  FPaths:
+  if (open)
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("OPEN")));
+
+  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FEATURE_PACK_DIR")));
+  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FPaths::FeaturePackDir());
+  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Automatic_DIR")));
+  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FPaths::AutomationDir());
+  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GameContentDir")));
+  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FPaths::GameContentDir());
+
+
 }
 
 GameDataManager::~GameDataManager() {
@@ -42,6 +58,10 @@ LevelData GameDataManager::ReadLevelData(FString levelName){
   //Quitar el inicio por defecto
   levelName.RemoveFromStart(FString("UEDPIE_0_"));
 
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FULL_PATH")));
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_filePath);
+
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("READ_LEVEL_DATA")));
   GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_data);
 
   if (!doc.HasParseError())
@@ -58,8 +78,8 @@ LevelData GameDataManager::ReadLevelData(FString levelName){
                     ret.name = levels[i]["name"].GetString();
 
                     if (levels[i].HasMember("orbs"))
-                      if (levels[i]["orbs"].IsInt())
-                        ret.orbs = levels[i]["orbs"].GetInt();
+                      if (levels[i]["orbs"].IsNumber())
+                        ret.orbs = levels[i]["orbs"].GetDouble();
 
                     if (levels[i].HasMember("points"))
                       if (levels[i]["points"].IsNumber())
@@ -95,8 +115,8 @@ void GameDataManager::WriteLevelData(LevelData data){
                   if (FString(levels[i]["name"].GetString()) == data.name){
 
                     if (levels[i].HasMember("orbs"))
-                      if (levels[i]["orbs"].IsInt())
-                        levels[i]["orbs"].SetInt(data.orbs);
+                      if (levels[i]["orbs"].IsNumber())
+                        levels[i]["orbs"].SetDouble(data.orbs);
 
                     if (levels[i].HasMember("points"))
                       if (levels[i]["points"].IsNumber())
