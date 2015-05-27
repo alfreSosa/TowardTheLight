@@ -5,32 +5,30 @@
 #include "rapidjson/document.h"
 
 struct LevelData{
-  int id = -1;
   FString name = "";
   unsigned int orbs = 0;
   float points = 0;
 };
 
 /**
- * 
+ * https://answers.unrealengine.com/questions/205899/c-class-singleton-problem.html
  */
 class TOWARDSTHELIGHT_API GameDataManager {
 public:
-  static GameDataManager* Instance() { if (m_instance == 0) m_instance = new GameDataManager(); return m_instance; }
-  void AllowWrite(bool allow) { m_allowWrite = allow; }
+  static GameDataManager* Instance();
 
   bool SavedGame();
 
-  LevelData ReadLevelData(int id);
-  bool WriteLevelData(LevelData data);
+  LevelData ReadLevelData(FString levelName);
+  void WriteLevelData(LevelData data);
 
 protected:
   GameDataManager();
   ~GameDataManager();
 
 private:
-  FString m_filePath = "Content/StorageFiles/saved.json";
   static GameDataManager* m_instance;
-  bool m_allowWrite;
+
+  FString m_filePath = "Content/StorageFiles/saved.json";
   FString m_data;
 };

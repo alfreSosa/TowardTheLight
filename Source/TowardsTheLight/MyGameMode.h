@@ -22,6 +22,11 @@ public:
     void AddPoints(float points);
   UFUNCTION()
     void OrbPicked();
+  
+  UFUNCTION(BlueprintCallable, Category = "GameState")
+    float GetActualPoints();
+  UFUNCTION(BlueprintCallable, Category = "GameState")
+    float GetActualOrbs();
 
   void EndGame(EndGameType type);
 
@@ -29,6 +34,6 @@ public:
   bool LoadJason(FString SaveDirectory, FString FileName, FString SaveText, bool AllowOverWriting);
 private:
   float m_actualPoints;
-  float m_countOrbs;
+  float m_countOrbs; //BUGS PARA BP, NO PUEDEN USAR INT, INVESTIGAR
 };
 

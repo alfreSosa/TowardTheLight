@@ -7,7 +7,8 @@
 
 #define COLLISION_PLAYER        ECC_GameTraceChannel1 
 const float PADDING_COLLISION_PERCENT = 0.05f;
-const float PADDING_COLLISION_PERCENT_RADIOUS = 0.5f; //HABRA QUE AJUSTARLO A LA MALLA
+const float PADDING_COLLISION_PERCENT_FEET = 0.30f;
+const float PADDING_COLLISION_PERCENT_RADIOUS = 0.55f; //HABRA QUE AJUSTARLO A LA MALLA
 const float DEFAULT_CAPSULE_RADIOUS = 30.0f;
 const float CAPSULE_RADIOUS_PADDING = 5.0f;
 const float DEFAULT_CAPSULE_HEIGHT = 95.0f;
@@ -88,6 +89,8 @@ public:
   /*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
     float SpeedIncrementInTransition;*/
 
+  void OnMobilePlatform(class AMobilePlatform *mp, FVector movement);
+
 private:
   float UpdateState();
   void CalculateOrientation();
@@ -95,7 +98,7 @@ private:
   void DoJump(float DeltaTime);
   void DoMovement(float DeltaTime, float value);
   void CheckCollision();
-  void CheckMobilePlatform();
+  //void CheckMobilePlatform();
   void AjustPosition();
   void Rotate(const FVector& rotation);
   FVector AbsVector(const FVector& vector);
@@ -118,6 +121,7 @@ private:
   float m_capsuleHeight;
   float m_capsuleRadious;
   float m_capsuleHeightPadding;
+  float m_capsuleHeightPaddingFeet;
   float m_capsuleRadiousPadding;
   FVector m_lastPosition;
 
