@@ -2,6 +2,7 @@
 
 #include "TowardsTheLight.h"
 #include "MobilePlatform.h"
+#include "PlayerOvi.h"
 
 
 AMobilePlatform::AMobilePlatform() {
@@ -31,7 +32,16 @@ void AMobilePlatform::BeginPlay() {
 
 void AMobilePlatform::Tick(float DeltaSeconds) {
   Super::BeginPlay();
+  if (!m_player)
+    for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
+      if (ActorItr->ActorHasTag("Player")){
+        m_player = (APlayerOvi*)*ActorItr;
+        break;
+      }
+
   doMovement(DeltaSeconds);
+  if (m_player)
+    m_player->OnMobilePlatform(this, m_movement);
 }
 
 void AMobilePlatform::doMovement(float DeltaSeconds){
@@ -105,24 +115,6 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
   }
 }
 
-//ESTO YA NO HARIA FALTA(CREO)
-//void AMobilePlatform::ReceiveActorBeginOverlap(AActor* OtherActor) {
-//  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("collision!!!!!")));
-//  if (OtherActor->ActorHasTag("Player")) {
-//    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("player!!!!!")));
-//    //this->SetActorEnableCollision(false);
-//    //PrimaryActorTick.bCanEverTick = false;
-//    //SetActorLocation(FVector(0, 0, 0));
-//    //AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
-//    //if (gameMode) {
-//    //  gameMode->AddPoints(this->Points);
-//    //  if (IsOrb)
-//    //    gameMode->OrbPicked();
-//
-//    //}
-//  }
+//FVector AMobilePlatform::GetPlatformMovement() const{
+//  return m_movement;
 //}
-
-FVector AMobilePlatform::GetPlatformMovement() const{
-  return m_movement;
-}

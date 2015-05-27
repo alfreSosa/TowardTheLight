@@ -7,13 +7,16 @@
 
 #define COLLISION_PLAYER        ECC_GameTraceChannel1 
 const float PADDING_COLLISION_PERCENT = 0.05f;
-const float PADDING_COLLISION_PERCENT_RADIOUS = 0.5f; //HABRA QUE AJUSTARLO A LA MALLA
+const float PADDING_COLLISION_PERCENT_FEET = 0.30f;
+const float PADDING_COLLISION_PERCENT_RADIOUS = 0.55f; //HABRA QUE AJUSTARLO A LA MALLA
 const float DEFAULT_CAPSULE_RADIOUS = 30.0f;
 const float CAPSULE_RADIOUS_PADDING = 5.0f;
 const float DEFAULT_CAPSULE_HEIGHT = 95.0f;
-const float DEFAULT_JUMP_TRANSITION = 200.0f;
+
+const float DEFAULT_SPEED_TRANSITION = 200.0f;
 const float DEFAULT_MOVEMENT_SPEED = 600.0f;
-const float DEFAULT_JUMP_HEIGHT = 350.0f;
+const float DEFAULT_JUMP_SPEED = 1000.0f;
+const float DEFAULT_JUMP_ACC = 1500.0f;
 
 
 UCLASS()
@@ -22,7 +25,7 @@ class TOWARDSTHELIGHT_API APlayerOvi : public APawn
 	GENERATED_BODY()
 
 public:
-	enum States { RIGHT, LEFT };
+	enum States { RIGHT, LEFT, STOP};
 	// Sets default values for this pawn's properties
 	APlayerOvi();
 
@@ -64,10 +67,10 @@ public:
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	  class USkeletalMeshComponent* Mesh;
 
-  UPROPERTY(EditAnywhere, Category = Player)
+ /* UPROPERTY(EditAnywhere, Category = Player)
       USceneComponent* Stick;
   UPROPERTY(EditAnywhere, Category = Player)
-    USceneComponent* StickLight;
+    USceneComponent* StickLight;*/
 
 #if WITH_EDITORONLY_DATA
 	UPROPERTY()
@@ -76,12 +79,18 @@ public:
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputControl)
     float MarginInput;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float MovementSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float JumpSpeed;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
-		float MaxJumpHeight;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+    float AccelerationJump;
+  /*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+    float SpeedIncrementInTransition;*/
+
+  void OnMobilePlatform(class AMobilePlatform *mp, FVector movement);
+
 private:
   float UpdateState();
   void CalculateOrientation();
@@ -89,7 +98,7 @@ private:
   void DoJump(float DeltaTime);
   void DoMovement(float DeltaTime, float value);
   void CheckCollision();
-  void CheckMobilePlatform();
+  //void CheckMobilePlatform();
   void AjustPosition();
   void Rotate(const FVector& rotation);
   FVector AbsVector(const FVector& vector);
@@ -103,17 +112,22 @@ private:
   bool m_hasLanded;
   bool m_headCollision;
   bool m_enabledGravity;
+  bool m_isInJumpTransition;
 	float m_limit;
-	float m_jumpDistance;
+
+  float m_actualAccJump;
+  float m_actualJumpSpeed;
+  float m_transitionDistance;
   float m_capsuleHeight;
   float m_capsuleRadious;
   float m_capsuleHeightPadding;
+  float m_capsuleHeightPaddingFeet;
   float m_capsuleRadiousPadding;
   FVector m_lastPosition;
 
   float m_semiWidthViewPort;
-  FVector m_initialTouch;
+  float m_centerTouchX;
+  States m_stateInput;
   ETouchIndex::Type m_fingerIndexMovement;
   ETouchIndex::Type m_fingerIndexJump;
-
 };

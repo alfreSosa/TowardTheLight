@@ -2,26 +2,33 @@
 
 #pragma once
 
-/**
- * 
- */
-class TOWARDSTHELIGHT_API GameDataManager
-{
+#include "rapidjson/document.h"
 
+struct LevelData{
+  FString name = "";
+  unsigned int orbs = 0;
+  float points = 0;
+};
+
+/**
+ * https://answers.unrealengine.com/questions/205899/c-class-singleton-problem.html
+ */
+class TOWARDSTHELIGHT_API GameDataManager {
 public:
-  const FString FILE_PATH = "Content/Levels/Levels.json";
-  static GameDataManager* Instance() { if (mInstance == 0) mInstance = new GameDataManager(); return mInstance; }
-  void AllowWrite(bool allow) { m_allowWrite = allow; }
-  void ReadData();
-  bool WriteData(FString data);
-  FString GetData() { return m_data; }
+  static GameDataManager* Instance();
+
+  bool SavedGame();
+
+  LevelData ReadLevelData(FString levelName);
+  void WriteLevelData(LevelData data);
+
 protected:
   GameDataManager();
   ~GameDataManager();
-private:
-  static GameDataManager* mInstance;
-  bool m_allowWrite;
-  FString m_data;
-public:
 
+private:
+  static GameDataManager* m_instance;
+
+  FString m_filePath = "Content/StorageFiles/saved.json";
+  FString m_data;
 };
