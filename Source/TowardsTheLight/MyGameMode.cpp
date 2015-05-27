@@ -11,12 +11,17 @@ AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Su
 
   DefaultPawnClass = APlayerOvi::StaticClass();
   PlayerControllerClass = AOviPlayerController::StaticClass();
+
+  static ConstructorHelpers::FObjectFinder<UBlueprint> SomeBlueprint(TEXT("Blueprint'/Game/GameElementsBP/LevelHUD.LevelHUD'"));
+  if (SomeBlueprint.Object)
+    HUDClass = (UClass*)SomeBlueprint.Object->GeneratedClass;
+
   m_countOrbs = m_actualPoints = 0;
 }
 
 void AMyGameMode::AddPoints(float points) {
   m_actualPoints += points;
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ActualPoints: %f"), m_actualPoints));
+  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ActualPoints: %f"), m_actualPoints));
 }
 
 void AMyGameMode::OrbPicked() {
@@ -57,4 +62,12 @@ void AMyGameMode::EndGame(EndGameType type) {
     //terminar la partida. volver al menú
     break;
   }
+}
+
+float AMyGameMode::GetActualPoints() {
+  return m_actualPoints; 
+}
+
+uint32 AMyGameMode::GetActualOrbs() {
+  return m_countOrbs; 
 }

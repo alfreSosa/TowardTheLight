@@ -15,7 +15,7 @@ APickableItem::APickableItem() {
 
 void APickableItem::ReceiveActorBeginOverlap(AActor* OtherActor) {
   if (OtherActor->ActorHasTag("Player")) {
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Item Picked")));
+    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Item Picked")));
     this->SetActorEnableCollision(false);
     SetActorLocation(FVector(0, 0, 0));
     AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
