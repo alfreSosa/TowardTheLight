@@ -26,7 +26,7 @@ void AMyGameMode::AddPoints(float points) {
 
 void AMyGameMode::OrbPicked() {
   m_countOrbs++;
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Orbs: %d"), m_countOrbs));
+  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Orbs: %d"), m_countOrbs));
 }
 
 void AMyGameMode::EndGame(EndGameType type) {
@@ -68,6 +68,6 @@ float AMyGameMode::GetActualPoints() {
   return m_actualPoints; 
 }
 
-uint32 AMyGameMode::GetActualOrbs() {
+float AMyGameMode::GetActualOrbs() {
   return m_countOrbs; 
 }
