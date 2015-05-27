@@ -5,6 +5,9 @@
 #include "PlayerOvi.h"
 #include "OviPlayerController.h"
 #include "GameDataManager.h"
+#include "rapidjson/rapidjson.h"
+
+FString FilePath = "Content/Levels/Levels.json";
 
 AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
   PrimaryActorTick.bCanEverTick = true;
@@ -12,6 +15,9 @@ AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Su
   DefaultPawnClass = APlayerOvi::StaticClass();
   PlayerControllerClass = AOviPlayerController::StaticClass();
   m_countOrbs = m_actualPoints = 0;
+  GameDataManager::Instance()->ReadData();
+  if (GEngine)
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GameDataManager::Instance()->GetData()); //lee el fichero
 }
 
 void AMyGameMode::AddPoints(float points) {
@@ -26,17 +32,9 @@ void AMyGameMode::OrbPicked() {
 
 void AMyGameMode::EndGame(EndGameType type) {
   switch (type){
-  case VICTORY:{
+  case VICTORY:
     GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("VICTORY!!!!")));
 
-    int ID = 0;
-    LevelData data = GameDataManager::Instance()->ReadLevelData(ID);
-    //if (GEngine)
-    //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GameDataManager::Instance()->GetData()); //lee el fichero
-
-    //si la puntuacion actual es mejor que la que hay en el fichero, hay que almacenarla
-
-  }
     break;
   case DEFEAT:
     GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("DEFEAT!!!!")));

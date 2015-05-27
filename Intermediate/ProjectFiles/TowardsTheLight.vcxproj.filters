@@ -100,10 +100,10 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\StaticEnemy.h">
       <Filter>Source\TowardsTheLight</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\Altar.h">
+    <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h">
       <Filter>Source\TowardsTheLight</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h">
+    <ClInclude Include="..\..\Source\TowardsTheLight\Altar.h">
       <Filter>Source\TowardsTheLight</Filter>
     </ClInclude>
   </ItemGroup>
@@ -138,10 +138,10 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\StaticEnemy.cpp">
       <Filter>Source\TowardsTheLight</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp">
+    <ClCompile Include="..\..\Source\TowardsTheLight\GameDataManager.cpp">
       <Filter>Source\TowardsTheLight</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\TowardsTheLight\GameDataManager.cpp">
+    <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp">
       <Filter>Source\TowardsTheLight</Filter>
     </ClCompile>
   </ItemGroup>
