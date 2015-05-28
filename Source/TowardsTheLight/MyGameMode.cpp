@@ -17,9 +17,13 @@ AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Su
     HUDClass = (UClass*)SomeBlueprint.Object->GeneratedClass;
 
   m_countOrbs = m_actualPoints = 0;
+
 }
 
 void AMyGameMode::AddPoints(float points) {
+  if (InputComponent)
+    InputComponent->BindAction("Back", IE_Pressed, this, &AMyGameMode::SetBackEvent);
+
   m_actualPoints += points;
   //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ActualPoints: %f"), m_actualPoints));
 }
@@ -70,4 +74,8 @@ float AMyGameMode::GetActualPoints() {
 
 float AMyGameMode::GetActualOrbs() {
   return m_countOrbs; 
+}
+
+void AMyGameMode::SetBackEvent() {
+  BackEvent();
 }

@@ -30,8 +30,13 @@ public:
 
   void EndGame(EndGameType type);
 
-  bool SaveJason(FString SaveDirectory, FString FileName, FString SaveText, bool AllowOverWriting);
-  bool LoadJason(FString SaveDirectory, FString FileName, FString SaveText, bool AllowOverWriting);
+  UFUNCTION(BlueprintImplementableEvent, Category = GameEvent)
+    void BackEvent();
+
+  UFUNCTION()
+    void SetBackEvent();
+
+
 private:
   float m_actualPoints;
   float m_countOrbs; //BUGS PARA BP, NO PUEDEN USAR INT, INVESTIGAR
