@@ -20,18 +20,18 @@ GameDataManager* GameDataManager::Instance() {
 
 GameDataManager::GameDataManager() {
   m_data = "";
-  bool open = false;
-
   m_filePath = FPaths::GameContentDir() + m_filePath;
-  open = FFileHelper::LoadFileToString(m_data, *m_filePath);
+
+  //solucion normal
+  //FFileHelper::LoadFileToString(m_data, *m_filePath);
   
+  //solucion con FILE*
   //FILE * pFile;
   //fopen_s(&pFile, TCHAR_TO_ANSI(*m_filePath), "r");
 
   //if (pFile){
   //  char buffer[256];
   //  while (!feof(pFile)){
-  //    open = true;
   //    if (fgets(buffer, 256, pFile) == NULL) break;
   //    m_data = m_data + FString(buffer);
   //  }
@@ -39,20 +39,24 @@ GameDataManager::GameDataManager() {
   //}
   //else{
   //  FString content("{\"general\":{\"sound\":true}, \"levels\" : []}");
-
   //  m_data = content;
   //  SavedGame();
   //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GUARDANDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")));
   //}
 
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("CONSTRUCTOR FULL_PATH")));
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_filePath);
+  //solucion con parseo
+  FFileHelper::LoadFileToString(m_data, *m_filePath);
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
 
-  if (open)
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("OPEN")));
-  else
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FALSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")));
+  if (doc.HasParseError()){
+    FString initial_content;
+    FString initial_content_path = FPaths::GameContentDir() + "StorageFiles/init/initial.json";
+    FFileHelper::LoadFileToString(initial_content, *initial_content_path);
 
+    m_data = initial_content;
+    SavedGame();
+  }
 }
 
 GameDataManager::~GameDataManager() {
@@ -64,27 +68,16 @@ GameDataManager::~GameDataManager() {
 }
 
 bool GameDataManager::SavedGame() {
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("SAVE---------WRITE DATA")));
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_data);
-
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("SAVE---------WRITE PATH")));
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_filePath);
-
   return FFileHelper::SaveStringToFile(m_data, *m_filePath);
 }
 
 LevelData GameDataManager::ReadLevelData(FString levelName){
-
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("READ_LEVEL_DATA")));
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_data);
-
   LevelData ret;
   Document doc;
   doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
 
   //Quitar el inicio por defecto
   levelName.RemoveFromStart(FString("UEDPIE_0_"));
-
 
   if (!doc.HasParseError())
     if (doc.IsObject())
@@ -117,8 +110,6 @@ LevelData GameDataManager::ReadLevelData(FString levelName){
   return ret;
 }
 
-
-
 void GameDataManager::WriteLevelData(LevelData data){
   Document doc;
   doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
@@ -148,7 +139,6 @@ void GameDataManager::WriteLevelData(LevelData data){
                     break;
                   }
           }
-
 
           if (!success){ //añadir el nuevo bloque
             Document::AllocatorType& allocator = doc.GetAllocator();

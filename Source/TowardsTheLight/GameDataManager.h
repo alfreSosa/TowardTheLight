@@ -27,6 +27,6 @@ protected:
 private:
   static GameDataManager* m_instance;
 
-  FString m_filePath = "StorageFiles/saved.json";
+  FString m_filePath = "StorageFiles/save/save.json";
   FString m_data;
 };
