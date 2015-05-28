@@ -19,22 +19,39 @@ GameDataManager* GameDataManager::Instance() {
 }
 
 GameDataManager::GameDataManager() {
+  m_data = "";
+  bool open = false;
+
   m_filePath = FPaths::GameContentDir() + m_filePath;
-  bool open = FFileHelper::LoadFileToString(m_data, *m_filePath);
+  open = FFileHelper::LoadFileToString(m_data, *m_filePath);
   
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FULL_PATH")));
+  //FILE * pFile;
+  //fopen_s(&pFile, TCHAR_TO_ANSI(*m_filePath), "r");
+
+  //if (pFile){
+  //  char buffer[256];
+  //  while (!feof(pFile)){
+  //    open = true;
+  //    if (fgets(buffer, 256, pFile) == NULL) break;
+  //    m_data = m_data + FString(buffer);
+  //  }
+  //  fclose(pFile);
+  //}
+  //else{
+  //  FString content("{\"general\":{\"sound\":true}, \"levels\" : []}");
+
+  //  m_data = content;
+  //  SavedGame();
+  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GUARDANDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")));
+  //}
+
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("CONSTRUCTOR FULL_PATH")));
   GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_filePath);
-  FPaths:
+
   if (open)
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("OPEN")));
-
-  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FEATURE_PACK_DIR")));
-  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FPaths::FeaturePackDir());
-  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Automatic_DIR")));
-  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FPaths::AutomationDir());
-  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GameContentDir")));
-  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FPaths::GameContentDir());
-
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("OPEN")));
+  else
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FALSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")));
 
 }
 
@@ -47,10 +64,20 @@ GameDataManager::~GameDataManager() {
 }
 
 bool GameDataManager::SavedGame() {
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("SAVE---------WRITE DATA")));
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_data);
+
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("SAVE---------WRITE PATH")));
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_filePath);
+
   return FFileHelper::SaveStringToFile(m_data, *m_filePath);
 }
 
 LevelData GameDataManager::ReadLevelData(FString levelName){
+
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("READ_LEVEL_DATA")));
+  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_data);
+
   LevelData ret;
   Document doc;
   doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
@@ -58,11 +85,6 @@ LevelData GameDataManager::ReadLevelData(FString levelName){
   //Quitar el inicio por defecto
   levelName.RemoveFromStart(FString("UEDPIE_0_"));
 
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FULL_PATH")));
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_filePath);
-
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("READ_LEVEL_DATA")));
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_data);
 
   if (!doc.HasParseError())
     if (doc.IsObject())
