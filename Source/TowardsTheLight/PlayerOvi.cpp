@@ -68,11 +68,10 @@ APlayerOvi::APlayerOvi() {
 
   Stick = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Stick"));
   Stick->AttachTo(Mesh);
-
+  
   StickLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("StickLight"));
   StickLight->SetVisibility(false, false);
-  //StickLight->SetLightColor(FLinearColor(1.0f,1.0f,1.0f));
-  StickLight->SetLightColor(FLinearColor(1.0f, 0.0f, 0.0f)); //PARA PROBAR EN ROJO, CAMBIAR PARA RELEASE
+  StickLight->SetLightColor(FLinearColor(1.0f, 0.0f, 0.0f)); //HAY QUE BORRAR LA LUZ
   StickLight->SetCastShadows(false);
   StickLight->SetAttenuationRadius(300.0f);  //CONSTANTE
   StickLight->AttachTo(Stick);

@@ -67,9 +67,12 @@ public:
 	  class USkeletalMeshComponent* Mesh;
 
   UPROPERTY(EditAnywhere, Category = Player)
-      USceneComponent* Stick;
+    UStaticMeshComponent* Stick;
   UPROPERTY(EditAnywhere, Category = Player)
     UPointLightComponent* StickLight;
+
+  /*UPROPERTY(EditAnywhere, Category = Player)
+    UMaterial* StickMaterial;*/
 
 #if WITH_EDITORONLY_DATA
 	UPROPERTY()
