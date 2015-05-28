@@ -50,12 +50,7 @@ GameDataManager::GameDataManager() {
   doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
 
   if (doc.HasParseError()){
-    FString initial_content;
-    FString initial_content_path = FPaths::GameContentDir() + "StorageFiles/init/initial.json";
-    FFileHelper::LoadFileToString(initial_content, *initial_content_path);
-
-    m_data = initial_content;
-    SavedGame();
+    ResetGame();
   }
 }
 
@@ -69,6 +64,15 @@ GameDataManager::~GameDataManager() {
 
 bool GameDataManager::SavedGame() {
   return FFileHelper::SaveStringToFile(m_data, *m_filePath);
+}
+
+void GameDataManager::ResetGame() {
+  FString initial_content;
+  FString initial_content_path = FPaths::GameContentDir() + "StorageFiles/init/initial.json";
+  FFileHelper::LoadFileToString(initial_content, *initial_content_path);
+
+  m_data = initial_content;
+  SavedGame();
 }
 
 LevelData GameDataManager::ReadLevelData(FString levelName){
@@ -159,4 +163,25 @@ void GameDataManager::WriteLevelData(LevelData data){
   m_data = buffer.GetString();
 
   SavedGame();
+}
+
+float GameDataManager::GetOrbsCounts() {
+  float ret = 0;
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+  if (!doc.HasParseError())
+    if (doc.IsObject())
+      if (doc.HasMember("levels"))
+        if (doc["levels"].IsArray()){
+          SizeType numLevels = doc["levels"].Size();
+          const Value &levels = doc["levels"];
+          for (SizeType i = 0; i < numLevels; i++)
+            if (levels[i].IsObject())
+              if (levels[i].HasMember("orbs"))
+                if (levels[i]["orbs"].IsNumber())
+                  ret += levels[i]["orbs"].GetDouble();
+        }
+
+  return ret;
 }
