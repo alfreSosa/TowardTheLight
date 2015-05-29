@@ -4,6 +4,7 @@
 #include "GameDataManager.h"
 #include "CoreMisc.h"
 
+#include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
@@ -18,8 +19,39 @@ GameDataManager* GameDataManager::Instance() {
 }
 
 GameDataManager::GameDataManager() {
-  m_filePath = FPaths::GameDir() + m_filePath;
+  m_data = "";
+  m_filePath = FPaths::GameContentDir() + m_filePath;
+
+  //solucion normal
+  //FFileHelper::LoadFileToString(m_data, *m_filePath);
+  
+  //solucion con FILE*
+  //FILE * pFile;
+  //fopen_s(&pFile, TCHAR_TO_ANSI(*m_filePath), "r");
+
+  //if (pFile){
+  //  char buffer[256];
+  //  while (!feof(pFile)){
+  //    if (fgets(buffer, 256, pFile) == NULL) break;
+  //    m_data = m_data + FString(buffer);
+  //  }
+  //  fclose(pFile);
+  //}
+  //else{
+  //  FString content("{\"general\":{\"sound\":true}, \"levels\" : []}");
+  //  m_data = content;
+  //  SavedGame();
+  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GUARDANDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")));
+  //}
+
+  //solucion con parseo
   FFileHelper::LoadFileToString(m_data, *m_filePath);
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+  if (doc.HasParseError()){
+    ResetGame();
+  }
 }
 
 GameDataManager::~GameDataManager() {
@@ -34,6 +66,15 @@ bool GameDataManager::SavedGame() {
   return FFileHelper::SaveStringToFile(m_data, *m_filePath);
 }
 
+void GameDataManager::ResetGame() {
+  FString initial_content;
+  FString initial_content_path = FPaths::GameContentDir() + "StorageFiles/init/initial.json";
+  FFileHelper::LoadFileToString(initial_content, *initial_content_path);
+
+  m_data = initial_content;
+  SavedGame();
+}
+
 LevelData GameDataManager::ReadLevelData(FString levelName){
   LevelData ret;
   Document doc;
@@ -41,8 +82,6 @@ LevelData GameDataManager::ReadLevelData(FString levelName){
 
   //Quitar el inicio por defecto
   levelName.RemoveFromStart(FString("UEDPIE_0_"));
-
-  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, m_data);
 
   if (!doc.HasParseError())
     if (doc.IsObject())
@@ -58,8 +97,8 @@ LevelData GameDataManager::ReadLevelData(FString levelName){
                     ret.name = levels[i]["name"].GetString();
 
                     if (levels[i].HasMember("orbs"))
-                      if (levels[i]["orbs"].IsInt())
-                        ret.orbs = levels[i]["orbs"].GetInt();
+                      if (levels[i]["orbs"].IsNumber())
+                        ret.orbs = levels[i]["orbs"].GetDouble();
 
                     if (levels[i].HasMember("points"))
                       if (levels[i]["points"].IsNumber())
@@ -74,8 +113,6 @@ LevelData GameDataManager::ReadLevelData(FString levelName){
   ret.name = levelName;
   return ret;
 }
-
-
 
 void GameDataManager::WriteLevelData(LevelData data){
   Document doc;
@@ -95,8 +132,8 @@ void GameDataManager::WriteLevelData(LevelData data){
                   if (FString(levels[i]["name"].GetString()) == data.name){
 
                     if (levels[i].HasMember("orbs"))
-                      if (levels[i]["orbs"].IsInt())
-                        levels[i]["orbs"].SetInt(data.orbs);
+                      if (levels[i]["orbs"].IsNumber())
+                        levels[i]["orbs"].SetDouble(data.orbs);
 
                     if (levels[i].HasMember("points"))
                       if (levels[i]["points"].IsNumber())
@@ -106,7 +143,6 @@ void GameDataManager::WriteLevelData(LevelData data){
                     break;
                   }
           }
-
 
           if (!success){ //añadir el nuevo bloque
             Document::AllocatorType& allocator = doc.GetAllocator();
@@ -127,4 +163,25 @@ void GameDataManager::WriteLevelData(LevelData data){
   m_data = buffer.GetString();
 
   SavedGame();
+}
+
+float GameDataManager::GetOrbsCounts() {
+  float ret = 0;
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+  if (!doc.HasParseError())
+    if (doc.IsObject())
+      if (doc.HasMember("levels"))
+        if (doc["levels"].IsArray()){
+          SizeType numLevels = doc["levels"].Size();
+          const Value &levels = doc["levels"];
+          for (SizeType i = 0; i < numLevels; i++)
+            if (levels[i].IsObject())
+              if (levels[i].HasMember("orbs"))
+                if (levels[i]["orbs"].IsNumber())
+                  ret += levels[i]["orbs"].GetDouble();
+        }
+
+  return ret;
 }

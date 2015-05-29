@@ -2,7 +2,7 @@
 
 #include "TowardsTheLight.h"
 #include "Altar.h"
-
+#include "PlayerOvi.h"
 
 // Sets default values
 AAltar::AAltar()
@@ -20,6 +20,13 @@ AAltar::AAltar()
   Trigger->AttachTo(RootComponent);
   Trigger->bHiddenInGame = true;
   Trigger->bGenerateOverlapEvents = true;
+
+  //Orientation
+  Orientation = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Orientation"));
+  Orientation->AttachTo(RootComponent);
+
+  GiveKey = true;
+  ColorKey = FLinearColor(0.0f, 0.0f, 1.0f);
 }
 
 // Called when the game starts or when spawned
@@ -44,8 +51,17 @@ void AAltar::RegisterDelegate() {
 
 void AAltar::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
   if (OtherActor->ActorHasTag("Player")){
-    if (GEngine)
-      GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "ACTIVADA LLAVE");
+
+    FVector dif = OtherActor->GetActorUpVector() - Orientation->GetUpVector();
+    dif.X = (dif.X < 0) ? -dif.X : dif.X;
+    dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
+    dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
+    if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05){
+      APlayerOvi *player = dynamic_cast<APlayerOvi *>(OtherActor);
+      if (player)
+        player->SetKey(GiveKey, ColorKey);
+    }
+    
   }
 }
 

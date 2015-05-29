@@ -2,11 +2,9 @@
 
 #pragma once
 
-#include "rapidjson/document.h"
-
 struct LevelData{
   FString name = "";
-  unsigned int orbs = 0;
+  float orbs = 0;
   float points = 0;
 };
 
@@ -18,9 +16,12 @@ public:
   static GameDataManager* Instance();
 
   bool SavedGame();
+  void ResetGame();
 
   LevelData ReadLevelData(FString levelName);
   void WriteLevelData(LevelData data);
+
+  float GetOrbsCounts();
 
 protected:
   GameDataManager();
@@ -29,6 +30,6 @@ protected:
 private:
   static GameDataManager* m_instance;
 
-  FString m_filePath = "Content/StorageFiles/saved.json";
+  FString m_filePath = "StorageFiles/save/save.json";
   FString m_data;
 };

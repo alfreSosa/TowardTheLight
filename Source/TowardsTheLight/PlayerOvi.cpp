@@ -63,14 +63,23 @@ APlayerOvi::APlayerOvi() {
     Mesh->bCanEverAffectNavigation = false;
     Mesh->SetRelativeLocation(FVector(0, 0, 0));
     Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
-    Mesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5));
+    Mesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5)); //CONSTANTE PASAR A VARIABLE CONSTANTE
   }
 
-  /*Stick = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Stick"));
-  Stick->AttachTo(Mesh);*/
+  Stick = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Stick"));
+  Stick->AttachTo(Mesh);
 
- /* StickLight = CreateDefaultSubobject<ULightComponentBase>(TEXT("StickLight"));
-  StickLight->AttachTo(Stick);*/
+  StickLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("StickLight"));
+  StickLight->SetVisibility(false, false);
+  //StickLight->SetLightColor(FLinearColor(1.0f,1.0f,1.0f));
+  StickLight->SetLightColor(FLinearColor(1.0f, 0.0f, 0.0f)); //PARA PROBAR EN ROJO, CAMBIAR PARA RELEASE
+  StickLight->SetCastShadows(false);
+  StickLight->SetAttenuationRadius(300.0f);  //CONSTANTE
+  StickLight->AttachTo(Stick);
+
+
+  //key Initialization
+  m_hasKey = false;
 
   m_state = States::RIGHT;
   m_limit = 0;
@@ -286,14 +295,7 @@ void APlayerOvi::DoJump(float DeltaTime){
   // movimiento uniformemente acelerado con aceleración AccelerationJump caidas libres
   if (m_isJumping && !m_headCollision) {
     if (m_actualJumpSpeed > 0) {
-      if (!m_isInJumpTransition){
-        m_actualJumpSpeed -= AccelerationJump * DeltaTime;
-      }
-      else {
-        m_transitionDistance += m_actualJumpSpeed * DeltaTime;
-        if (m_transitionDistance >= 200.0f)
-          m_isInJumpTransition = false;
-      }
+      m_actualJumpSpeed -= AccelerationJump * DeltaTime;
       m_enabledGravity = false;
       location += m_actualJumpSpeed * DeltaTime * up;
     }
@@ -341,11 +343,6 @@ void APlayerOvi::CalculateOrientation(){
     bool toUp = dotUp > m_limit;
 
     val = (toUp) ? 90 : -90;
-
-    /*if (toUp && m_isJumping) {
-      m_isInJumpTransition = true;
-      m_transitionDistance = 0.0f;
-    }*/
 
     if (m_state == States::RIGHT)
       Rotate(FVector(-val, 0, 0));
@@ -566,7 +563,7 @@ void APlayerOvi::CheckCollision() {
   //DrawDebugLine(GetWorld(), StartTrace, EndTraceUp, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   bool collisionUp = OutTraceResultUp.Num() > 0;
   GetWorld()->LineTraceMulti(OutTraceResultUpLeftF, StartTraceLeftF, EndTraceUpLeftF, COLLISION_PLAYER, TraceParams, ResponseParam);
-  DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceUpLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceUpLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   bool collisionUpLeftF = OutTraceResultUp.Num() > 0;
   GetWorld()->LineTraceMulti(OutTraceResultUpRigthF, StartTraceRigthF, EndTraceUpRightF, COLLISION_PLAYER, TraceParams, ResponseParam);
   //DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceUpRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
@@ -829,4 +826,10 @@ void APlayerOvi::OnMobilePlatform(AMobilePlatform *mp, FVector movement){
       }
     }
   }
+}
+
+void APlayerOvi::SetKey(bool key, FColor colorKey) {
+  m_hasKey = key;
+  StickLight->SetLightColor(colorKey);
+  StickLight->SetVisibility(key, key);
 }

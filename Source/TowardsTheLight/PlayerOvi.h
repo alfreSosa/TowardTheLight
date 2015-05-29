@@ -13,7 +13,6 @@ const float DEFAULT_CAPSULE_RADIOUS = 30.0f;
 const float CAPSULE_RADIOUS_PADDING = 5.0f;
 const float DEFAULT_CAPSULE_HEIGHT = 95.0f;
 
-const float DEFAULT_SPEED_TRANSITION = 200.0f;
 const float DEFAULT_MOVEMENT_SPEED = 600.0f;
 const float DEFAULT_JUMP_SPEED = 1000.0f;
 const float DEFAULT_JUMP_ACC = 1500.0f;
@@ -67,10 +66,10 @@ public:
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	  class USkeletalMeshComponent* Mesh;
 
- /* UPROPERTY(EditAnywhere, Category = Player)
+  UPROPERTY(EditAnywhere, Category = Player)
       USceneComponent* Stick;
   UPROPERTY(EditAnywhere, Category = Player)
-    USceneComponent* StickLight;*/
+    UPointLightComponent* StickLight;
 
 #if WITH_EDITORONLY_DATA
 	UPROPERTY()
@@ -86,11 +85,9 @@ public:
 		float JumpSpeed;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
     float AccelerationJump;
-  /*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
-    float SpeedIncrementInTransition;*/
 
   void OnMobilePlatform(class AMobilePlatform *mp, FVector movement);
-
+  void SetKey(bool key, FColor colorKey);
 private:
   float UpdateState();
   void CalculateOrientation();
@@ -105,6 +102,7 @@ private:
   FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
 
   States m_state;
+
 	bool m_right;
 	bool m_left;
   bool m_doJump;
@@ -113,8 +111,10 @@ private:
   bool m_headCollision;
   bool m_enabledGravity;
   bool m_isInJumpTransition;
-	float m_limit;
 
+  bool m_hasKey;
+
+	float m_limit;
   float m_actualAccJump;
   float m_actualJumpSpeed;
   float m_transitionDistance;
@@ -123,6 +123,7 @@ private:
   float m_capsuleHeightPadding;
   float m_capsuleHeightPaddingFeet;
   float m_capsuleRadiousPadding;
+
   FVector m_lastPosition;
 
   float m_semiWidthViewPort;
