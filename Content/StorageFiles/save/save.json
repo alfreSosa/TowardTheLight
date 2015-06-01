@@ -1,10 +1,1 @@
-{
-	"general":
-	{
-		"sound": true
-	},
-	"levels":
-	[
-
-	]
-}
+{"general":{"sound":true},"levels":[{"name":"WIP_Nivel03_Modulos_Jordi","orbs":1,"points":4000}]}
