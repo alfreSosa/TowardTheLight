@@ -66,16 +66,19 @@ APlayerOvi::APlayerOvi() {
     Mesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5)); //CONSTANTE PASAR A VARIABLE CONSTANTE
   }
 
-  Stick = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Stick"));
-  Stick->AttachTo(Mesh);
-  
-  StickLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("StickLight"));
-  StickLight->SetVisibility(false, false);
-  StickLight->SetLightColor(FLinearColor(1.0f, 0.0f, 0.0f)); //HAY QUE BORRAR LA LUZ
-  StickLight->SetCastShadows(false);
-  StickLight->SetAttenuationRadius(300.0f);  //CONSTANTE
-  StickLight->AttachTo(Stick);
+  StickMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
+  UMaterial* mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Baculo/baculo_diffuse.baculo_diffuse'"));
+  if (MatFinder.Succeeded())
+  {
+    mat = MatFinder.Object;
+    StickMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
 
+  Stick = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Stick"));
+  Stick->SetMobility(EComponentMobility::Movable);
+
+  Stick->AttachTo(Mesh);
 
   //key Initialization
   m_hasKey = false;
@@ -126,6 +129,10 @@ void APlayerOvi::BeginPlay(){
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_COLLISION_PERCENT;
   m_capsuleRadiousPadding = m_capsuleRadious * PADDING_COLLISION_PERCENT_RADIOUS;
   m_capsuleHeightPaddingFeet = m_capsuleHeight * PADDING_COLLISION_PERCENT_FEET;
+
+  Stick->SetMaterial(0, StickMaterial);
+  /*FVector color(1.0, 0, 0);
+  StickMaterial->SetVectorParameterValue("BaculoColor", color);*/
 }
 
 void APlayerOvi::Tick(float DeltaTime){
@@ -829,6 +836,5 @@ void APlayerOvi::OnMobilePlatform(AMobilePlatform *mp, FVector movement){
 
 void APlayerOvi::SetKey(bool key, FColor colorKey) {
   m_hasKey = key;
-  StickLight->SetLightColor(colorKey);
-  StickLight->SetVisibility(key, key);
+  StickMaterial->SetVectorParameterValue("BaculoColor", colorKey);
 }

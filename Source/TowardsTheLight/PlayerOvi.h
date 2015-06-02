@@ -68,11 +68,6 @@ public:
 
   UPROPERTY(EditAnywhere, Category = Player)
     UStaticMeshComponent* Stick;
-  UPROPERTY(EditAnywhere, Category = Player)
-    UPointLightComponent* StickLight;
-
-  /*UPROPERTY(EditAnywhere, Category = Player)
-    UMaterial* StickMaterial;*/
 
 #if WITH_EDITORONLY_DATA
 	UPROPERTY()
@@ -91,7 +86,11 @@ public:
 
   void OnMobilePlatform(class AMobilePlatform *mp, FVector movement);
   void SetKey(bool key, FColor colorKey);
+
 private:
+
+  UMaterialInstanceDynamic *StickMaterial;
+
   float UpdateState();
   void CalculateOrientation();
   void CalculateGravity(float DeltaTime);
