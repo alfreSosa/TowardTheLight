@@ -65,6 +65,8 @@ public:
     /** The main skeletal mesh associated with this Character (optional sub-object). */
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	  class USkeletalMeshComponent* Mesh;
+	  UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	  class USkeletalMeshComponent* TailMesh;
 
   UPROPERTY(EditAnywhere, Category = Player)
     UStaticMeshComponent* Stick;

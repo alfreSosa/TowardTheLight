@@ -66,6 +66,26 @@ APlayerOvi::APlayerOvi() {
     Mesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5)); //CONSTANTE PASAR A VARIABLE CONSTANTE
   }
 
+  TailMesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalTailComponent"));
+  if (TailMesh) {
+	  TailMesh->AlwaysLoadOnClient = true;
+	  TailMesh->AlwaysLoadOnServer = true;
+	  TailMesh->bOwnerNoSee = false;
+	  TailMesh->MeshComponentUpdateFlag = EMeshComponentUpdateFlag::AlwaysTickPose;
+	  TailMesh->bCastDynamicShadow = true;
+	  TailMesh->bAffectDynamicIndirectLighting = true;
+	  TailMesh->PrimaryComponentTick.TickGroup = TG_PrePhysics;
+	  TailMesh->bChartDistanceFactor = true;
+	  TailMesh->AttachParent = CapsuleComponent;
+	  static FName CollisionProfileName(TEXT("OverlapAll"));
+	  TailMesh->SetCollisionProfileName(CollisionProfileName);
+	  TailMesh->bGenerateOverlapEvents = true;
+	  TailMesh->bCanEverAffectNavigation = false;
+	  TailMesh->SetRelativeLocation(FVector(0, 0, 0));
+	  //Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
+	  TailMesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5)); //CONSTANTE PASAR A VARIABLE CONSTANTE
+  }
+
   StickMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
   UMaterial* mat = nullptr;
   static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Baculo/baculo_diffuse.baculo_diffuse'"));
