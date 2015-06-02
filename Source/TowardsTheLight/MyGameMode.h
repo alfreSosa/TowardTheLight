@@ -30,12 +30,20 @@ public:
 
   void EndGame(EndGameType type);
 
-  UFUNCTION(BlueprintImplementableEvent, Category = GameEvent)
-    void BackEvent();
+  UFUNCTION(BlueprintCallable, Category = TTLFunctions)
+    void SetPauseBP(bool enable);
 
-  UFUNCTION()
-    void SetBackEvent();
+  UFUNCTION(BlueprintCallable, Category = TTLFunctions)
+    bool IsPausedBP();
 
+  UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
+    void GameVictory();
+
+  UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
+    void GameDefeat();
+
+  UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
+    void GameWithdrawal();
 
 private:
   float m_actualPoints;
