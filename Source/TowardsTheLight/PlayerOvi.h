@@ -13,9 +13,9 @@ const float DEFAULT_CAPSULE_RADIOUS = 30.0f;
 const float CAPSULE_RADIOUS_PADDING = 5.0f;
 const float DEFAULT_CAPSULE_HEIGHT = 95.0f;
 
-const float DEFAULT_MOVEMENT_SPEED = 600.0f;
-const float DEFAULT_JUMP_SPEED = 1000.0f;
-const float DEFAULT_JUMP_ACC = 1500.0f;
+const float DEFAULT_MOVEMENT_SPEED = 620.0f; //ajustado a valores de diseño
+const float DEFAULT_JUMP_SPEED = 1550.0f; //ajustado a valores de diseño
+const float DEFAULT_JUMP_ACC = 3300.0f; //ajustado a valores de diseño
 
 
 UCLASS()
