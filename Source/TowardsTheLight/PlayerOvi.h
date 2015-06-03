@@ -13,9 +13,9 @@ const float DEFAULT_CAPSULE_RADIOUS = 30.0f;
 const float CAPSULE_RADIOUS_PADDING = 5.0f;
 const float DEFAULT_CAPSULE_HEIGHT = 95.0f;
 
-const float DEFAULT_MOVEMENT_SPEED = 600.0f;
-const float DEFAULT_JUMP_SPEED = 1000.0f;
-const float DEFAULT_JUMP_ACC = 1500.0f;
+const float DEFAULT_MOVEMENT_SPEED = 620.0f; //ajustado a valores de diseño
+const float DEFAULT_JUMP_SPEED = 1550.0f; //ajustado a valores de diseño
+const float DEFAULT_JUMP_ACC = 3300.0f; //ajustado a valores de diseño
 
 
 UCLASS()
@@ -65,11 +65,11 @@ public:
     /** The main skeletal mesh associated with this Character (optional sub-object). */
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	  class USkeletalMeshComponent* Mesh;
+	  /*UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	  class USkeletalMeshComponent* TailMesh;*/
 
   UPROPERTY(EditAnywhere, Category = Player)
-      USceneComponent* Stick;
-  UPROPERTY(EditAnywhere, Category = Player)
-    UPointLightComponent* StickLight;
+    UStaticMeshComponent* Stick;
 
 #if WITH_EDITORONLY_DATA
 	UPROPERTY()
@@ -88,7 +88,21 @@ public:
 
   void OnMobilePlatform(class AMobilePlatform *mp, FVector movement);
   void SetKey(bool key, FColor colorKey);
+
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool isPlayerRunning();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool PlayerStopRunning();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool isPlayerJumping();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool PlayerHasLanded();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+	  bool PlayerisToRight();
 private:
+
+  UMaterialInstanceDynamic *StickMaterial;
+
   float UpdateState();
   void CalculateOrientation();
   void CalculateGravity(float DeltaTime);
@@ -114,6 +128,7 @@ private:
 
   bool m_hasKey;
 
+  bool bPlayerRunning;
 	float m_limit;
   float m_actualAccJump;
   float m_actualJumpSpeed;
