@@ -17,13 +17,12 @@ AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Su
     HUDClass = (UClass*)SomeBlueprint.Object->GeneratedClass;
 
   m_countOrbs = m_actualPoints = 0;
+  state = EndGameType::NONE;
 }
 
 void AMyGameMode::AddPoints(float points) {
   m_actualPoints += points;
   //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ActualPoints: %f"), m_actualPoints));
-
-  SetPauseBP(true);
 }
 
 void AMyGameMode::OrbPicked() {
@@ -34,7 +33,7 @@ void AMyGameMode::OrbPicked() {
 void AMyGameMode::EndGame(EndGameType type) {
   switch (type){
   case VICTORY:{
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("VICTORY!!!!")));
+    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("VICTORY!!!!")));
 
     LevelData data = GameDataManager::Instance()->ReadLevelData(GetWorld()->GetMapName());
     //si la puntuacion actual es mejor que la que hay en el fichero, hay que almacenarla 
@@ -51,20 +50,16 @@ void AMyGameMode::EndGame(EndGameType type) {
       GameDataManager::Instance()->WriteLevelData(data);
 
     //terminar la partida. volver al menú
-    GameVictory();
+    //GameVictory();
+    state = EndGameType::VICTORY;
   }
     break;
   case DEFEAT:
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("DEFEAT!!!!")));
+    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("DEFEAT!!!!")));
 
     //terminar la partida. volver al menú
-    GameDefeat();
-    break;
-  case WITHDRAWAL:
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("WITHDRAWAL!!!!")));
-
-    //terminar la partida. volver al menú
-    GameWithdrawal();
+    //GameDefeat();
+    state = EndGameType::DEFEAT;
     break;
   }
 }
@@ -88,4 +83,8 @@ bool AMyGameMode::IsPausedBP() {
   if (PlayerController != NULL)
     return PlayerController->IsPaused();
   return false;
+}
+
+float AMyGameMode::EndGameBP() {
+  return (float)state;
 }

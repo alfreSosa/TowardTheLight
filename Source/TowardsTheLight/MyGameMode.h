@@ -14,7 +14,7 @@ class TOWARDSTHELIGHT_API AMyGameMode : public AGameMode
 	GENERATED_BODY()
 
 public:
-  enum EndGameType { VICTORY, DEFEAT, WITHDRAWAL };
+  enum EndGameType { NONE = 0, VICTORY = 1, DEFEAT = -1 };
 
   AMyGameMode(const FObjectInitializer& ObjectInitializer);  // Our added constructor
 
@@ -36,17 +36,19 @@ public:
   UFUNCTION(BlueprintCallable, Category = TTLFunctions)
     bool IsPausedBP();
 
-  UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
-    void GameVictory();
+  UFUNCTION(BlueprintCallable, Category = TTLFunctions)
+    float EndGameBP();
 
-  UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
-    void GameDefeat();
+  //UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
+  //  void GameVictory();
 
-  UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
-    void GameWithdrawal();
+  //UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
+  //  void GameDefeat();
 
 private:
   float m_actualPoints;
-  float m_countOrbs; //BUGS PARA BP, NO PUEDEN USAR INT, INVESTIGAR
+  float m_countOrbs;
+
+  EndGameType state;
 };
 
