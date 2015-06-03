@@ -15,6 +15,7 @@ AAltar::AAltar()
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
   OurVisibleComponent->AttachTo(RootComponent);
   //trigger
+
   Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("ActivationZone"));
   Trigger->SetCollisionProfileName(FName(TEXT("OverlapOnlyPawn")));
   Trigger->AttachTo(RootComponent);
