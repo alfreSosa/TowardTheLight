@@ -12,7 +12,7 @@ AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Su
   DefaultPawnClass = APlayerOvi::StaticClass();
   PlayerControllerClass = AOviPlayerController::StaticClass();
 
-  static ConstructorHelpers::FObjectFinder<UBlueprint> SomeBlueprint(TEXT("Blueprint'/Game/GameElementsBP/LevelHUD.LevelHUD'"));
+  static ConstructorHelpers::FObjectFinder<UBlueprint> SomeBlueprint(TEXT("Blueprint'/Game/UIElementsBP/LevelHUD.LevelHUD'"));
   if (SomeBlueprint.Object)
     HUDClass = (UClass*)SomeBlueprint.Object->GeneratedClass;
 
