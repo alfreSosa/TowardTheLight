@@ -878,3 +878,7 @@ bool APlayerOvi::isPlayerJumping() {
 bool APlayerOvi::PlayerHasLanded() {
   return m_hasLanded;
 }
+
+bool APlayerOvi::PlayerisToRight() {
+	return (m_state == States::RIGHT);
+}

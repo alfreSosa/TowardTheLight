@@ -97,7 +97,8 @@ public:
     bool isPlayerJumping();
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
     bool PlayerHasLanded();
-
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+	  bool PlayerisToRight();
 private:
 
   UMaterialInstanceDynamic *StickMaterial;
