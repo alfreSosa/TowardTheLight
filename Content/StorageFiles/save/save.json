@@ -1,1 +1,5 @@
+<<<<<<< HEAD
+{"general":{"sound":true},"levels":[{"name":"WIP_Nivel03_Modulos_Jordi","orbs":1,"points":4000},{"name":"TEST_Nivel03_Modulos_Jordi","orbs":1,"points":2700}]}
+=======
 {"general":{"sound":true},"levels":[{"name":"DevelopmentLevel","orbs":1,"points":300}]}
+>>>>>>> 656d9bd758ad3277a8e4d4f76a2e79e6283f9df9
