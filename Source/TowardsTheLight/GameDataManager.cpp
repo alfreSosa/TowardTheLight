@@ -50,7 +50,7 @@ GameDataManager::GameDataManager() {
   doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
 
   if (doc.HasParseError()){
-    ResetGame();
+    DeleteGameData();
   }
 }
 
@@ -66,7 +66,7 @@ bool GameDataManager::SavedGame() {
   return FFileHelper::SaveStringToFile(m_data, *m_filePath);
 }
 
-void GameDataManager::ResetGame() {
+void GameDataManager::DeleteGameData() {
   FString initial_content;
   FString initial_content_path = FPaths::GameContentDir() + "StorageFiles/init/initial.json";
   FFileHelper::LoadFileToString(initial_content, *initial_content_path);

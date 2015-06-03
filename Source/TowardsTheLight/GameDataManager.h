@@ -16,7 +16,7 @@ public:
   static GameDataManager* Instance();
 
   bool SavedGame();
-  void ResetGame();
+  void DeleteGameData();
 
   LevelData ReadLevelData(FString levelName);
   void WriteLevelData(LevelData data);

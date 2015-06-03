@@ -63,20 +63,42 @@ APlayerOvi::APlayerOvi() {
     Mesh->bCanEverAffectNavigation = false;
     Mesh->SetRelativeLocation(FVector(0, 0, 0));
     Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
-    Mesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5)); //CONSTANTE PASAR A VARIABLE CONSTANTE
+    //rMesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5)); //CONSTANTE PASAR A VARIABLE CONSTANTE
+  }
+
+  //TailMesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalTailComponent"));
+  //if (TailMesh) {
+	 // TailMesh->AlwaysLoadOnClient = true;
+	 // TailMesh->AlwaysLoadOnServer = true;
+	 // TailMesh->bOwnerNoSee = false;
+	 // TailMesh->MeshComponentUpdateFlag = EMeshComponentUpdateFlag::AlwaysTickPose;
+	 // TailMesh->bCastDynamicShadow = true;
+	 // TailMesh->bAffectDynamicIndirectLighting = true;
+	 // TailMesh->PrimaryComponentTick.TickGroup = TG_PrePhysics;
+	 // TailMesh->bChartDistanceFactor = true;
+	 // TailMesh->AttachParent = CapsuleComponent;
+	 // static FName CollisionProfileName(TEXT("OverlapAll"));
+	 // TailMesh->SetCollisionProfileName(CollisionProfileName);
+	 // TailMesh->bGenerateOverlapEvents = true;
+	 // TailMesh->bCanEverAffectNavigation = false;
+	 // TailMesh->SetRelativeLocation(FVector(0, 0, 0));
+	 // //Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
+	 // TailMesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5)); //CONSTANTE PASAR A VARIABLE CONSTANTE
+  //}
+
+  StickMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
+  UMaterial* mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Baculo/baculo_diffuse.baculo_diffuse'"));
+  if (MatFinder.Succeeded())
+  {
+    mat = MatFinder.Object;
+    StickMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
   }
 
   Stick = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Stick"));
+  Stick->SetMobility(EComponentMobility::Movable);
+
   Stick->AttachTo(Mesh);
-
-  StickLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("StickLight"));
-  StickLight->SetVisibility(false, false);
-  //StickLight->SetLightColor(FLinearColor(1.0f,1.0f,1.0f));
-  StickLight->SetLightColor(FLinearColor(1.0f, 0.0f, 0.0f)); //PARA PROBAR EN ROJO, CAMBIAR PARA RELEASE
-  StickLight->SetCastShadows(false);
-  StickLight->SetAttenuationRadius(300.0f);  //CONSTANTE
-  StickLight->AttachTo(Stick);
-
 
   //key Initialization
   m_hasKey = false;
@@ -105,6 +127,8 @@ APlayerOvi::APlayerOvi() {
   m_stateInput = States::STOP;
   m_isInJumpTransition = false;
   m_transitionDistance = 0.0f;
+
+  bPlayerRunning = false;
   
 }
 
@@ -127,6 +151,10 @@ void APlayerOvi::BeginPlay(){
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_COLLISION_PERCENT;
   m_capsuleRadiousPadding = m_capsuleRadious * PADDING_COLLISION_PERCENT_RADIOUS;
   m_capsuleHeightPaddingFeet = m_capsuleHeight * PADDING_COLLISION_PERCENT_FEET;
+
+  Stick->SetMaterial(0, StickMaterial);
+  /*FVector color(1.0, 0, 0);
+  StickMaterial->SetVectorParameterValue("BaculoColor", color);*/
 }
 
 void APlayerOvi::Tick(float DeltaTime){
@@ -168,6 +196,8 @@ float APlayerOvi::UpdateState() {
   else{
     value = 0;
   }
+
+  bPlayerRunning = (value != 0) ? true : false;
 
   return value;
 }
@@ -830,6 +860,25 @@ void APlayerOvi::OnMobilePlatform(AMobilePlatform *mp, FVector movement){
 
 void APlayerOvi::SetKey(bool key, FColor colorKey) {
   m_hasKey = key;
-  StickLight->SetLightColor(colorKey);
-  StickLight->SetVisibility(key, key);
+  StickMaterial->SetVectorParameterValue("BaculoColor", colorKey);
+}
+
+bool APlayerOvi::isPlayerRunning() { 
+  return bPlayerRunning; 
+}
+
+bool APlayerOvi::PlayerStopRunning() {
+  return !bPlayerRunning;
+}
+
+bool APlayerOvi::isPlayerJumping() {
+  return m_isJumping;
+}
+
+bool APlayerOvi::PlayerHasLanded() {
+  return m_hasLanded;
+}
+
+bool APlayerOvi::PlayerisToRight() {
+	return (m_state == States::RIGHT);
 }
