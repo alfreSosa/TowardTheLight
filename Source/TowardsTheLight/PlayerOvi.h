@@ -65,8 +65,8 @@ public:
     /** The main skeletal mesh associated with this Character (optional sub-object). */
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	  class USkeletalMeshComponent* Mesh;
-	  UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	  class USkeletalMeshComponent* TailMesh;
+	  /*UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	  class USkeletalMeshComponent* TailMesh;*/
 
   UPROPERTY(EditAnywhere, Category = Player)
     UStaticMeshComponent* Stick;
@@ -88,6 +88,15 @@ public:
 
   void OnMobilePlatform(class AMobilePlatform *mp, FVector movement);
   void SetKey(bool key, FColor colorKey);
+
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool isPlayerRunning();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool PlayerStopRunning();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool isPlayerJumping();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool PlayerHasLanded();
 
 private:
 
@@ -118,6 +127,7 @@ private:
 
   bool m_hasKey;
 
+  bool bPlayerRunning;
 	float m_limit;
   float m_actualAccJump;
   float m_actualJumpSpeed;

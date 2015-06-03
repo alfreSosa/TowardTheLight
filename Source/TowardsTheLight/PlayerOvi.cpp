@@ -63,28 +63,28 @@ APlayerOvi::APlayerOvi() {
     Mesh->bCanEverAffectNavigation = false;
     Mesh->SetRelativeLocation(FVector(0, 0, 0));
     Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
-    Mesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5)); //CONSTANTE PASAR A VARIABLE CONSTANTE
+    //rMesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5)); //CONSTANTE PASAR A VARIABLE CONSTANTE
   }
 
-  TailMesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalTailComponent"));
-  if (TailMesh) {
-	  TailMesh->AlwaysLoadOnClient = true;
-	  TailMesh->AlwaysLoadOnServer = true;
-	  TailMesh->bOwnerNoSee = false;
-	  TailMesh->MeshComponentUpdateFlag = EMeshComponentUpdateFlag::AlwaysTickPose;
-	  TailMesh->bCastDynamicShadow = true;
-	  TailMesh->bAffectDynamicIndirectLighting = true;
-	  TailMesh->PrimaryComponentTick.TickGroup = TG_PrePhysics;
-	  TailMesh->bChartDistanceFactor = true;
-	  TailMesh->AttachParent = CapsuleComponent;
-	  static FName CollisionProfileName(TEXT("OverlapAll"));
-	  TailMesh->SetCollisionProfileName(CollisionProfileName);
-	  TailMesh->bGenerateOverlapEvents = true;
-	  TailMesh->bCanEverAffectNavigation = false;
-	  TailMesh->SetRelativeLocation(FVector(0, 0, 0));
-	  //Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
-	  TailMesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5)); //CONSTANTE PASAR A VARIABLE CONSTANTE
-  }
+  //TailMesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalTailComponent"));
+  //if (TailMesh) {
+	 // TailMesh->AlwaysLoadOnClient = true;
+	 // TailMesh->AlwaysLoadOnServer = true;
+	 // TailMesh->bOwnerNoSee = false;
+	 // TailMesh->MeshComponentUpdateFlag = EMeshComponentUpdateFlag::AlwaysTickPose;
+	 // TailMesh->bCastDynamicShadow = true;
+	 // TailMesh->bAffectDynamicIndirectLighting = true;
+	 // TailMesh->PrimaryComponentTick.TickGroup = TG_PrePhysics;
+	 // TailMesh->bChartDistanceFactor = true;
+	 // TailMesh->AttachParent = CapsuleComponent;
+	 // static FName CollisionProfileName(TEXT("OverlapAll"));
+	 // TailMesh->SetCollisionProfileName(CollisionProfileName);
+	 // TailMesh->bGenerateOverlapEvents = true;
+	 // TailMesh->bCanEverAffectNavigation = false;
+	 // TailMesh->SetRelativeLocation(FVector(0, 0, 0));
+	 // //Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
+	 // TailMesh->SetRelativeScale3D(FVector(2.5, 2.5, 2.5)); //CONSTANTE PASAR A VARIABLE CONSTANTE
+  //}
 
   StickMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
   UMaterial* mat = nullptr;
@@ -127,6 +127,8 @@ APlayerOvi::APlayerOvi() {
   m_stateInput = States::STOP;
   m_isInJumpTransition = false;
   m_transitionDistance = 0.0f;
+
+  bPlayerRunning = false;
   
 }
 
@@ -194,6 +196,8 @@ float APlayerOvi::UpdateState() {
   else{
     value = 0;
   }
+
+  bPlayerRunning = (value != 0) ? true : false;
 
   return value;
 }
@@ -857,4 +861,20 @@ void APlayerOvi::OnMobilePlatform(AMobilePlatform *mp, FVector movement){
 void APlayerOvi::SetKey(bool key, FColor colorKey) {
   m_hasKey = key;
   StickMaterial->SetVectorParameterValue("BaculoColor", colorKey);
+}
+
+bool APlayerOvi::isPlayerRunning() { 
+  return bPlayerRunning; 
+}
+
+bool APlayerOvi::PlayerStopRunning() {
+  return !bPlayerRunning;
+}
+
+bool APlayerOvi::isPlayerJumping() {
+  return m_isJumping;
+}
+
+bool APlayerOvi::PlayerHasLanded() {
+  return m_hasLanded;
 }
