@@ -39,6 +39,9 @@ public:
   UFUNCTION(BlueprintCallable, Category = TTLFunctions)
     float EndGameBP();
 
+  UFUNCTION(BlueprintCallable, Category = TTLFunctions)
+    FString GetLevelNameBP();
+
   //UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
   //  void GameVictory();
 

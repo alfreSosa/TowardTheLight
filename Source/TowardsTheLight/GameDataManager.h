@@ -22,6 +22,8 @@ public:
   void WriteLevelData(LevelData data);
 
   float GetOrbsCounts();
+  float GetOrbsLevel(FString levelName);
+  float GetPointsLevel(FString levelName);
 
 protected:
   GameDataManager();

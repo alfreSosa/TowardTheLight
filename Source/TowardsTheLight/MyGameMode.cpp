@@ -88,3 +88,9 @@ bool AMyGameMode::IsPausedBP() {
 float AMyGameMode::EndGameBP() {
   return (float)state;
 }
+
+FString AMyGameMode::GetLevelNameBP(){
+  FString levelName = GetWorld()->GetMapName();
+  levelName.RemoveFromStart(FString("UEDPIE_0_"));
+  return levelName;
+}
