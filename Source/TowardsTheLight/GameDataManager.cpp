@@ -185,3 +185,57 @@ float GameDataManager::GetOrbsCounts() {
 
   return ret;
 }
+
+float GameDataManager::GetOrbsLevel(FString levelName){
+  float ret = 0.f;
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+  if (!doc.HasParseError())
+    if (doc.IsObject())
+      if (doc.HasMember("levels"))
+        if (doc["levels"].IsArray()){
+          SizeType numLevels = doc["levels"].Size();
+          const Value &levels = doc["levels"];
+          for (SizeType i = 0; i < numLevels; i++)
+            if (levels[i].IsObject())
+              if (levels[i].HasMember("name"))
+                if (levels[i]["name"].IsString())
+                  if (FString(levels[i]["name"].GetString()) == levelName){
+                    if (levels[i].HasMember("orbs"))
+                      if (levels[i]["orbs"].IsNumber())
+                        ret = levels[i]["orbs"].GetDouble();
+
+                    return ret;
+                  }
+        }
+
+  return ret;
+}
+
+float GameDataManager::GetPointsLevel(FString levelName){
+  float ret = 0.f;
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+  if (!doc.HasParseError())
+    if (doc.IsObject())
+      if (doc.HasMember("levels"))
+        if (doc["levels"].IsArray()){
+          SizeType numLevels = doc["levels"].Size();
+          const Value &levels = doc["levels"];
+          for (SizeType i = 0; i < numLevels; i++)
+            if (levels[i].IsObject())
+              if (levels[i].HasMember("name"))
+                if (levels[i]["name"].IsString())
+                  if (FString(levels[i]["name"].GetString()) == levelName){
+                    if (levels[i].HasMember("points"))
+                      if (levels[i]["points"].IsNumber())
+                        ret = levels[i]["points"].GetDouble();
+
+                    return ret;
+                  }
+        }
+
+  return ret;
+}

@@ -79,3 +79,4 @@ DerivedDataCache/*
 *.swo
 .ctrlp_cache/
 
+Content/StorageFiles/save/save.json
