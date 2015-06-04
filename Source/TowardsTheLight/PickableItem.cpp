@@ -11,19 +11,22 @@ APickableItem::APickableItem() {
   OurVisibleComponent->AttachTo(RootComponent);
   this->SetActorEnableCollision(true);
   Points = DEFAULT_POINTS;
+  m_collected = false;
 }
 
 void APickableItem::ReceiveActorBeginOverlap(AActor* OtherActor) {
-  if (OtherActor->ActorHasTag("Player")) {
+  if (OtherActor->ActorHasTag("Player") && !m_collected) {
     //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Item Picked")));
-    this->SetActorEnableCollision(false);
-    SetActorLocation(FVector(0, 0, 0));
+    m_collected = true;  //auqnue el ojeto se destruya, es bueno dejarlo por si al frame siguiente la memoria no se ha liberado aún
+    this->SetActorEnableCollision(false); //comentar si se pone el destroy
+    SetActorLocation(FVector(0, 0, 0)); //comentar si se pone el destroy 
     AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
     if (gameMode) {
       gameMode->AddPoints(this->Points);
       if (IsOrb)
         gameMode->OrbPicked();
     }
+    //this->Destroy();
   }
 }
 
