@@ -167,13 +167,14 @@ void APlayerOvi::Tick(float DeltaTime){
   DoMovement(DeltaTime, value);
   DoJump(DeltaTime);
   CalculateGravity(DeltaTime);
-  CalculateOrientation();
   CheckCollision();
-  //CheckMobilePlatform();
+  CalculateOrientation();  
 }
 
 float APlayerOvi::UpdateState() {
   m_lastPosition = GetActorLocation();
+  m_lastUpVector = GetActorUpVector();
+  m_lastForwardVector = GetActorForwardVector();
   float value = 0;
   FVector up = GetActorUpVector();
   FVector forward = GetActorForwardVector();
@@ -330,6 +331,7 @@ void APlayerOvi::DoJump(float DeltaTime){
       location += m_actualJumpSpeed * DeltaTime * up;
     }
     else {
+      m_actualJumpSpeed = 0;
       m_isJumping = false;
     }
   } else {
@@ -450,11 +452,12 @@ void APlayerOvi::CheckCollision() {
   const FVector EndTraceLegs = (newLocationForward - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPaddingFeet)) + GetActorForwardVector() * m_capsuleRadious;
   const FVector EndTraceMidle = newLocationForward + GetActorForwardVector() * m_capsuleRadious;
 
-  const FVector EndTraceTopBack = (newLocationForward + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) - GetActorForwardVector() * m_capsuleRadious;
-  const FVector EndTraceBottomBack = (newLocationForward - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) - GetActorForwardVector() * m_capsuleRadious;
-  const FVector EndTraceBodyBack = (newLocationForward + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPaddingFeet)) - GetActorForwardVector() * m_capsuleRadious;
-  const FVector EndTraceLegsBack = (newLocationForward - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPaddingFeet)) - GetActorForwardVector() * m_capsuleRadious;
-  const FVector EndTraceMidleBack = newLocationForward - GetActorForwardVector() * m_capsuleRadious;
+  //cambiado a last_position porque va hacia atras y la posicion nueva siempre sera hacia adelante.
+  const FVector EndTraceTopBack = (m_lastPosition + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) - GetActorForwardVector() * m_capsuleRadious; 
+  const FVector EndTraceBottomBack = (m_lastPosition - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) - GetActorForwardVector() * m_capsuleRadious;
+  const FVector EndTraceBodyBack = (m_lastPosition + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPaddingFeet)) - GetActorForwardVector() * m_capsuleRadious;
+  const FVector EndTraceLegsBack = (m_lastPosition - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPaddingFeet)) - GetActorForwardVector() * m_capsuleRadious;
+  const FVector EndTraceMidleBack = m_lastPosition - GetActorForwardVector() * m_capsuleRadious;
 
   // Setup the trace query  
   static FName FireTraceIdent = FName(TEXT("Platform"));

@@ -140,6 +140,8 @@ private:
   float m_capsuleRadiousPadding;
 
   FVector m_lastPosition;
+  FVector m_lastUpVector;
+  FVector m_lastForwardVector;
 
   float m_semiWidthViewPort;
   float m_centerTouchX;
