@@ -143,7 +143,8 @@ private:
   FVector m_lastUpVector;
   FVector m_lastForwardVector;
 
-  float m_semiWidthViewPort;
+  float m_limitViewPort0;
+  float m_limitViewPort1;
   float m_centerTouchX;
   States m_stateInput;
   ETouchIndex::Type m_fingerIndexMovement;

@@ -119,7 +119,8 @@ APlayerOvi::APlayerOvi() {
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_COLLISION_PERCENT;
   m_capsuleRadiousPadding = m_capsuleRadious * PADDING_COLLISION_PERCENT_RADIOUS;
 
-  m_semiWidthViewPort = 0.f;
+  m_limitViewPort0 = 0.f;
+  m_limitViewPort1 = 0.f;
   m_centerTouchX = 0.f;
   m_fingerIndexMovement = ETouchIndex::Touch10;
   m_fingerIndexJump = ETouchIndex::Touch10;
@@ -129,7 +130,6 @@ APlayerOvi::APlayerOvi() {
   m_transitionDistance = 0.0f;
 
   bPlayerRunning = false;
-  
 }
 
 void APlayerOvi::BeginPlay(){
@@ -160,8 +160,10 @@ void APlayerOvi::BeginPlay(){
 void APlayerOvi::Tick(float DeltaTime){
   Super::Tick(DeltaTime);
 
-  if (m_semiWidthViewPort == 0)
-    m_semiWidthViewPort = GEngine->GameViewport->Viewport->GetSizeXY().X / 2;
+  if (m_limitViewPort0 == 0 && m_limitViewPort1 == 0){
+    m_limitViewPort0 = GEngine->GameViewport->Viewport->GetSizeXY().X * 0.45;
+    m_limitViewPort1 = GEngine->GameViewport->Viewport->GetSizeXY().X * 0.55;
+  }
 
   float value = UpdateState();
   DoMovement(DeltaTime, value);
@@ -218,7 +220,7 @@ void APlayerOvi::SetupPlayerInputComponent(class UInputComponent* InputComponent
 }
 
 void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location) {
-  if (Location.X > m_semiWidthViewPort && m_fingerIndexMovement != FingerIndex) { //JUMP
+  if (Location.X > m_limitViewPort1 && m_fingerIndexMovement != FingerIndex) { //JUMP
     OnStartJump();
     m_fingerIndexJump = FingerIndex;
     //if (!nearGear)
@@ -227,7 +229,7 @@ void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector
     //  puntero a nearGear->doAction();
     //}
   }
-  else { //MOVEMENT SWIPE
+  else if (Location.X < m_limitViewPort0){ //MOVEMENT SWIPE
     if (m_centerTouchX == 0){ //initial touch
       m_centerTouchX = Location.X;
       m_fingerIndexMovement = FingerIndex;
