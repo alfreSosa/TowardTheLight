@@ -5,6 +5,8 @@
 #include "GameFramework/Actor.h"
 #include "Mechanism.generated.h"
 
+class AMobilePlatform;
+
 UCLASS()
 class TOWARDSTHELIGHT_API AMechanism : public AActor
 {
@@ -16,7 +18,8 @@ public:
     USceneComponent* MeshActivator;
   UPROPERTY()
     UBoxComponent *Trigger;
-
+  UPROPERTY(EditAnywhere, Category = MechanismTarget)
+    AActor *Target;
 	//constructor
 	AMechanism();
 
@@ -35,6 +38,9 @@ public:
     void OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 private:
+  //MechanisState
   bool m_isPlayerOn;
+  //TargetVariables
+  AMobilePlatform *m_mobileTarget;
 	
 };

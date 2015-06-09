@@ -2,7 +2,7 @@
 
 #include "TowardsTheLight.h"
 #include "Mechanism.h"
-
+#include "MobilePlatform.h"
 
 AMechanism::AMechanism()
 {
@@ -12,19 +12,27 @@ AMechanism::AMechanism()
   MeshActivator = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshActivator"));
   MeshActivator->AttachTo(RootComponent);
   //trigger component
-  //trigger
   Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
   Trigger->SetCollisionProfileName(FName(TEXT("OverlapOnlyPawn")));
   Trigger->AttachTo(RootComponent);
   Trigger->bHiddenInGame = true;
   Trigger->bGenerateOverlapEvents = true;
+  //default values public properties
+  Target = nullptr;
   //initialize custom variables
   m_isPlayerOn = false;
+  m_mobileTarget = nullptr;
 }
 
 void AMechanism::BeginPlay()
 {
 	Super::BeginPlay();
+  m_mobileTarget = dynamic_cast<AMobilePlatform *>(Target);
+  //prueba de concepto
+  if(m_mobileTarget)
+    if (GEngine)
+      GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("He asignado una movil como referencia")));
+
   RegisterDelegate();
 }
 
