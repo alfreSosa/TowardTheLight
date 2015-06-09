@@ -27,6 +27,7 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick( float DeltaSeconds ) override;
   virtual void ReceiveActorOnInputTouchBegin(const ETouchIndex::Type FingerIndex) override;
+  //virtual void OnActorBeginOverlap() override;
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
   //Custom public functions
   void RegisterDelegate();
@@ -38,7 +39,8 @@ public:
     void OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 private:
-  //MechanisState
+  //MechanismState
+  bool m_isEnabled;
   bool m_isPlayerOn;
   //TargetVariables
   AMobilePlatform *m_mobileTarget;
