@@ -149,4 +149,5 @@ private:
   States m_stateInput;
   ETouchIndex::Type m_fingerIndexMovement;
   ETouchIndex::Type m_fingerIndexJump;
+  ETouchIndex::Type m_fingerIndexOther;
 };

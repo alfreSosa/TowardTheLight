@@ -124,6 +124,7 @@ APlayerOvi::APlayerOvi() {
   m_centerTouchX = 0.f;
   m_fingerIndexMovement = ETouchIndex::Touch10;
   m_fingerIndexJump = ETouchIndex::Touch10;
+  m_fingerIndexOther = ETouchIndex::Touch10;
   MarginInput = 50.f;
   m_stateInput = States::STOP;
   m_isInJumpTransition = false;
@@ -220,7 +221,7 @@ void APlayerOvi::SetupPlayerInputComponent(class UInputComponent* InputComponent
 }
 
 void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location) {
-  if (Location.X > m_limitViewPort1 && m_fingerIndexMovement != FingerIndex) { //JUMP
+  if (Location.X > m_limitViewPort1 && m_fingerIndexMovement != FingerIndex && m_fingerIndexOther != FingerIndex) { //JUMP
     OnStartJump();
     m_fingerIndexJump = FingerIndex;
     //if (!nearGear)
@@ -229,7 +230,7 @@ void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector
     //  puntero a nearGear->doAction();
     //}
   }
-  else if (Location.X < m_limitViewPort0){ //MOVEMENT SWIPE
+  else if (Location.X < m_limitViewPort0 && m_fingerIndexJump != FingerIndex && m_fingerIndexOther != FingerIndex){ //MOVEMENT SWIPE
     if (m_centerTouchX == 0){ //initial touch
       m_centerTouchX = Location.X;
       m_fingerIndexMovement = FingerIndex;
@@ -262,6 +263,8 @@ void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector
       }
     }
   }
+  else if (m_fingerIndexJump != FingerIndex && m_fingerIndexMovement != FingerIndex)
+    m_fingerIndexOther = FingerIndex;
 }
 
 void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location) {
@@ -269,13 +272,14 @@ void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Loc
     OnStopJump();
     m_fingerIndexJump = ETouchIndex::Touch10;
   }
-
-  if (FingerIndex == m_fingerIndexMovement){
+  else if (FingerIndex == m_fingerIndexMovement){
     m_centerTouchX = 0.f;
     m_fingerIndexMovement = ETouchIndex::Touch10;
     OnStopRight();
     OnStopLeft();
   }
+  else if (FingerIndex == m_fingerIndexOther)
+    m_fingerIndexOther = ETouchIndex::Touch10;
 }
 
 void APlayerOvi::OnStartRight() {
@@ -328,9 +332,12 @@ void APlayerOvi::DoJump(float DeltaTime){
   // movimiento uniformemente acelerado con aceleración AccelerationJump caidas libres
   if (m_isJumping && !m_headCollision) {
     if (m_actualJumpSpeed > 0) {
-      m_actualJumpSpeed -= AccelerationJump * DeltaTime;
-      m_enabledGravity = false;
       location += m_actualJumpSpeed * DeltaTime * up;
+
+      m_actualJumpSpeed -= AccelerationJump * DeltaTime;
+      if (m_actualJumpSpeed < 0)
+        m_actualJumpSpeed = 0;
+      m_enabledGravity = false;
     }
     else {
       m_actualJumpSpeed = 0;
