@@ -1,6 +1,7 @@
 #include "TowardsTheLight.h"
 #include "PlayerOvi.h"
 #include "MobilePlatform.h"
+#include "TimeManager.h"
 
 /************************************/
 /*DEBUG ALTERNATIVO*/
@@ -158,8 +159,10 @@ void APlayerOvi::BeginPlay(){
   StickMaterial->SetVectorParameterValue("BaculoColor", color);*/
 }
 
-void APlayerOvi::Tick(float DeltaTime){
-  Super::Tick(DeltaTime);
+void APlayerOvi::Tick(float DeltaSeconds){
+  DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+
+  Super::Tick(DeltaSeconds);
 
   if (m_limitViewPort0 == 0 && m_limitViewPort1 == 0){
     m_limitViewPort0 = GEngine->GameViewport->Viewport->GetSizeXY().X * 0.45;
@@ -167,9 +170,9 @@ void APlayerOvi::Tick(float DeltaTime){
   }
 
   float value = UpdateState();
-  DoMovement(DeltaTime, value);
-  DoJump(DeltaTime);
-  CalculateGravity(DeltaTime);
+  DoMovement(DeltaSeconds, value);
+  DoJump(DeltaSeconds);
+  CalculateGravity(DeltaSeconds);
   CheckCollision();
   CalculateOrientation();  
 }
@@ -306,14 +309,14 @@ void APlayerOvi::OnStopJump() {
   m_doJump = false;
 }
 
-void  APlayerOvi::DoMovement(float DeltaTime, float value){
+void  APlayerOvi::DoMovement(float DeltaSeconds, float value){
   FVector forward = GetActorForwardVector();
   FVector location = GetActorLocation();
-  location += MovementSpeed * DeltaTime * value * forward;
+  location += MovementSpeed * DeltaSeconds * value * forward;
   SetActorLocation(location);
 }
 
-void APlayerOvi::DoJump(float DeltaTime){
+void APlayerOvi::DoJump(float DeltaSeconds){
   if (m_hasLanded && !m_doJump) {
     m_isJumping = false;
     m_headCollision = false;
@@ -332,9 +335,9 @@ void APlayerOvi::DoJump(float DeltaTime){
   // movimiento uniformemente acelerado con aceleración AccelerationJump caidas libres
   if (m_isJumping && !m_headCollision) {
     if (m_actualJumpSpeed > 0) {
-      location += m_actualJumpSpeed * DeltaTime * up;
+      location += m_actualJumpSpeed * DeltaSeconds * up;
 
-      m_actualJumpSpeed -= AccelerationJump * DeltaTime;
+      m_actualJumpSpeed -= AccelerationJump * DeltaSeconds;
       if (m_actualJumpSpeed < 0)
         m_actualJumpSpeed = 0;
       m_enabledGravity = false;
@@ -350,17 +353,17 @@ void APlayerOvi::DoJump(float DeltaTime){
   SetActorLocation(location);
 }
 
-void APlayerOvi::CalculateGravity(float DeltaTime){
+void APlayerOvi::CalculateGravity(float DeltaSeconds){
   FVector up = GetActorUpVector();
   FVector location = GetActorLocation();
 
   if (m_enabledGravity) {
     if (m_actualJumpSpeed < JumpSpeed)
-      m_actualJumpSpeed += AccelerationJump * DeltaTime;
+      m_actualJumpSpeed += AccelerationJump * DeltaSeconds;
     else{
       m_actualJumpSpeed = JumpSpeed;
     }
-    location -= m_actualJumpSpeed * DeltaTime * up;
+    location -= m_actualJumpSpeed * DeltaSeconds * up;
     SetActorLocation(location);
   }
 }

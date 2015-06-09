@@ -37,13 +37,6 @@ void AAltar::BeginPlay()
   RegisterDelegate();
 }
 
-// Called every frame
-void AAltar::Tick( float DeltaTime )
-{
-	Super::Tick( DeltaTime );
-
-}
-
 void AAltar::RegisterDelegate() {
   if (!Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AAltar::OnBeginTriggerOverlap)) {
     Trigger->OnComponentBeginOverlap.AddDynamic(this, &AAltar::OnBeginTriggerOverlap);

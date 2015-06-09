@@ -51,6 +51,7 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\MobilePlatform.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\StaticEnemy.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\TimeManager.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Tower.cpp" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Altar.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h" />
@@ -67,6 +68,7 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\stringbuffer.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\writer.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\StaticEnemy.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\TimeManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Tower.h" />
     <None Include="..\..\TowardsTheLight.uproject" />
     <None Include="..\..\Source\TowardsTheLight.Target.cs" />

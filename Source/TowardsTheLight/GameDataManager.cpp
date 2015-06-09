@@ -22,29 +22,6 @@ GameDataManager::GameDataManager() {
   m_data = "";
   m_filePath = FPaths::GameContentDir() + m_filePath;
 
-  //solucion normal
-  //FFileHelper::LoadFileToString(m_data, *m_filePath);
-  
-  //solucion con FILE*
-  //FILE * pFile;
-  //fopen_s(&pFile, TCHAR_TO_ANSI(*m_filePath), "r");
-
-  //if (pFile){
-  //  char buffer[256];
-  //  while (!feof(pFile)){
-  //    if (fgets(buffer, 256, pFile) == NULL) break;
-  //    m_data = m_data + FString(buffer);
-  //  }
-  //  fclose(pFile);
-  //}
-  //else{
-  //  FString content("{\"general\":{\"sound\":true}, \"levels\" : []}");
-  //  m_data = content;
-  //  SavedGame();
-  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GUARDANDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")));
-  //}
-
-  //solucion con parseo
   FFileHelper::LoadFileToString(m_data, *m_filePath);
   Document doc;
   doc.Parse<0>(TCHAR_TO_ANSI(*m_data));

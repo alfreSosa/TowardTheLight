@@ -11,12 +11,3 @@ AStaticPlatform::AStaticPlatform()
   this->Tags.Add("Platform");
 }
 
-// Called when the game starts or when spawned
-void AStaticPlatform::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-
-

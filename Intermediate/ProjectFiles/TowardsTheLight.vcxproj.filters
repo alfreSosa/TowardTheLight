@@ -106,6 +106,9 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\Mechanism.h">
       <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\TimeManager.h">
+      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp">
@@ -154,6 +157,9 @@
       <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\OviPlayerController.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\TimeManager.cpp">
       <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
     </ClCompile>
   </ItemGroup>

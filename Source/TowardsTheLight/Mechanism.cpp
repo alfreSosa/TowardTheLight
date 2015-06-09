@@ -3,6 +3,7 @@
 #include "TowardsTheLight.h"
 #include "Mechanism.h"
 #include "MobilePlatform.h"
+#include "TimeManager.h"
 
 AMechanism::AMechanism()
 {
@@ -39,9 +40,11 @@ void AMechanism::BeginPlay()
   RegisterDelegate();
 }
 
-void AMechanism::Tick( float DeltaTime )
+void AMechanism::Tick(float DeltaSeconds)
 {
-	Super::Tick( DeltaTime );
+  DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+
+  Super::Tick(DeltaSeconds);
 
 }
 

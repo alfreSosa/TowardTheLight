@@ -105,9 +105,9 @@ private:
 
   float UpdateState();
   void CalculateOrientation();
-  void CalculateGravity(float DeltaTime);
-  void DoJump(float DeltaTime);
-  void DoMovement(float DeltaTime, float value);
+  void CalculateGravity(float DeltaSeconds);
+  void DoJump(float DeltaSeconds);
+  void DoMovement(float DeltaSeconds, float value);
   void CheckCollision();
   //void CheckMobilePlatform();
   void AjustPosition();

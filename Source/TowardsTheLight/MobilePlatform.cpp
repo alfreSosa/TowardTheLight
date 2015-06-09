@@ -3,6 +3,7 @@
 #include "TowardsTheLight.h"
 #include "MobilePlatform.h"
 #include "PlayerOvi.h"
+#include "TimeManager.h"
 
 
 AMobilePlatform::AMobilePlatform() {
@@ -31,7 +32,8 @@ void AMobilePlatform::BeginPlay() {
 }
 
 void AMobilePlatform::Tick(float DeltaSeconds) {
-  Super::BeginPlay();
+  DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+
   if (!m_player)
     for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
       if (ActorItr->ActorHasTag("Player")){

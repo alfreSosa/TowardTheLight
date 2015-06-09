@@ -30,10 +30,3 @@ void APickableItem::ReceiveActorBeginOverlap(AActor* OtherActor) {
   }
 }
 
-// Called when the game starts or when spawned
-void APickableItem::BeginPlay() {
-	Super::BeginPlay();
-	
-}
-
-
