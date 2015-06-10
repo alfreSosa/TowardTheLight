@@ -19,6 +19,9 @@ ATappable::ATappable()
   Trigger->AttachTo(RootComponent);
   Trigger->bHiddenInGame = true;
   Trigger->bGenerateOverlapEvents = true;
+
+  /* XXXComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+     XXXComponent->SetCollisionResponseToChannel(ECC_XXX, ECollisionResponse::ECR_Overlap);*/
   //default values public properties
 
   //initialize custom variables
