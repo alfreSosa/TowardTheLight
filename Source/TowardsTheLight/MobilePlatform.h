@@ -48,8 +48,10 @@ public:
     float Speed;
   UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float InitialDelay;
-  UPROPERTY(EditAnywhere, Category = MobilePlatform)
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
     bool Enabled;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    bool DisableAtEndState;
 
   //FVector GetPlatformMovement() const;
 };
