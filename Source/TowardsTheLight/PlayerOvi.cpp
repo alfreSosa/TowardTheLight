@@ -645,6 +645,8 @@ void APlayerOvi::CheckCollision() {
             }
           }
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDown[i].Location, -m_capsuleHeight));
+          m_hasLanded = true;
+          m_actualJumpSpeed = JumpSpeed; 
           break;
         }
     }
@@ -665,6 +667,8 @@ void APlayerOvi::CheckCollision() {
               }
             }
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
+            m_hasLanded = true;
+            m_actualJumpSpeed = JumpSpeed; 
             break;
           }
       }
@@ -685,11 +689,12 @@ void APlayerOvi::CheckCollision() {
             }
           }
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownRigthF[i].Location, -m_capsuleHeight));
+          m_hasLanded = true;
+          m_actualJumpSpeed = JumpSpeed; 
           break;
         }
     }
-    m_hasLanded = true;
-    m_actualJumpSpeed = JumpSpeed;
+    
   }
   else {
     if (m_currentMobile) {
@@ -704,6 +709,8 @@ void APlayerOvi::CheckCollision() {
         for (int i = 0; i < size; i++)
           if (OutTraceResultUp[i].GetActor()->ActorHasTag("Platform")) {
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUp[i].Location, m_capsuleHeight));
+            m_headCollision = true;
+            m_actualJumpSpeed = 0.0f; 
             break;
           }
       }
@@ -713,6 +720,8 @@ void APlayerOvi::CheckCollision() {
           for (int i = 0; i < size; i++)
             if (OutTraceResultUpLeftF[i].GetActor()->ActorHasTag("Platform")) {
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpLeftF[i].Location, m_capsuleHeight));
+            m_headCollision = true;
+            m_actualJumpSpeed = 0.0f; 
             break;
             }
         }
@@ -722,11 +731,11 @@ void APlayerOvi::CheckCollision() {
         for (int i = 0; i < size; i++)
           if (OutTraceResultUpRigthF[i].GetActor()->ActorHasTag("Platform")) {
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpRigthF[i].Location, m_capsuleHeight));
+            m_headCollision = true;
+            m_actualJumpSpeed = 0.0f;
             break;
           }
       }
-      m_headCollision = true;
-      m_actualJumpSpeed = 0.0f;
     }
   }
 }
