@@ -348,6 +348,7 @@ void APlayerOvi::DoJump(float DeltaSeconds){
       m_isJumping = false;
     }
   } else {
+    m_isFalling = !m_hasLanded;
     m_enabledGravity = true;
   }
 
@@ -866,6 +867,10 @@ bool APlayerOvi::PlayerStopRunning() {
 
 bool APlayerOvi::isPlayerJumping() {
   return m_isJumping;
+}
+
+bool APlayerOvi::isPlayerFalling() {
+  return m_isFalling;
 }
 
 bool APlayerOvi::PlayerHasLanded() {

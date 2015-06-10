@@ -96,6 +96,8 @@ public:
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
     bool isPlayerJumping();
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool isPlayerFalling();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
     bool PlayerHasLanded();
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
 	  bool PlayerisToRight();
@@ -120,7 +122,8 @@ private:
 	bool m_right;
 	bool m_left;
   bool m_doJump;
-	bool m_isJumping;
+  bool m_isJumping;
+  bool m_isFalling;
   bool m_hasLanded;
   bool m_headCollision;
   bool m_enabledGravity;
