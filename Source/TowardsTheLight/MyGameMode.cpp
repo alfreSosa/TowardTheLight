@@ -74,18 +74,10 @@ float AMyGameMode::GetActualOrbs() {
 }
 
 void AMyGameMode::SetPauseBP(bool enable) {
-  //AOviPlayerController* const PlayerController = (AOviPlayerController*)GetWorld()->GetFirstPlayerController();
-  //if (PlayerController != NULL)
-  //  PlayerController->SetPause(enable);
   TimeManager::Instance()->SetPause(enable);
 }
 
 bool AMyGameMode::IsPausedBP() {
-  //AOviPlayerController* const PlayerController = (AOviPlayerController*)GetWorld()->GetFirstPlayerController();
-  //if (PlayerController != NULL)
-  //  return PlayerController->IsPaused();
-  //return false;
-
   return TimeManager::Instance()->IsPaused();
 }
 
