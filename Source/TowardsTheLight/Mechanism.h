@@ -2,22 +2,18 @@
 
 #pragma once
 
-#include "GameFramework/Actor.h"
+#include "Tappable.h"
 #include "Mechanism.generated.h"
 
 class AMobilePlatform;
 
 UCLASS()
-class TOWARDSTHELIGHT_API AMechanism : public AActor
+class TOWARDSTHELIGHT_API AMechanism : public ATappable
 {
 	GENERATED_BODY()
 	
 public:
   //Properties
-  UPROPERTY(EditAnywhere, Category = Activator)
-    USceneComponent* MeshActivator;
-  UPROPERTY()
-    UBoxComponent *Trigger;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
     AActor *Target;
 	//constructor
@@ -26,22 +22,12 @@ public:
 	//Class Functions
 	virtual void BeginPlay() override;
 	virtual void Tick( float DeltaSeconds ) override;
-  virtual void ReceiveActorOnInputTouchBegin(const ETouchIndex::Type FingerIndex) override;
-  //virtual void OnActorBeginOverlap() override;
-  void EndPlay(const EEndPlayReason::Type EndPlayReason);
-  //Custom public functions
-  void RegisterDelegate();
-
-  //Delegates
-  UFUNCTION()
-    void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-  UFUNCTION()
-    void OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+  virtual void Activate(bool enabled);
+  virtual void Execute();
 
 private:
   //MechanismState
   bool m_isEnabled;
-  bool m_isPlayerOn;
   //TargetVariables
   AMobilePlatform *m_mobileTarget;
 	
