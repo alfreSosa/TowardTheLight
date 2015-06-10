@@ -17,7 +17,7 @@ const float DEFAULT_MOVEMENT_SPEED = 620.0f; //ajustado a valores de diseño
 const float DEFAULT_JUMP_SPEED = 1550.0f; //ajustado a valores de diseño
 const float DEFAULT_JUMP_ACC = 3300.0f; //ajustado a valores de diseño
 
-
+class AMobilePlatform;
 UCLASS()
 class TOWARDSTHELIGHT_API APlayerOvi : public APawn
 {
@@ -125,6 +125,9 @@ private:
   bool m_headCollision;
   bool m_enabledGravity;
   bool m_isInJumpTransition;
+
+  bool m_isOnMobilePlatform;
+  AMobilePlatform *m_currentMobile;
 
   bool m_hasKey;
 

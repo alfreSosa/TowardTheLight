@@ -107,7 +107,7 @@ APlayerOvi::APlayerOvi() {
   m_state = States::RIGHT;
   m_limit = 0;
   m_right = m_left = false;
-  m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
+  m_isOnMobilePlatform = m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
   m_enabledGravity = true;
   
   JumpSpeed = DEFAULT_JUMP_SPEED;
@@ -132,6 +132,7 @@ APlayerOvi::APlayerOvi() {
   m_transitionDistance = 0.0f;
 
   bPlayerRunning = false;
+  m_currentMobile = nullptr;
 }
 
 void APlayerOvi::BeginPlay(){
@@ -357,7 +358,8 @@ void APlayerOvi::CalculateGravity(float DeltaSeconds){
   FVector up = GetActorUpVector();
   FVector location = GetActorLocation();
 
-  if (m_enabledGravity) {
+  if (m_enabledGravity && !m_hasLanded && !m_isOnMobilePlatform) {
+    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Gravity")));
     if (m_actualJumpSpeed < JumpSpeed)
       m_actualJumpSpeed += AccelerationJump * DeltaSeconds;
     else{
@@ -626,11 +628,21 @@ void APlayerOvi::CheckCollision() {
   bool collisionUpRightF = OutTraceResultUp.Num() > 0;
 
   if (collisionDown || collisionDownLeftF || collisionDownRightF) {
-
     if (collisionDown) {
       int size = OutTraceResultDown.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultDown[i].GetActor()->ActorHasTag("Platform")) {
+          if (OutTraceResultDown[i].GetActor()->ActorHasTag("MobilePlatform")) {
+            AMobilePlatform *movil = dynamic_cast<AMobilePlatform *>(OutTraceResultDown[i].GetActor());
+            if (movil) {
+              if (m_currentMobile)
+                if (m_currentMobile != movil) 
+                  m_currentMobile->SetPlayerOn(false);
+
+              m_currentMobile = movil;
+              m_currentMobile->SetPlayerOn(true);
+            }
+          }
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDown[i].Location, -m_capsuleHeight));
           break;
         }
@@ -640,6 +652,17 @@ void APlayerOvi::CheckCollision() {
         int size = OutTraceResultDownLeftF.Num();
         for (int i = 0; i < size; i++)
           if (OutTraceResultDownLeftF[i].GetActor()->ActorHasTag("Platform")) {
+            if (OutTraceResultDownLeftF[i].GetActor()->ActorHasTag("MobilePlatform")) {
+              AMobilePlatform *movil = dynamic_cast<AMobilePlatform *>(OutTraceResultDownLeftF[i].GetActor());
+              if (movil) {
+                if (m_currentMobile)
+                  if (m_currentMobile != movil)
+                    m_currentMobile->SetPlayerOn(false);
+                
+                m_currentMobile = movil;
+                m_currentMobile->SetPlayerOn(true);
+              }
+            }
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
             break;
           }
@@ -649,6 +672,17 @@ void APlayerOvi::CheckCollision() {
       int size = OutTraceResultDownRigthF.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultDownRigthF[i].GetActor()->ActorHasTag("Platform")) {
+          if (OutTraceResultDownRigthF[i].GetActor()->ActorHasTag("MobilePlatform")) {
+            AMobilePlatform *movil = dynamic_cast<AMobilePlatform *>(OutTraceResultDownRigthF[i].GetActor());
+            if (movil) {
+              if (m_currentMobile)
+                if (m_currentMobile != movil)
+                  m_currentMobile->SetPlayerOn(false);
+              
+              m_currentMobile = movil;
+              m_currentMobile->SetPlayerOn(true);
+            }
+          }
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownRigthF[i].Location, -m_capsuleHeight));
           break;
         }
@@ -657,6 +691,11 @@ void APlayerOvi::CheckCollision() {
     m_actualJumpSpeed = JumpSpeed;
   }
   else {
+    if (m_currentMobile) {
+      m_currentMobile->SetPlayerOn(false);
+      m_isOnMobilePlatform = false;
+      m_currentMobile = nullptr;
+    }
     m_hasLanded = false;
     if (collisionUp || collisionUpLeftF || collisionUpRightF) {
       if (collisionUp) {
@@ -731,78 +770,83 @@ FVector APlayerOvi::RecalculateLocation(FVector Direction, FVector Location, FVe
 
 void APlayerOvi::OnMobilePlatform(AMobilePlatform *mp, FVector movement){
   if (!m_isJumping){
-    TArray<FHitResult> OutTraceResultDown;
-    TArray<FHitResult> OutTraceResultDownLeftF;
-    TArray<FHitResult> OutTraceResultDownRigthF;
+    FVector loc = GetActorLocation();
+    SetActorLocation(loc + movement);
+    m_isOnMobilePlatform = true;
+  //  TArray<FHitResult> OutTraceResultDown;
+  //  TArray<FHitResult> OutTraceResultDownLeftF;
+  //  TArray<FHitResult> OutTraceResultDownRigthF;
 
-    // Calculate the start location for trace  
-    FVector StartTrace = m_lastPosition;
-    FVector StartTraceLeftF = StartTrace + GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
-    FVector StartTraceRigthF = StartTrace - GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
+  //  // Calculate the start location for trace  
+  //  FVector StartTrace = m_lastPosition;
+  //  FVector StartTraceLeftF = StartTrace + GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
+  //  FVector StartTraceRigthF = StartTrace - GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
 
-    // Calculate endpoint of trace  
-    const FVector EndTraceDown = GetActorLocation() - GetActorUpVector() * m_capsuleHeight;
+  //  // Calculate endpoint of trace  
+  //  const FVector EndTraceDown = GetActorLocation() - GetActorUpVector() * m_capsuleHeight;
 
-    FVector newLocationUp;
-    newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
-    newLocationUp.Y = (FMath::Abs(GetActorUpVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
-    newLocationUp.Z = (FMath::Abs(GetActorUpVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
+  //  FVector newLocationUp;
+  //  newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
+  //  newLocationUp.Y = (FMath::Abs(GetActorUpVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
+  //  newLocationUp.Z = (FMath::Abs(GetActorUpVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
 
-    const FVector EndTraceDownLeftF = (newLocationUp + GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
-    const FVector EndTraceDownRightF = (newLocationUp - GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
+  //  const FVector EndTraceDownLeftF = (newLocationUp + GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
+  //  const FVector EndTraceDownRightF = (newLocationUp - GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
 
-    // Setup the trace query  
-    static FName FireTraceIdent = FName(TEXT("MobilePlatform"));
-    FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
-    TraceParams.bTraceAsyncScene = true;
-    TraceParams.bFindInitialOverlaps = true;
-    TraceParams.bTraceComplex = true;
+  //  // Setup the trace query  
+  //  static FName FireTraceIdent = FName(TEXT("MobilePlatform"));
+  //  FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
+  //  TraceParams.bTraceAsyncScene = true;
+  //  TraceParams.bFindInitialOverlaps = true;
+  //  TraceParams.bTraceComplex = true;
 
-    FCollisionResponseParams ResponseParam(ECollisionResponse::ECR_Overlap);
+  //  FCollisionResponseParams ResponseParam(ECollisionResponse::ECR_Overlap);
 
-    GetWorld()->LineTraceMulti(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_PLAYER, TraceParams, ResponseParam);
-    bool collisionDown = OutTraceResultDown.Num() > 0;
-    GetWorld()->LineTraceMulti(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_PLAYER, TraceParams, ResponseParam);
-    bool collisionDownLeftF = OutTraceResultDownLeftF.Num() > 0;
-    GetWorld()->LineTraceMulti(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_PLAYER, TraceParams, ResponseParam);
-    bool collisionDownRightF = OutTraceResultDownRigthF.Num() > 0;
+  //  GetWorld()->LineTraceMulti(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_PLAYER, TraceParams, ResponseParam);
+  //  bool collisionDown = OutTraceResultDown.Num() > 0;
+  //  GetWorld()->LineTraceMulti(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_PLAYER, TraceParams, ResponseParam);
+  //  bool collisionDownLeftF = OutTraceResultDownLeftF.Num() > 0;
+  //  GetWorld()->LineTraceMulti(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_PLAYER, TraceParams, ResponseParam);
+  //  bool collisionDownRightF = OutTraceResultDownRigthF.Num() > 0;
 
-    if (collisionDown || collisionDownLeftF || collisionDownRightF) {
+  //  if (collisionDown || collisionDownLeftF || collisionDownRightF) {
 
-      if (collisionDown) {
-        int size = OutTraceResultDown.Num();
-        for (int i = 0; i < size; i++)
-          if (OutTraceResultDown[i].GetActor()->ActorHasTag("MobilePlatform")) {
-            AMobilePlatform *mobile = dynamic_cast<AMobilePlatform *>(OutTraceResultDown[i].GetActor());
-            if (mobile == mp) {
-              FVector loc = GetActorLocation();
-              SetActorLocation(loc + movement);
-            }
-          }
-      }
-      else if (collisionDownLeftF) {
-        int size = OutTraceResultDownLeftF.Num();
-        for (int i = 0; i < size; i++)
-          if (OutTraceResultDownLeftF[i].GetActor()->ActorHasTag("MobilePlatform")) {
-            AMobilePlatform *mobile = dynamic_cast<AMobilePlatform *>(OutTraceResultDownLeftF[i].GetActor());
-            if (mobile == mp) {
-              FVector loc = GetActorLocation();
-              SetActorLocation(loc + movement);
-            }
-          }
-      }
-      else if (collisionDownRightF) {
-        int size = OutTraceResultDownRigthF.Num();
-        for (int i = 0; i < size; i++)
-          if (OutTraceResultDownRigthF[i].GetActor()->ActorHasTag("MobilePlatform")) {
-            AMobilePlatform *mobile = dynamic_cast<AMobilePlatform *>(OutTraceResultDownRigthF[i].GetActor());
-            if (mobile == mp) {
-              FVector loc = GetActorLocation();
-              SetActorLocation(loc + movement);
-            }
-          }
-      }
-    }
+  //    if (collisionDown) {
+  //      int size = OutTraceResultDown.Num();
+  //      for (int i = 0; i < size; i++)
+  //        if (OutTraceResultDown[i].GetActor()->ActorHasTag("MobilePlatform")) {
+  //          AMobilePlatform *mobile = dynamic_cast<AMobilePlatform *>(OutTraceResultDown[i].GetActor());
+  //          if (mobile == mp) {
+  //            FVector loc = GetActorLocation();
+  //            SetActorLocation(loc + movement);
+  //          }
+  //        }
+  //    }
+  //    else if (collisionDownLeftF) {
+  //      int size = OutTraceResultDownLeftF.Num();
+  //      for (int i = 0; i < size; i++)
+  //        if (OutTraceResultDownLeftF[i].GetActor()->ActorHasTag("MobilePlatform")) {
+  //          AMobilePlatform *mobile = dynamic_cast<AMobilePlatform *>(OutTraceResultDownLeftF[i].GetActor());
+  //          if (mobile == mp) {
+  //            FVector loc = GetActorLocation();
+  //            SetActorLocation(loc + movement);
+  //          }
+  //        }
+  //    }
+  //    else if (collisionDownRightF) {
+  //      int size = OutTraceResultDownRigthF.Num();
+  //      for (int i = 0; i < size; i++)
+  //        if (OutTraceResultDownRigthF[i].GetActor()->ActorHasTag("MobilePlatform")) {
+  //          AMobilePlatform *mobile = dynamic_cast<AMobilePlatform *>(OutTraceResultDownRigthF[i].GetActor());
+  //          if (mobile == mp) {
+  //            FVector loc = GetActorLocation();
+  //            SetActorLocation(loc + movement);
+  //          }
+  //        }
+  //    }
+  //  }
+  } else{
+    m_isOnMobilePlatform = false;
   }
   
 }

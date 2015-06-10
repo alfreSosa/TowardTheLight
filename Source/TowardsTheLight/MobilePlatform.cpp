@@ -22,7 +22,7 @@ AMobilePlatform::AMobilePlatform() {
   m_timer = 0;
   m_state = INITIAL_DELAY;
   m_currentDistance = 0;
-
+  m_isPlayerOn = false;
 }
 
 void AMobilePlatform::BeginPlay() {
@@ -42,7 +42,7 @@ void AMobilePlatform::Tick(float DeltaSeconds) {
       }
 
   doMovement(DeltaSeconds);
-  if (m_player)
+  if (m_player && m_isPlayerOn)
     m_player->OnMobilePlatform(this, m_movement);
 }
 
@@ -117,6 +117,9 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
   }
 }
 
+void AMobilePlatform::SetPlayerOn(bool on) {
+  m_isPlayerOn = on;
+}
 //FVector AMobilePlatform::GetPlatformMovement() const{
 //  return m_movement;
 //}
