@@ -103,6 +103,7 @@ APlayerOvi::APlayerOvi() {
 
   //key Initialization
   m_hasKey = false;
+  m_colorKey = FLinearColor(0.0f, 0.0f, 0.0f);
 
   m_state = States::RIGHT;
   m_limit = 0;
@@ -861,13 +862,23 @@ void APlayerOvi::OnMobilePlatform(AMobilePlatform *mp, FVector movement){
   
 }
 
-void APlayerOvi::SetKey(bool key, FColor colorKey) {
+void APlayerOvi::SetKey(bool key, FLinearColor colorKey) {
   m_hasKey = key;
-  if (m_hasKey)
+  if (m_hasKey){
     StickMaterial->SetScalarParameterValue("Brillo", 5.0f);
+    m_colorKey = colorKey;
+  }
   else
     StickMaterial->SetScalarParameterValue("Brillo", 0.0f);
   StickMaterial->SetVectorParameterValue("BaculoColor", colorKey);
+}
+
+bool APlayerOvi::HasKey(){
+  return m_hasKey;
+}
+
+FLinearColor APlayerOvi::GetColorKey(){
+  return m_colorKey;
 }
 
 bool APlayerOvi::isPlayerRunning() { 

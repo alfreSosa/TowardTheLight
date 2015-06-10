@@ -31,8 +31,7 @@ AAltar::AAltar()
 }
 
 // Called when the game starts or when spawned
-void AAltar::BeginPlay()
-{
+void AAltar::BeginPlay(){
 	Super::BeginPlay();
   RegisterDelegate();
 }

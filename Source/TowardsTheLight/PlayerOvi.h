@@ -87,7 +87,11 @@ public:
     float AccelerationJump;
 
   void OnMobilePlatform(class AMobilePlatform *mp, FVector movement);
-  void SetKey(bool key, FColor colorKey);
+  
+  void SetKey(bool key, FLinearColor colorKey);
+  bool HasKey();
+  FLinearColor GetColorKey();
+
 
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
     bool isPlayerRunning();
@@ -135,6 +139,7 @@ private:
   AMobilePlatform *m_currentMobile;
 
   bool m_hasKey;
+  FLinearColor m_colorKey;
 
   bool bPlayerRunning;
 	float m_limit;
