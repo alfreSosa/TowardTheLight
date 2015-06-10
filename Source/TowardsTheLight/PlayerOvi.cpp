@@ -854,6 +854,10 @@ void APlayerOvi::OnMobilePlatform(AMobilePlatform *mp, FVector movement){
 
 void APlayerOvi::SetKey(bool key, FColor colorKey) {
   m_hasKey = key;
+  if (m_hasKey)
+    StickMaterial->SetScalarParameterValue("Brillo", 1.0f);
+  else
+    StickMaterial->SetScalarParameterValue("Brillo", 0.0f);
   StickMaterial->SetVectorParameterValue("BaculoColor", colorKey);
 }
 
@@ -879,4 +883,8 @@ bool APlayerOvi::PlayerHasLanded() {
 
 bool APlayerOvi::PlayerisToRight() {
 	return (m_state == States::RIGHT);
+}
+
+bool APlayerOvi::isPlayerPaused() {
+  return TimeManager::Instance()->IsPaused();
 }

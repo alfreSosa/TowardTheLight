@@ -101,6 +101,8 @@ public:
     bool PlayerHasLanded();
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
 	  bool PlayerisToRight();
+  UFUNCTION(BlueprintCallable, Category = "PlayerState")
+    bool isPlayerPaused();
 private:
 
   UMaterialInstanceDynamic *StickMaterial;
