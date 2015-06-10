@@ -34,6 +34,8 @@ public:
   virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;
   void SetPlayerOn(bool on);
+  void ChangeEnabled(bool enabled);
+  bool isEnabled();
   UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float RightDistance;
   UPROPERTY(EditAnywhere, Category = MobilePlatform)
@@ -46,6 +48,8 @@ public:
     float Speed;
   UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float InitialDelay;
+  UPROPERTY(EditAnywhere, Category = MobilePlatform)
+    bool Enabled;
 
   //FVector GetPlatformMovement() const;
 };

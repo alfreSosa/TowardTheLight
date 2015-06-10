@@ -33,17 +33,18 @@ void AMobilePlatform::BeginPlay() {
 
 void AMobilePlatform::Tick(float DeltaSeconds) {
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+  if (Enabled) {
+    if (!m_player)
+      for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
+        if (ActorItr->ActorHasTag("Player")){
+          m_player = (APlayerOvi*)*ActorItr;
+          break;
+        }
 
-  if (!m_player)
-    for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
-      if (ActorItr->ActorHasTag("Player")){
-        m_player = (APlayerOvi*)*ActorItr;
-        break;
-      }
-
-  doMovement(DeltaSeconds);
-  if (m_player && m_isPlayerOn)
-    m_player->OnMobilePlatform(this, m_movement);
+    doMovement(DeltaSeconds);
+    if (m_player && m_isPlayerOn)
+      m_player->OnMobilePlatform(this, m_movement);
+  }
 }
 
 void AMobilePlatform::doMovement(float DeltaSeconds){
@@ -119,6 +120,14 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
 
 void AMobilePlatform::SetPlayerOn(bool on) {
   m_isPlayerOn = on;
+}
+
+void AMobilePlatform::ChangeEnabled(bool enabled) {
+  Enabled = enabled;
+}
+
+bool AMobilePlatform::isEnabled() {
+  return Enabled;
 }
 //FVector AMobilePlatform::GetPlatformMovement() const{
 //  return m_movement;

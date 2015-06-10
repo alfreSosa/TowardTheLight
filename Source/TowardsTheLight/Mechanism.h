@@ -16,6 +16,10 @@ public:
   //Properties
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
     AActor *Target;
+  UPROPERTY(EditAnywhere, Category = MechanismTarget)
+    bool CanActivate;
+  UPROPERTY(EditAnywhere, Category = MechanismTarget)
+    bool CanDisactivate;
 	//constructor
 	AMechanism();
 

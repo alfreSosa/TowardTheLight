@@ -18,8 +18,6 @@ public:
     FLinearColor ColorKey;
   UPROPERTY(EditAnywhere, Category = Altar)
     USceneComponent* OurVisibleComponent;
-  UPROPERTY(EditAnywhere, Category = Altar)
-    UStaticMeshComponent* Orientation;
 
 private:
   UPROPERTY()

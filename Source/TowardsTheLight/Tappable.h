@@ -5,6 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "Tappable.generated.h"
 
+class APlayerOvi;
 UCLASS()
 class TOWARDSTHELIGHT_API ATappable : public AActor
 {
@@ -16,6 +17,10 @@ public:
     USceneComponent* MeshActivator;
   UPROPERTY()
     UBoxComponent *Trigger;
+  UPROPERTY(EditAnywhere, Category = Activator)
+    bool NeedKey;
+  UPROPERTY(EditAnywhere, Category = Activator)
+    FLinearColor ColorKey;
 	// Sets default values for this actor's properties
 	ATappable();
 
@@ -39,5 +44,7 @@ public:
 protected:
   //MechanismState
   bool m_isPlayerOn;
+private:
+  APlayerOvi *m_player;
 	
 };
