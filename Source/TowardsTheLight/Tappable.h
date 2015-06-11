@@ -42,9 +42,6 @@ public:
   UFUNCTION()
     void OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 protected:
-  //MechanismState
   bool m_isPlayerOn;
-private:
   APlayerOvi *m_player;
-	
 };

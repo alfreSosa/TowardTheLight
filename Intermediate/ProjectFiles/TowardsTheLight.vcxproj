@@ -50,6 +50,7 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\MobileEnemy.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\MobilePlatform.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\Portal.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\StaticEnemy.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Tappable.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\TimeManager.cpp" />
@@ -61,6 +62,7 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\MobileEnemy.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\MobilePlatform.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\PickableItem.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\Portal.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\document.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\filestream.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\prettywriter.h" />
