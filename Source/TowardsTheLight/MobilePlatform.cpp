@@ -17,6 +17,7 @@ AMobilePlatform::AMobilePlatform() {
   LeftDelay = 1.f;
   Speed = 100.f;
   InitialDelay = 1.f;
+  Enabled = true;
 
   //private variables
   m_timer = 0;
