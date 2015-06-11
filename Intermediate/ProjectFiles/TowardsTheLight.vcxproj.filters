@@ -23,21 +23,6 @@
     <Filter Include="Source\TowardsTheLight">
       <UniqueIdentifier>{AFF64995-8ABF-4767-AB1F-36C6FDA4ACAD}</UniqueIdentifier>
     </Filter>
-    <None Include="..\..\Source\TowardsTheLight\TowardsTheLight.Build.cs">
-      <Filter>Source\TowardsTheLight</Filter>
-    </None>
-    <ClCompile Include="..\..\Source\TowardsTheLight\TowardsTheLight.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\TowardsTheLight\TowardsTheLight.h">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\Source\TowardsTheLight\TowardsTheLightGameMode.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\TowardsTheLight\TowardsTheLightGameMode.h">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClInclude>
     <Filter Include="Source\TowardsTheLight\Resources">
       <UniqueIdentifier>{41E8AA72-B35C-465C-B247-8A6609730420}</UniqueIdentifier>
     </Filter>
@@ -47,29 +32,11 @@
     <ResourceCompile Include="..\..\Source\TowardsTheLight\Resources\Windows\TowardsTheLight.rc">
       <Filter>Source\TowardsTheLight\Resources\Windows</Filter>
     </ResourceCompile>
+    <None Include="..\..\Source\TowardsTheLight\TowardsTheLight.Build.cs">
+      <Filter>Source</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\TowardsTheLight\MyGameMode.h">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\OviCameraActor.h">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\PlayerOvi.h">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\OviPlayerController.h">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\StaticPlatform.h">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\Tower.h">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\PickableItem.h">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\document.h">
       <Filter>Source\TowardsTheLight\rapidjson</Filter>
     </ClInclude>
@@ -91,64 +58,121 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\writer.h">
       <Filter>Source\TowardsTheLight\rapidjson</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\MobilePlatform.h">
-      <Filter>Source\TowardsTheLight</Filter>
+    <ClInclude Include="..\..\Source\TowardsTheLight\Altar.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\TowardsTheLight\MobileEnemy.h">
-      <Filter>Source\TowardsTheLight</Filter>
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\MobilePlatform.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\OviCameraActor.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\PickableItem.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\PlayerOvi.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\TowardsTheLight\StaticEnemy.h">
-      <Filter>Source\TowardsTheLight</Filter>
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\Altar.h">
-      <Filter>Source\TowardsTheLight</Filter>
+    <ClInclude Include="..\..\Source\TowardsTheLight\StaticPlatform.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\Tower.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h">
-      <Filter>Source\TowardsTheLight</Filter>
+      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\TowardsTheLight\MenuGameMode.h">
-      <Filter>Source\TowardsTheLight</Filter>
+      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\MyGameMode.h">
+      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\OviPlayerController.h">
+      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\TowardsTheLight.h">
+      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\TowardsTheLightGameMode.h">
+      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\Mechanism.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\TimeManager.h">
+      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\Tappable.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\Portal.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\TowardsTheLight\MyGameMode.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
+    <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\OviCameraActor.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TowardsTheLight\PlayerOvi.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TowardsTheLight\OviPlayerController.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TowardsTheLight\StaticPlatform.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TowardsTheLight\Tower.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\MobilePlatform.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\MobileEnemy.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\PlayerOvi.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\StaticEnemy.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
+    <ClCompile Include="..\..\Source\TowardsTheLight\StaticPlatform.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\Tower.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\TowardsTheLightGameMode.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\TowardsTheLight.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\Mechanism.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\GameDataManager.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
+      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\MenuGameMode.cpp">
-      <Filter>Source\TowardsTheLight</Filter>
+      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\MyGameMode.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\OviPlayerController.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\TimeManager.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\Tappable.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\Portal.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +181,24 @@
     </Filter>
     <Filter Include="Source\TowardsTheLight\Utils">
       <UniqueIdentifier>{7850546f-b42a-4656-8e49-a7e7b5962071}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\TowardsTheLight\include">
+      <UniqueIdentifier>{a52503d7-51a7-4e1d-9970-3d9fd167edc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\TowardsTheLight\include\SceneObjects">
+      <UniqueIdentifier>{915082ef-d786-4442-8f01-a31f94d92add}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\TowardsTheLight\include\SceneControllers">
+      <UniqueIdentifier>{414bb27b-dac2-4583-aab6-da8ccdcab043}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\TowardsTheLight\source">
+      <UniqueIdentifier>{968350d5-37bc-459a-81b9-6e9df5226e7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\TowardsTheLight\source\SceneObjects">
+      <UniqueIdentifier>{d85210b1-a70e-42fd-abb9-d8622d34c780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\TowardsTheLight\source\SceneControllers">
+      <UniqueIdentifier>{66f8ed18-45c3-4251-add4-e24269df33a6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

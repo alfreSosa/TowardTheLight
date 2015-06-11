@@ -42,11 +42,11 @@ public:
   UFUNCTION(BlueprintCallable, Category = TTLFunctions)
     FString GetLevelNameBP();
 
-  //UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
-  //  void GameVictory();
+  UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
+    void PointsSoundEvent();
 
-  //UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
-  //  void GameDefeat();
+  UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
+    void OrbsSoundEvent();
 
 private:
   float m_actualPoints;

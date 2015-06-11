@@ -5,6 +5,7 @@
 #include "PlayerOvi.h"
 #include "OviPlayerController.h"
 #include "GameDataManager.h"
+#include "TimeManager.h"
 
 AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
   PrimaryActorTick.bCanEverTick = true;
@@ -23,42 +24,42 @@ AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Su
 void AMyGameMode::AddPoints(float points) {
   m_actualPoints += points;
   //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ActualPoints: %f"), m_actualPoints));
+
+  PointsSoundEvent();
 }
 
 void AMyGameMode::OrbPicked() {
   m_countOrbs++;
   //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Orbs: %d"), m_countOrbs));
+
+  OrbsSoundEvent();
 }
 
 void AMyGameMode::EndGame(EndGameType type) {
   switch (type){
   case VICTORY:{
-    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("VICTORY!!!!")));
-
-    LevelData data = GameDataManager::Instance()->ReadLevelData(GetWorld()->GetMapName());
-    //si la puntuacion actual es mejor que la que hay en el fichero, hay que almacenarla 
-    bool write = false;
-    if (m_countOrbs > data.orbs){
-      data.orbs = m_countOrbs;
-      write = true;
+    if (state == EndGameType::NONE){
+      LevelData data = GameDataManager::Instance()->ReadLevelData(GetWorld()->GetMapName());
+      //si la puntuacion actual es mejor que la que hay en el fichero, hay que almacenarla 
+      bool write = false;
+      if (m_countOrbs > data.orbs){
+        data.orbs = m_countOrbs;
+        write = true;
+      }
+      if (m_actualPoints > data.points){
+        data.points = m_actualPoints;
+        write = true;
+      }
+      if (write)
+        GameDataManager::Instance()->WriteLevelData(data);
     }
-    if (m_actualPoints > data.points){
-      data.points = m_actualPoints;
-      write = true;
-    }
-    if (write)
-      GameDataManager::Instance()->WriteLevelData(data);
 
     //terminar la partida. volver al menú
-    //GameVictory();
     state = EndGameType::VICTORY;
   }
     break;
   case DEFEAT:
-    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("DEFEAT!!!!")));
-
     //terminar la partida. volver al menú
-    //GameDefeat();
     state = EndGameType::DEFEAT;
     break;
   }
@@ -73,16 +74,11 @@ float AMyGameMode::GetActualOrbs() {
 }
 
 void AMyGameMode::SetPauseBP(bool enable) {
-  AOviPlayerController* const PlayerController = (AOviPlayerController*)GetWorld()->GetFirstPlayerController();
-  if (PlayerController != NULL)
-    PlayerController->SetPause(enable);
+  TimeManager::Instance()->SetPause(enable);
 }
 
 bool AMyGameMode::IsPausedBP() {
-  AOviPlayerController* const PlayerController = (AOviPlayerController*)GetWorld()->GetFirstPlayerController();
-  if (PlayerController != NULL)
-    return PlayerController->IsPaused();
-  return false;
+  return TimeManager::Instance()->IsPaused();
 }
 
 float AMyGameMode::EndGameBP() {

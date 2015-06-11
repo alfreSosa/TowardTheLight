@@ -4,6 +4,7 @@
 #include "OviCameraActor.h"
 #include "PlayerOvi.h"
 #include "OviPlayerController.h"
+#include "TimeManager.h"
 
 AOviCameraActor::AOviCameraActor(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
   // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -22,6 +23,8 @@ void AOviCameraActor::BeginPlay(){
 }
 
 void AOviCameraActor::Tick(float DeltaSeconds){
+  DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+
   if (!m_player)
     for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
       if (ActorItr->ActorHasTag("Player")){

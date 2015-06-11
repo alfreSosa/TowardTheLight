@@ -12,7 +12,6 @@ class TOWARDSTHELIGHT_API AStaticPlatform : public AActor
 	
 public:	
 	AStaticPlatform();
-  virtual void BeginPlay() override;
 
   UPROPERTY(EditAnywhere)
     USceneComponent* OurVisibleComponent;

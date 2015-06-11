@@ -3,6 +3,7 @@
 #include "TowardsTheLight.h"
 #include "MobileEnemy.h"
 
+#include "TimeManager.h"
 
 AMobileEnemy::AMobileEnemy() {
   PrimaryActorTick.bCanEverTick = true;
@@ -41,7 +42,7 @@ void AMobileEnemy::BeginPlay() {
 }
 
 void AMobileEnemy::Tick(float DeltaSeconds) {
-  Super::Tick(DeltaSeconds);
+  DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
 
   if (!HasTrigger || (HasTrigger && m_initMovement))
     doMovement(DeltaSeconds);

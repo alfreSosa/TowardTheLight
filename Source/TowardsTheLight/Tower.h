@@ -19,12 +19,18 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-  UPROPERTY(EditAnywhere)
+  UPROPERTY(EditAnywhere, Category = Tower)
     UStaticMeshComponent* Body;
 
-  UPROPERTY(EditAnywhere)
+  UPROPERTY(EditAnywhere, Category = Tower)
     UStaticMeshComponent* Entrance;
 	
+  UPROPERTY(EditAnywhere, Category = Tower)
+    bool NeedKey;
+  UPROPERTY(EditAnywhere, Category = Tower)
+    FLinearColor ColorKey;
+
+
   void RegisterDelegate();
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

@@ -45,18 +45,24 @@
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\GameDataManager.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\Mechanism.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\MenuGameMode.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\MobileEnemy.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\MobilePlatform.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\Portal.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\StaticEnemy.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\Tappable.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\TimeManager.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Tower.cpp" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Altar.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\Mechanism.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\MenuGameMode.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\MobileEnemy.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\MobilePlatform.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\PickableItem.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\Portal.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\document.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\filestream.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\prettywriter.h" />
@@ -65,6 +71,8 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\stringbuffer.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\writer.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\StaticEnemy.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\Tappable.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\TimeManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Tower.h" />
     <None Include="..\..\TowardsTheLight.uproject" />
     <None Include="..\..\Source\TowardsTheLight.Target.cs" />
