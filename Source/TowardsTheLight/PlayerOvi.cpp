@@ -163,7 +163,6 @@ void APlayerOvi::BeginPlay(){
 
 void APlayerOvi::Tick(float DeltaSeconds){
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
-
   Super::Tick(DeltaSeconds);
 
   if (m_limitViewPort0 == 0 && m_limitViewPort1 == 0){
@@ -343,13 +342,14 @@ void APlayerOvi::DoJump(float DeltaSeconds){
       if (m_actualJumpSpeed < 0)
         m_actualJumpSpeed = 0;
       m_enabledGravity = false;
+      m_isFalling = false;
     }
     else {
       m_actualJumpSpeed = 0;
       m_isJumping = false;
     }
   } else {
-    m_isFalling = !m_hasLanded;
+      m_isFalling = !m_hasLanded;
     m_enabledGravity = true;
   }
 

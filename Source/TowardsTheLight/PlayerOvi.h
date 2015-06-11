@@ -134,7 +134,6 @@ private:
   bool m_headCollision;
   bool m_enabledGravity;
   bool m_isInJumpTransition;
-
   bool m_isOnMobilePlatform;
   AMobilePlatform *m_currentMobile;
 
