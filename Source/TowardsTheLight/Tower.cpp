@@ -3,6 +3,8 @@
 #include "TowardsTheLight.h"
 #include "Tower.h"
 #include "MyGameMode.h"
+#include "PlayerOvi.h"
+
 
 // Sets default values
 ATower::ATower() {
@@ -19,6 +21,9 @@ ATower::ATower() {
   Trigger->bHiddenInGame = true;
   Trigger->SetWorldScale3D(FVector(0.5, 0.5, 0.5));
   Trigger->bGenerateOverlapEvents = true;
+
+  NeedKey = false;
+  ColorKey = FLinearColor(0.0f, 0.0f, 0.0f);
 }
 
 // Called when the game starts or when spawned
@@ -36,14 +41,19 @@ void ATower::RegisterDelegate() {
 
 void ATower::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
   if (OtherActor->ActorHasTag("Player")){
-    FVector dif = OtherActor->GetActorUpVector() - Entrance->GetUpVector();
-    dif.X = (dif.X < 0) ? -dif.X : dif.X;
-    dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
-    dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
-    if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05){
-      AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
-      if (gameMode)
-        gameMode->EndGame(AMyGameMode::VICTORY);
+    APlayerOvi *player = dynamic_cast<APlayerOvi *>(OtherActor);
+    if (player){
+      FVector dif = player->GetActorUpVector() - Entrance->GetUpVector();
+      dif.X = (dif.X < 0) ? -dif.X : dif.X;
+      dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
+      dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
+      if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05){
+        if (!NeedKey || (NeedKey && player->HasKey() && ColorKey == player->GetColorKey())){
+          AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+          if (gameMode)
+            gameMode->EndGame(AMyGameMode::VICTORY);
+        }
+      }
     }
   }
 }

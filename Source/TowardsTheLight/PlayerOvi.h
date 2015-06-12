@@ -17,7 +17,7 @@ const float DEFAULT_MOVEMENT_SPEED = 620.0f; //ajustado a valores de diseño
 const float DEFAULT_JUMP_SPEED = 1550.0f; //ajustado a valores de diseño
 const float DEFAULT_JUMP_ACC = 3300.0f; //ajustado a valores de diseño
 
-
+class AMobilePlatform;
 UCLASS()
 class TOWARDSTHELIGHT_API APlayerOvi : public APawn
 {
@@ -87,7 +87,11 @@ public:
     float AccelerationJump;
 
   void OnMobilePlatform(class AMobilePlatform *mp, FVector movement);
-  void SetKey(bool key, FColor colorKey);
+  
+  void SetKey(bool key, FLinearColor colorKey);
+  bool HasKey();
+  FLinearColor GetColorKey();
+
 
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
     bool isPlayerRunning();
@@ -96,18 +100,22 @@ public:
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
     bool isPlayerJumping();
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool isPlayerFalling();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
     bool PlayerHasLanded();
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
 	  bool PlayerisToRight();
+  UFUNCTION(BlueprintCallable, Category = "PlayerState")
+    bool isPlayerPaused();
 private:
 
   UMaterialInstanceDynamic *StickMaterial;
 
   float UpdateState();
   void CalculateOrientation();
-  void CalculateGravity(float DeltaTime);
-  void DoJump(float DeltaTime);
-  void DoMovement(float DeltaTime, float value);
+  void CalculateGravity(float DeltaSeconds);
+  void DoJump(float DeltaSeconds);
+  void DoMovement(float DeltaSeconds, float value);
   void CheckCollision();
   //void CheckMobilePlatform();
   void AjustPosition();
@@ -120,13 +128,17 @@ private:
 	bool m_right;
 	bool m_left;
   bool m_doJump;
-	bool m_isJumping;
+  bool m_isJumping;
+  bool m_isFalling;
   bool m_hasLanded;
   bool m_headCollision;
   bool m_enabledGravity;
   bool m_isInJumpTransition;
+  bool m_isOnMobilePlatform;
+  AMobilePlatform *m_currentMobile;
 
   bool m_hasKey;
+  FLinearColor m_colorKey;
 
   bool bPlayerRunning;
 	float m_limit;
@@ -143,9 +155,11 @@ private:
   FVector m_lastUpVector;
   FVector m_lastForwardVector;
 
-  float m_semiWidthViewPort;
+  float m_limitViewPort0;
+  float m_limitViewPort1;
   float m_centerTouchX;
   States m_stateInput;
   ETouchIndex::Type m_fingerIndexMovement;
   ETouchIndex::Type m_fingerIndexJump;
+  ETouchIndex::Type m_fingerIndexOther;
 };

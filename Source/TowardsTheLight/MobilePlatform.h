@@ -19,7 +19,7 @@ class TOWARDSTHELIGHT_API AMobilePlatform : public AStaticPlatform
   float m_currentDistance;
   FVector m_rightVector;
   FVector m_movement;
-
+  bool m_isPlayerOn;
   enum state{
     INITIAL_DELAY,
     TO_RIGHT,
@@ -33,7 +33,9 @@ public:
   AMobilePlatform();
   virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;
-
+  void SetPlayerOn(bool on);
+  void ChangeEnabled(bool enabled);
+  bool isEnabled();
   UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float RightDistance;
   UPROPERTY(EditAnywhere, Category = MobilePlatform)
@@ -46,6 +48,10 @@ public:
     float Speed;
   UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float InitialDelay;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    bool Enabled;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    bool DisableAtEndState;
 
   //FVector GetPlatformMovement() const;
 };

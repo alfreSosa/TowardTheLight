@@ -22,26 +22,14 @@ AAltar::AAltar()
   Trigger->bHiddenInGame = true;
   Trigger->bGenerateOverlapEvents = true;
 
-  //Orientation
-  Orientation = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Orientation"));
-  Orientation->AttachTo(RootComponent);
-
   GiveKey = true;
   ColorKey = FLinearColor(0.0f, 0.0f, 1.0f);
 }
 
 // Called when the game starts or when spawned
-void AAltar::BeginPlay()
-{
+void AAltar::BeginPlay(){
 	Super::BeginPlay();
   RegisterDelegate();
-}
-
-// Called every frame
-void AAltar::Tick( float DeltaTime )
-{
-	Super::Tick( DeltaTime );
-
 }
 
 void AAltar::RegisterDelegate() {
@@ -53,7 +41,7 @@ void AAltar::RegisterDelegate() {
 void AAltar::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
   if (OtherActor->ActorHasTag("Player")){
 
-    FVector dif = OtherActor->GetActorUpVector() - Orientation->GetUpVector();
+    FVector dif = OtherActor->GetActorUpVector() - GetActorUpVector();
     dif.X = (dif.X < 0) ? -dif.X : dif.X;
     dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
     dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;

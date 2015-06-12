@@ -3,6 +3,7 @@
 #include "TowardsTheLight.h"
 #include "MobilePlatform.h"
 #include "PlayerOvi.h"
+#include "TimeManager.h"
 
 
 AMobilePlatform::AMobilePlatform() {
@@ -16,12 +17,13 @@ AMobilePlatform::AMobilePlatform() {
   LeftDelay = 1.f;
   Speed = 100.f;
   InitialDelay = 1.f;
+  Enabled = true;
 
   //private variables
   m_timer = 0;
   m_state = INITIAL_DELAY;
   m_currentDistance = 0;
-
+  DisableAtEndState = m_isPlayerOn = false;
 }
 
 void AMobilePlatform::BeginPlay() {
@@ -31,17 +33,19 @@ void AMobilePlatform::BeginPlay() {
 }
 
 void AMobilePlatform::Tick(float DeltaSeconds) {
-  Super::BeginPlay();
-  if (!m_player)
-    for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
-      if (ActorItr->ActorHasTag("Player")){
-        m_player = (APlayerOvi*)*ActorItr;
-        break;
-      }
+  DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+  if (Enabled) {
+    if (!m_player)
+      for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
+        if (ActorItr->ActorHasTag("Player")){
+          m_player = (APlayerOvi*)*ActorItr;
+          break;
+        }
 
-  doMovement(DeltaSeconds);
-  if (m_player)
-    m_player->OnMobilePlatform(this, m_movement);
+    doMovement(DeltaSeconds);
+    if (m_player && m_isPlayerOn)
+      m_player->OnMobilePlatform(this, m_movement);
+  }
 }
 
 void AMobilePlatform::doMovement(float DeltaSeconds){
@@ -70,6 +74,8 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
       SetActorLocation(location);
     }
     else{
+      if (DisableAtEndState)
+        Enabled = false;
       m_state = RIGHT_DELAY;
       m_currentDistance = 0;
       if (m_totalDistance == RightDistance)
@@ -91,6 +97,8 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
       SetActorLocation(location);
     }
     else{
+      if (DisableAtEndState)
+        Enabled = false;
       m_state = LEFT_DELAY;
       m_currentDistance = 0;
     }
@@ -115,6 +123,17 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
   }
 }
 
+void AMobilePlatform::SetPlayerOn(bool on) {
+  m_isPlayerOn = on;
+}
+
+void AMobilePlatform::ChangeEnabled(bool enabled) {
+  Enabled = enabled;
+}
+
+bool AMobilePlatform::isEnabled() {
+  return Enabled;
+}
 //FVector AMobilePlatform::GetPlatformMovement() const{
 //  return m_movement;
 //}

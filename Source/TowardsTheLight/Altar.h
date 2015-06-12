@@ -12,15 +12,12 @@ class TOWARDSTHELIGHT_API AAltar : public AActor
 public:	
 	AAltar();
 	virtual void BeginPlay() override;
-	virtual void Tick( float DeltaSeconds ) override;
   UPROPERTY(EditAnywhere, Category = Altar)
     bool GiveKey;
   UPROPERTY(EditAnywhere, Category = Altar)
     FLinearColor ColorKey;
   UPROPERTY(EditAnywhere, Category = Altar)
     USceneComponent* OurVisibleComponent;
-  UPROPERTY(EditAnywhere, Category = Altar)
-    UStaticMeshComponent* Orientation;
 
 private:
   UPROPERTY()
