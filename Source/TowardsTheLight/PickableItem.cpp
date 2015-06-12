@@ -8,8 +8,12 @@
 APickableItem::APickableItem() {
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
+  RootComponent->SetMobility(EComponentMobility::Static);
+  OurVisibleComponent->SetMobility(EComponentMobility::Static);
   OurVisibleComponent->AttachTo(RootComponent);
+  
   this->SetActorEnableCollision(true);
+
   Points = DEFAULT_POINTS;
   m_collected = false;
 }
