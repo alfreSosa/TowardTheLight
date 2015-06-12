@@ -10,6 +10,9 @@ AMobilePlatform::AMobilePlatform() {
   PrimaryActorTick.bCanEverTick = true;
   this->SetActorEnableCollision(true);
 
+  RootComponent->SetMobility(EComponentMobility::Movable);
+  OurVisibleComponent->SetMobility(EComponentMobility::Movable);
+
   //setting
   RightDistance = 100.f;
   LeftDistance = 100.f;
