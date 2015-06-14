@@ -38,22 +38,22 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
   //sets right flag when key is pressed
-	UFUNCTION()
+  UFUNCTION(BlueprintCallable, Category = "PlayerInputTTL")
 		void OnStartRight();
 	//clears right flag when key is released
-	UFUNCTION()
+  UFUNCTION(BlueprintCallable, Category = "PlayerInputTTL")
 		void OnStopRight();
 	//sets left flag when key is pressed
-	UFUNCTION()
+  UFUNCTION(BlueprintCallable, Category = "PlayerInputTTL")
 		void OnStartLeft();
 	//clears left flag when key is released
-	UFUNCTION()
+  UFUNCTION(BlueprintCallable, Category = "PlayerInputTTL")
 		void OnStopLeft();
   //sets jump flag when key is pressed
-  UFUNCTION()
+  UFUNCTION(BlueprintCallable, Category = "PlayerInputTTL")
     void OnStartJump();
   //clears jump flag when key is released
-  UFUNCTION()
+  UFUNCTION(BlueprintCallable, Category = "PlayerInputTTL")
     void OnStopJump();
 
 	void TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location);
@@ -91,7 +91,6 @@ public:
   void SetKey(bool key, FLinearColor colorKey);
   bool HasKey();
   FLinearColor GetColorKey();
-
 
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
     bool isPlayerRunning();

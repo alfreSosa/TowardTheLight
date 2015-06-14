@@ -42,6 +42,9 @@ public:
   UFUNCTION(BlueprintCallable, Category = TTLFunctions)
     FString GetLevelNameBP();
 
+  UFUNCTION(BlueprintCallable, Category = TTLFunctions)
+    bool SwipeControlBP();
+
   UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
     void PointsSoundEvent();
 

@@ -16,3 +16,11 @@ FString AMenuGameMode::GetLevelPoints(FString levelName){
   ret = ret.FromInt(GameDataManager::Instance()->GetPointsLevel(levelName));
   return ret;
 }
+
+bool AMenuGameMode::IsSwipeControlBP(){
+  return GameDataManager::Instance()->IsSwipeControl();
+}
+
+void AMenuGameMode::SetSwipeControlBP(bool enable){
+  GameDataManager::Instance()->SetSwipeControl(enable);
+}
