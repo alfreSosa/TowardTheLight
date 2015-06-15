@@ -652,6 +652,7 @@ void APlayerOvi::CheckCollision() {
           }
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDown[i].Location, -m_capsuleHeight));
           m_hasLanded = true;
+          m_isFalling = false;
           m_actualJumpSpeed = JumpSpeed; 
           break;
         }
@@ -674,7 +675,8 @@ void APlayerOvi::CheckCollision() {
             }
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
             m_hasLanded = true;
-            m_actualJumpSpeed = JumpSpeed; 
+            m_isFalling = false; 
+            m_actualJumpSpeed = JumpSpeed;
             break;
           }
       }
@@ -696,7 +698,8 @@ void APlayerOvi::CheckCollision() {
           }
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownRigthF[i].Location, -m_capsuleHeight));
           m_hasLanded = true;
-          m_actualJumpSpeed = JumpSpeed; 
+          m_isFalling = false;
+          m_actualJumpSpeed = JumpSpeed;
           break;
         }
     }
