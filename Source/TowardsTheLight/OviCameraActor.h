@@ -31,4 +31,6 @@ public:
     float Padding;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ConfigCamera)
     float DistanceCameraToPlayer;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ConfigCamera)
+    float VerticalOffset;
 };
