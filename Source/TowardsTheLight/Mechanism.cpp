@@ -9,6 +9,8 @@ AMechanism::AMechanism()
 {
 	PrimaryActorTick.bCanEverTick = true;
   CanActivate = CanDisactivate = true;
+  DisableAtEndAction = false;
+  NumberOfActions = 1;
 }
 
 void AMechanism::BeginPlay()
@@ -18,6 +20,7 @@ void AMechanism::BeginPlay()
   //prueba de concepto
   if (m_mobileTarget) {
     m_isEnabled = true;
+    m_mobileTarget->InitByMechanism(DisableAtEndAction, NumberOfActions);
   }
 
 }

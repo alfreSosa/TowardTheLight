@@ -19,5 +19,10 @@ public:
   UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
     FString GetLevelOrbs(FString levelName);
 
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    bool IsSwipeControlBP();
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    void SetSwipeControlBP(bool enable);
+
 private:
 };

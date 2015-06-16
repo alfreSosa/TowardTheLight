@@ -20,6 +20,10 @@ public:
     bool CanActivate;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
     bool CanDisactivate;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    bool DisableAtEndAction;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    int32 NumberOfActions;
 	//constructor
 	AMechanism();
 

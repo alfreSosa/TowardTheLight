@@ -14,6 +14,7 @@ AOviCameraActor::AOviCameraActor(const class FObjectInitializer& ObjectInitializ
   Padding = 200;
   DistanceCameraToPlayer = 2000;
   GetCameraComponent()->FieldOfView = 45;
+  VerticalOffset = 500;
 }
 
 void AOviCameraActor::BeginPlay(){
@@ -71,6 +72,7 @@ void AOviCameraActor::SetPosition(){
   dist.Normalize();
   finalPos += dist * DistanceCameraToPlayer;
 
+  finalPos += GetActorUpVector() * VerticalOffset;
   SetActorLocation(finalPos);
 }
 
