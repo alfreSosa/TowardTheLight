@@ -2,7 +2,7 @@
 
 #include "TowardsTheLight.h"
 #include "Mechanism.h"
-#include "MobilePlatform.h"
+#include "StaticPlatform.h"
 #include "TimeManager.h"
 
 AMechanism::AMechanism()
@@ -16,13 +16,13 @@ AMechanism::AMechanism()
 void AMechanism::BeginPlay()
 {
 	Super::BeginPlay();
-  m_mobileTarget = dynamic_cast<AMobilePlatform *>(Target);
-  //prueba de concepto
-  if (m_mobileTarget) {
-    m_isEnabled = true;
-    m_mobileTarget->InitByMechanism(DisableAtEndAction, NumberOfActions);
-  }
+  int32 numTargets = Targets.Num();
+  m_Targets.Init(numTargets);
+  for (int32 i = 0; i < numTargets; i++)
+    m_Targets[i] = dynamic_cast<AStaticPlatform *>(Targets[i]);
 
+  for (int32 i = 0; i < numTargets; i++)
+    m_Targets[i]->InitByMechanism(DisableAtEndAction, NumberOfActions);
 }
 
 void AMechanism::Tick(float DeltaSeconds)
@@ -36,21 +36,19 @@ void AMechanism::Activate(bool enabled) {
 }
 
 void AMechanism::Execute() {
-  if (m_isEnabled) {
-    if (m_mobileTarget) {
-      if (m_mobileTarget->isEnabled()) {
-        if (CanDisactivate) {
-          m_mobileTarget->ChangeEnabled(false);
-          GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("MobilePlatform Desactivated")));
-        }
+  int32 numTargets = m_Targets.Num();
+  for (int32 i = 0; i < numTargets; i++) {
+    if (m_Targets[i]->isEnabled()) {
+      if (CanDisactivate) {
+        m_Targets[i]->ChangeEnabled(false);
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Platform Desactivated")));
       }
-      else {
-        if (CanActivate) {
-          m_mobileTarget->ChangeEnabled(true);
-          GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("MobilePlatform Activated")));
-        }
+    }
+    else {
+      if (CanActivate) {
+        m_Targets[i]->ChangeEnabled(true);
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Platform Activated")));
       }
-
     }
   }
 }

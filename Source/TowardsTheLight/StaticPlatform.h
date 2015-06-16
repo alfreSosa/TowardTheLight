@@ -15,6 +15,8 @@ public:
 
   UPROPERTY(EditAnywhere)
     USceneComponent* OurVisibleComponent;
-	
+  virtual void ChangeEnabled(bool enabled);
+  virtual bool isEnabled();
+  virtual void InitByMechanism(bool disableAtEnd, int32 numActions);
 	
 };
