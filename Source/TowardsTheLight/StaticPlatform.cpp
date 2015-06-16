@@ -3,8 +3,7 @@
 #include "TowardsTheLight.h"
 #include "StaticPlatform.h"
 
-AStaticPlatform::AStaticPlatform()
-{
+AStaticPlatform::AStaticPlatform() {
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
   RootComponent->SetMobility(EComponentMobility::Static);
@@ -13,3 +12,15 @@ AStaticPlatform::AStaticPlatform()
   this->Tags.Add("Platform");
 }
 
+
+void AStaticPlatform::ChangeEnabled(bool enabled) {
+
+}
+
+bool AStaticPlatform::isEnabled() {
+  return false;
+}
+
+void AStaticPlatform::InitByMechanism(bool disableAtEnd, int32 numActions) {
+
+}
