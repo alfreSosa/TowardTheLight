@@ -20,6 +20,7 @@ class TOWARDSTHELIGHT_API AMobilePlatform : public AStaticPlatform
   FVector m_rightVector;
   FVector m_movement;
   bool m_isPlayerOn;
+  int32 m_actions;
   enum state{
     INITIAL_DELAY,
     TO_RIGHT,
@@ -52,6 +53,8 @@ public:
     bool Enabled;
   UPROPERTY(EditAnywhere, Category = MechanismResponse)
     bool DisableAtEndState;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    int32 NumberOfPaths;
 
   //FVector GetPlatformMovement() const;
 };

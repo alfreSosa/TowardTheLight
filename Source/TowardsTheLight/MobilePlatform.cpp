@@ -26,6 +26,8 @@ AMobilePlatform::AMobilePlatform() {
   m_timer = 0;
   m_state = INITIAL_DELAY;
   m_currentDistance = 0;
+  NumberOfPaths = 1.0;
+  m_actions = 0;
   DisableAtEndState = m_isPlayerOn = false;
 }
 
@@ -77,8 +79,11 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
       SetActorLocation(location);
     }
     else{
-      if (DisableAtEndState)
+      m_actions++;
+      if (DisableAtEndState && m_actions >= NumberOfPaths) {
         Enabled = false;
+        m_actions = 0;
+      }
       m_state = RIGHT_DELAY;
       m_currentDistance = 0;
       if (m_totalDistance == RightDistance)
@@ -100,8 +105,12 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
       SetActorLocation(location);
     }
     else{
-      if (DisableAtEndState)
-        Enabled = false;
+       m_actions++;
+       if (DisableAtEndState && m_actions >= NumberOfPaths) {
+         Enabled = false;
+         m_actions = 0;
+       }
+
       m_state = LEFT_DELAY;
       m_currentDistance = 0;
     }
