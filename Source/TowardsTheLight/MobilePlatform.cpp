@@ -26,9 +26,9 @@ AMobilePlatform::AMobilePlatform() {
   m_timer = 0;
   m_state = INITIAL_DELAY;
   m_currentDistance = 0;
-  NumberOfPaths = 1.0;
+  m_maxActions = 1;
   m_actions = 0;
-  DisableAtEndState = m_isPlayerOn = false;
+  m_disableAtEndAction = m_isPlayerOn = false;
 }
 
 void AMobilePlatform::BeginPlay() {
@@ -80,7 +80,7 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
     }
     else{
       m_actions++;
-      if (DisableAtEndState && m_actions >= NumberOfPaths) {
+      if (m_disableAtEndAction && m_actions >= m_maxActions) {
         Enabled = false;
         m_actions = 0;
       }
@@ -106,7 +106,7 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
     }
     else{
        m_actions++;
-       if (DisableAtEndState && m_actions >= NumberOfPaths) {
+       if (m_disableAtEndAction && m_actions >= m_maxActions) {
          Enabled = false;
          m_actions = 0;
        }
@@ -146,6 +146,12 @@ void AMobilePlatform::ChangeEnabled(bool enabled) {
 bool AMobilePlatform::isEnabled() {
   return Enabled;
 }
+
+void AMobilePlatform::InitByMechanism(bool disableAtEnd, int32 numActions) {
+  m_disableAtEndAction = disableAtEnd;
+  m_maxActions = numActions;
+}
+
 //FVector AMobilePlatform::GetPlatformMovement() const{
 //  return m_movement;
 //}
