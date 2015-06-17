@@ -25,7 +25,7 @@ AMobileEnemy::AMobileEnemy() {
   m_initMovement = false;
   m_jumpSpeed = 0.0f;
   m_actualJumpSpeed = m_accelerationJump = 0.0f;
-  m_enableGravity = false;
+  m_forwardCollision = m_enableGravity = false;
   m_player = nullptr;
 
   //Capsule
@@ -68,6 +68,8 @@ void AMobileEnemy::BeginPlay() {
 void AMobileEnemy::Tick(float DeltaSeconds) {
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
   m_lastPosition = GetActorLocation();
+  m_forwardCollision = false;
+
   if (!m_player) {
     for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
       if (ActorItr->ActorHasTag("Player")) {
@@ -196,13 +198,11 @@ void AMobileEnemy::CheckCollision() {
   TArray<FHitResult> OutTraceResultMiddle;
 
   FVector StartTrace = m_lastPosition;
-
-  FVector newLocationForward;
-  newLocationForward.X = (FMath::Abs(GetActorForwardVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
-  newLocationForward.Y = (FMath::Abs(GetActorForwardVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
-  newLocationForward.Z = (FMath::Abs(GetActorForwardVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
-
-  const FVector EndTraceMidle = newLocationForward + GetActorForwardVector() * m_capsuleRadious;
+  FVector newLocationRigth;
+  newLocationRigth.X = (FMath::Abs(GetActorRightVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
+  newLocationRigth.Y = (FMath::Abs(GetActorRightVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
+  newLocationRigth.Z = (FMath::Abs(GetActorRightVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
+  const FVector EndTraceMidle = newLocationRigth + GetActorRightVector() * m_capsuleRadious;
 
   static FName FireTraceIdent = FName(TEXT("Platform"));
   FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
@@ -215,12 +215,15 @@ void AMobileEnemy::CheckCollision() {
   GetWorld()->LineTraceMulti(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_PLAYER, TraceParams, ResponseParam);
   bool collisionMidle = OutTraceResultMiddle.Num() > 0;
   //DrawDebugLine(GetWorld(), StartTrace, EndTraceMidle, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+
   if (collisionMidle) {
     int size = OutTraceResultMiddle.Num();
     for (int i = 0; i < size; i++)
       if (OutTraceResultMiddle[i].GetActor()->ActorHasTag("Platform")) {
-        //SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultMiddle[i].Location, m_capsuleRadious));
+        SetActorLocation(RecalculateLocation(GetActorRightVector(), GetActorLocation(), OutTraceResultMiddle[i].Location, m_capsuleRadious));
         //aqui hacer que cambie de direccion.
+        ResponseCollision();
+        m_forwardCollision = true; // este bool esta por mi idea original, revisar su uso antes de subir por si hay que borrar
         break;
       }
   }
@@ -229,27 +232,26 @@ void AMobileEnemy::CheckCollision() {
   newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
   newLocationUp.Y = (FMath::Abs(GetActorUpVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
   newLocationUp.Z = (FMath::Abs(GetActorUpVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
-
   const FVector EndTraceDown = newLocationUp - GetActorUpVector() * m_capsuleHeight;
 
   GetWorld()->LineTraceMulti(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_PLAYER, TraceParams, ResponseParam);
   bool collisionDown = OutTraceResultDown.Num() > 0;
   //DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
-    if (collisionDown) {
-      int size = OutTraceResultDown.Num();
-      for (int i = 0; i < size; i++)
-        if (OutTraceResultDown[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDown[i].Location, -m_capsuleHeight));
-          m_enableGravity = false;
-          m_actualJumpSpeed = m_jumpSpeed;
-          break;
-        }
-    }
-    else {
-      m_enableGravity = true;
-    }
+  if (collisionDown) {
+    int size = OutTraceResultDown.Num();
+    for (int i = 0; i < size; i++)
+      if (OutTraceResultDown[i].GetActor()->ActorHasTag("Platform")) {
+        SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDown[i].Location, -m_capsuleHeight));
+        m_enableGravity = false;
+        m_actualJumpSpeed = m_jumpSpeed;
+        break;
+      }
   }
+  else {
+    m_enableGravity = true;
+  }
+}
 
 FVector AMobileEnemy::AbsVector(const FVector& vector) {
   FVector absVector = FVector::ZeroVector;
@@ -279,4 +281,17 @@ FVector AMobileEnemy::RecalculateLocation(FVector Direction, FVector Location, F
   loc.Z = (FMath::Abs(nPos.Z) <= 0.01) ? loc.Z : nPos.Z;
 
   return loc;
+}
+
+void AMobileEnemy::ResponseCollision() {
+  switch (m_state) {
+  case TO_RIGHT: 
+    m_state = RIGHT_DELAY;
+    m_currentDistance = 0; // esto hay que calcular la nueva
+    break;
+  case TO_LEFT:
+    m_state = LEFT_DELAY;
+    m_currentDistance = 0; 
+    break;
+  }
 }

@@ -10,7 +10,7 @@
  */
 class APlayerOvi;
 
-const float DEFAULT_ENEMY_CAPSULE_RADIOUS = 40.0f;
+const float DEFAULT_ENEMY_CAPSULE_RADIOUS = 45.0f;
 const float DEFAULT_ENEMY_CAPSULE_HEIGHT = 95.0f;
 
 UCLASS()
@@ -27,11 +27,13 @@ class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
   float m_jumpSpeed;
   float m_accelerationJump;
   float m_actualJumpSpeed;
+  float m_capsuleHeight;
+  float m_capsuleRadious; 
   bool m_enableGravity;
+  bool m_forwardCollision;
   APlayerOvi *m_player;
   FVector m_lastPosition;
-  float m_capsuleHeight;
-  float m_capsuleRadious;
+  
 
   enum state{
     INITIAL_DELAY,
@@ -44,6 +46,7 @@ class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
   void doMovement(float DeltaSeconds);
   void CalculateGravity(float DeltaSeconds);
   void CheckCollision();
+  void ResponseCollision();
   FVector AbsVector(const FVector& vector);
   FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
 public:
