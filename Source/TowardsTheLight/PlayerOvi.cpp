@@ -345,7 +345,6 @@ void APlayerOvi::CalculateGravity(float DeltaSeconds){
   FVector location = GetActorLocation();
 
   if (m_enabledGravity && !m_hasLanded && !m_isOnMobilePlatform) {
-    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Gravity")));
     if (m_actualJumpSpeed < JumpSpeed)
       m_actualJumpSpeed += AccelerationJump * DeltaSeconds;
     else{
