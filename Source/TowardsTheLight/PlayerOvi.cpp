@@ -1,6 +1,7 @@
 #include "TowardsTheLight.h"
 #include "PlayerOvi.h"
 #include "MobilePlatform.h"
+#include "GameDataManager.h"
 #include "TimeManager.h"
 
 /************************************/
@@ -225,65 +226,69 @@ void APlayerOvi::SetupPlayerInputComponent(class UInputComponent* InputComponent
 }
 
 void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location) {
-  if (Location.X > m_limitViewPort1 && m_fingerIndexMovement != FingerIndex && m_fingerIndexOther != FingerIndex) { //JUMP
-    OnStartJump();
-    m_fingerIndexJump = FingerIndex;
-    //if (!nearGear)
-    //  OnStartJump();
-    //else{
-    //  puntero a nearGear->doAction();
-    //}
-  }
-  else if (Location.X < m_limitViewPort0 && m_fingerIndexJump != FingerIndex && m_fingerIndexOther != FingerIndex){ //MOVEMENT SWIPE
-    if (m_centerTouchX == 0){ //initial touch
-      m_centerTouchX = Location.X;
-      m_fingerIndexMovement = FingerIndex;
+  if (GameDataManager::Instance()->IsSwipeControl()){
+    if (Location.X > m_limitViewPort1 && m_fingerIndexMovement != FingerIndex && m_fingerIndexOther != FingerIndex) { //JUMP
+      OnStartJump();
+      m_fingerIndexJump = FingerIndex;
+      //if (!nearGear)
+      //  OnStartJump();
+      //else{
+      //  puntero a nearGear->doAction();
+      //}
     }
-    if (m_fingerIndexMovement == FingerIndex){
-      if (Location.X > m_centerTouchX + MarginInput){ //right swipe
-        OnStartRight();
-        OnStopLeft();
-        m_centerTouchX = Location.X - MarginInput;
-        m_stateInput = States::RIGHT;
+    else if (Location.X < m_limitViewPort0 && m_fingerIndexJump != FingerIndex && m_fingerIndexOther != FingerIndex){ //MOVEMENT SWIPE
+      if (m_centerTouchX == 0){ //initial touch
+        m_centerTouchX = Location.X;
+        m_fingerIndexMovement = FingerIndex;
       }
-      else if (Location.X < m_centerTouchX - MarginInput){ //left swipe
-        OnStartLeft();
-        OnStopRight();
-        m_centerTouchX = Location.X + MarginInput;
-        m_stateInput = States::LEFT;
-      }
-      else if (Location.X > m_centerTouchX && m_stateInput == States::RIGHT){ //right swipe
-        OnStartRight();
-        OnStopLeft();
-      }
-      else if (Location.X < m_centerTouchX && m_stateInput == States::LEFT){ //left swipe
-        OnStartLeft();
-        OnStopRight();
-      }
-      else{ //no movement
-        OnStopRight();
-        OnStopLeft();
-        m_stateInput = States::STOP;
+      if (m_fingerIndexMovement == FingerIndex){
+        if (Location.X > m_centerTouchX + MarginInput){ //right swipe
+          OnStartRight();
+          OnStopLeft();
+          m_centerTouchX = Location.X - MarginInput;
+          m_stateInput = States::RIGHT;
+        }
+        else if (Location.X < m_centerTouchX - MarginInput){ //left swipe
+          OnStartLeft();
+          OnStopRight();
+          m_centerTouchX = Location.X + MarginInput;
+          m_stateInput = States::LEFT;
+        }
+        else if (Location.X > m_centerTouchX && m_stateInput == States::RIGHT){ //right swipe
+          OnStartRight();
+          OnStopLeft();
+        }
+        else if (Location.X < m_centerTouchX && m_stateInput == States::LEFT){ //left swipe
+          OnStartLeft();
+          OnStopRight();
+        }
+        else{ //no movement
+          OnStopRight();
+          OnStopLeft();
+          m_stateInput = States::STOP;
+        }
       }
     }
+    else if (m_fingerIndexJump != FingerIndex && m_fingerIndexMovement != FingerIndex)
+      m_fingerIndexOther = FingerIndex;
   }
-  else if (m_fingerIndexJump != FingerIndex && m_fingerIndexMovement != FingerIndex)
-    m_fingerIndexOther = FingerIndex;
 }
 
 void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location) {
-  if (FingerIndex == m_fingerIndexJump){
-    OnStopJump();
-    m_fingerIndexJump = ETouchIndex::Touch10;
+  if (GameDataManager::Instance()->IsSwipeControl()){
+    if (FingerIndex == m_fingerIndexJump){
+      OnStopJump();
+      m_fingerIndexJump = ETouchIndex::Touch10;
+    }
+    else if (FingerIndex == m_fingerIndexMovement){
+      m_centerTouchX = 0.f;
+      m_fingerIndexMovement = ETouchIndex::Touch10;
+      OnStopRight();
+      OnStopLeft();
+    }
+    else if (FingerIndex == m_fingerIndexOther)
+      m_fingerIndexOther = ETouchIndex::Touch10;
   }
-  else if (FingerIndex == m_fingerIndexMovement){
-    m_centerTouchX = 0.f;
-    m_fingerIndexMovement = ETouchIndex::Touch10;
-    OnStopRight();
-    OnStopLeft();
-  }
-  else if (FingerIndex == m_fingerIndexOther)
-    m_fingerIndexOther = ETouchIndex::Touch10;
 }
 
 void APlayerOvi::OnStartRight() {
@@ -647,6 +652,7 @@ void APlayerOvi::CheckCollision() {
           }
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDown[i].Location, -m_capsuleHeight));
           m_hasLanded = true;
+          m_isFalling = false;
           m_actualJumpSpeed = JumpSpeed; 
           break;
         }
@@ -669,7 +675,8 @@ void APlayerOvi::CheckCollision() {
             }
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
             m_hasLanded = true;
-            m_actualJumpSpeed = JumpSpeed; 
+            m_isFalling = false; 
+            m_actualJumpSpeed = JumpSpeed;
             break;
           }
       }
@@ -691,7 +698,8 @@ void APlayerOvi::CheckCollision() {
           }
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownRigthF[i].Location, -m_capsuleHeight));
           m_hasLanded = true;
-          m_actualJumpSpeed = JumpSpeed; 
+          m_isFalling = false;
+          m_actualJumpSpeed = JumpSpeed;
           break;
         }
     }

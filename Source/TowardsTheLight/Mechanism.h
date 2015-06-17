@@ -5,7 +5,7 @@
 #include "Tappable.h"
 #include "Mechanism.generated.h"
 
-class AMobilePlatform;
+class AStaticPlatform;
 
 UCLASS()
 class TOWARDSTHELIGHT_API AMechanism : public ATappable
@@ -15,11 +15,15 @@ class TOWARDSTHELIGHT_API AMechanism : public ATappable
 public:
   //Properties
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
-    AActor *Target;
+    TArray<AActor *> Targets;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
     bool CanActivate;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
     bool CanDisactivate;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    bool DisableAtEndAction;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    int32 NumberOfActions;
 	//constructor
 	AMechanism();
 
@@ -30,9 +34,7 @@ public:
   virtual void Execute();
 
 private:
-  //MechanismState
-  bool m_isEnabled;
   //TargetVariables
-  AMobilePlatform *m_mobileTarget;
+  TArray<AStaticPlatform *> m_Targets;
 	
 };

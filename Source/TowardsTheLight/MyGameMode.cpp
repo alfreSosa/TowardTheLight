@@ -90,3 +90,7 @@ FString AMyGameMode::GetLevelNameBP(){
   levelName.RemoveFromStart(FString("UEDPIE_0_"));
   return levelName;
 }
+
+bool AMyGameMode::SwipeControlBP(){
+  return GameDataManager::Instance()->IsSwipeControl();
+}
