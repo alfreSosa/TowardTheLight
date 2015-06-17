@@ -30,7 +30,6 @@ class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
   float m_capsuleHeight;
   float m_capsuleRadious; 
   bool m_enableGravity;
-  bool m_forwardCollision;
   APlayerOvi *m_player;
   FVector m_lastPosition;
   

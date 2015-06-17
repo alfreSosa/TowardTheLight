@@ -36,6 +36,7 @@ APlayerOvi::APlayerOvi() {
   //Fijamos por defecto la rotacion de la capsula para que el forward este de cara a la camara
   CapsuleComponent->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 0)));
   CapsuleComponent->SetCapsuleHalfHeight(DEFAULT_CAPSULE_HEIGHT);
+  CapsuleComponent->SetMaterial(0, nullptr); //WARNING DE MANOLO
   RootComponent = CapsuleComponent;
 
 #if WITH_EDITORONLY_DATA
@@ -114,11 +115,13 @@ APlayerOvi::APlayerOvi() {
 
   bPlayerRunning = false;
   m_currentMobile = nullptr;
+
 }
 
 void APlayerOvi::BeginPlay(){
-  Super::BeginPlay();
 
+  Super::BeginPlay();
+  CapsuleComponent->SetMaterial(0, nullptr);
   float dotForward = FVector::DotProduct(FVector(1, 1, 1), GetActorForwardVector());
   if (dotForward < 0)
     m_state = States::LEFT;
