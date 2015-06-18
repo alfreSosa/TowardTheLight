@@ -8,10 +8,12 @@
 /**
  * 
  */
+#define COLLISION_ENEMY    ECC_GameTraceChannel2 
 class APlayerOvi;
 
 const float DEFAULT_ENEMY_CAPSULE_RADIOUS = 45.0f;
 const float DEFAULT_ENEMY_CAPSULE_HEIGHT = 95.0f;
+const float PADDING_ENEMY_COLLISION_PERCENT = 0.05f;
 
 UCLASS()
 class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
@@ -28,7 +30,8 @@ class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
   float m_accelerationJump;
   float m_actualJumpSpeed;
   float m_capsuleHeight;
-  float m_capsuleRadious; 
+  float m_capsuleRadious;
+  float m_capsuleHeightPadding;
   bool m_enableGravity;
   APlayerOvi *m_player;
   FVector m_lastPosition;
