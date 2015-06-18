@@ -79,7 +79,6 @@ APlayerOvi::APlayerOvi() {
 
   Stick = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Stick"));
   Stick->SetMobility(EComponentMobility::Movable);
-
   Stick->AttachTo(Mesh);
 
   //key Initialization
@@ -142,6 +141,12 @@ void APlayerOvi::BeginPlay(){
   Stick->SetMaterial(0, StickMaterial);
   /*FVector color(1.0, 0, 0);
   StickMaterial->SetVectorParameterValue("BaculoColor", color);*/
+
+  /**ESTO ES LO QUE ASIGNA EL BASTON AL SOCKET****/
+
+ /* const USkeletalMeshSocket *socket = Mesh->GetSocketByName("Puntodeacople_Baston");
+  if (socket)
+    socket->AttachActor(prueba, Mesh);*/
 }
 
 void APlayerOvi::Tick(float DeltaSeconds){
