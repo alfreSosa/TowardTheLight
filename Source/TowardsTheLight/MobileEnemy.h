@@ -8,6 +8,11 @@
 /**
  * 
  */
+class APlayerOvi;
+
+const float DEFAULT_ENEMY_CAPSULE_RADIOUS = 45.0f;
+const float DEFAULT_ENEMY_CAPSULE_HEIGHT = 95.0f;
+
 UCLASS()
 class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
 {
@@ -19,6 +24,16 @@ class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
   FVector m_rightVector;
   bool m_initMovement;
 
+  float m_jumpSpeed;
+  float m_accelerationJump;
+  float m_actualJumpSpeed;
+  float m_capsuleHeight;
+  float m_capsuleRadious; 
+  bool m_enableGravity;
+  APlayerOvi *m_player;
+  FVector m_lastPosition;
+  
+
   enum state{
     INITIAL_DELAY,
     TO_RIGHT,
@@ -27,11 +42,18 @@ class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
     LEFT_DELAY,
   }m_state;
 
+  void doMovement(float DeltaSeconds);
+  void CalculateGravity(float DeltaSeconds);
+  void CheckCollision();
+  void ResponseCollision();
+  FVector AbsVector(const FVector& vector);
+  FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
+public:
   UPROPERTY()
     UBoxComponent *Trigger;
+  UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+  class UCapsuleComponent* CapsuleComponent;
 
-  void doMovement(float DeltaSeconds);
-public:
   AMobileEnemy();
   virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;

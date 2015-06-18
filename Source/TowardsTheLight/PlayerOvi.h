@@ -59,15 +59,10 @@ public:
 	void TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location);
 
-	/** The CapsuleComponent being used for movement collision (by CharacterMovement). Always treated as being vertically aligned in simple collision check functions. */
   UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	  class UCapsuleComponent* CapsuleComponent;
-    /** The main skeletal mesh associated with this Character (optional sub-object). */
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	  class USkeletalMeshComponent* Mesh;
-	  /*UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	  class USkeletalMeshComponent* TailMesh;*/
-
   UPROPERTY(EditAnywhere, Category = Player)
     UStaticMeshComponent* Stick;
 
