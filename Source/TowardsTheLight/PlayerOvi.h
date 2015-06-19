@@ -6,9 +6,10 @@
 #include "PlayerOvi.generated.h"
 
 #define COLLISION_PLAYER        ECC_GameTraceChannel1 
+
 const float PADDING_COLLISION_PERCENT = 0.05f;
 const float PADDING_COLLISION_PERCENT_FEET = 0.30f;
-const float PADDING_COLLISION_PERCENT_RADIOUS = 0.55f; //HABRA QUE AJUSTARLO A LA MALLA
+const float PADDING_COLLISION_PERCENT_RADIOUS = 0.55f;
 const float DEFAULT_CAPSULE_RADIOUS = 30.0f;
 const float CAPSULE_RADIOUS_PADDING = 5.0f;
 const float DEFAULT_CAPSULE_HEIGHT = 95.0f;
@@ -18,6 +19,7 @@ const float DEFAULT_JUMP_SPEED = 1550.0f; //ajustado a valores de diseño
 const float DEFAULT_JUMP_ACC = 3300.0f; //ajustado a valores de diseño
 
 class AMobilePlatform;
+class AStick;
 UCLASS()
 class TOWARDSTHELIGHT_API APlayerOvi : public APawn
 {
@@ -63,8 +65,6 @@ public:
 	  class UCapsuleComponent* CapsuleComponent;
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	  class USkeletalMeshComponent* Mesh;
-  UPROPERTY(EditAnywhere, Category = Player)
-    UStaticMeshComponent* Stick;
 
 #if WITH_EDITORONLY_DATA
 	UPROPERTY()
@@ -103,15 +103,12 @@ public:
     bool isPlayerPaused();
 private:
 
-  UMaterialInstanceDynamic *StickMaterial;
-
   float UpdateState();
   void CalculateOrientation();
   void CalculateGravity(float DeltaSeconds);
   void DoJump(float DeltaSeconds);
   void DoMovement(float DeltaSeconds, float value);
   void CheckCollision();
-  //void CheckMobilePlatform();
   void AjustPosition();
   void Rotate(const FVector& rotation);
   FVector AbsVector(const FVector& vector);
@@ -133,7 +130,7 @@ private:
 
   bool m_hasKey;
   FLinearColor m_colorKey;
-
+  AStick* m_stick;
   bool bPlayerRunning;
 	float m_limit;
   float m_actualAccJump;
