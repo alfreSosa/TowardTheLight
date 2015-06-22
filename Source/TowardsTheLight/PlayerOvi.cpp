@@ -1,8 +1,8 @@
 #include "TowardsTheLight.h"
 #include "PlayerOvi.h"
 #include "MobilePlatform.h"
-#include "GameDataManager.h"
 #include "TimeManager.h"
+#include "Stick.h"
 
 /************************************/
 /*DEBUG ALTERNATIVO*/
@@ -68,23 +68,10 @@ APlayerOvi::APlayerOvi() {
     Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
   }
 
-  StickMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
-  UMaterial* mat = nullptr;
-  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Baculo/baculo_diffuse.baculo_diffuse'"));
-  if (MatFinder.Succeeded())
-  {
-    mat = MatFinder.Object;
-    StickMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
-  }
-
-  Stick = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Stick"));
-  Stick->SetMobility(EComponentMobility::Movable);
-  Stick->AttachTo(Mesh);
-
   //key Initialization
   m_hasKey = false;
   m_colorKey = FLinearColor(0.0f, 0.0f, 0.0f);
-
+  m_stick = nullptr;
   m_state = States::RIGHT;
   m_limit = 0;
   m_right = m_left = false;
@@ -114,7 +101,6 @@ APlayerOvi::APlayerOvi() {
 
   bPlayerRunning = false;
   m_currentMobile = nullptr;
-
 }
 
 void APlayerOvi::BeginPlay(){
@@ -138,15 +124,11 @@ void APlayerOvi::BeginPlay(){
   m_capsuleRadiousPadding = m_capsuleRadious * PADDING_COLLISION_PERCENT_RADIOUS;
   m_capsuleHeightPaddingFeet = m_capsuleHeight * PADDING_COLLISION_PERCENT_FEET;
 
-  Stick->SetMaterial(0, StickMaterial);
-  /*FVector color(1.0, 0, 0);
-  StickMaterial->SetVectorParameterValue("BaculoColor", color);*/
-
   /**ESTO ES LO QUE ASIGNA EL BASTON AL SOCKET****/
-
- /* const USkeletalMeshSocket *socket = Mesh->GetSocketByName("Puntodeacople_Baston");
+  m_stick = GetWorld()->SpawnActor<AStick>(AStick::StaticClass());
+  const USkeletalMeshSocket *socket = Mesh->GetSocketByName("Puntodeacople_Baston");
   if (socket)
-    socket->AttachActor(prueba, Mesh);*/
+    socket->AttachActor(m_stick, Mesh);
 }
 
 void APlayerOvi::Tick(float DeltaSeconds){
@@ -213,69 +195,66 @@ void APlayerOvi::SetupPlayerInputComponent(class UInputComponent* InputComponent
 }
 
 void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location) {
-  if (GameDataManager::Instance()->IsSwipeControl()){
-    if (Location.X > m_limitViewPort1 && m_fingerIndexMovement != FingerIndex && m_fingerIndexOther != FingerIndex) { //JUMP
-      OnStartJump();
-      m_fingerIndexJump = FingerIndex;
-      //if (!nearGear)
-      //  OnStartJump();
-      //else{
-      //  puntero a nearGear->doAction();
-      //}
-    }
-    else if (Location.X < m_limitViewPort0 && m_fingerIndexJump != FingerIndex && m_fingerIndexOther != FingerIndex){ //MOVEMENT SWIPE
-      if (m_centerTouchX == 0){ //initial touch
-        m_centerTouchX = Location.X;
-        m_fingerIndexMovement = FingerIndex;
-      }
-      if (m_fingerIndexMovement == FingerIndex){
-        if (Location.X > m_centerTouchX + MarginInput){ //right swipe
-          OnStartRight();
-          OnStopLeft();
-          m_centerTouchX = Location.X - MarginInput;
-          m_stateInput = States::RIGHT;
-        }
-        else if (Location.X < m_centerTouchX - MarginInput){ //left swipe
-          OnStartLeft();
-          OnStopRight();
-          m_centerTouchX = Location.X + MarginInput;
-          m_stateInput = States::LEFT;
-        }
-        else if (Location.X > m_centerTouchX && m_stateInput == States::RIGHT){ //right swipe
-          OnStartRight();
-          OnStopLeft();
-        }
-        else if (Location.X < m_centerTouchX && m_stateInput == States::LEFT){ //left swipe
-          OnStartLeft();
-          OnStopRight();
-        }
-        else{ //no movement
-          OnStopRight();
-          OnStopLeft();
-          m_stateInput = States::STOP;
-        }
-      }
-    }
-    else if (m_fingerIndexJump != FingerIndex && m_fingerIndexMovement != FingerIndex)
-      m_fingerIndexOther = FingerIndex;
+  if (Location.X > m_limitViewPort1 && m_fingerIndexMovement != FingerIndex && m_fingerIndexOther != FingerIndex) { //JUMP
+    OnStartJump();
+    m_fingerIndexJump = FingerIndex;
+    //if (!nearGear)
+    //  OnStartJump();
+    //else{
+    //  puntero a nearGear->doAction();
+    //}
   }
+  else if (Location.X < m_limitViewPort0 && m_fingerIndexJump != FingerIndex && m_fingerIndexOther != FingerIndex){ //MOVEMENT SWIPE
+    if (m_centerTouchX == 0){ //initial touch
+      m_centerTouchX = Location.X;
+      m_fingerIndexMovement = FingerIndex;
+    }
+    if (m_fingerIndexMovement == FingerIndex){
+      if (Location.X > m_centerTouchX + MarginInput){ //right swipe
+        OnStartRight();
+        OnStopLeft();
+        m_centerTouchX = Location.X - MarginInput;
+        m_stateInput = States::RIGHT;
+      }
+      else if (Location.X < m_centerTouchX - MarginInput){ //left swipe
+        OnStartLeft();
+        OnStopRight();
+        m_centerTouchX = Location.X + MarginInput;
+        m_stateInput = States::LEFT;
+      }
+      else if (Location.X > m_centerTouchX && m_stateInput == States::RIGHT){ //right swipe
+        OnStartRight();
+        OnStopLeft();
+      }
+      else if (Location.X < m_centerTouchX && m_stateInput == States::LEFT){ //left swipe
+        OnStartLeft();
+        OnStopRight();
+      }
+      else{ //no movement
+        OnStopRight();
+        OnStopLeft();
+        m_stateInput = States::STOP;
+      }
+    }
+  }
+  else if (m_fingerIndexJump != FingerIndex && m_fingerIndexMovement != FingerIndex)
+    m_fingerIndexOther = FingerIndex;
+  
 }
 
 void APlayerOvi::TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location) {
-  if (GameDataManager::Instance()->IsSwipeControl()){
-    if (FingerIndex == m_fingerIndexJump){
-      OnStopJump();
-      m_fingerIndexJump = ETouchIndex::Touch10;
-    }
-    else if (FingerIndex == m_fingerIndexMovement){
-      m_centerTouchX = 0.f;
-      m_fingerIndexMovement = ETouchIndex::Touch10;
-      OnStopRight();
-      OnStopLeft();
-    }
-    else if (FingerIndex == m_fingerIndexOther)
-      m_fingerIndexOther = ETouchIndex::Touch10;
+  if (FingerIndex == m_fingerIndexJump){
+    OnStopJump();
+    m_fingerIndexJump = ETouchIndex::Touch10;
   }
+  else if (FingerIndex == m_fingerIndexMovement){
+    m_centerTouchX = 0.f;
+    m_fingerIndexMovement = ETouchIndex::Touch10;
+    OnStopRight();
+    OnStopLeft();
+  }
+  else if (FingerIndex == m_fingerIndexOther)
+    m_fingerIndexOther = ETouchIndex::Touch10;
 }
 
 void APlayerOvi::OnStartRight() {
@@ -786,13 +765,11 @@ void APlayerOvi::OnMobilePlatform(AMobilePlatform *mp, FVector movement){
 
 void APlayerOvi::SetKey(bool key, FLinearColor colorKey) {
   m_hasKey = key;
-  if (m_hasKey){
-    StickMaterial->SetScalarParameterValue("Brillo", 5.0f);
-    m_colorKey = colorKey;
-  }
+  m_colorKey = colorKey;
+  if (m_hasKey)
+    m_stick->SetColor(m_colorKey, 5.0f);
   else
-    StickMaterial->SetScalarParameterValue("Brillo", 0.0f);
-  StickMaterial->SetVectorParameterValue("BaculoColor", colorKey);
+    m_stick->SetColor(m_colorKey, 0.0f);  
 }
 
 bool APlayerOvi::HasKey(){
