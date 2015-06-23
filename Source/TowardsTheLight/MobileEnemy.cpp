@@ -68,15 +68,9 @@ void AMobileEnemy::BeginPlay() {
   m_lastPosition = GetActorLocation();
   FVector right = GetActorRightVector();
   //right limit
-  m_rightPosition = GetActorLocation() + right * RightDistance;
-  m_rightPosition.X = (right.X > 0.05 || right.X < -0.05) ? m_rightPosition.X : 0.0f;
-  m_rightPosition.Y = (right.Y > 0.05 || right.Y < -0.05) ? m_rightPosition.Y : 0.0f;
-  m_rightPosition.Z = (right.Z > 0.05 || right.Z < -0.05) ? m_rightPosition.Z : 0.0f;
+  m_rightPosition = (GetActorLocation() + RightDistance) * right;
   //left limit
-  m_leftPosition = GetActorLocation() - right * LeftDistance;
-  m_leftPosition.X = (right.X > 0.05 || right.X < -0.05) ? m_leftPosition.X : 0.0f;
-  m_leftPosition.Y = (right.Y > 0.05 || right.Y < -0.05) ? m_leftPosition.Y : 0.0f;
-  m_leftPosition.Z = (right.Z > 0.05 || right.Z < -0.05) ? m_leftPosition.Z : 0.0f;
+  m_leftPosition = (GetActorLocation() - LeftDistance) * right;
   RegisterDelegate();
 
 }
@@ -114,38 +108,32 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
     }
     break;
   case TO_RIGHT:{
-    float actualPosition = FVector::DotProduct(GetActorLocation(), m_rightVector);
-    float limitRight = m_rightPosition.X + m_rightPosition.Y + m_rightPosition.Z;
-    if (actualPosition < limitRight){
+    FVector pos = GetActorLocation() * m_rightVector;
+    FVector dif = m_rightPosition - pos;
+
+    if ((dif.X < 0.05 && dif.X > -0.05) && (dif.Y < 0.05 && dif.Y > -0.05) && (dif.Z < 0.05 && dif.Z > -0.05)){
       FVector location = GetActorLocation();
       location += Speed * DeltaSeconds * m_rightVector;
       SetActorLocation(location);
     }
     else{
-      FVector pos;
-      pos.X = (m_rightVector.X > 0.05 || m_rightVector.X < -0.05) ? m_rightPosition.X : GetActorLocation().X;
-      pos.Y = (m_rightVector.Y > 0.05 || m_rightVector.Y < -0.05) ? m_rightPosition.Y : GetActorLocation().Y;
-      pos.Z = (m_rightVector.Z > 0.05 || m_rightVector.Z < -0.05) ? m_rightPosition.Z : GetActorLocation().Z;
-      SetActorLocation(pos);
+      //SetActorLocation(nLimit);
       m_state = RIGHT_DELAY;
       m_currentDistance = 0;
     }
   }
     break;
   case TO_LEFT:{
-    float actualPosition = FVector::DotProduct(GetActorLocation(), m_rightVector);
-    float limitLeft = m_leftPosition.X + m_leftPosition.Y + m_leftPosition.Z;
-    if (actualPosition > limitLeft){
+    FVector pos = GetActorLocation() * m_rightVector;
+    FVector dif = m_leftPosition - pos;
+
+    if ((dif.X < 0.05 && dif.X > -0.05) && (dif.Y < 0.05 && dif.Y > -0.05) && (dif.Z < 0.05 && dif.Z > -0.05)){
       FVector location = GetActorLocation();
       location += Speed * DeltaSeconds * -m_rightVector;
       SetActorLocation(location);
     }
     else{
-      FVector pos;
-      pos.X = (m_rightVector.X > 0.05 || m_rightVector.X < -0.05) ? m_leftPosition.X : GetActorLocation().X;
-      pos.Y = (m_rightVector.Y > 0.05 || m_rightVector.Y < -0.05) ? m_leftPosition.Y : GetActorLocation().Y;
-      pos.Z = (m_rightVector.Z > 0.05 || m_rightVector.Z < -0.05) ? m_leftPosition.Z : GetActorLocation().Z;
-      SetActorLocation(pos);
+      //SetActorLocation(nLimit);
       m_state = LEFT_DELAY;
       m_currentDistance = 0;
     }
