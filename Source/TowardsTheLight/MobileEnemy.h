@@ -22,6 +22,8 @@ class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
 	
   float m_timer;
   float m_totalDistance;
+  FVector m_rightPosition;
+  FVector m_leftPosition;
   float m_currentDistance;
   FVector m_rightVector;
   bool m_initMovement;

@@ -27,6 +27,8 @@ AMobileEnemy::AMobileEnemy() {
   m_actualJumpSpeed = m_accelerationJump = 0.0f;
   m_enableGravity = true;
   m_player = nullptr;
+  m_leftPosition = m_rightPosition = FVector::ZeroVector;
+
   //Capsule
   CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
   CapsuleComponent->InitCapsuleSize(DEFAULT_ENEMY_CAPSULE_RADIOUS, DEFAULT_ENEMY_CAPSULE_HEIGHT);
@@ -64,7 +66,17 @@ void AMobileEnemy::BeginPlay() {
   m_capsuleRadious = CapsuleComponent->GetScaledCapsuleRadius();
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_ENEMY_COLLISION_PERCENT;
   m_lastPosition = GetActorLocation();
-
+  FVector right = GetActorRightVector();
+  //right limit
+  m_rightPosition = GetActorLocation() + right * RightDistance;
+  m_rightPosition.X = (right.X > 0.05 || right.X < -0.05) ? m_rightPosition.X : 0.0f;
+  m_rightPosition.Y = (right.Y > 0.05 || right.Y < -0.05) ? m_rightPosition.Y : 0.0f;
+  m_rightPosition.Z = (right.Z > 0.05 || right.Z < -0.05) ? m_rightPosition.Z : 0.0f;
+  //left limit
+  m_leftPosition = GetActorLocation() - right * LeftDistance;
+  m_leftPosition.X = (right.X > 0.05 || right.X < -0.05) ? m_leftPosition.X : 0.0f;
+  m_leftPosition.Y = (right.Y > 0.05 || right.Y < -0.05) ? m_leftPosition.Y : 0.0f;
+  m_leftPosition.Z = (right.Z > 0.05 || right.Z < -0.05) ? m_leftPosition.Z : 0.0f;
   RegisterDelegate();
 
 }
@@ -102,34 +114,38 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
     }
     break;
   case TO_RIGHT:{
-    float dist = Speed * DeltaSeconds;
-    if (m_totalDistance - m_currentDistance < dist)
-      dist = m_totalDistance - m_currentDistance;
-
-    if (m_currentDistance < m_totalDistance){
-      m_currentDistance += dist;
+    float actualPosition = FVector::DotProduct(GetActorLocation(), m_rightVector);
+    float limitRight = m_rightPosition.X + m_rightPosition.Y + m_rightPosition.Z;
+    if (actualPosition < limitRight){
       FVector location = GetActorLocation();
-      location += dist * m_rightVector;
+      location += Speed * DeltaSeconds * m_rightVector;
       SetActorLocation(location);
     }
     else{
+      FVector pos;
+      pos.X = (m_rightVector.X > 0.05 || m_rightVector.X < -0.05) ? m_rightPosition.X : GetActorLocation().X;
+      pos.Y = (m_rightVector.Y > 0.05 || m_rightVector.Y < -0.05) ? m_rightPosition.Y : GetActorLocation().Y;
+      pos.Z = (m_rightVector.Z > 0.05 || m_rightVector.Z < -0.05) ? m_rightPosition.Z : GetActorLocation().Z;
+      SetActorLocation(pos);
       m_state = RIGHT_DELAY;
       m_currentDistance = 0;
     }
   }
     break;
   case TO_LEFT:{
-    float dist = Speed * DeltaSeconds;
-    if (m_totalDistance - m_currentDistance < dist)
-      dist = m_totalDistance - m_currentDistance;
-
-    if (m_currentDistance < m_totalDistance){
-      m_currentDistance += dist;
+    float actualPosition = FVector::DotProduct(GetActorLocation(), m_rightVector);
+    float limitLeft = m_leftPosition.X + m_leftPosition.Y + m_leftPosition.Z;
+    if (actualPosition > limitLeft){
       FVector location = GetActorLocation();
-      location += dist * -m_rightVector;
+      location += Speed * DeltaSeconds * -m_rightVector;
       SetActorLocation(location);
     }
     else{
+      FVector pos;
+      pos.X = (m_rightVector.X > 0.05 || m_rightVector.X < -0.05) ? m_leftPosition.X : GetActorLocation().X;
+      pos.Y = (m_rightVector.Y > 0.05 || m_rightVector.Y < -0.05) ? m_leftPosition.Y : GetActorLocation().Y;
+      pos.Z = (m_rightVector.Z > 0.05 || m_rightVector.Z < -0.05) ? m_leftPosition.Z : GetActorLocation().Z;
+      SetActorLocation(pos);
       m_state = LEFT_DELAY;
       m_currentDistance = 0;
     }
@@ -417,11 +433,9 @@ void AMobileEnemy::ResponseCollision() {
   switch (m_state) {
   case TO_RIGHT: 
     m_state = RIGHT_DELAY;
-    m_currentDistance = m_totalDistance - m_currentDistance;
     break;
   case TO_LEFT:
     m_state = LEFT_DELAY;
-    m_currentDistance = m_totalDistance - m_currentDistance;
     break;
   }
 }
