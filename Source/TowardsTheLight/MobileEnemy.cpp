@@ -64,6 +64,13 @@ void AMobileEnemy::BeginPlay() {
   m_capsuleRadious = CapsuleComponent->GetScaledCapsuleRadius();
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_ENEMY_COLLISION_PERCENT;
   m_lastPosition = GetActorLocation();
+  
+  {
+    FVector right = GetActorRightVector();
+    right = right;
+    m_rightPosition = (m_lastPosition + RightDistance * right) * right;
+    m_leftPosition = (m_lastPosition + LeftDistance * -right) * right;
+  }
 
   RegisterDelegate();
 
@@ -230,18 +237,18 @@ void AMobileEnemy::CheckCollision() {
   newLocationForward.Z = (FMath::Abs(GetActorRightVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
 
   // Calculate the start location for trace back
-  //FVector StartTraceBack = newLocationForward;
-  //FVector StartTraceTopBack = StartTraceBack + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding);
-  //FVector StartTraceBottomBack = StartTraceBack - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding);
+  /*FVector StartTraceBack = newLocationForward;
+  FVector StartTraceTopBack = StartTraceBack + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding);
+  FVector StartTraceBottomBack = StartTraceBack - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding);*/
 
   const FVector EndTraceTop = (newLocationForward + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) + GetActorRightVector() * m_capsuleRadious;
   const FVector EndTraceBottom = (newLocationForward - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) + GetActorRightVector() * m_capsuleRadious;
   const FVector EndTraceMidle = newLocationForward + GetActorRightVector() * m_capsuleRadious;
 
   //cambiado a last_position porque va hacia atras y la posicion nueva siempre sera hacia adelante.
-  //const FVector EndTraceTopBack = (m_lastPosition + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) - GetActorRightVector() * (m_capsuleRadious - 5);
-  //const FVector EndTraceBottomBack = (m_lastPosition - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) - GetActorRightVector() * (m_capsuleRadious - 5); 
-  //const FVector EndTraceMidleBack = m_lastPosition - GetActorRightVector() * (m_capsuleRadious - 5);
+  /*const FVector EndTraceTopBack = (m_lastPosition + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) - GetActorRightVector() * (m_capsuleRadious - 5);
+  const FVector EndTraceBottomBack = (m_lastPosition - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) - GetActorRightVector() * (m_capsuleRadious - 5); 
+  const FVector EndTraceMidleBack = m_lastPosition - GetActorRightVector() * (m_capsuleRadious - 5);*/
 
   // Setup the trace query  
   static FName FireTraceIdent = FName(TEXT("Platform"));
@@ -303,30 +310,30 @@ void AMobileEnemy::CheckCollision() {
   }
 
 
-  //if (collisionMidleBack) {
-  //  int size = OutTraceResultMiddleBack.Num();
-  //  for (int i = 0; i < size; i++)
-  //    if (OutTraceResultMiddleBack[i].GetActor()->ActorHasTag("Platform")) {
-  //      SetActorLocation(RecalculateLocation(-GetActorRightVector(), GetActorLocation(), OutTraceResultMiddleBack[i].Location, m_capsuleRadious));
-  //      break;
-  //    }
-  //}
-  //else if (collisionTopBack) {
-  //  int size = OutTraceResultTopBack.Num();
-  //  for (int i = 0; i < size; i++)
-  //    if (OutTraceResultTopBack[i].GetActor()->ActorHasTag("Platform")) {
-  //      SetActorLocation(RecalculateLocation(-GetActorRightVector(), GetActorLocation(), OutTraceResultTopBack[i].Location, m_capsuleRadious));
-  //      break;
-  //    }
-  //}
-  //else if (collisionBottomBack) {
-  //  int size = OutTraceResultBottomBack.Num();
-  //  for (int i = 0; i < size; i++)
-  //    if (OutTraceResultBottomBack[i].GetActor()->ActorHasTag("Platform")) {
-  //      SetActorLocation(RecalculateLocation(-GetActorRightVector(), GetActorLocation(), OutTraceResultBottomBack[i].Location, m_capsuleRadious));
-  //      break;
-  //    }
-  //}
+  /*if (collisionMidleBack) {
+    int size = OutTraceResultMiddleBack.Num();
+    for (int i = 0; i < size; i++)
+      if (OutTraceResultMiddleBack[i].GetActor()->ActorHasTag("Platform")) {
+        SetActorLocation(RecalculateLocation(-GetActorRightVector(), GetActorLocation(), OutTraceResultMiddleBack[i].Location, m_capsuleRadious));
+        break;
+      }
+  }
+  else if (collisionTopBack) {
+    int size = OutTraceResultTopBack.Num();
+    for (int i = 0; i < size; i++)
+      if (OutTraceResultTopBack[i].GetActor()->ActorHasTag("Platform")) {
+        SetActorLocation(RecalculateLocation(-GetActorRightVector(), GetActorLocation(), OutTraceResultTopBack[i].Location, m_capsuleRadious));
+        break;
+      }
+  }
+  else if (collisionBottomBack) {
+    int size = OutTraceResultBottomBack.Num();
+    for (int i = 0; i < size; i++)
+      if (OutTraceResultBottomBack[i].GetActor()->ActorHasTag("Platform")) {
+        SetActorLocation(RecalculateLocation(-GetActorRightVector(), GetActorLocation(), OutTraceResultBottomBack[i].Location, m_capsuleRadious));
+        break;
+      }
+  }*/
 
   FVector newLocationUp;
   newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
@@ -415,14 +422,19 @@ FVector AMobileEnemy::RecalculateLocation(FVector Direction, FVector Location, F
 }
 
 void AMobileEnemy::ResponseCollision() {
+ // FVector right = GetActorRightVector();
+  FVector location = GetActorLocation();
+  float val = 0.0f;
   switch (m_state) {
   case TO_RIGHT:
     m_state = RIGHT_DELAY;
-    m_currentDistance = m_totalDistance - m_currentDistance;
+    val = (m_rightPosition - location * m_rightVector).Size();
+    m_currentDistance = val;
     break;
   case TO_LEFT:
     m_state = LEFT_DELAY;
-    m_currentDistance = m_totalDistance - m_currentDistance;
+    val = (m_leftPosition - location * m_rightVector).Size();
+    m_currentDistance = val;
     break;
   }
 }
