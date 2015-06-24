@@ -17,10 +17,14 @@ FString AMenuGameMode::GetLevelPoints(FString levelName){
   return ret;
 }
 
-bool AMenuGameMode::IsSwipeControlBP(){
-  return GameDataManager::Instance()->IsSwipeControl();
+bool AMenuGameMode::LevelExists(FString levelName){
+  return GameDataManager::Instance()->LevelExists(levelName);
 }
 
-void AMenuGameMode::SetSwipeControlBP(bool enable){
-  GameDataManager::Instance()->SetSwipeControl(enable);
-}
+//bool AMenuGameMode::IsSwipeControlBP(){
+//  return GameDataManager::Instance()->IsSwipeControl();
+//}
+//
+//void AMenuGameMode::SetSwipeControlBP(bool enable){
+//  GameDataManager::Instance()->SetSwipeControl(enable);
+//}

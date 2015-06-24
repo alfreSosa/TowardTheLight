@@ -24,9 +24,10 @@ public:
   float GetOrbsCounts();
   float GetOrbsLevel(FString levelName);
   float GetPointsLevel(FString levelName);
+  bool LevelExists(FString levelName);
 
-  bool IsSwipeControl();
-  void SetSwipeControl(bool enable);
+//  bool IsSwipeControl();
+//  void SetSwipeControl(bool enable);
 
 protected:
   GameDataManager();
@@ -38,5 +39,5 @@ private:
   FString m_filePath = "StorageFiles/save/save.json";
   FString m_data;
 
-  enum SwipeControl { NONE = 0, SWIPE = 1, BUTTONS = -1 } m_swipeControl;
+//  enum SwipeControl { NONE = 0, SWIPE = 1, BUTTONS = -1 } m_swipeControl;
 };
