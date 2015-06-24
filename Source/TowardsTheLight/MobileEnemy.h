@@ -51,6 +51,7 @@ class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
   void CalculateGravity(float DeltaSeconds);
   void CheckCollision();
   void ResponseCollision();
+  void ResponseCollisionBackward();
   FVector AbsVector(const FVector& vector);
   FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
 public:
