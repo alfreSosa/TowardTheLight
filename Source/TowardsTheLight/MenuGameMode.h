@@ -14,9 +14,9 @@ class TOWARDSTHELIGHT_API AMenuGameMode : public AGameMode {
 
 public:
   UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
-    FString GetLevelPoints(FString levelName);
+    float GetLevelPoints(FString levelName);
   UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
-    FString GetLevelOrbs(FString levelName);
+    float GetLevelOrbs(FString levelName);
 
   UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
     bool LevelExists(FString levelName);
