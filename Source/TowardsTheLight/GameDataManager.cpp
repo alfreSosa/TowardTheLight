@@ -21,7 +21,7 @@ GameDataManager* GameDataManager::Instance() {
 GameDataManager::GameDataManager() {
   m_data = "";
   m_filePath = FPaths::GameContentDir() + m_filePath;
-  m_swipeControl = NONE;
+//  m_swipeControl = NONE;
 
   FFileHelper::LoadFileToString(m_data, *m_filePath);
   Document doc;
@@ -218,43 +218,66 @@ float GameDataManager::GetPointsLevel(FString levelName){
   return ret;
 }
 
-bool GameDataManager::IsSwipeControl(){
-  if (m_swipeControl == NONE){
-    Document doc;
-    doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
-
-    if (!doc.HasParseError())
-      if (doc.IsObject())
-        if (doc.HasMember("general"))
-          if (doc["general"].IsObject())
-            if (doc["general"].HasMember("swipeControl"))
-              if (doc["general"]["swipeControl"].IsBool()){
-                bool ret = doc["general"]["swipeControl"].GetBool();
-                m_swipeControl = ret ? SWIPE : BUTTONS;
-              }
-  }
-
-  return m_swipeControl == SWIPE;
-}
-
-void GameDataManager::SetSwipeControl(bool enable){
+bool GameDataManager::LevelExists(FString levelName){
   Document doc;
   doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
 
   if (!doc.HasParseError())
     if (doc.IsObject())
-      if (doc.HasMember("general"))
-        if (doc["general"].IsObject())
-          if (doc["general"].HasMember("swipeControl"))
-            if (doc["general"]["swipeControl"].IsBool()){
-              doc["general"]["swipeControl"].SetBool(enable);
-              m_swipeControl = enable ? SWIPE : BUTTONS;
-            }
+      if (doc.HasMember("levels"))
+        if (doc["levels"].IsArray()){
+          SizeType numLevels = doc["levels"].Size();
+          const Value &levels = doc["levels"];
+          for (SizeType i = 0; i < numLevels; i++)
+            if (levels[i].IsObject())
+              if (levels[i].HasMember("name"))
+                if (levels[i]["name"].IsString())
+                  if (FString(levels[i]["name"].GetString()) == levelName)
+                    return true;
+        }
 
-  StringBuffer buffer;
-  Writer<StringBuffer> writer(buffer);
-  doc.Accept(writer);
-  m_data = buffer.GetString();
-
-  SavedGame();
+  return false;
 }
+
+
+
+//bool GameDataManager::IsSwipeControl(){
+//  if (m_swipeControl == NONE){
+//    Document doc;
+//    doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+//
+//    if (!doc.HasParseError())
+//      if (doc.IsObject())
+//        if (doc.HasMember("general"))
+//          if (doc["general"].IsObject())
+//            if (doc["general"].HasMember("swipeControl"))
+//              if (doc["general"]["swipeControl"].IsBool()){
+//                bool ret = doc["general"]["swipeControl"].GetBool();
+//                m_swipeControl = ret ? SWIPE : BUTTONS;
+//              }
+//  }
+//
+//  return m_swipeControl == SWIPE;
+//}
+//
+//void GameDataManager::SetSwipeControl(bool enable){
+//  Document doc;
+//  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+//
+//  if (!doc.HasParseError())
+//    if (doc.IsObject())
+//      if (doc.HasMember("general"))
+//        if (doc["general"].IsObject())
+//          if (doc["general"].HasMember("swipeControl"))
+//            if (doc["general"]["swipeControl"].IsBool()){
+//              doc["general"]["swipeControl"].SetBool(enable);
+//              m_swipeControl = enable ? SWIPE : BUTTONS;
+//            }
+//
+//  StringBuffer buffer;
+//  Writer<StringBuffer> writer(buffer);
+//  doc.Accept(writer);
+//  m_data = buffer.GetString();
+//
+//  SavedGame();
+//}
