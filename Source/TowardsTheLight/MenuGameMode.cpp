@@ -5,22 +5,22 @@
 #include "GameDataManager.h"
 
 
-FString AMenuGameMode::GetLevelOrbs(FString levelName){
-  FString ret;
-  ret = ret.FromInt(GameDataManager::Instance()->GetOrbsLevel(levelName));
-  return ret;
+float AMenuGameMode::GetLevelOrbs(FString levelName){
+  return GameDataManager::Instance()->GetOrbsLevel(levelName);
 }
 
-FString AMenuGameMode::GetLevelPoints(FString levelName){
-  FString ret;
-  ret = ret.FromInt(GameDataManager::Instance()->GetPointsLevel(levelName));
-  return ret;
+float AMenuGameMode::GetLevelPoints(FString levelName){
+  return GameDataManager::Instance()->GetPointsLevel(levelName);
 }
 
-bool AMenuGameMode::IsSwipeControlBP(){
-  return GameDataManager::Instance()->IsSwipeControl();
+bool AMenuGameMode::LevelExists(FString levelName){
+  return GameDataManager::Instance()->LevelExists(levelName);
 }
 
-void AMenuGameMode::SetSwipeControlBP(bool enable){
-  GameDataManager::Instance()->SetSwipeControl(enable);
-}
+//bool AMenuGameMode::IsSwipeControlBP(){
+//  return GameDataManager::Instance()->IsSwipeControl();
+//}
+//
+//void AMenuGameMode::SetSwipeControlBP(bool enable){
+//  GameDataManager::Instance()->SetSwipeControl(enable);
+//}

@@ -91,6 +91,6 @@ FString AMyGameMode::GetLevelNameBP(){
   return levelName;
 }
 
-bool AMyGameMode::SwipeControlBP(){
-  return GameDataManager::Instance()->IsSwipeControl();
-}
+//bool AMyGameMode::SwipeControlBP(){
+//  return GameDataManager::Instance()->IsSwipeControl();
+//}
