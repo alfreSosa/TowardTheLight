@@ -1,1 +1,10 @@
-{"general":{"swipeControl":false},"levels":[{"name":"APK_Nivel_01","orbs":1,"points":4600},{"name":"WIP_JM_Sanchez_01","orbs":2,"points":300},{"name":"manu","orbs":1,"points":300},{"name":"APK_Nivel_03","orbs":1,"points":2500}]}
+{
+	"general":
+	{
+		"genericConfig": true
+	},
+	"levels":
+	[
+
+	]
+}
