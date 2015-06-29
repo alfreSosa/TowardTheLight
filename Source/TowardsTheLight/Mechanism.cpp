@@ -11,11 +11,30 @@ AMechanism::AMechanism()
   CanActivate = CanDisactivate = true;
   DisableAtEndAction = false;
   NumberOfActions = 1;
+  
+  UStaticMesh *mesh;
+  static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshFinder(TEXT("StaticMesh'/Game/Models/Button/buton.buton'"));
+  if (MeshFinder.Succeeded())
+  {
+    mesh = MeshFinder.Object;
+    MeshActivator->SetStaticMesh(mesh);
+  }
+  
+  MeshActivator->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
+  MechanismMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
+  UMaterial* mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Button/Button.Button'"));
+  if (MatFinder.Succeeded())
+  {
+    mat = MatFinder.Object;
+    MechanismMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
 }
 
 void AMechanism::BeginPlay()
 {
 	Super::BeginPlay();
+  MeshActivator->SetMaterial(0, MechanismMaterial);
   int32 numTargets = Targets.Num();
   m_Targets.Init(numTargets);
   for (int32 i = 0; i < numTargets; i++)

@@ -36,5 +36,5 @@ public:
 private:
   //TargetVariables
   TArray<AStaticPlatform *> m_Targets;
-	
+  UMaterialInstanceDynamic *MechanismMaterial;
 };
