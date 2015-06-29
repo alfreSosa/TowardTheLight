@@ -21,7 +21,6 @@ public:
 	
   UPROPERTY(EditAnywhere, Category = Tower)
     UStaticMeshComponent* Body;
-
   UPROPERTY(EditAnywhere, Category = Tower)
     UStaticMeshComponent* Entrance;
 	
@@ -29,7 +28,6 @@ public:
     bool NeedKey;
   UPROPERTY(EditAnywhere, Category = Tower)
     FLinearColor ColorKey;
-
 
   void RegisterDelegate();
   UFUNCTION()
