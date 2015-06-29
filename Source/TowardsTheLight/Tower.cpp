@@ -8,13 +8,17 @@
 
 // Sets default values
 ATower::ATower() {
-  RootComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
-  RootComponent->SetWorldScale3D(FVector(2.5, 2.5, 2.5));
-  RootComponent = Body;
+  RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+  Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
+  Body->SetWorldScale3D(FVector(2.5, 2.5, 2.5));
+  RootComponent->SetMobility(EComponentMobility::Static);
+  Body->SetMobility(EComponentMobility::Static);
+  Body->AttachTo(RootComponent);
   this->Tags.Add("Platform");
 
   Entrance = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Entrance"));
-  Entrance->AttachTo(RootComponent);
+  Entrance->SetMobility(EComponentMobility::Static);
+  Entrance->AttachTo(Body);
 
   Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
   Trigger->AttachTo(Entrance);
