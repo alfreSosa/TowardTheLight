@@ -10,7 +10,7 @@
 ATower::ATower() {
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
-  Body->SetWorldScale3D(FVector(2.5, 2.5, 2.5));
+//  Body->SetWorldScale3D(FVector(2.5, 2.5, 2.5));
   RootComponent->SetMobility(EComponentMobility::Static);
   Body->SetMobility(EComponentMobility::Static);
   Body->AttachTo(RootComponent);
