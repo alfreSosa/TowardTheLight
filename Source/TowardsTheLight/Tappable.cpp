@@ -59,8 +59,13 @@ void ATappable::RegisterDelegate() {
 
 void ATappable::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
   if (OtherActor->ActorHasTag("Player")){
-    m_isPlayerOn = true;
     m_player = dynamic_cast<APlayerOvi *>(OtherActor);
+    FVector dif = m_player->GetActorUpVector() - GetActorUpVector();
+    dif.X = (dif.X < 0) ? -dif.X : dif.X;
+    dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
+    dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
+    if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05)
+      m_isPlayerOn = true;
     Activate(true);
   }
 }
@@ -77,11 +82,6 @@ void  ATappable::ReceiveActorOnInputTouchBegin(const ETouchIndex::Type FingerInd
   if (m_isPlayerOn)
     if (m_player)
       if (!NeedKey || (NeedKey && m_player->HasKey() && ColorKey == m_player->GetColorKey())) {
-        FVector dif = m_player->GetActorUpVector() - GetActorUpVector();
-        dif.X = (dif.X < 0) ? -dif.X : dif.X;
-        dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
-        dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
-        if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05)
           Execute();
       }
 }
