@@ -34,7 +34,7 @@ AMechanism::AMechanism()
 void AMechanism::BeginPlay()
 {
 	Super::BeginPlay();
-  MeshActivator->SetMaterial(0, MechanismMaterial);
+  m_meshActivator->SetMaterial(0, MechanismMaterial);
   int32 numTargets = Targets.Num();
   m_Targets.Init(numTargets);
   for (int32 i = 0; i < numTargets; i++)
