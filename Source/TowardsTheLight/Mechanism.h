@@ -17,6 +17,8 @@ public:
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
     TArray<AActor *> Targets;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
+    bool TargetsAreEnabled;
+  UPROPERTY(EditAnywhere, Category = MechanismTarget)
     bool CanActivate;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
     bool CanDisactivate;
@@ -24,6 +26,14 @@ public:
     bool DisableAtEndAction;
   UPROPERTY(EditAnywhere, Category = MechanismResponse)
     int32 NumberOfActions;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    float TimeInIntermittence;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    float TimeToStartIntermittence;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    FLinearColor ColorDisabled;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    FLinearColor ColorEnabled;
 	//constructor
 	AMechanism();
 
@@ -35,6 +45,9 @@ public:
 
 private:
   //TargetVariables
+  float m_elapsedIntermitence;
+  float m_elapsedStartIntermitence;
+  bool intermitedOn;
   TArray<AStaticPlatform *> m_Targets;
   UMaterialInstanceDynamic *MechanismMaterial;
 };
