@@ -21,6 +21,8 @@ AMobilePlatform::AMobilePlatform() {
   Speed = 100.f;
   InitialDelay = 1.f;
   Enabled = true;
+  ColorDisabled = FLinearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  ColorEnabled = FLinearColor(0.0f, 0.9490f, 1.0f, 1.0f);
 
   //private variables
   m_timer = 0;
@@ -29,12 +31,22 @@ AMobilePlatform::AMobilePlatform() {
   m_maxActions = 1;
   m_actions = 0;
   m_disableAtEndAction = m_isPlayerOn = false;
+
+  MobilePlatformMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
+  UMaterial* mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Plataforma_MOVIL/Plataforma_movil.Plataforma_movil'"));
+  if (MatFinder.Succeeded())
+  {
+    mat = MatFinder.Object;
+    MobilePlatformMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
 }
 
 void AMobilePlatform::BeginPlay() {
   Super::BeginPlay();
   this->Tags.Add("MobilePlatform");
   m_totalDistance = RightDistance;
+  OurVisibleComponent->SetMaterial(0, MobilePlatformMaterial);
 }
 
 void AMobilePlatform::Tick(float DeltaSeconds) {

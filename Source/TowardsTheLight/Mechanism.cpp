@@ -16,7 +16,8 @@ AMechanism::AMechanism()
   TimeToStartIntermittence = 5.0f;
   ColorDisabled = FLinearColor(0.0f, 0.0f, 0.0f, 1.0f);
   ColorEnabled = FLinearColor(0.0f, 0.9490f, 1.0f, 1.0f);
-  intermitedOn = TargetsAreEnabled = false;
+  TargetsAreEnabled = false;
+  intermitedOn = true;
   //Private properties
   m_elapsedIntermitence = 0.0f;
   m_elapsedStartIntermitence = TimeToStartIntermittence;
@@ -42,8 +43,6 @@ void AMechanism::BeginPlay()
 
   for (int32 i = 0; i < numTargets; i++)
     m_Targets[i]->InitByMechanism(DisableAtEndAction, NumberOfActions);
-
-  intermitedOn = TargetsAreEnabled;
 }
 
 void AMechanism::Tick(float DeltaSeconds)
