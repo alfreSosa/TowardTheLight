@@ -15,7 +15,7 @@ public:
 
   UPROPERTY(EditAnywhere)
     UStaticMeshComponent* MeshActivator;
-  UPROPERTY()
+  UPROPERTY(EditAnywhere)
     UBoxComponent *Trigger;
   UPROPERTY(EditAnywhere, Category = Activator)
     bool NeedKey;
