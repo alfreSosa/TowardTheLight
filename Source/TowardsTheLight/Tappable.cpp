@@ -14,6 +14,8 @@ ATappable::ATappable()
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   MeshActivator = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshActivator"));
   MeshActivator->AttachTo(RootComponent);
+
+  m_meshActivator = MeshActivator;
   //trigger component
   Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
   Trigger->SetCollisionProfileName(FName(TEXT("OverlapOnlyPawn")));
@@ -33,6 +35,7 @@ ATappable::ATappable()
 void ATappable::BeginPlay()
 {
 	Super::BeginPlay();
+  m_meshActivator = MeshActivator;
   RegisterDelegate();
 }
 
