@@ -10,15 +10,16 @@ class TOWARDSTHELIGHT_API ATower : public APawn
 {
 	GENERATED_BODY()
 
-  UPROPERTY()
-    UBoxComponent *Trigger;
+ 
 public:	
 	// Sets default values for this actor's properties
 	ATower();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
+  UPROPERTY(EditAnywhere)
+    UBoxComponent *Trigger;
   UPROPERTY(EditAnywhere, Category = Tower)
     UStaticMeshComponent* Body;
   UPROPERTY(EditAnywhere, Category = Tower)
