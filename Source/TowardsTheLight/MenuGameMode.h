@@ -19,6 +19,9 @@ public:
     float GetLevelOrbs(FString levelName);
 
   UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    float GetTotalOrbs();
+
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
     bool LevelExists(FString levelName);
 
   //UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
