@@ -18,10 +18,9 @@ public:
     FLinearColor ColorKey;
   UPROPERTY(EditAnywhere, Category = Altar)
     USceneComponent* OurVisibleComponent;
-
-private:
-  UPROPERTY()
+  UPROPERTY(EditAnywhere)
     UBoxComponent *Trigger;
+private:
   void RegisterDelegate();
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
