@@ -23,7 +23,12 @@ public:
     UStaticMeshComponent* Body;
   UPROPERTY(EditAnywhere, Category = Tower)
     UStaticMeshComponent* Entrance;
-	
+  UPROPERTY(EditAnywhere, Category = Tower)
+    UStaticMeshComponent* Light;
+  UPROPERTY(EditAnywhere, Category = Tower)
+    FLinearColor ColorDisabled;
+  UPROPERTY(EditAnywhere, Category = Tower)
+    FLinearColor ColorEnabled;
   UPROPERTY(EditAnywhere, Category = Tower)
     bool NeedKey;
   UPROPERTY(EditAnywhere, Category = Tower)
@@ -33,4 +38,6 @@ public:
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
+private:
+  UMaterialInstanceDynamic *TowerLightMaterial;
 };
