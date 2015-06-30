@@ -30,8 +30,8 @@ ATower::ATower() {
   Trigger->SetWorldScale3D(FVector(0.5, 0.5, 0.5));
   Trigger->bGenerateOverlapEvents = true;
 
-  ColorDisabled = FColor(0.0f, 0.0f, 0.0f, 1.0f);
-  ColorEnabled = FColor(0.0f, 0.9490f, 1.0f, 1.0f);
+  ColorDisabled = FLinearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  ColorEnabled = FLinearColor(0.0f, 0.9490f, 1.0f, 1.0f);
 
   NeedKey = false;
   ColorKey = FLinearColor(0.0f, 0.0f, 0.0f);
