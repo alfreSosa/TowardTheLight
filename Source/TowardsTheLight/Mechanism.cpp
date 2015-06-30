@@ -14,8 +14,8 @@ AMechanism::AMechanism()
   NumberOfActions = 1;
   TimeInIntermittence = 1.0f;
   TimeToStartIntermittence = 5.0f;
-  ColorDisabled = FColor(0.0f, 0.0f, 0.0f, 1.0f);
-  ColorEnabled = FColor(0.0f, 0.9490f, 1.0f, 1.0f);
+  ColorDisabled = FLinearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  ColorEnabled = FLinearColor(0.0f, 0.9490f, 1.0f, 1.0f);
   intermitedOn = TargetsAreEnabled = false;
   //Private properties
   m_elapsedIntermitence = 0.0f;
