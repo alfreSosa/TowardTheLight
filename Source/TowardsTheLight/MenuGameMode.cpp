@@ -13,6 +13,10 @@ float AMenuGameMode::GetLevelPoints(FString levelName){
   return GameDataManager::Instance()->GetPointsLevel(levelName);
 }
 
+float AMenuGameMode::GetTotalOrbs(){
+  return GameDataManager::Instance()->GetOrbsCounts();
+}
+
 bool AMenuGameMode::LevelExists(FString levelName){
   return GameDataManager::Instance()->LevelExists(levelName);
 }
