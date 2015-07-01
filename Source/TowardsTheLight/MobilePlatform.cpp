@@ -23,6 +23,7 @@ AMobilePlatform::AMobilePlatform() {
   Enabled = true;
   ColorDisabled = FLinearColor(0.0f, 0.0f, 0.0f, 1.0f);
   ColorEnabled = FLinearColor(0.0f, 0.9490f, 1.0f, 1.0f);
+  TimeInIntermittence = 1.0f;
 
   //private variables
   m_timer = 0;
@@ -31,6 +32,9 @@ AMobilePlatform::AMobilePlatform() {
   m_maxActions = 1;
   m_actions = 0;
   m_disableAtEndAction = m_isPlayerOn = false;
+  intermitedOn = true;
+  m_target = ColorEnabled;
+  m_origin = ColorDisabled;
 
   MobilePlatformMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
   UMaterial* mat = nullptr;
@@ -47,6 +51,10 @@ void AMobilePlatform::BeginPlay() {
   this->Tags.Add("MobilePlatform");
   m_totalDistance = RightDistance;
   OurVisibleComponent->SetMaterial(0, MobilePlatformMaterial);
+  m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
+  m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
+  FLinearColor color = (Enabled) ? ColorEnabled : ColorDisabled;
+  MobilePlatformMaterial->SetVectorParameterValue("Color", color);
 }
 
 void AMobilePlatform::Tick(float DeltaSeconds) {
@@ -62,13 +70,27 @@ void AMobilePlatform::Tick(float DeltaSeconds) {
     doMovement(DeltaSeconds);
     if (m_player && m_isPlayerOn)
       m_player->OnMobilePlatform(this, m_movement);
+  } else {
+    MobilePlatformMaterial->SetVectorParameterValue("Color", ColorDisabled);
   }
 }
 
 void AMobilePlatform::doMovement(float DeltaSeconds){
   m_movement = FVector(0);
   switch (m_state){
-  case INITIAL_DELAY:
+  case INITIAL_DELAY:{
+    m_elapsedIntermitence += DeltaSeconds;
+    float t = (m_elapsedIntermitence / TimeInIntermittence);
+    t = (t > 1.0f) ? 1.0f : t;
+    FLinearColor actual = FMath::Lerp(m_origin, m_target, t);
+    MobilePlatformMaterial->SetVectorParameterValue("Color", actual);
+    if (m_elapsedIntermitence >= TimeInIntermittence) {
+      m_elapsedIntermitence = 0.0f;
+      intermitedOn = !intermitedOn;
+      m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
+      m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
+    }
+
     if (m_timer < InitialDelay)
       m_timer += DeltaSeconds;
     else{
@@ -76,8 +98,10 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
       m_state = TO_RIGHT;
       m_rightVector = GetActorRightVector();
     }
+  }
     break;
   case TO_RIGHT:{
+    MobilePlatformMaterial->SetVectorParameterValue("Color", ColorEnabled);
     float dist = Speed * DeltaSeconds;
     if (m_totalDistance - m_currentDistance < dist)
       dist = m_totalDistance - m_currentDistance;
@@ -98,12 +122,16 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
       }
       m_state = RIGHT_DELAY;
       m_currentDistance = 0;
+      m_elapsedIntermitence = 0.0f;
+      m_target = ColorDisabled;
+      m_origin = ColorEnabled;
       if (m_totalDistance == RightDistance)
         m_totalDistance += LeftDistance;
     }
   }
     break;
   case TO_LEFT:{
+    MobilePlatformMaterial->SetVectorParameterValue("Color", ColorEnabled);
     float dist = Speed * DeltaSeconds;
     if (m_totalDistance - m_currentDistance < dist)
       dist = m_totalDistance - m_currentDistance;
@@ -125,24 +153,51 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
 
       m_state = LEFT_DELAY;
       m_currentDistance = 0;
+      m_target = ColorDisabled;
+      m_origin = ColorEnabled;
+      m_elapsedIntermitence = 0.0f;
     }
   }
     break;
-  case RIGHT_DELAY:
+  case RIGHT_DELAY:{
+    m_elapsedIntermitence += DeltaSeconds;
+    float t = (m_elapsedIntermitence / TimeInIntermittence);
+    t = (t > 1.0f) ? 1.0f : t;
+    FLinearColor actual = FMath::Lerp(m_origin, m_target, t);
+    MobilePlatformMaterial->SetVectorParameterValue("Color", actual);
+    if (m_elapsedIntermitence >= TimeInIntermittence) {
+      m_elapsedIntermitence = 0.0f;
+      intermitedOn = !intermitedOn;
+      m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
+      m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
+    }
     if (m_timer < RightDelay)
       m_timer += DeltaSeconds;
     else{
       m_timer = 0;
       m_state = TO_LEFT;
     }
+  }
     break;
-  case LEFT_DELAY:
+  case LEFT_DELAY:{
+    m_elapsedIntermitence += DeltaSeconds;
+    float t = (m_elapsedIntermitence / TimeInIntermittence);
+    t = (t > 1.0f) ? 1.0f : t;
+    FLinearColor actual = FMath::Lerp(m_origin, m_target, t);
+    MobilePlatformMaterial->SetVectorParameterValue("Color", actual);
+    if (m_elapsedIntermitence >= TimeInIntermittence) {
+      m_elapsedIntermitence = 0.0f;
+      intermitedOn = !intermitedOn;
+      m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
+      m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
+    }
     if (m_timer < LeftDelay)
       m_timer += DeltaSeconds;
     else{
       m_timer = 0;
       m_state = TO_RIGHT;
     }
+  }
     break;
   }
 }
