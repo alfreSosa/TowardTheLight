@@ -100,7 +100,6 @@ void AMechanism::Execute() {
         m_target = ColorEnabled;
         m_origin = ColorDisabled;
         m_Targets[i]->ChangeEnabled(false);
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Platform Desactivated")));
       }
     }
     else {
@@ -110,7 +109,6 @@ void AMechanism::Execute() {
         m_target = ColorDisabled;
         m_origin = ColorEnabled;
         m_Targets[i]->ChangeEnabled(true);
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Platform Activated")));
       }
     }
   }
