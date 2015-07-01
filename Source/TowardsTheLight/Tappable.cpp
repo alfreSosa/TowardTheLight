@@ -14,6 +14,8 @@ ATappable::ATappable()
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   MeshActivator = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshActivator"));
   MeshActivator->AttachTo(RootComponent);
+  RootComponent->SetMobility(EComponentMobility::Static);
+  MeshActivator->SetMobility(EComponentMobility::Static);
 
   m_meshActivator = MeshActivator;
   //trigger component
