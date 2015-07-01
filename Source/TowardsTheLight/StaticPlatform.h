@@ -14,7 +14,7 @@ public:
 	AStaticPlatform();
 
   UPROPERTY(EditAnywhere)
-    USceneComponent* OurVisibleComponent;
+    UStaticMeshComponent* OurVisibleComponent;
   virtual void ChangeEnabled(bool enabled);
   virtual bool isEnabled();
   virtual void InitByMechanism(bool disableAtEnd, int32 numActions);
