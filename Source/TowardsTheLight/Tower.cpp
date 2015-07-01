@@ -4,7 +4,7 @@
 #include "Tower.h"
 #include "MyGameMode.h"
 #include "PlayerOvi.h"
-
+#include "TimeManager.h"
 
 // Sets default values
 ATower::ATower() {
@@ -44,6 +44,11 @@ ATower::ATower() {
     mat = MatFinder.Object;
     TowerLightMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
   }
+
+  m_startVictory = false;
+  m_timeToFinish = 2.0f;
+  m_elapsedTime = 0.0f;
+
 }
 
 // Called when the game starts or when spawned
@@ -52,6 +57,22 @@ void ATower::BeginPlay() {
   Light->SetMaterial(0, TowerLightMaterial);
   TowerLightMaterial->SetVectorParameterValue("Color", ColorDisabled);
   RegisterDelegate();
+  m_startVictory = false;
+  m_timeToFinish = 2.0f;
+  m_elapsedTime = 0.0f;
+}
+
+void ATower::Tick(float DeltaSeconds) {
+  DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+  Super::Tick(DeltaSeconds);
+  
+  if (m_startVictory) {
+    float t = m_elapsedTime / m_timeToFinish;
+    t = (t > 1.0f) ? 1.0f : t;
+    FLinearColor color = FMath::Lerp(ColorDisabled, ColorEnabled, t);
+    TowerLightMaterial->SetVectorParameterValue("Color", color);
+    m_elapsedTime += DeltaSeconds;
+  }
 }
 
 void ATower::RegisterDelegate() {
@@ -72,7 +93,7 @@ void ATower::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveCom
         if (!NeedKey || (NeedKey && player->HasKey() && ColorKey == player->GetColorKey())){
           AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
           if (gameMode) {
-            TowerLightMaterial->SetVectorParameterValue("Color", ColorEnabled);
+            m_startVictory = true;
             gameMode->EndGame(AMyGameMode::VICTORY);
           }
         }

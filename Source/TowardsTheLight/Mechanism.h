@@ -48,6 +48,8 @@ private:
   float m_elapsedIntermitence;
   float m_elapsedStartIntermitence;
   bool intermitedOn;
+  FLinearColor m_target;
+  FLinearColor m_origin;
   TArray<AStaticPlatform *> m_Targets;
   UMaterialInstanceDynamic *MechanismMaterial;
 };

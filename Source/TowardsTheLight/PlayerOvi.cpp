@@ -3,6 +3,7 @@
 #include "MobilePlatform.h"
 #include "TimeManager.h"
 #include "Stick.h"
+#include "MyGameMode.h"
 
 /************************************/
 /*DEBUG ALTERNATIVO*/
@@ -124,7 +125,9 @@ void APlayerOvi::BeginPlay(){
   m_capsuleRadiousPadding = m_capsuleRadious * PADDING_COLLISION_PERCENT_RADIOUS;
   m_capsuleHeightPaddingFeet = m_capsuleHeight * PADDING_COLLISION_PERCENT_FEET;
 
-  /**ESTO ES LO QUE ASIGNA EL BASTON AL SOCKET****/
+  //Get MyGameMode
+  m_gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+
   m_stick = GetWorld()->SpawnActor<AStick>(AStick::StaticClass());
   const USkeletalMeshSocket *socket = Mesh->GetSocketByName("Puntodeacople_Baston");
   if (socket)
@@ -139,13 +142,15 @@ void APlayerOvi::Tick(float DeltaSeconds){
     m_limitViewPort0 = GEngine->GameViewport->Viewport->GetSizeXY().X * 0.45;
     m_limitViewPort1 = GEngine->GameViewport->Viewport->GetSizeXY().X * 0.55;
   }
-
-  float value = UpdateState();
-  DoMovement(DeltaSeconds, value);
-  DoJump(DeltaSeconds);
-  CalculateGravity(DeltaSeconds);
-  CheckCollision();
-  CalculateOrientation();  
+  float gameStatus = m_gameMode->EndGameBP();
+  if (gameStatus < 0.05f && gameStatus > -0.05f) {
+    float value = UpdateState();
+    DoMovement(DeltaSeconds, value);
+    DoJump(DeltaSeconds);
+    CalculateGravity(DeltaSeconds);
+    CheckCollision();
+    CalculateOrientation();
+  }
 }
 
 float APlayerOvi::UpdateState() {

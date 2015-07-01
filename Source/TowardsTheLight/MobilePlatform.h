@@ -23,6 +23,12 @@ class TOWARDSTHELIGHT_API AMobilePlatform : public AStaticPlatform
   int32 m_actions;
   int32 m_maxActions;
   bool m_disableAtEndAction;
+  UMaterialInstanceDynamic *MobilePlatformMaterial;
+  float m_elapsedIntermitence;
+  bool intermitedOn;
+  FLinearColor m_target;
+  FLinearColor m_origin;
+
   enum state{
     INITIAL_DELAY,
     TO_RIGHT,
@@ -55,6 +61,12 @@ public:
     float InitialDelay;
   UPROPERTY(EditAnywhere, Category = MechanismResponse)
     bool Enabled;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    float TimeInIntermittence;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    FLinearColor ColorDisabled;
+  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+    FLinearColor ColorEnabled;
 
   //FVector GetPlatformMovement() const;
 };
