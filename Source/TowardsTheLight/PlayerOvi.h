@@ -20,6 +20,7 @@ const float DEFAULT_JUMP_ACC = 3300.0f; //ajustado a valores de diseño
 
 class AMobilePlatform;
 class AStick;
+class AMyGameMode;
 UCLASS()
 class TOWARDSTHELIGHT_API APlayerOvi : public APawn
 {
@@ -115,6 +116,7 @@ private:
   FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
 
   States m_state;
+  AMyGameMode *m_gameMode;
 
 	bool m_right;
 	bool m_left;

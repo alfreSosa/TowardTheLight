@@ -16,7 +16,10 @@ AMechanism::AMechanism()
   TimeToStartIntermittence = 5.0f;
   ColorDisabled = FLinearColor(0.0f, 0.0f, 0.0f, 1.0f);
   ColorEnabled = FLinearColor(0.0f, 0.9490f, 1.0f, 1.0f);
-  intermitedOn = TargetsAreEnabled = false;
+  TargetsAreEnabled = false;
+  intermitedOn = true;
+  m_target = ColorEnabled;
+  m_origin = ColorDisabled;
   //Private properties
   m_elapsedIntermitence = 0.0f;
   m_elapsedStartIntermitence = TimeToStartIntermittence;
@@ -43,7 +46,8 @@ void AMechanism::BeginPlay()
   for (int32 i = 0; i < numTargets; i++)
     m_Targets[i]->InitByMechanism(DisableAtEndAction, NumberOfActions);
 
-  intermitedOn = TargetsAreEnabled;
+  m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
+  m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
 }
 
 void AMechanism::Tick(float DeltaSeconds)
@@ -54,11 +58,15 @@ void AMechanism::Tick(float DeltaSeconds)
   if (m_isPlayerOn) {
     if (m_elapsedStartIntermitence >= TimeToStartIntermittence) {
       m_elapsedIntermitence += DeltaSeconds;
+      float t = (m_elapsedIntermitence / TimeInIntermittence);
+      t = (t > 1.0f) ? 1.0f : t;
+      FLinearColor actual = FMath::Lerp(m_origin, m_target, t);
+      MechanismMaterial->SetVectorParameterValue("Color", actual);
       if (m_elapsedIntermitence >= TimeInIntermittence) {
         m_elapsedIntermitence = 0.0f;
         intermitedOn = !intermitedOn;
-        FColor actual = (intermitedOn) ? ColorEnabled : ColorDisabled;
-        MechanismMaterial->SetVectorParameterValue("Color", actual);
+        m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
+        m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
       }
     }
   }
@@ -71,7 +79,9 @@ void AMechanism::Tick(float DeltaSeconds)
         some = true;
         break;
       }
-    FColor actual = (some) ? ColorEnabled : ColorDisabled;
+    FLinearColor actual = (some) ? ColorEnabled : ColorDisabled;
+    m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
+    m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
     MechanismMaterial->SetVectorParameterValue("Color", actual);
   }
 }
@@ -87,6 +97,8 @@ void AMechanism::Execute() {
       if (CanDisactivate) {
         m_elapsedStartIntermitence = 0.0f;
         MechanismMaterial->SetVectorParameterValue("Color", ColorDisabled);
+        m_target = ColorEnabled;
+        m_origin = ColorDisabled;
         m_Targets[i]->ChangeEnabled(false);
         GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Platform Desactivated")));
       }
@@ -95,6 +107,8 @@ void AMechanism::Execute() {
       if (CanActivate) {
         m_elapsedStartIntermitence = 0.0f;
         MechanismMaterial->SetVectorParameterValue("Color", ColorEnabled);
+        m_target = ColorDisabled;
+        m_origin = ColorEnabled;
         m_Targets[i]->ChangeEnabled(true);
         GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Platform Activated")));
       }
