@@ -1,10 +1,1 @@
-{
-	"general":
-	{
-		"genericConfig": true
-	},
-	"levels":
-	[
-
-	]
-}
+{"general":{"genericConfig":true},"levels":[{"name":"APK_Nivel_01","orbs":3,"points":5500}]}
