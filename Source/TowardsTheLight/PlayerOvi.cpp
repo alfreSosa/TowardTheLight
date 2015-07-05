@@ -581,15 +581,16 @@ void APlayerOvi::CheckCollision() {
 
   GetWorld()->LineTraceMulti(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_PLAYER, TraceParams, ResponseParam);
   bool collisionDown = OutTraceResultDown.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   GetWorld()->LineTraceMulti(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_PLAYER, TraceParams, ResponseParam);
   bool collisionDownLeftF = OutTraceResultDownLeftF.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceDownLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceDownLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   GetWorld()->LineTraceMulti(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_PLAYER, TraceParams, ResponseParam);
   bool collisionDownRightF = OutTraceResultDownRigthF.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceDownRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceDownRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
   if (collisionDown || collisionDownLeftF || collisionDownRightF) {
+    bool action = false;
     if (collisionDown) {
       int size = OutTraceResultDown.Num();
       for (int i = 0; i < size; i++)
@@ -605,6 +606,7 @@ void APlayerOvi::CheckCollision() {
               m_currentMobile->SetPlayerOn(true);
             }
           }
+          action = true;
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDown[i].Location, -m_capsuleHeight));
           m_hasLanded = true;
           m_isFalling = false;
@@ -628,6 +630,7 @@ void APlayerOvi::CheckCollision() {
                 m_currentMobile->SetPlayerOn(true);
               }
             }
+            action = true;
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
             m_hasLanded = true;
             m_isFalling = false; 
@@ -651,12 +654,22 @@ void APlayerOvi::CheckCollision() {
               m_currentMobile->SetPlayerOn(true);
             }
           }
+          action = true;
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownRigthF[i].Location, -m_capsuleHeight));
           m_hasLanded = true;
           m_isFalling = false;
           m_actualJumpSpeed = JumpSpeed;
           break;
         }
+    }
+    if (!action) 
+    {
+      if (m_currentMobile) {
+        m_currentMobile->SetPlayerOn(false);
+        m_isOnMobilePlatform = false;
+        m_currentMobile = nullptr;
+      }
+      m_hasLanded = false;
     }
     
   }
