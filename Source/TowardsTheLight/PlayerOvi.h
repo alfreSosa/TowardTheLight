@@ -112,6 +112,7 @@ private:
   void CheckCollision();
   void AjustPosition();
   void Rotate(const FVector& rotation);
+  bool isInputEnabled();
   FVector AbsVector(const FVector& vector);
   FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
 

@@ -161,10 +161,10 @@ void APlayerOvi::Tick(float DeltaSeconds){
   float gameStatus = m_gameMode->EndGameBP();
   float value = 0.0f;
 
-  if (gameStatus < 0.05f && gameStatus > -0.05f)
+  if (isInputEnabled())
     value = UpdateState();
   //esto habra que ahcerlo ya mas generico y no solo para final de partida, ya que el boton y la animacion tambine bloquean input
-  if (gameStatus > 0.05f || gameStatus < -0.05f){
+  if (!isInputEnabled()){
     value = 0;
     m_doJump = false;
   }
@@ -859,4 +859,9 @@ bool APlayerOvi::PlayerisToRight() {
 
 bool APlayerOvi::isPlayerPaused() {
   return TimeManager::Instance()->IsPaused();
+}
+
+bool APlayerOvi::isInputEnabled() {
+  float gameStatus = m_gameMode->EndGameBP();
+  return (gameStatus < 0.05f && gameStatus > -0.05f);
 }
