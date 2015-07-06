@@ -117,7 +117,7 @@ private:
 
   States m_state;
   AMyGameMode *m_gameMode;
-
+  FCollisionQueryParams m_TraceParams;
 	bool m_right;
 	bool m_left;
   bool m_doJump;
