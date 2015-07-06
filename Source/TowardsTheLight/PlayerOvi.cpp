@@ -4,6 +4,7 @@
 #include "TimeManager.h"
 #include "Stick.h"
 #include "MyGameMode.h"
+#include "Tappable.h"
 
 /************************************/
 /*DEBUG ALTERNATIVO*/
@@ -115,7 +116,7 @@ void APlayerOvi::BeginPlay(){
   TraceParams.bFindInitialOverlaps = false;
   TraceParams.bTraceComplex = true;
   TArray<AActor *> ignorados;
-  for (TActorIterator< AActor > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
+  for (TActorIterator<ATappable > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
     if (ActorItr->ActorHasTag("Tappable"))
       ignorados.Add(*ActorItr);
   }
