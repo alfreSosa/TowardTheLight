@@ -159,15 +159,21 @@ void APlayerOvi::Tick(float DeltaSeconds){
     m_limitViewPort1 = GEngine->GameViewport->Viewport->GetSizeXY().X * 0.55;
   }
   float gameStatus = m_gameMode->EndGameBP();
+  float value = 0.0f;
+
+  if (gameStatus < 0.05f && gameStatus > -0.05f)
+    value = UpdateState();
   //esto habra que ahcerlo ya mas generico y no solo para final de partida, ya que el boton y la animacion tambine bloquean input
-  if (gameStatus < 0.05f && gameStatus > -0.05f) {
-    float value = UpdateState();
-    DoMovement(DeltaSeconds, value);
-    DoJump(DeltaSeconds);
-    CalculateGravity(DeltaSeconds);
-    CheckCollision();
-    CalculateOrientation();
+  if (gameStatus > 0.05f || gameStatus < -0.05f){
+    value = 0;
+    m_doJump = false;
   }
+  DoMovement(DeltaSeconds, value);
+  DoJump(DeltaSeconds);
+  CalculateGravity(DeltaSeconds);
+  CheckCollision();
+  CalculateOrientation();
+  
 }
 
 float APlayerOvi::UpdateState() {
