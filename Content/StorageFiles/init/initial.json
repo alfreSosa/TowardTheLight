@@ -1,7 +1,7 @@
 {
 	"general":
 	{
-		"swipeControl": true
+		"genericConfig": true
 	},
 	"levels":
 	[

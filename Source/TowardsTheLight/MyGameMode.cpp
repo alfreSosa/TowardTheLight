@@ -42,11 +42,11 @@ void AMyGameMode::EndGame(EndGameType type) {
       LevelData data = GameDataManager::Instance()->ReadLevelData(GetWorld()->GetMapName());
       //si la puntuacion actual es mejor que la que hay en el fichero, hay que almacenarla 
       bool write = false;
-      if (m_countOrbs > data.orbs){
+      if (m_countOrbs >= data.orbs){
         data.orbs = m_countOrbs;
         write = true;
       }
-      if (m_actualPoints > data.points){
+      if (m_actualPoints >= data.points){
         data.points = m_actualPoints;
         write = true;
       }
@@ -91,6 +91,6 @@ FString AMyGameMode::GetLevelNameBP(){
   return levelName;
 }
 
-bool AMyGameMode::SwipeControlBP(){
-  return GameDataManager::Instance()->IsSwipeControl();
-}
+//bool AMyGameMode::SwipeControlBP(){
+//  return GameDataManager::Instance()->IsSwipeControl();
+//}

@@ -12,10 +12,10 @@ class TOWARDSTHELIGHT_API ATappable : public AActor
 	GENERATED_BODY()
 	
 public:	
-  //Properties
-  UPROPERTY(EditAnywhere, Category = Activator)
-    USceneComponent* MeshActivator;
-  UPROPERTY()
+
+  UPROPERTY(EditAnywhere)
+    UStaticMeshComponent* MeshActivator;
+  UPROPERTY(EditAnywhere)
     UBoxComponent *Trigger;
   UPROPERTY(EditAnywhere, Category = Activator)
     bool NeedKey;
@@ -42,6 +42,8 @@ public:
   UFUNCTION()
     void OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 protected:
+  //Properties
+  UStaticMeshComponent* m_meshActivator;
   bool m_isPlayerOn;
   APlayerOvi *m_player;
 };
