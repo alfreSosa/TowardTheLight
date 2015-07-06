@@ -490,22 +490,22 @@ void APlayerOvi::CheckCollision() {
 
   GetWorld()->LineTraceMulti(OutTraceResultTop, StartTraceTop, EndTraceTop, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionTop = OutTraceResultTop.Num() > 0;
-  DrawDebugLine(GetWorld(), StartTraceTop, EndTraceTop, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  //DrawDebugLine(GetWorld(), StartTraceTop, EndTraceTop, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   GetWorld()->LineTraceMulti(OutTraceResultBottom, StartTraceBottom, EndTraceBottom, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionBottom = OutTraceResultBottom.Num() > 0;
-  DrawDebugLine(GetWorld(), StartTraceBottom, EndTraceBottom, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  //DrawDebugLine(GetWorld(), StartTraceBottom, EndTraceBottom, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   
   GetWorld()->LineTraceMulti(OutTraceResultBody, StartTraceBody, EndTraceBody, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionBody = OutTraceResultBody.Num() > 0;
-  DrawDebugLine(GetWorld(), StartTraceBody, EndTraceBody, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  //DrawDebugLine(GetWorld(), StartTraceBody, EndTraceBody, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   GetWorld()->LineTraceMulti(OutTraceResultLegs, StartTraceLegs, EndTraceLegs, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionLegs = OutTraceResultLegs.Num() > 0;
-  DrawDebugLine(GetWorld(), StartTraceLegs, EndTraceLegs, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  //DrawDebugLine(GetWorld(), StartTraceLegs, EndTraceLegs, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
 
   GetWorld()->LineTraceMulti(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionMidle = OutTraceResultMiddle.Num() > 0;
-  DrawDebugLine(GetWorld(), StartTrace, EndTraceMidle, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  //DrawDebugLine(GetWorld(), StartTrace, EndTraceMidle, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
 
   GetWorld()->LineTraceMulti(OutTraceResultTopBack, StartTraceTopBack, EndTraceTopBack, COLLISION_PLAYER, m_TraceParams, ResponseParam);
@@ -532,11 +532,7 @@ void APlayerOvi::CheckCollision() {
       int size = OutTraceResultTop.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultTop[i].GetActor()->ActorHasTag("Platform")) {
-          //ñapa para el piquito puntiagudo de las moviles, esto es temporal y si no cambia la malla revisarlo y ponerlo bien
-          float movil = 0.0f;
-          if (OutTraceResultTop[i].GetActor()->ActorHasTag("MobilePlatform"))
-            movil = 5.0f;
-          SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultTop[i].Location, m_capsuleRadious + movil));
+          SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultTop[i].Location, m_capsuleRadious));
           break;
         }
     }
@@ -544,11 +540,7 @@ void APlayerOvi::CheckCollision() {
       int size = OutTraceResultBottom.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultBottom[i].GetActor()->ActorHasTag("Platform")) {
-          //ñapa para el piquito puntiagudo de las moviles, esto es temporal y si no cambia la malla revisarlo y ponerlo bien
-          float movil = 0.0f;
-          if (OutTraceResultBottom[i].GetActor()->ActorHasTag("MobilePlatform"))
-            movil = 5.0f;
-          SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultBottom[i].Location, m_capsuleRadious + movil));
+          SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultBottom[i].Location, m_capsuleRadious));
           break;
         }
     }
@@ -556,11 +548,7 @@ void APlayerOvi::CheckCollision() {
       int size = OutTraceResultMiddle.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultMiddle[i].GetActor()->ActorHasTag("Platform")) {
-          //ñapa para el piquito puntiagudo de las moviles, esto es temporal y si no cambia la malla revisarlo y ponerlo bien
-          float movil = 0.0f;
-          if (OutTraceResultMiddle[i].GetActor()->ActorHasTag("MobilePlatform"))
-            movil = 5.0f;
-          SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultMiddle[i].Location, m_capsuleRadious + movil));
+          SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultMiddle[i].Location, m_capsuleRadious));
           break;
         }
     }
@@ -614,13 +602,13 @@ void APlayerOvi::CheckCollision() {
 
   GetWorld()->LineTraceMulti(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionDown = OutTraceResultDown.Num() > 0;
-  DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  //DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   GetWorld()->LineTraceMulti(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionDownLeftF = OutTraceResultDownLeftF.Num() > 0;
-  DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceDownLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceDownLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   GetWorld()->LineTraceMulti(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionDownRightF = OutTraceResultDownRigthF.Num() > 0;
-  DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceDownRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  //DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceDownRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
   if (collisionDown || collisionDownLeftF || collisionDownRightF) {
     bool action = false;
