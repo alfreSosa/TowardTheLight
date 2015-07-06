@@ -4,6 +4,7 @@
 #include "TimeManager.h"
 #include "Stick.h"
 #include "MyGameMode.h"
+#include "Tappable.h"
 
 /************************************/
 /*DEBUG ALTERNATIVO*/
@@ -115,7 +116,7 @@ void APlayerOvi::BeginPlay(){
   TraceParams.bFindInitialOverlaps = false;
   TraceParams.bTraceComplex = true;
   TArray<AActor *> ignorados;
-  for (TActorIterator< AActor > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
+  for (TActorIterator<ATappable > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
     if (ActorItr->ActorHasTag("Tappable"))
       ignorados.Add(*ActorItr);
   }
@@ -158,15 +159,21 @@ void APlayerOvi::Tick(float DeltaSeconds){
     m_limitViewPort1 = GEngine->GameViewport->Viewport->GetSizeXY().X * 0.55;
   }
   float gameStatus = m_gameMode->EndGameBP();
+  float value = 0.0f;
+
+  if (gameStatus < 0.05f && gameStatus > -0.05f)
+    value = UpdateState();
   //esto habra que ahcerlo ya mas generico y no solo para final de partida, ya que el boton y la animacion tambine bloquean input
-  if (gameStatus < 0.05f && gameStatus > -0.05f) {
-    float value = UpdateState();
-    DoMovement(DeltaSeconds, value);
-    DoJump(DeltaSeconds);
-    CalculateGravity(DeltaSeconds);
-    CheckCollision();
-    CalculateOrientation();
+  if (gameStatus > 0.05f || gameStatus < -0.05f){
+    value = 0;
+    m_doJump = false;
   }
+  DoMovement(DeltaSeconds, value);
+  DoJump(DeltaSeconds);
+  CalculateGravity(DeltaSeconds);
+  CheckCollision();
+  CalculateOrientation();
+  
 }
 
 float APlayerOvi::UpdateState() {
