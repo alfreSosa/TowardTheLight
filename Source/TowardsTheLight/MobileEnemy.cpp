@@ -63,6 +63,7 @@ void AMobileEnemy::BeginPlay() {
   m_capsuleHeight = CapsuleComponent->GetScaledCapsuleHalfHeight();
   m_capsuleRadious = CapsuleComponent->GetScaledCapsuleRadius();
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_ENEMY_COLLISION_PERCENT;
+  m_capsuleRadiousPadding = m_capsuleRadious * 0.55f;
   m_lastPosition = GetActorLocation();
   
   {
@@ -227,8 +228,8 @@ void AMobileEnemy::CheckCollision() {
   FVector StartTraceBody = StartTrace + GetActorUpVector() * m_capsuleHeight;
   FVector StartTraceLegs = StartTrace - GetActorUpVector() * m_capsuleHeight;
 
-  FVector StartTraceLeftF = StartTrace + GetActorRightVector() * m_capsuleRadious;
-  FVector StartTraceRigthF = StartTrace - GetActorRightVector() * m_capsuleRadious;
+  FVector StartTraceLeftF = StartTrace + GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
+  FVector StartTraceRigthF = StartTrace - GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
   // Calculate the end location for trace  
   //horizontal
   FVector newLocationForward;
@@ -341,8 +342,8 @@ void AMobileEnemy::CheckCollision() {
   newLocationUp.Z = (FMath::Abs(GetActorUpVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
 
   const FVector EndTraceDown = newLocationUp - GetActorUpVector() * m_capsuleHeight;
-  const FVector EndTraceDownLeftF = (newLocationUp + GetActorRightVector() * m_capsuleRadious) - GetActorUpVector() * m_capsuleHeight;
-  const FVector EndTraceDownRightF = (newLocationUp - GetActorRightVector() * m_capsuleRadious) - GetActorUpVector() * m_capsuleHeight;
+  const FVector EndTraceDownLeftF = (newLocationUp + GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
+  const FVector EndTraceDownRightF = (newLocationUp - GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
 
   GetWorld()->LineTraceMulti(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionDownLeftF = OutTraceResultDownLeftF.Num() > 0;

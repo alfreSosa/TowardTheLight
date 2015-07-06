@@ -16,7 +16,6 @@ ATappable::ATappable()
   MeshActivator->AttachTo(RootComponent);
   RootComponent->SetMobility(EComponentMobility::Static);
   MeshActivator->SetMobility(EComponentMobility::Static);
-
   m_meshActivator = MeshActivator;
   //trigger component
   Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
@@ -31,6 +30,7 @@ ATappable::ATappable()
   //initialize custom editor variables
   NeedKey = false;
   ColorKey = FLinearColor(0.0f, 0.0f, 0.0f);
+  this->Tags.Add("Tappable");
 }
 
 // Called when the game starts or when spawned

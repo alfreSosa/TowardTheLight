@@ -107,6 +107,21 @@ APlayerOvi::APlayerOvi() {
 void APlayerOvi::BeginPlay(){
 
   Super::BeginPlay();
+  /*Initialize TraceParam*/
+  // Setup the trace query  
+  static FName FireTraceIdent = FName(TEXT("Platform"));
+  FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
+  TraceParams.bTraceAsyncScene = true;
+  TraceParams.bFindInitialOverlaps = false;
+  TraceParams.bTraceComplex = true;
+  TArray<AActor *> ignorados;
+  for (TActorIterator< AActor > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
+    if (ActorItr->ActorHasTag("Tappable"))
+      ignorados.Add(*ActorItr);
+  }
+  TraceParams.AddIgnoredActors(ignorados);
+  m_TraceParams = TraceParams;
+  /*Initialize other*/
   CapsuleComponent->SetMaterial(0, nullptr);
   float dotForward = FVector::DotProduct(FVector(1, 1, 1), GetActorForwardVector());
   if (dotForward < 0)
@@ -143,6 +158,7 @@ void APlayerOvi::Tick(float DeltaSeconds){
     m_limitViewPort1 = GEngine->GameViewport->Viewport->GetSizeXY().X * 0.55;
   }
   float gameStatus = m_gameMode->EndGameBP();
+  //esto habra que ahcerlo ya mas generico y no solo para final de partida, ya que el boton y la animacion tambine bloquean input
   if (gameStatus < 0.05f && gameStatus > -0.05f) {
     float value = UpdateState();
     DoMovement(DeltaSeconds, value);
@@ -458,50 +474,55 @@ void APlayerOvi::CheckCollision() {
   const FVector EndTraceLegsBack = (m_lastPosition - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPaddingFeet)) - GetActorForwardVector() * m_capsuleRadious;
   const FVector EndTraceMidleBack = m_lastPosition - GetActorForwardVector() * m_capsuleRadious;
 
-  // Setup the trace query  
-  static FName FireTraceIdent = FName(TEXT("Platform"));
-  FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
-  TraceParams.bTraceAsyncScene = true;
-  TraceParams.bFindInitialOverlaps = true;
-  TraceParams.bTraceComplex = true;
-  
+  //// Setup the trace query  
+  //static FName FireTraceIdent = FName(TEXT("Platform"));
+  //FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
+  //TraceParams.bTraceAsyncScene = true;
+  //TraceParams.bFindInitialOverlaps = false;
+  //TraceParams.bTraceComplex = true;
+  //TArray<AActor *> ignorados;
+  //for (TActorIterator< AActor > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
+  //  if (ActorItr->ActorHasTag("Tappable"))
+  //    ignorados.Add(*ActorItr);
+  //}
+  //TraceParams.AddIgnoredActors(ignorados);
   FCollisionResponseParams ResponseParam(ECollisionResponse::ECR_Overlap);
 
-  GetWorld()->LineTraceMulti(OutTraceResultTop, StartTraceTop, EndTraceTop, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultTop, StartTraceTop, EndTraceTop, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionTop = OutTraceResultTop.Num() > 0;
   //DrawDebugLine(GetWorld(), StartTraceTop, EndTraceTop, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-  GetWorld()->LineTraceMulti(OutTraceResultBottom, StartTraceBottom, EndTraceBottom, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultBottom, StartTraceBottom, EndTraceBottom, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionBottom = OutTraceResultBottom.Num() > 0;
   //DrawDebugLine(GetWorld(), StartTraceBottom, EndTraceBottom, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   
-  GetWorld()->LineTraceMulti(OutTraceResultBody, StartTraceBody, EndTraceBody, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultBody, StartTraceBody, EndTraceBody, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionBody = OutTraceResultBody.Num() > 0;
   //DrawDebugLine(GetWorld(), StartTraceBody, EndTraceBody, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-  GetWorld()->LineTraceMulti(OutTraceResultLegs, StartTraceLegs, EndTraceLegs, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultLegs, StartTraceLegs, EndTraceLegs, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionLegs = OutTraceResultLegs.Num() > 0;
   //DrawDebugLine(GetWorld(), StartTraceLegs, EndTraceLegs, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
 
-  GetWorld()->LineTraceMulti(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionMidle = OutTraceResultMiddle.Num() > 0;
   //DrawDebugLine(GetWorld(), StartTrace, EndTraceMidle, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
 
-  GetWorld()->LineTraceMulti(OutTraceResultTopBack, StartTraceTopBack, EndTraceTopBack, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultTopBack, StartTraceTopBack, EndTraceTopBack, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionTopBack = OutTraceResultTopBack.Num() > 0;
   //DrawDebugLine(GetWorld(), StartTraceTopBack, EndTraceTopBack, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-  GetWorld()->LineTraceMulti(OutTraceResultBottomBack, StartTraceBottomBack, EndTraceBottomBack, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultBottomBack, StartTraceBottomBack, EndTraceBottomBack, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionBottomBack = OutTraceResultBottomBack.Num() > 0;
   //DrawDebugLine(GetWorld(), StartTraceBottomBack, EndTraceBottomBack, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
-  GetWorld()->LineTraceMulti(OutTraceResultBodyBack, StartTraceBodyBack, EndTraceBodyBack, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultBodyBack, StartTraceBodyBack, EndTraceBodyBack, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionBodyBack = OutTraceResultBodyBack.Num() > 0;
   //DrawDebugLine(GetWorld(), StartTraceBodyBack, EndTraceBodyBack, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-  GetWorld()->LineTraceMulti(OutTraceResultLegsBack, StartTraceLegsBack, EndTraceLegsBack, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultLegsBack, StartTraceLegsBack, EndTraceLegsBack, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionLegsBack = OutTraceResultLegsBack.Num() > 0;
   //DrawDebugLine(GetWorld(), StartTraceLegsBack, EndTraceLegsBack, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
-  GetWorld()->LineTraceMulti(OutTraceResultMiddleBack, StartTraceBack, EndTraceMidleBack, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultMiddleBack, StartTraceBack, EndTraceMidleBack, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionMidleBack = OutTraceResultMiddleBack.Num() > 0;
   //DrawDebugLine(GetWorld(), StartTraceBack, EndTraceMidleBack, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
@@ -579,15 +600,15 @@ void APlayerOvi::CheckCollision() {
   const FVector EndTraceDownLeftF = (newLocationUp + GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
   const FVector EndTraceDownRightF = (newLocationUp - GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
 
-  GetWorld()->LineTraceMulti(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionDown = OutTraceResultDown.Num() > 0;
-  DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-  GetWorld()->LineTraceMulti(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_PLAYER, TraceParams, ResponseParam);
+  //DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  GetWorld()->LineTraceMulti(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionDownLeftF = OutTraceResultDownLeftF.Num() > 0;
-  DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceDownLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-  GetWorld()->LineTraceMulti(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_PLAYER, TraceParams, ResponseParam);
+  //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceDownLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  GetWorld()->LineTraceMulti(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   bool collisionDownRightF = OutTraceResultDownRigthF.Num() > 0;
-  DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceDownRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  //DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceDownRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
   if (collisionDown || collisionDownLeftF || collisionDownRightF) {
     bool action = false;
@@ -606,6 +627,7 @@ void APlayerOvi::CheckCollision() {
               m_currentMobile->SetPlayerOn(true);
             }
           }
+          FVector localizaion = OutTraceResultDown[i].Location;
           action = true;
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDown[i].Location, -m_capsuleHeight));
           m_hasLanded = true;
@@ -630,6 +652,7 @@ void APlayerOvi::CheckCollision() {
                 m_currentMobile->SetPlayerOn(true);
               }
             }
+            FVector localizaion = OutTraceResultDownLeftF[i].Location;
             action = true;
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
             m_hasLanded = true;
@@ -655,6 +678,7 @@ void APlayerOvi::CheckCollision() {
             }
           }
           action = true;
+          FVector localizaion = OutTraceResultDownRigthF[i].Location;
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownRigthF[i].Location, -m_capsuleHeight));
           m_hasLanded = true;
           m_isFalling = false;
@@ -690,13 +714,13 @@ void APlayerOvi::CheckCollision() {
   const FVector EndTraceUpLeftF = (newLocationUp + GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) + GetActorUpVector() * m_capsuleHeight;
   const FVector EndTraceUpRightF = (newLocationUp - GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) + GetActorUpVector() * m_capsuleHeight;
 
-  GetWorld()->LineTraceMulti(OutTraceResultUp, StartTrace, EndTraceUp, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultUp, StartTrace, EndTraceUp, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   //DrawDebugLine(GetWorld(), StartTrace, EndTraceUp, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   bool collisionUp = OutTraceResultUp.Num() > 0;
-  GetWorld()->LineTraceMulti(OutTraceResultUpLeftF, StartTraceLeftF, EndTraceUpLeftF, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultUpLeftF, StartTraceLeftF, EndTraceUpLeftF, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceUpLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   bool collisionUpLeftF = OutTraceResultUp.Num() > 0;
-  GetWorld()->LineTraceMulti(OutTraceResultUpRigthF, StartTraceRigthF, EndTraceUpRightF, COLLISION_PLAYER, TraceParams, ResponseParam);
+  GetWorld()->LineTraceMulti(OutTraceResultUpRigthF, StartTraceRigthF, EndTraceUpRightF, COLLISION_PLAYER, m_TraceParams, ResponseParam);
   //DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceUpRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   bool collisionUpRightF = OutTraceResultUp.Num() > 0;
 
