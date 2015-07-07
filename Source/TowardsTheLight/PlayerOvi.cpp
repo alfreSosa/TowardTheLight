@@ -646,6 +646,12 @@ void APlayerOvi::CheckCollision() {
               m_currentMobile = movil;
               m_currentMobile->SetPlayerOn(true);
             }
+          } else {
+            if (m_currentMobile) {
+              m_currentMobile->SetPlayerOn(false);
+              m_isOnMobilePlatform = false;
+              m_currentMobile = nullptr;
+            }
           }
           FVector localizaion = OutTraceResultDown[i].Location;
           action = true;
@@ -672,6 +678,13 @@ void APlayerOvi::CheckCollision() {
                 m_currentMobile->SetPlayerOn(true);
               }
             }
+            else {
+              if (m_currentMobile) {
+                m_currentMobile->SetPlayerOn(false);
+                m_isOnMobilePlatform = false;
+                m_currentMobile = nullptr;
+              }
+            }
             FVector localizaion = OutTraceResultDownLeftF[i].Location;
             action = true;
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
@@ -695,6 +708,13 @@ void APlayerOvi::CheckCollision() {
               
               m_currentMobile = movil;
               m_currentMobile->SetPlayerOn(true);
+            }
+          }
+          else {
+            if (m_currentMobile) {
+              m_currentMobile->SetPlayerOn(false);
+              m_isOnMobilePlatform = false;
+              m_currentMobile = nullptr;
             }
           }
           action = true;
