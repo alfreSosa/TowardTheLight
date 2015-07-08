@@ -87,6 +87,7 @@ public:
   void SetKey(bool key, FLinearColor colorKey);
   bool HasKey();
   FLinearColor GetColorKey();
+  void EnabledPushButton();
 
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
     bool isPlayerRunning();
@@ -100,6 +101,9 @@ public:
     bool PlayerHasLanded();
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
 	  bool PlayerisToRight();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool PlayerisPushinButton();
+
   UFUNCTION(BlueprintCallable, Category = "PlayerState")
     bool isPlayerPaused();
 private:
@@ -112,6 +116,7 @@ private:
   void CheckCollision();
   void AjustPosition();
   void Rotate(const FVector& rotation);
+  bool isInputEnabled();
   FVector AbsVector(const FVector& vector);
   FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
 
@@ -129,6 +134,9 @@ private:
   bool m_isInJumpTransition;
   bool m_isOnMobilePlatform;
   AMobilePlatform *m_currentMobile;
+  //animation boton
+  bool m_isPushingButton;
+  float m_elapsedButton;
 
   bool m_hasKey;
   FLinearColor m_colorKey;
