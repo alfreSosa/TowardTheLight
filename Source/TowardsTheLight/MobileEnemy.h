@@ -5,21 +5,24 @@
 #include "StaticEnemy.h"
 #include "MobileEnemy.generated.h"
 
-/**
- * 
- */
 #define COLLISION_ENEMY    ECC_GameTraceChannel2 
 class APlayerOvi;
-
-const float DEFAULT_ENEMY_CAPSULE_RADIOUS = 45.0f;
-const float DEFAULT_ENEMY_CAPSULE_HEIGHT = 95.0f;
-const float PADDING_ENEMY_COLLISION_PERCENT = 0.05f;
 
 UCLASS()
 class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
 {
 	GENERATED_BODY()
-	
+
+private:
+
+  enum state{
+    INITIAL_DELAY,
+    TO_RIGHT,
+    TO_LEFT,
+    RIGHT_DELAY,
+    LEFT_DELAY,
+  }m_state;
+
   float m_timer;
   float m_totalDistance;
   float m_currentDistance;
@@ -38,15 +41,6 @@ class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
   bool m_enableGravity;
   APlayerOvi *m_player;
   FVector m_lastPosition;
-  
-
-  enum state{
-    INITIAL_DELAY,
-    TO_RIGHT,
-    TO_LEFT,
-    RIGHT_DELAY,
-    LEFT_DELAY,
-  }m_state;
 
   void doMovement(float DeltaSeconds);
   void CalculateGravity(float DeltaSeconds);
@@ -55,16 +49,10 @@ class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
   void ResponseCollisionBackward();
   FVector AbsVector(const FVector& vector);
   FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
+
 public:
   UPROPERTY()
     UBoxComponent *Trigger;
-  UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-  class UCapsuleComponent* CapsuleComponent;
-
-  AMobileEnemy();
-  virtual void BeginPlay() override;
-  virtual void Tick(float DeltaSeconds) override;
-
   UPROPERTY(EditAnywhere, Category = MobileEnemy)
     float RightDistance;
   UPROPERTY(EditAnywhere, Category = MobileEnemy)
@@ -79,9 +67,16 @@ public:
     float InitialDelay;
   UPROPERTY(EditAnywhere, Category = MobileEnemy)
     bool HasTrigger;
+  UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+  class UCapsuleComponent* CapsuleComponent;
 
+  AMobileEnemy();
+  virtual void BeginPlay() override;
+  virtual void Tick(float DeltaSeconds) override;
   void RegisterDelegate();
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
+
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-  void EndPlay(const EEndPlayReason::Type EndPlayReason);
+  
 };

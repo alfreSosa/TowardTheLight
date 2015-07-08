@@ -204,10 +204,12 @@ void APlayerOvi::Tick(float DeltaSeconds){
       m_isPushingButton = false;
     }
   }
-
+  //get last position for this frame.
+  m_lastPosition = GetActorLocation();
   float value = 0.0f;
   if (isInputEnabled())
     value = UpdateState();
+
   if (!isInputEnabled()){
     value = 0;
     m_doJump = false;
@@ -222,9 +224,6 @@ void APlayerOvi::Tick(float DeltaSeconds){
 }
 
 float APlayerOvi::UpdateState() {
-  //get last position for this frame.
-  m_lastPosition = GetActorLocation();
-
   //update movement
   float value = 0;
   if (m_right){
