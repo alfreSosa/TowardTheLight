@@ -4,6 +4,7 @@
 #include "Mechanism.h"
 #include "StaticPlatform.h"
 #include "TimeManager.h"
+#include "PlayerOvi.h"
 
 AMechanism::AMechanism()
 {
@@ -91,6 +92,7 @@ void AMechanism::Activate(bool enabled) {
 }
 
 void AMechanism::Execute() {
+  m_player->EnabledPushButton();
   int32 numTargets = m_Targets.Num();
   for (int32 i = 0; i < numTargets; i++) {
     if (m_Targets[i]->isEnabled()) {
