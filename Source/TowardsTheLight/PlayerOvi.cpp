@@ -15,9 +15,27 @@ GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Som
 }*/
 
 /*************************************/
+const float PADDING_COLLISION_PERCENT = 0.15f;
+const float PADDING_COLLISION_PERCENT_FEET = 0.30f;
+const float PADDING_COLLISION_PERCENT_RADIOUS = 0.55f;
+const float DEFAULT_CAPSULE_RADIOUS = 30.0f;
+const float CAPSULE_RADIOUS_PADDING = 5.0f;
+const float DEFAULT_CAPSULE_HEIGHT = 95.0f;
+
+const float DEFAULT_MOVEMENT_SPEED = 620.0f;
+const float DEFAULT_JUMP_SPEED = 1550.0f;
+const float DEFAULT_JUMP_ACC = 3300.0f;
 
 APlayerOvi::APlayerOvi() {
   PrimaryActorTick.bCanEverTick = true;
+
+  //Public properties
+  JumpSpeed = DEFAULT_JUMP_SPEED;
+  MovementSpeed = DEFAULT_MOVEMENT_SPEED;
+  AccelerationJump = DEFAULT_JUMP_ACC;
+  MarginInput = 50.f;
+
+  //Pawn properties
   AutoPossessPlayer = EAutoReceiveInput::Player0;
 
   bUseControllerRotationPitch = false;
@@ -70,50 +88,55 @@ APlayerOvi::APlayerOvi() {
     Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
   }
 
-  //key Initialization
+  //private properties
+  //key propierties
   m_hasKey = false;
   m_colorKey = FLinearColor(0.0f, 0.0f, 0.0f);
   m_stick = nullptr;
+
+  //player movement
   m_state = States::RIGHT;
   m_limit = 0;
   m_right = m_left = false;
-  m_isOnMobilePlatform = m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
+
+  //player jump & gravity
+  m_isJumping = m_doJump = m_hasLanded = m_headCollision = false;
   m_enabledGravity = true;
-  
-  JumpSpeed = DEFAULT_JUMP_SPEED;
-  MovementSpeed = DEFAULT_MOVEMENT_SPEED;
   m_actualJumpSpeed = JumpSpeed;
-  AccelerationJump = DEFAULT_JUMP_ACC;
-  
+
+  //pawn capsule private propiertes
   m_capsuleHeight = DEFAULT_CAPSULE_HEIGHT;
   m_capsuleRadious = DEFAULT_CAPSULE_RADIOUS;
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_COLLISION_PERCENT;
   m_capsuleRadiousPadding = m_capsuleRadious * PADDING_COLLISION_PERCENT_RADIOUS;
 
+  //input properties
   m_limitViewPort0 = 0.f;
   m_limitViewPort1 = 0.f;
   m_centerTouchX = 0.f;
   m_fingerIndexMovement = ETouchIndex::Touch10;
   m_fingerIndexJump = ETouchIndex::Touch10;
   m_fingerIndexOther = ETouchIndex::Touch10;
-  MarginInput = 50.f;
-  m_stateInput = States::STOP;
-  m_isInJumpTransition = false;
-  m_transitionDistance = 0.0f;
 
+  m_stateInput = States::STOP;
+
+  //iteraction mobile platform propierties
   bPlayerRunning = false;
   m_currentMobile = nullptr;
-
+  m_isOnMobilePlatform = false;
+  //iteraction Tappables propierties
   m_isPushingButton = false;
   m_elapsedButton = 0.0f;
-
 }
 
 void APlayerOvi::BeginPlay(){
 
   Super::BeginPlay();
+
+  // time for button animation
   m_elapsedButton = 0.0f;
-  /*Initialize TraceParam*/
+
+  //Initialize TraceParam
   static FName FireTraceIdent = FName(TEXT("Platform"));
   FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
   TraceParams.bTraceAsyncScene = true;
@@ -126,19 +149,24 @@ void APlayerOvi::BeginPlay(){
   }
   TraceParams.AddIgnoredActors(ignorados);
   m_TraceParams = TraceParams;
-  /*Initialize other*/
+
+  // material for capsule
   CapsuleComponent->SetMaterial(0, nullptr);
+
+  // calculate limit world & initial orientation
   float dotForward = FVector::DotProduct(FVector(1, 1, 1), GetActorForwardVector());
   if (dotForward < 0)
     m_state = States::LEFT;
   else
     m_state = States::RIGHT;
 
-  this->Tags.Add("Player");
   m_limit = FVector::DotProduct(GetActorLocation(), GetActorRightVector());
   m_limit = abs(m_limit);
 
-  //GetCaspuleValues
+  //tag player
+  this->Tags.Add("Player");
+  
+  //GetCaspuleValues for simulate physics
   m_capsuleHeight = CapsuleComponent->GetScaledCapsuleHalfHeight();
   m_capsuleRadious = CapsuleComponent->GetScaledCapsuleRadius();
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_COLLISION_PERCENT;
@@ -148,6 +176,7 @@ void APlayerOvi::BeginPlay(){
   //Get MyGameMode
   m_gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
 
+  //Set player Stick in the animation socket
   m_stick = GetWorld()->SpawnActor<AStick>(AStick::StaticClass());
   const USkeletalMeshSocket *socket = Mesh->GetSocketByName("Puntodeacople_Baston");
   if (socket)
@@ -155,14 +184,19 @@ void APlayerOvi::BeginPlay(){
 }
 
 void APlayerOvi::Tick(float DeltaSeconds){
+  //get own deltaTime
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
   Super::Tick(DeltaSeconds);
+  //pause animations if is game paused
   Mesh->bPauseAnims = isPlayerPaused();
+
+  //first tick initialize viewport properties, dont work at begin play
   if (m_limitViewPort0 == 0 && m_limitViewPort1 == 0){
     m_limitViewPort0 = GEngine->GameViewport->Viewport->GetSizeXY().X * 0.45;
     m_limitViewPort1 = GEngine->GameViewport->Viewport->GetSizeXY().X * 0.55;
   }
 
+  //update elapsed time if push button animation is running
   if (m_isPushingButton) {
     m_elapsedButton += DeltaSeconds;
     if (m_elapsedButton >= 2.0f) {
@@ -171,16 +205,14 @@ void APlayerOvi::Tick(float DeltaSeconds){
     }
   }
 
-  float gameStatus = m_gameMode->EndGameBP();
   float value = 0.0f;
-
   if (isInputEnabled())
     value = UpdateState();
-  //esto habra que ahcerlo ya mas generico y no solo para final de partida, ya que el boton y la animacion tambine bloquean input
   if (!isInputEnabled()){
     value = 0;
     m_doJump = false;
   }
+
   DoMovement(DeltaSeconds, value);
   DoJump(DeltaSeconds);
   CalculateGravity(DeltaSeconds);
@@ -190,13 +222,11 @@ void APlayerOvi::Tick(float DeltaSeconds){
 }
 
 float APlayerOvi::UpdateState() {
+  //get last position for this frame.
   m_lastPosition = GetActorLocation();
-  m_lastUpVector = GetActorUpVector();
-  m_lastForwardVector = GetActorForwardVector();
-  float value = 0;
-  FVector up = GetActorUpVector();
-  FVector forward = GetActorForwardVector();
 
+  //update movement
+  float value = 0;
   if (m_right){
     value = 1;
     if (m_state != States::RIGHT){
@@ -216,6 +246,7 @@ float APlayerOvi::UpdateState() {
     value = 0;
   }
 
+  //update animation variable
   bPlayerRunning = (value != 0) ? true : false;
 
   return value;
@@ -239,11 +270,6 @@ void APlayerOvi::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector
   if (Location.X > m_limitViewPort1 && m_fingerIndexMovement != FingerIndex && m_fingerIndexOther != FingerIndex) { //JUMP
     OnStartJump();
     m_fingerIndexJump = FingerIndex;
-    //if (!nearGear)
-    //  OnStartJump();
-    //else{
-    //  puntero a nearGear->doAction();
-    //}
   }
   else if (Location.X < m_limitViewPort0 && m_fingerIndexJump != FingerIndex && m_fingerIndexOther != FingerIndex){ //MOVEMENT SWIPE
     if (m_centerTouchX == 0){ //initial touch
@@ -345,7 +371,6 @@ void APlayerOvi::DoJump(float DeltaSeconds){
   FVector up = GetActorUpVector();
   FVector location = GetActorLocation();
 
-  // movimiento uniformemente acelerado con aceleración AccelerationJump caidas libres
   if (m_isJumping && !m_headCollision) {
     if (m_actualJumpSpeed > 0) {
       location += m_actualJumpSpeed * DeltaSeconds * up;
@@ -494,18 +519,6 @@ void APlayerOvi::CheckCollision() {
   const FVector EndTraceLegsBack = (m_lastPosition - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPaddingFeet)) - GetActorForwardVector() * m_capsuleRadious;
   const FVector EndTraceMidleBack = m_lastPosition - GetActorForwardVector() * m_capsuleRadious;
 
-  //// Setup the trace query  
-  //static FName FireTraceIdent = FName(TEXT("Platform"));
-  //FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
-  //TraceParams.bTraceAsyncScene = true;
-  //TraceParams.bFindInitialOverlaps = false;
-  //TraceParams.bTraceComplex = true;
-  //TArray<AActor *> ignorados;
-  //for (TActorIterator< AActor > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
-  //  if (ActorItr->ActorHasTag("Tappable"))
-  //    ignorados.Add(*ActorItr);
-  //}
-  //TraceParams.AddIgnoredActors(ignorados);
   FCollisionResponseParams ResponseParam(ECollisionResponse::ECR_Overlap);
 
   GetWorld()->LineTraceMulti(OutTraceResultTop, StartTraceTop, EndTraceTop, COLLISION_PLAYER, m_TraceParams, ResponseParam);
@@ -607,10 +620,8 @@ void APlayerOvi::CheckCollision() {
         }
     }
   }
-
   // Calculate the end location for trace  
   // Vertical 
-  //esta posicion es coger la posicion actual pero solo en la cordenada deseada, ya que si no el rayo seria oblicuo.
   FVector newLocationUp;
   newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
   newLocationUp.Y = (FMath::Abs(GetActorUpVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
