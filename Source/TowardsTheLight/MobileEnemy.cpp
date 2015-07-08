@@ -5,6 +5,10 @@
 #include "PlayerOvi.h"
 #include "TimeManager.h"
 
+const float DEFAULT_ENEMY_CAPSULE_RADIOUS = 45.0f;
+const float DEFAULT_ENEMY_CAPSULE_HEIGHT = 95.0f;
+const float PADDING_ENEMY_COLLISION_PERCENT = 0.05f;
+
 AMobileEnemy::AMobileEnemy() {
   PrimaryActorTick.bCanEverTick = true;
   this->SetActorEnableCollision(true);
