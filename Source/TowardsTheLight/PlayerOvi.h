@@ -134,7 +134,6 @@ private:
   bool m_isInJumpTransition;
   bool m_isOnMobilePlatform;
   AMobilePlatform *m_currentMobile;
-  int m_frameCounter;
   //animation boton
   bool m_isPushingButton;
   float m_elapsedButton;

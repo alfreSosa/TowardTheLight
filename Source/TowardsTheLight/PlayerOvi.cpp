@@ -106,7 +106,6 @@ APlayerOvi::APlayerOvi() {
 
   m_isPushingButton = false;
   m_elapsedButton = 0.0f;
-  m_frameCounter = 0;
 
 }
 
@@ -643,7 +642,6 @@ void APlayerOvi::CheckCollision() {
               if (m_currentMobile)
                 if (m_currentMobile != movil) 
                   m_currentMobile->SetPlayerOn(false);
-              m_frameCounter = 0;
               m_currentMobile = movil;
               m_currentMobile->SetPlayerOn(true);
             }
@@ -674,8 +672,6 @@ void APlayerOvi::CheckCollision() {
                 if (m_currentMobile)
                   if (m_currentMobile != movil)
                     m_currentMobile->SetPlayerOn(false);
-                
-                m_frameCounter = 0;
                 m_currentMobile = movil;
                 m_currentMobile->SetPlayerOn(true);
               }
@@ -707,8 +703,6 @@ void APlayerOvi::CheckCollision() {
               if (m_currentMobile)
                 if (m_currentMobile != movil)
                   m_currentMobile->SetPlayerOn(false);
-              
-              m_frameCounter = 0;
               m_currentMobile = movil;
               m_currentMobile->SetPlayerOn(true);
             }
@@ -741,15 +735,12 @@ void APlayerOvi::CheckCollision() {
     
   }
   else {
-    //m_frame counter codigo de prueba para los extraños de las moviles.
-    //si en un frame deja de haber rayo, pero al siguiente vuelve no se cae de las moviles.
-    if (m_currentMobile && m_frameCounter > 0) {
+    if (m_currentMobile) {
       m_currentMobile->SetPlayerOn(false);
       m_isOnMobilePlatform = false;
       m_currentMobile = nullptr;
     }
     m_hasLanded = false;
-    m_frameCounter++;
   }
 
   newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
