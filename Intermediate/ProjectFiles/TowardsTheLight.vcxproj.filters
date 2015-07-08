@@ -118,6 +118,9 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\Stick.h">
       <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\InfoGameInstance.h">
+      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp">
@@ -179,6 +182,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\Stick.cpp">
       <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\InfoGameInstance.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

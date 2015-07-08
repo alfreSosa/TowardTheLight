@@ -103,13 +103,17 @@ APlayerOvi::APlayerOvi() {
 
   bPlayerRunning = false;
   m_currentMobile = nullptr;
+
+  m_isPushingButton = false;
+  m_elapsedButton = 0.0f;
+
 }
 
 void APlayerOvi::BeginPlay(){
 
   Super::BeginPlay();
+  m_elapsedButton = 0.0f;
   /*Initialize TraceParam*/
-  // Setup the trace query  
   static FName FireTraceIdent = FName(TEXT("Platform"));
   FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
   TraceParams.bTraceAsyncScene = true;
@@ -158,13 +162,22 @@ void APlayerOvi::Tick(float DeltaSeconds){
     m_limitViewPort0 = GEngine->GameViewport->Viewport->GetSizeXY().X * 0.45;
     m_limitViewPort1 = GEngine->GameViewport->Viewport->GetSizeXY().X * 0.55;
   }
+
+  if (m_isPushingButton) {
+    m_elapsedButton += DeltaSeconds;
+    if (m_elapsedButton >= 2.0f) {
+      m_elapsedButton = 0.0f;
+      m_isPushingButton = false;
+    }
+  }
+
   float gameStatus = m_gameMode->EndGameBP();
   float value = 0.0f;
 
-  if (gameStatus < 0.05f && gameStatus > -0.05f)
+  if (isInputEnabled())
     value = UpdateState();
   //esto habra que ahcerlo ya mas generico y no solo para final de partida, ya que el boton y la animacion tambine bloquean input
-  if (gameStatus > 0.05f || gameStatus < -0.05f){
+  if (!isInputEnabled()){
     value = 0;
     m_doJump = false;
   }
@@ -633,6 +646,12 @@ void APlayerOvi::CheckCollision() {
               m_currentMobile = movil;
               m_currentMobile->SetPlayerOn(true);
             }
+          } else {
+            if (m_currentMobile) {
+              m_currentMobile->SetPlayerOn(false);
+              m_isOnMobilePlatform = false;
+              m_currentMobile = nullptr;
+            }
           }
           FVector localizaion = OutTraceResultDown[i].Location;
           action = true;
@@ -659,6 +678,13 @@ void APlayerOvi::CheckCollision() {
                 m_currentMobile->SetPlayerOn(true);
               }
             }
+            else {
+              if (m_currentMobile) {
+                m_currentMobile->SetPlayerOn(false);
+                m_isOnMobilePlatform = false;
+                m_currentMobile = nullptr;
+              }
+            }
             FVector localizaion = OutTraceResultDownLeftF[i].Location;
             action = true;
             SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
@@ -682,6 +708,13 @@ void APlayerOvi::CheckCollision() {
               
               m_currentMobile = movil;
               m_currentMobile->SetPlayerOn(true);
+            }
+          }
+          else {
+            if (m_currentMobile) {
+              m_currentMobile->SetPlayerOn(false);
+              m_isOnMobilePlatform = false;
+              m_currentMobile = nullptr;
             }
           }
           action = true;
@@ -859,4 +892,17 @@ bool APlayerOvi::PlayerisToRight() {
 
 bool APlayerOvi::isPlayerPaused() {
   return TimeManager::Instance()->IsPaused();
+}
+
+bool APlayerOvi::isInputEnabled() {
+  float gameStatus = m_gameMode->EndGameBP();
+  return (gameStatus < 0.05f && gameStatus > -0.05f) && !m_isPushingButton;
+}
+
+bool APlayerOvi::PlayerisPushinButton() {
+  return m_isPushingButton;
+}
+
+void  APlayerOvi::EnabledPushButton() { 
+  m_isPushingButton = true; 
 }
