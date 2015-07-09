@@ -199,7 +199,7 @@ void APlayerOvi::Tick(float DeltaSeconds){
   //update elapsed time if push button animation is running
   if (m_isPushingButton) {
     m_elapsedButton += DeltaSeconds;
-    if (m_elapsedButton >= 2.0f) {
+    if (m_elapsedButton >= 1.0f) {
       m_elapsedButton = 0.0f;
       m_isPushingButton = false;
     }
