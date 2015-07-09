@@ -9,6 +9,25 @@
 AMechanism::AMechanism()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+  //skeletal mesh
+  SkeletalMesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalComponent"));
+  if (SkeletalMesh) {
+    SkeletalMesh->AlwaysLoadOnClient = true;
+    SkeletalMesh->AlwaysLoadOnServer = true;
+    SkeletalMesh->bOwnerNoSee = false;
+    SkeletalMesh->MeshComponentUpdateFlag = EMeshComponentUpdateFlag::AlwaysTickPose;
+    SkeletalMesh->bCastDynamicShadow = true;
+    SkeletalMesh->bAffectDynamicIndirectLighting = true;
+    SkeletalMesh->PrimaryComponentTick.TickGroup = TG_PrePhysics;
+    SkeletalMesh->bChartDistanceFactor = true;
+    SkeletalMesh->AttachParent = RootComponent;
+    static FName CollisionProfileName(TEXT("OverlapAll"));
+    SkeletalMesh->SetCollisionProfileName(CollisionProfileName);
+    SkeletalMesh->bGenerateOverlapEvents = true;
+    SkeletalMesh->bCanEverAffectNavigation = false;
+    SkeletalMesh->SetRelativeLocation(FVector(0, 0, 0));
+  }
   //Public properties
   CanActivate = CanDisactivate = true;
   DisableAtEndAction = false;
@@ -33,12 +52,14 @@ AMechanism::AMechanism()
     mat = MatFinder.Object;
     MechanismMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
   }
+
+  m_isPushed = false;
 }
 
 void AMechanism::BeginPlay()
 {
 	Super::BeginPlay();
-  m_meshActivator->SetMaterial(0, MechanismMaterial);
+  SkeletalMesh->SetMaterial(0, MechanismMaterial);
   int32 numTargets = Targets.Num();
   m_Targets.Init(numTargets);
   for (int32 i = 0; i < numTargets; i++)
@@ -49,6 +70,8 @@ void AMechanism::BeginPlay()
 
   m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
   m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
+  m_isPushed = false;
+  m_elapsedAnimation = 0.0f;
 }
 
 void AMechanism::Tick(float DeltaSeconds)
@@ -85,6 +108,15 @@ void AMechanism::Tick(float DeltaSeconds)
     m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
     MechanismMaterial->SetVectorParameterValue("Color", actual);
   }
+  
+  //animation
+  if (m_isPushed) {
+    m_elapsedAnimation += DeltaSeconds;
+    if (m_elapsedAnimation >= 1.0f) {
+      m_isPushed = false;
+      m_elapsedAnimation = 0.0f;
+    }
+  }
 }
 
 void AMechanism::Activate(bool enabled) {
@@ -97,6 +129,7 @@ void AMechanism::Execute() {
   for (int32 i = 0; i < numTargets; i++) {
     if (m_Targets[i]->isEnabled()) {
       if (CanDisactivate) {
+        m_isPushed = true;
         m_elapsedStartIntermitence = 0.0f;
         MechanismMaterial->SetVectorParameterValue("Color", ColorDisabled);
         m_target = ColorEnabled;
@@ -106,6 +139,7 @@ void AMechanism::Execute() {
     }
     else {
       if (CanActivate) {
+        m_isPushed = true;
         m_elapsedStartIntermitence = 0.0f;
         MechanismMaterial->SetVectorParameterValue("Color", ColorEnabled);
         m_target = ColorDisabled;
@@ -116,4 +150,6 @@ void AMechanism::Execute() {
   }
 }
 
-
+bool AMechanism::isPushingButton() {
+  return m_isPushed;
+}

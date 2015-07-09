@@ -14,6 +14,8 @@ class TOWARDSTHELIGHT_API AMechanism : public ATappable
 	
 public:
   //Properties
+  UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+  class USkeletalMeshComponent* SkeletalMesh;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
     TArray<AActor *> Targets;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
@@ -34,6 +36,7 @@ public:
     FLinearColor ColorDisabled;
   UPROPERTY(EditAnywhere, Category = MechanismResponse)
     FLinearColor ColorEnabled;
+
 	//constructor
 	AMechanism();
 
@@ -43,7 +46,13 @@ public:
   virtual void Activate(bool enabled);
   virtual void Execute();
 
+  UFUNCTION(BlueprintCallable, Category = "ButtonLocomotion")
+    bool isPushingButton();
 private:
+  //animation
+  bool m_isPushed;
+  float m_elapsedAnimation = 0.0f;
+  
   //TargetVariables
   float m_elapsedIntermitence;
   float m_elapsedStartIntermitence;
