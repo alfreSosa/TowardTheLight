@@ -124,27 +124,29 @@ void AMechanism::Activate(bool enabled) {
 }
 
 void AMechanism::Execute() {
-  m_player->EnabledPushButton();
-  int32 numTargets = m_Targets.Num();
-  for (int32 i = 0; i < numTargets; i++) {
-    if (m_Targets[i]->isEnabled()) {
-      if (CanDisactivate) {
-        m_isPushed = true;
-        m_elapsedStartIntermitence = 0.0f;
-        MechanismMaterial->SetVectorParameterValue("Color", ColorDisabled);
-        m_target = ColorEnabled;
-        m_origin = ColorDisabled;
-        m_Targets[i]->ChangeEnabled(false);
+  if (!m_isPushed){
+    m_player->EnabledPushButton();
+    int32 numTargets = m_Targets.Num();
+    for (int32 i = 0; i < numTargets; i++) {
+      if (m_Targets[i]->isEnabled()) {
+        if (CanDisactivate) {
+          m_isPushed = true;
+          m_elapsedStartIntermitence = 0.0f;
+          MechanismMaterial->SetVectorParameterValue("Color", ColorDisabled);
+          m_target = ColorEnabled;
+          m_origin = ColorDisabled;
+          m_Targets[i]->ChangeEnabled(false);
+        }
       }
-    }
-    else {
-      if (CanActivate) {
-        m_isPushed = true;
-        m_elapsedStartIntermitence = 0.0f;
-        MechanismMaterial->SetVectorParameterValue("Color", ColorEnabled);
-        m_target = ColorDisabled;
-        m_origin = ColorEnabled;
-        m_Targets[i]->ChangeEnabled(true);
+      else {
+        if (CanActivate) {
+          m_isPushed = true;
+          m_elapsedStartIntermitence = 0.0f;
+          MechanismMaterial->SetVectorParameterValue("Color", ColorEnabled);
+          m_target = ColorDisabled;
+          m_origin = ColorEnabled;
+          m_Targets[i]->ChangeEnabled(true);
+        }
       }
     }
   }
