@@ -23,6 +23,9 @@ private:
     LEFT_DELAY,
   }m_state;
 
+  //animation
+  bool m_isMoving;
+
   float m_timer;
   float m_totalDistance;
   float m_currentDistance;
@@ -51,6 +54,8 @@ private:
   FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
 
 public:
+  UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+  class USkeletalMeshComponent* EnemyAnimationMesh;
   UPROPERTY()
     UBoxComponent *Trigger;
   UPROPERTY(EditAnywhere, Category = MobileEnemy)
@@ -78,5 +83,6 @@ public:
 
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-  
+  UFUNCTION(BlueprintCallable, Category = "EnemyLocomotion")
+    bool EnemyisMoving();
 };
