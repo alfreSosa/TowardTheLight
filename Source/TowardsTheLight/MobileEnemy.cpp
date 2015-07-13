@@ -12,7 +12,7 @@ const float PADDING_ENEMY_COLLISION_PERCENT = 0.05f;
 AMobileEnemy::AMobileEnemy() {
   PrimaryActorTick.bCanEverTick = true;
   this->SetActorEnableCollision(true);
-
+  m_isMoving = false;
   //setting
   RightDistance = 100.f;
   LeftDistance = 100.f;
@@ -56,6 +56,27 @@ AMobileEnemy::AMobileEnemy() {
   Trigger->bHiddenInGame = true;
   Trigger->bGenerateOverlapEvents = true;
   Trigger->SetRelativeLocation(FVector(0, 0, 0));
+
+  //animationMesh
+
+  EnemyAnimationMesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalComponent"));
+  if (EnemyAnimationMesh) {
+    EnemyAnimationMesh->AlwaysLoadOnClient = true;
+    EnemyAnimationMesh->AlwaysLoadOnServer = true;
+    EnemyAnimationMesh->bOwnerNoSee = false;
+    EnemyAnimationMesh->MeshComponentUpdateFlag = EMeshComponentUpdateFlag::AlwaysTickPose;
+    EnemyAnimationMesh->bCastDynamicShadow = true;
+    EnemyAnimationMesh->bAffectDynamicIndirectLighting = true;
+    EnemyAnimationMesh->PrimaryComponentTick.TickGroup = TG_PrePhysics;
+    EnemyAnimationMesh->bChartDistanceFactor = true;
+    EnemyAnimationMesh->AttachParent = RootComponent;
+    static FName CollisionProfileName(TEXT("OverlapAll"));
+    EnemyAnimationMesh->SetCollisionProfileName(CollisionProfileName);
+    EnemyAnimationMesh->bGenerateOverlapEvents = true;
+    EnemyAnimationMesh->bCanEverAffectNavigation = false;
+    EnemyAnimationMesh->SetRelativeLocation(FVector(0, 0, 0));
+    EnemyAnimationMesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
+  }
 }
 
 
@@ -76,6 +97,7 @@ void AMobileEnemy::BeginPlay() {
     m_rightPosition = (m_lastPosition + RightDistance * right) * right;
     m_leftPosition = (m_lastPosition + LeftDistance * -right) * right;
   }
+  m_isMoving = !HasTrigger;
 
   RegisterDelegate();
 
@@ -105,8 +127,10 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
 void AMobileEnemy::doMovement(float DeltaSeconds){
   switch (m_state){
   case INITIAL_DELAY:
-    if (m_timer < InitialDelay)
+    if (m_timer < InitialDelay) {
       m_timer += DeltaSeconds;
+      m_isMoving = false;
+    }
     else{
       m_timer = 0;
       m_state = TO_RIGHT;
@@ -114,6 +138,7 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
     }
     break;
   case TO_RIGHT:{
+    m_isMoving = true;
     float dist = Speed * DeltaSeconds;
     if (m_totalDistance - m_currentDistance < dist)
       dist = m_totalDistance - m_currentDistance;
@@ -131,6 +156,7 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
   }
                 break;
   case TO_LEFT:{
+    m_isMoving = true;
     float dist = Speed * DeltaSeconds;
     if (m_totalDistance - m_currentDistance < dist)
       dist = m_totalDistance - m_currentDistance;
@@ -148,6 +174,7 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
   }
                break;
   case RIGHT_DELAY:
+    m_isMoving = false;
     if (m_timer < RightDelay)
       m_timer += DeltaSeconds;
     else{
@@ -160,6 +187,7 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
     }
     break;
   case LEFT_DELAY:
+    m_isMoving = false;
     if (m_timer < LeftDelay)
       m_timer += DeltaSeconds;
     else{
@@ -474,4 +502,8 @@ void AMobileEnemy::ResponseCollisionBackward() {
     break;
 
   }
+}
+
+bool AMobileEnemy::EnemyisMoving() {
+  return m_isMoving;
 }
