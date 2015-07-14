@@ -24,10 +24,13 @@ public:
   UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
     bool LevelExists(FString levelName);
 
-  //UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
-  //  bool IsSwipeControlBP();
-  //UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
-  //  void SetSwipeControlBP(bool enable);
-
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    bool HasMusicBP();
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    void SetMusicBP(bool enable);
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    bool HasEffectsBP();
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    void SetEffectsBP(bool enable);
 private:
 };

@@ -13,7 +13,8 @@ class TOWARDSTHELIGHT_API APickableItem : public AActor
 public:	
 	// Sets default values for this actor's properties
 	APickableItem();
-	
+  virtual void Tick(float DeltaSeconds) override;
+
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
 
   UPROPERTY(EditAnywhere)
