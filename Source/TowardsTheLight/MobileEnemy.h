@@ -12,6 +12,7 @@ UCLASS()
 class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
 {
 	GENERATED_BODY()
+  TScriptDelegate<FWeakObjectPtr> m_delegate;
 
 private:
 
@@ -81,6 +82,8 @@ public:
   void RegisterDelegate();
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
 
+  UFUNCTION()
+    void OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
   UFUNCTION(BlueprintCallable, Category = "EnemyLocomotion")
