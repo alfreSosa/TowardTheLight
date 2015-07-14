@@ -4,6 +4,7 @@
 #include "MobileEnemy.h"
 #include "PlayerOvi.h"
 #include "TimeManager.h"
+#include "MyGameMode.h"
 
 const float DEFAULT_ENEMY_CAPSULE_RADIOUS = 45.0f;
 const float DEFAULT_ENEMY_CAPSULE_HEIGHT = 95.0f;
@@ -206,6 +207,18 @@ void AMobileEnemy::RegisterDelegate() {
   if (!Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AMobileEnemy::OnBeginTriggerOverlap)) {
     Trigger->OnComponentBeginOverlap.AddDynamic(this, &AMobileEnemy::OnBeginTriggerOverlap);
   }
+  if (!EnemyAnimationMesh->OnComponentBeginOverlap.IsBound()) {
+    m_delegate.BindUFunction(this, TEXT("OnCollisionSkeletal"));
+    EnemyAnimationMesh->OnComponentBeginOverlap.Add(m_delegate);
+  }
+}
+
+void AMobileEnemy::OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
+  if (OtherActor->ActorHasTag("Player")){
+    AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+    if (gameMode)
+      gameMode->EndGame(AMyGameMode::DEFEAT);
+  }
 }
 
 void AMobileEnemy::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
@@ -218,6 +231,9 @@ void AMobileEnemy::EndPlay(const EEndPlayReason::Type EndPlayReason){
   if (Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AMobileEnemy::OnBeginTriggerOverlap))  {
     Trigger->OnComponentBeginOverlap.RemoveDynamic(this, &AMobileEnemy::OnBeginTriggerOverlap);
   }
+
+  if (EnemyAnimationMesh->OnComponentBeginOverlap.IsBound())
+    EnemyAnimationMesh->OnComponentBeginOverlap.Remove(m_delegate);
   Super::EndPlay(EndPlayReason);
 }
 
