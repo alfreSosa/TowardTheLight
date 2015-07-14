@@ -21,10 +21,18 @@ bool AMenuGameMode::LevelExists(FString levelName){
   return GameDataManager::Instance()->LevelExists(levelName);
 }
 
-//bool AMenuGameMode::IsSwipeControlBP(){
-//  return GameDataManager::Instance()->IsSwipeControl();
-//}
-//
-//void AMenuGameMode::SetSwipeControlBP(bool enable){
-//  GameDataManager::Instance()->SetSwipeControl(enable);
-//}
+bool AMenuGameMode::HasMusicBP(){
+  return GameDataManager::Instance()->HasMusic();
+}
+
+void AMenuGameMode::SetMusicBP(bool enable){
+  GameDataManager::Instance()->SetMusic(enable);
+}
+
+bool AMenuGameMode::HasEffectsBP(){
+  return GameDataManager::Instance()->HasEffects();
+}
+
+void AMenuGameMode::SetEffectsBP(bool enable){
+  GameDataManager::Instance()->SetEffects(enable);
+}

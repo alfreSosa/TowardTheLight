@@ -21,7 +21,8 @@ GameDataManager* GameDataManager::Instance() {
 GameDataManager::GameDataManager() {
   m_data = "";
   m_filePath = FPaths::GameContentDir() + m_filePath;
-//  m_swipeControl = NONE;
+  m_music = NONE;
+  m_effects = NONE;
 
   FFileHelper::LoadFileToString(m_data, *m_filePath);
   Document doc;
@@ -240,44 +241,85 @@ bool GameDataManager::LevelExists(FString levelName){
 }
 
 
+//OPTIONS
+bool GameDataManager::HasMusic(){
+  if (m_music == NONE){
+    Document doc;
+    doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
 
-//bool GameDataManager::IsSwipeControl(){
-//  if (m_swipeControl == NONE){
-//    Document doc;
-//    doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
-//
-//    if (!doc.HasParseError())
-//      if (doc.IsObject())
-//        if (doc.HasMember("general"))
-//          if (doc["general"].IsObject())
-//            if (doc["general"].HasMember("swipeControl"))
-//              if (doc["general"]["swipeControl"].IsBool()){
-//                bool ret = doc["general"]["swipeControl"].GetBool();
-//                m_swipeControl = ret ? SWIPE : BUTTONS;
-//              }
-//  }
-//
-//  return m_swipeControl == SWIPE;
-//}
-//
-//void GameDataManager::SetSwipeControl(bool enable){
-//  Document doc;
-//  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
-//
-//  if (!doc.HasParseError())
-//    if (doc.IsObject())
-//      if (doc.HasMember("general"))
-//        if (doc["general"].IsObject())
-//          if (doc["general"].HasMember("swipeControl"))
-//            if (doc["general"]["swipeControl"].IsBool()){
-//              doc["general"]["swipeControl"].SetBool(enable);
-//              m_swipeControl = enable ? SWIPE : BUTTONS;
-//            }
-//
-//  StringBuffer buffer;
-//  Writer<StringBuffer> writer(buffer);
-//  doc.Accept(writer);
-//  m_data = buffer.GetString();
-//
-//  SavedGame();
-//}
+    if (!doc.HasParseError())
+      if (doc.IsObject())
+        if (doc.HasMember("general"))
+          if (doc["general"].IsObject())
+            if (doc["general"].HasMember("music"))
+              if (doc["general"]["music"].IsBool()){
+                bool ret = doc["general"]["music"].GetBool();
+                m_music = ret ? YES : NO;
+              }
+  }
+
+  return m_music == YES;
+}
+
+void GameDataManager::SetMusic(bool enable){
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+  if (!doc.HasParseError())
+    if (doc.IsObject())
+      if (doc.HasMember("general"))
+        if (doc["general"].IsObject())
+          if (doc["general"].HasMember("music"))
+            if (doc["general"]["music"].IsBool()){
+              doc["general"]["music"].SetBool(enable);
+              m_music = enable ? YES : NO;
+            }
+
+  StringBuffer buffer;
+  Writer<StringBuffer> writer(buffer);
+  doc.Accept(writer);
+  m_data = buffer.GetString();
+
+  SavedGame();
+}
+
+bool GameDataManager::HasEffects(){
+  if (m_effects == NONE){
+    Document doc;
+    doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+    if (!doc.HasParseError())
+      if (doc.IsObject())
+        if (doc.HasMember("general"))
+          if (doc["general"].IsObject())
+            if (doc["general"].HasMember("effects"))
+              if (doc["general"]["effects"].IsBool()){
+                bool ret = doc["general"]["effects"].GetBool();
+                m_effects = ret ? YES : NO;
+              }
+  }
+
+  return m_effects == YES;
+}
+
+void GameDataManager::SetEffects(bool enable){
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+  if (!doc.HasParseError())
+    if (doc.IsObject())
+      if (doc.HasMember("general"))
+        if (doc["general"].IsObject())
+          if (doc["general"].HasMember("effects"))
+            if (doc["general"]["effects"].IsBool()){
+              doc["general"]["effects"].SetBool(enable);
+              m_effects = enable ? YES : NO;
+            }
+
+  StringBuffer buffer;
+  Writer<StringBuffer> writer(buffer);
+  doc.Accept(writer);
+  m_data = buffer.GetString();
+
+  SavedGame();
+}

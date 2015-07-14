@@ -26,8 +26,10 @@ public:
   float GetPointsLevel(FString levelName);
   bool LevelExists(FString levelName);
 
-//  bool IsSwipeControl();
-//  void SetSwipeControl(bool enable);
+  bool HasMusic();
+  void SetMusic(bool enable);
+  bool HasEffects();
+  void SetEffects(bool enable);
 
 protected:
   GameDataManager();
@@ -39,5 +41,7 @@ private:
   FString m_filePath = "StorageFiles/save/save.json";
   FString m_data;
 
-//  enum SwipeControl { NONE = 0, SWIPE = 1, BUTTONS = -1 } m_swipeControl;
+  enum BinaryOption { NONE = 0, YES = 1, NO = -1 };
+  BinaryOption m_music;
+  BinaryOption m_effects;
 };
