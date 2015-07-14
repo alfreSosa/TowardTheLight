@@ -7,10 +7,9 @@
 
 // Sets default values
 APickableItem::APickableItem() {
+  PrimaryActorTick.bCanEverTick = true;
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
-//  RootComponent->SetMobility(EComponentMobility::Static);
-//  OurVisibleComponent->SetMobility(EComponentMobility::Static);
   OurVisibleComponent->AttachTo(RootComponent);
   
   this->SetActorEnableCollision(true);
@@ -24,9 +23,8 @@ void APickableItem::Tick(float DeltaSeconds){
 
   if (IsOrb){
     FRotator MyRot = GetActorRotation();
-    MyRot.Yaw += 150 * DeltaSeconds;
-    //MyRot.Roll += 150 * DeltaSeconds;
-    //MyRot.Pitch += 150 * DeltaSeconds;
+    MyRot.Yaw += 50 * DeltaSeconds;
+    MyRot.Roll += 75 * DeltaSeconds;
     SetActorRotation(MyRot);
   }
 }
