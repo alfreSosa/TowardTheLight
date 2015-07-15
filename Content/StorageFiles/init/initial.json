@@ -6,6 +6,14 @@
 	},
 	"levels":
 	[
-
+		{"name":"Publishers_01","orbs":0,"points":0},
+		{"name":"Publishers_02","orbs":0,"points":0},
+		{"name":"Publishers_03","orbs":0,"points":0},
+		{"name":"Publishers_04","orbs":0,"points":0},
+		{"name":"Publishers_05","orbs":0,"points":0},
+		{"name":"Publishers_06","orbs":0,"points":0},
+		{"name":"Publishers_07","orbs":0,"points":0},
+		{"name":"Publishers_08","orbs":0,"points":0},
+		{"name":"Publishers_09","orbs":0,"points":0}
 	]
 }
