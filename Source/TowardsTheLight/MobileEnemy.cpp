@@ -333,7 +333,7 @@ void AMobileEnemy::CheckCollision() {
   if (collisionMidle) {
     int size = OutTraceResultMiddle.Num();
     for (int i = 0; i < size; i++)
-      if (OutTraceResultMiddle[i].GetActor()->ActorHasTag("Platform")) {
+      if (OutTraceResultMiddle[i].GetActor()->ActorHasTag("Platform") || OutTraceResultMiddle[i].GetActor()->ActorHasTag("Player")) {
         SetActorLocation(RecalculateLocation(GetActorRightVector(), GetActorLocation(), OutTraceResultMiddle[i].Location, m_capsuleRadious));
         ResponseCollision();
         break;
@@ -342,7 +342,7 @@ void AMobileEnemy::CheckCollision() {
   else if (collisionTop) {
     int size = OutTraceResultTop.Num();
     for (int i = 0; i < size; i++)
-      if (OutTraceResultTop[i].GetActor()->ActorHasTag("Platform")) {
+      if (OutTraceResultTop[i].GetActor()->ActorHasTag("Platform") || OutTraceResultTop[i].GetActor()->ActorHasTag("Player")) {
         SetActorLocation(RecalculateLocation(GetActorRightVector(), GetActorLocation(), OutTraceResultTop[i].Location, m_capsuleRadious));
         ResponseCollision();
         break;
@@ -351,7 +351,7 @@ void AMobileEnemy::CheckCollision() {
   else if (collisionBottom) {
     int size = OutTraceResultBottom.Num();
     for (int i = 0; i < size; i++)
-      if (OutTraceResultBottom[i].GetActor()->ActorHasTag("Platform")) {
+      if (OutTraceResultBottom[i].GetActor()->ActorHasTag("Platform") || OutTraceResultBottom[i].GetActor()->ActorHasTag("Player")) {
         SetActorLocation(RecalculateLocation(GetActorRightVector(), GetActorLocation(), OutTraceResultBottom[i].Location, m_capsuleRadious));
         ResponseCollision();
         break;
