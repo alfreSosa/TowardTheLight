@@ -124,6 +124,9 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\IntermittentPlatform.h">
       <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\LocalizationManager.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp">
@@ -191,6 +194,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\IntermittentPlatform.cpp">
       <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\LocalizationManager.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -9,7 +9,6 @@ void APortal::BeginPlay() {
 }
 
 void APortal::Activate(bool enabled) {
-
 }
 
 void APortal::Execute() {
@@ -17,10 +16,10 @@ void APortal::Execute() {
   dif.X = (dif.X < 0) ? -dif.X : dif.X;
   dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
   dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
-  if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05){
+  if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05) {
     FTransform newTransformPlayer = Partner->GetTransform();
 
-    newTransformPlayer.SetScale3D(FVector(1));
+    newTransformPlayer.SetScale3D(m_player->GetTransform().GetScale3D());
 
     float limitWorld = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorRightVector());
     limitWorld = abs(limitWorld);
@@ -47,9 +46,4 @@ void APortal::Execute() {
     m_player->SetActorTransform(newTransformPlayer);
   }
 }
-
-
-
-
-
 
