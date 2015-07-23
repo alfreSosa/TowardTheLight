@@ -12,20 +12,37 @@ UCLASS()
 class TOWARDSTHELIGHT_API AIntermittentPlatform : public AStaticPlatform
 {
   GENERATED_BODY()
-  AIntermittentPlatform();
-  virtual void BeginPlay() override;
-  virtual void Tick(float DeltaSeconds) override;
-//properties
 public:
+  //properties
   UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
     int32 NumberOfIntermitences;
   UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
-    float TimeInState;
+    float InitialTimeDelay;
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+    float EndTimeDelay;
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+    float TimeInStateVisible;
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+    float TimeInStateNoVisible;
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+    bool StartVisible;
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+    bool RestartAtEnd;
   UPROPERTY(EditAnywhere, Category = MechanismResponse)
     bool Enabled;
+  //functions
+  AIntermittentPlatform();
+  virtual void BeginPlay() override;
+  virtual void Tick(float DeltaSeconds) override;
+  void ChangeEnabled(bool enabled);
 private:
-  enum State {ON, OFF};
+  //functions
+  void runStateMachine(float DeltaSeconds);
+  //properties
+  enum State {INITIALDELAY, ON, OFF, ENDDELAY};
   State m_actualState;
   float m_elapsedTime;
+  bool m_countIntermittences;
+  int32 m_counterIntermittences;
 	
 };
