@@ -189,6 +189,7 @@ void APlayerOvi::Tick(float DeltaSeconds){
   //get own deltaTime
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
   Super::Tick(DeltaSeconds);
+
   //pause animations if is game paused
   Mesh->bPauseAnims = isPlayerPaused();
 
