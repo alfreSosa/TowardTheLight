@@ -21,30 +21,9 @@ GameDataManager* GameDataManager::Instance() {
 GameDataManager::GameDataManager() {
   m_data = "";
   m_filePath = FPaths::GameContentDir() + m_filePath;
+  m_music = NONE;
+  m_effects = NONE;
 
-  //solucion normal
-  //FFileHelper::LoadFileToString(m_data, *m_filePath);
-  
-  //solucion con FILE*
-  //FILE * pFile;
-  //fopen_s(&pFile, TCHAR_TO_ANSI(*m_filePath), "r");
-
-  //if (pFile){
-  //  char buffer[256];
-  //  while (!feof(pFile)){
-  //    if (fgets(buffer, 256, pFile) == NULL) break;
-  //    m_data = m_data + FString(buffer);
-  //  }
-  //  fclose(pFile);
-  //}
-  //else{
-  //  FString content("{\"general\":{\"sound\":true}, \"levels\" : []}");
-  //  m_data = content;
-  //  SavedGame();
-  //  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GUARDANDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")));
-  //}
-
-  //solucion con parseo
   FFileHelper::LoadFileToString(m_data, *m_filePath);
   Document doc;
   doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
@@ -238,4 +217,109 @@ float GameDataManager::GetPointsLevel(FString levelName){
         }
 
   return ret;
+}
+
+bool GameDataManager::LevelExists(FString levelName){
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+  if (!doc.HasParseError())
+    if (doc.IsObject())
+      if (doc.HasMember("levels"))
+        if (doc["levels"].IsArray()){
+          SizeType numLevels = doc["levels"].Size();
+          const Value &levels = doc["levels"];
+          for (SizeType i = 0; i < numLevels; i++)
+            if (levels[i].IsObject())
+              if (levels[i].HasMember("name"))
+                if (levels[i]["name"].IsString())
+                  if (FString(levels[i]["name"].GetString()) == levelName)
+                    return true;
+        }
+
+  return false;
+}
+
+
+//OPTIONS
+bool GameDataManager::HasMusic(){
+  if (m_music == NONE){
+    Document doc;
+    doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+    if (!doc.HasParseError())
+      if (doc.IsObject())
+        if (doc.HasMember("general"))
+          if (doc["general"].IsObject())
+            if (doc["general"].HasMember("music"))
+              if (doc["general"]["music"].IsBool()){
+                bool ret = doc["general"]["music"].GetBool();
+                m_music = ret ? YES : NO;
+              }
+  }
+
+  return m_music == YES;
+}
+
+void GameDataManager::SetMusic(bool enable){
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+  if (!doc.HasParseError())
+    if (doc.IsObject())
+      if (doc.HasMember("general"))
+        if (doc["general"].IsObject())
+          if (doc["general"].HasMember("music"))
+            if (doc["general"]["music"].IsBool()){
+              doc["general"]["music"].SetBool(enable);
+              m_music = enable ? YES : NO;
+            }
+
+  StringBuffer buffer;
+  Writer<StringBuffer> writer(buffer);
+  doc.Accept(writer);
+  m_data = buffer.GetString();
+
+  SavedGame();
+}
+
+bool GameDataManager::HasEffects(){
+  if (m_effects == NONE){
+    Document doc;
+    doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+    if (!doc.HasParseError())
+      if (doc.IsObject())
+        if (doc.HasMember("general"))
+          if (doc["general"].IsObject())
+            if (doc["general"].HasMember("effects"))
+              if (doc["general"]["effects"].IsBool()){
+                bool ret = doc["general"]["effects"].GetBool();
+                m_effects = ret ? YES : NO;
+              }
+  }
+
+  return m_effects == YES;
+}
+
+void GameDataManager::SetEffects(bool enable){
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+  if (!doc.HasParseError())
+    if (doc.IsObject())
+      if (doc.HasMember("general"))
+        if (doc["general"].IsObject())
+          if (doc["general"].HasMember("effects"))
+            if (doc["general"]["effects"].IsBool()){
+              doc["general"]["effects"].SetBool(enable);
+              m_effects = enable ? YES : NO;
+            }
+
+  StringBuffer buffer;
+  Writer<StringBuffer> writer(buffer);
+  doc.Accept(writer);
+  m_data = buffer.GetString();
+
+  SavedGame();
 }

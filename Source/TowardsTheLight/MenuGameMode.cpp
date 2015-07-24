@@ -5,14 +5,34 @@
 #include "GameDataManager.h"
 
 
-FString AMenuGameMode::GetLevelOrbs(FString levelName){
-  FString ret;
-  ret = ret.FromInt(GameDataManager::Instance()->GetOrbsLevel(levelName));
-  return ret;
+float AMenuGameMode::GetLevelOrbs(FString levelName){
+  return GameDataManager::Instance()->GetOrbsLevel(levelName);
 }
 
-FString AMenuGameMode::GetLevelPoints(FString levelName){
-  FString ret;
-  ret = ret.FromInt(GameDataManager::Instance()->GetPointsLevel(levelName));
-  return ret;
+float AMenuGameMode::GetLevelPoints(FString levelName){
+  return GameDataManager::Instance()->GetPointsLevel(levelName);
+}
+
+float AMenuGameMode::GetTotalOrbs(){
+  return GameDataManager::Instance()->GetOrbsCounts();
+}
+
+bool AMenuGameMode::LevelExists(FString levelName){
+  return GameDataManager::Instance()->LevelExists(levelName);
+}
+
+bool AMenuGameMode::HasMusicBP(){
+  return GameDataManager::Instance()->HasMusic();
+}
+
+void AMenuGameMode::SetMusicBP(bool enable){
+  GameDataManager::Instance()->SetMusic(enable);
+}
+
+bool AMenuGameMode::HasEffectsBP(){
+  return GameDataManager::Instance()->HasEffects();
+}
+
+void AMenuGameMode::SetEffectsBP(bool enable){
+  GameDataManager::Instance()->SetEffects(enable);
 }

@@ -24,6 +24,12 @@ public:
   float GetOrbsCounts();
   float GetOrbsLevel(FString levelName);
   float GetPointsLevel(FString levelName);
+  bool LevelExists(FString levelName);
+
+  bool HasMusic();
+  void SetMusic(bool enable);
+  bool HasEffects();
+  void SetEffects(bool enable);
 
 protected:
   GameDataManager();
@@ -34,4 +40,8 @@ private:
 
   FString m_filePath = "StorageFiles/save/save.json";
   FString m_data;
+
+  enum BinaryOption { NONE = 0, YES = 1, NO = -1 };
+  BinaryOption m_music;
+  BinaryOption m_effects;
 };

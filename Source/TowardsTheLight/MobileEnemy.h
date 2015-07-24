@@ -5,19 +5,16 @@
 #include "StaticEnemy.h"
 #include "MobileEnemy.generated.h"
 
-/**
- * 
- */
+#define COLLISION_ENEMY    ECC_GameTraceChannel2 
+class APlayerOvi;
+
 UCLASS()
 class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
 {
 	GENERATED_BODY()
-	
-  float m_timer;
-  float m_totalDistance;
-  float m_currentDistance;
-  FVector m_rightVector;
-  bool m_initMovement;
+  TScriptDelegate<FWeakObjectPtr> m_delegate;
+
+private:
 
   enum state{
     INITIAL_DELAY,
@@ -27,15 +24,41 @@ class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
     LEFT_DELAY,
   }m_state;
 
-  UPROPERTY()
-    UBoxComponent *Trigger;
+  //animation
+  bool m_isMoving;
+
+  float m_timer;
+  float m_totalDistance;
+  float m_currentDistance;
+  FVector m_rightVector;
+  FVector m_rightPosition;
+  FVector m_leftPosition;
+  bool m_initMovement;
+
+  float m_jumpSpeed;
+  float m_accelerationJump;
+  float m_actualJumpSpeed;
+  float m_capsuleHeight;
+  float m_capsuleRadious;
+  float m_capsuleHeightPadding;
+  float m_capsuleRadiousPadding;
+  bool m_enableGravity;
+  APlayerOvi *m_player;
+  FVector m_lastPosition;
 
   void doMovement(float DeltaSeconds);
-public:
-  AMobileEnemy();
-  virtual void BeginPlay() override;
-  virtual void Tick(float DeltaSeconds) override;
+  void CalculateGravity(float DeltaSeconds);
+  void CheckCollision();
+  void ResponseCollision();
+  void ResponseCollisionBackward();
+  FVector AbsVector(const FVector& vector);
+  FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
 
+public:
+  UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+  class USkeletalMeshComponent* EnemyAnimationMesh;
+  UPROPERTY()
+    UBoxComponent *Trigger;
   UPROPERTY(EditAnywhere, Category = MobileEnemy)
     float RightDistance;
   UPROPERTY(EditAnywhere, Category = MobileEnemy)
@@ -50,9 +73,19 @@ public:
     float InitialDelay;
   UPROPERTY(EditAnywhere, Category = MobileEnemy)
     bool HasTrigger;
+  UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+  class UCapsuleComponent* CapsuleComponent;
 
+  AMobileEnemy();
+  virtual void BeginPlay() override;
+  virtual void Tick(float DeltaSeconds) override;
   void RegisterDelegate();
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
+
+  UFUNCTION()
+    void OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-  void EndPlay(const EEndPlayReason::Type EndPlayReason);
+  UFUNCTION(BlueprintCallable, Category = "EnemyLocomotion")
+    bool EnemyisMoving();
 };

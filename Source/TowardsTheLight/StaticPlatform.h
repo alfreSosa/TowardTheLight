@@ -12,10 +12,11 @@ class TOWARDSTHELIGHT_API AStaticPlatform : public AActor
 	
 public:	
 	AStaticPlatform();
-  virtual void BeginPlay() override;
 
   UPROPERTY(EditAnywhere)
-    USceneComponent* OurVisibleComponent;
-	
+    UStaticMeshComponent* OurVisibleComponent;
+  virtual void ChangeEnabled(bool enabled);
+  virtual bool isEnabled();
+  virtual void InitByMechanism(bool disableAtEnd, int32 numActions);
 	
 };

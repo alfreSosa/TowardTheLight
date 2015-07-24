@@ -13,11 +13,24 @@ class TOWARDSTHELIGHT_API AMenuGameMode : public AGameMode {
   GENERATED_BODY()
 
 public:
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    float GetLevelPoints(FString levelName);
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    float GetLevelOrbs(FString levelName);
 
   UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
-    FString GetLevelPoints(FString levelName);
-  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
-    FString GetLevelOrbs(FString levelName);
+    float GetTotalOrbs();
 
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    bool LevelExists(FString levelName);
+
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    bool HasMusicBP();
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    void SetMusicBP(bool enable);
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    bool HasEffectsBP();
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    void SetEffectsBP(bool enable);
 private:
 };

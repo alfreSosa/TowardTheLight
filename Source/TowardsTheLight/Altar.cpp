@@ -7,69 +7,33 @@
 // Sets default values
 AAltar::AAltar()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	//PrimaryActorTick.bCanEverTick = true;
   this->SetActorEnableCollision(true);
-  this->Tags.Add("Platform");
-
-  RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-  OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
-  OurVisibleComponent->AttachTo(RootComponent);
-  //trigger
-
-  Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("ActivationZone"));
-  Trigger->SetCollisionProfileName(FName(TEXT("OverlapOnlyPawn")));
-  Trigger->AttachTo(RootComponent);
-  Trigger->bHiddenInGame = true;
-  Trigger->bGenerateOverlapEvents = true;
-
-  //Orientation
-  Orientation = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Orientation"));
-  Orientation->AttachTo(RootComponent);
-
   GiveKey = true;
-  ColorKey = FLinearColor(0.0f, 0.0f, 1.0f);
+  AltarColor = FLinearColor(0.0f, 0.0f, 1.0f);
+
+  AltarMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
+  UMaterial* mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Altar/Altar_mat.Altar_mat'"));
+  if (MatFinder.Succeeded())
+  {
+    mat = MatFinder.Object;
+    AltarMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
 }
 
 // Called when the game starts or when spawned
-void AAltar::BeginPlay()
-{
+void AAltar::BeginPlay(){
 	Super::BeginPlay();
-  RegisterDelegate();
+  m_meshActivator->SetMaterial(0, AltarMaterial);
+  AltarMaterial->SetVectorParameterValue("Color", AltarColor);
 }
 
-// Called every frame
-void AAltar::Tick( float DeltaTime )
-{
-	Super::Tick( DeltaTime );
+void AAltar::Activate(bool enabled) {
 
 }
 
-void AAltar::RegisterDelegate() {
-  if (!Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AAltar::OnBeginTriggerOverlap)) {
-    Trigger->OnComponentBeginOverlap.AddDynamic(this, &AAltar::OnBeginTriggerOverlap);
-  }
-}
-
-void AAltar::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-  if (OtherActor->ActorHasTag("Player")){
-
-    FVector dif = OtherActor->GetActorUpVector() - Orientation->GetUpVector();
-    dif.X = (dif.X < 0) ? -dif.X : dif.X;
-    dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
-    dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
-    if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05){
-      APlayerOvi *player = dynamic_cast<APlayerOvi *>(OtherActor);
-      if (player)
-        player->SetKey(GiveKey, ColorKey);
-    }
-    
-  }
-}
-
-void AAltar::EndPlay(const EEndPlayReason::Type EndPlayReason){
-  if (Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AAltar::OnBeginTriggerOverlap))  {
-    Trigger->OnComponentBeginOverlap.RemoveDynamic(this, &AAltar::OnBeginTriggerOverlap);
-  }
-  Super::EndPlay(EndPlayReason);
+void AAltar::Execute() {
+  m_player->SetKey(GiveKey, AltarColor);
 }
 

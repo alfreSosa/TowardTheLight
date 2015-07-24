@@ -13,10 +13,8 @@ class TOWARDSTHELIGHT_API APickableItem : public AActor
 public:	
 	// Sets default values for this actor's properties
 	APickableItem();
+  virtual void Tick(float DeltaSeconds) override;
 
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-	
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
 
   UPROPERTY(EditAnywhere)

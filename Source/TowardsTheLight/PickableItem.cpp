@@ -2,16 +2,31 @@
 
 #include "TowardsTheLight.h"
 #include "PickableItem.h"
+#include "TimeManager.h"
 #include "MyGameMode.h"
 
 // Sets default values
 APickableItem::APickableItem() {
+  PrimaryActorTick.bCanEverTick = true;
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
   OurVisibleComponent->AttachTo(RootComponent);
+  
   this->SetActorEnableCollision(true);
+
   Points = DEFAULT_POINTS;
   m_collected = false;
+}
+
+void APickableItem::Tick(float DeltaSeconds){
+  DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+
+  if (IsOrb){
+    FRotator MyRot = GetActorRotation();
+    MyRot.Yaw += 50 * DeltaSeconds;
+    MyRot.Roll += 75 * DeltaSeconds;
+    SetActorRotation(MyRot);
+  }
 }
 
 void APickableItem::ReceiveActorBeginOverlap(AActor* OtherActor) {
@@ -29,11 +44,4 @@ void APickableItem::ReceiveActorBeginOverlap(AActor* OtherActor) {
     this->Destroy();
   }
 }
-
-// Called when the game starts or when spawned
-void APickableItem::BeginPlay() {
-	Super::BeginPlay();
-	
-}
-
 

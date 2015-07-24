@@ -3,29 +3,76 @@
 #include "TowardsTheLight.h"
 #include "Tower.h"
 #include "MyGameMode.h"
+#include "PlayerOvi.h"
+#include "TimeManager.h"
 
 // Sets default values
 ATower::ATower() {
-  RootComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
-  RootComponent->SetWorldScale3D(FVector(2.5, 2.5, 2.5));
-  RootComponent = Body;
+  RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+  Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
+//  Body->SetWorldScale3D(FVector(2.5, 2.5, 2.5));
+  RootComponent->SetMobility(EComponentMobility::Static);
+  Body->SetMobility(EComponentMobility::Static);
+  Body->AttachTo(RootComponent);
   this->Tags.Add("Platform");
 
+  Light = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Light"));
+  Light->SetMobility(EComponentMobility::Static);
+  Light->AttachTo(Body);
+
   Entrance = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Entrance"));
-  Entrance->AttachTo(RootComponent);
+  Entrance->SetMobility(EComponentMobility::Static);
+  Entrance->AttachTo(Body);
 
   Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
   Trigger->AttachTo(Entrance);
   Trigger->bHiddenInGame = true;
   Trigger->SetWorldScale3D(FVector(0.5, 0.5, 0.5));
   Trigger->bGenerateOverlapEvents = true;
+
+  ColorDisabled = FLinearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  ColorEnabled = FLinearColor(0.0f, 0.9490f, 1.0f, 1.0f);
+
+  NeedKey = false;
+  ColorKey = FLinearColor(0.0f, 0.0f, 0.0f);
+
+  TowerLightMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
+  UMaterial* mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Tower/Tower_sphere_material.Tower_sphere_material'"));
+  if (MatFinder.Succeeded())
+  {
+    mat = MatFinder.Object;
+    TowerLightMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
+
+  m_startVictory = false;
+  m_timeToFinish = 2.0f;
+  m_elapsedTime = 0.0f;
+
 }
 
 // Called when the game starts or when spawned
 void ATower::BeginPlay() {
 	Super::BeginPlay();
-	
+  Light->SetMaterial(0, TowerLightMaterial);
+  TowerLightMaterial->SetVectorParameterValue("Color", ColorDisabled);
   RegisterDelegate();
+  m_startVictory = false;
+  m_timeToFinish = 2.0f;
+  m_elapsedTime = 0.0f;
+}
+
+void ATower::Tick(float DeltaSeconds) {
+  DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+  Super::Tick(DeltaSeconds);
+  
+  if (m_startVictory) {
+    float t = m_elapsedTime / m_timeToFinish;
+    t = (t > 1.0f) ? 1.0f : t;
+    FLinearColor color = FMath::Lerp(ColorDisabled, ColorEnabled, t);
+    TowerLightMaterial->SetVectorParameterValue("Color", color);
+    m_elapsedTime += DeltaSeconds;
+  }
 }
 
 void ATower::RegisterDelegate() {
@@ -36,14 +83,21 @@ void ATower::RegisterDelegate() {
 
 void ATower::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
   if (OtherActor->ActorHasTag("Player")){
-    FVector dif = OtherActor->GetActorUpVector() - Entrance->GetUpVector();
-    dif.X = (dif.X < 0) ? -dif.X : dif.X;
-    dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
-    dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
-    if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05){
-      AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
-      if (gameMode)
-        gameMode->EndGame(AMyGameMode::VICTORY);
+    APlayerOvi *player = dynamic_cast<APlayerOvi *>(OtherActor);
+    if (player){
+      FVector dif = player->GetActorUpVector() - Entrance->GetUpVector();
+      dif.X = (dif.X < 0) ? -dif.X : dif.X;
+      dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
+      dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
+      if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05){
+        if (!NeedKey || (NeedKey && player->HasKey() && ColorKey == player->GetColorKey())){
+          AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+          if (gameMode) {
+            m_startVictory = true;
+            gameMode->EndGame(AMyGameMode::VICTORY);
+          }
+        }
+      }
     }
   }
 }

@@ -3,20 +3,24 @@
 #include "TowardsTheLight.h"
 #include "StaticPlatform.h"
 
-AStaticPlatform::AStaticPlatform()
-{
+AStaticPlatform::AStaticPlatform() {
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
+  RootComponent->SetMobility(EComponentMobility::Static);
+  OurVisibleComponent->SetMobility(EComponentMobility::Static);
   OurVisibleComponent->AttachTo(RootComponent);
   this->Tags.Add("Platform");
 }
 
-// Called when the game starts or when spawned
-void AStaticPlatform::BeginPlay()
-{
-	Super::BeginPlay();
-	
+
+void AStaticPlatform::ChangeEnabled(bool enabled) {
+
 }
 
+bool AStaticPlatform::isEnabled() {
+  return false;
+}
 
+void AStaticPlatform::InitByMechanism(bool disableAtEnd, int32 numActions) {
 
+}
