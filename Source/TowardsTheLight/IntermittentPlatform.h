@@ -14,27 +14,37 @@ class TOWARDSTHELIGHT_API AIntermittentPlatform : public AStaticPlatform
   GENERATED_BODY()
 public:
   //properties
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     int32 NumberOfIntermitences;
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     float InitialTimeDelay;
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     float EndTimeDelay;
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     float TimeInStateVisible;
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     float TimeInStateNoVisible;
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformState)
     bool StartVisible;
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
-    bool RestartAtEnd;
-  UPROPERTY(EditAnywhere, Category = MechanismResponse)
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformState)
+    bool Loop;
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformState)
     bool Enabled;
+
+  UPROPERTY(EditAnywhere, Category = PlatformSynchronize)
+    AIntermittentPlatform *Previous;
+  UPROPERTY(EditAnywhere, Category = PlatformSynchronize)
+    AIntermittentPlatform *Next;
+
   //functions
   AIntermittentPlatform();
   virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;
+  virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
+  virtual void ReceiveActorEndOverlap(AActor* OtherActor) override;
   void ChangeEnabled(bool enabled);
+  void AlertPlayerTouching(bool player, AIntermittentPlatform *platform);
 private:
   //functions
   void runStateMachine(float DeltaSeconds);
@@ -44,5 +54,7 @@ private:
   float m_elapsedTime;
   bool m_countIntermittences;
   int32 m_counterIntermittences;
+  bool m_playerIsTouching;
+  bool m_isVisible;
 	
 };
