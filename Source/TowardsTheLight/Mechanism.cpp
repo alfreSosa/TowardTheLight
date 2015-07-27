@@ -36,7 +36,6 @@ AMechanism::AMechanism()
   TimeToStartIntermittence = 5.0f;
   ColorDisabled = FLinearColor(0.0f, 0.0f, 0.0f, 1.0f);
   ColorEnabled = FLinearColor(0.0f, 0.9490f, 1.0f, 1.0f);
-  TargetsAreEnabled = false;
   intermitedOn = true;
   m_target = ColorEnabled;
   m_origin = ColorDisabled;
@@ -124,7 +123,7 @@ void AMechanism::Activate(bool enabled) {
 }
 
 void AMechanism::Execute() {
-  if (!m_isPushed){
+  if (!m_isPushed) {
     m_player->EnabledPushButton();
     int32 numTargets = m_Targets.Num();
     for (int32 i = 0; i < numTargets; i++) {

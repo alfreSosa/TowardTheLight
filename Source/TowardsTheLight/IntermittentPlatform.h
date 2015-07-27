@@ -44,6 +44,8 @@ public:
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
   virtual void ReceiveActorEndOverlap(AActor* OtherActor) override;
   void ChangeEnabled(bool enabled);
+  bool isEnabled();
+  void InitByMechanism(bool disableAtEnd, int32 numActions);
   void AlertPlayerTouching(bool player, AIntermittentPlatform *platform);
 private:
   //functions
@@ -55,6 +57,8 @@ private:
   bool m_countIntermittences;
   int32 m_counterIntermittences;
   bool m_playerIsTouching;
+  bool m_disableTimer;
   bool m_isVisible;
+  bool m_restart;
 	
 };

@@ -23,6 +23,8 @@ AIntermittentPlatform::AIntermittentPlatform() {
   m_elapsedTime = 0.0f;
   m_actualState = State::INITIALDELAY;
   m_playerIsTouching = false;
+  m_disableTimer = false;
+  m_restart = false;
   Previous = nullptr;
   Next = nullptr;
 }
@@ -41,12 +43,19 @@ void AIntermittentPlatform::BeginPlay() {
   m_playerIsTouching = false;
   m_counterIntermittences = NumberOfIntermitences;
   m_countIntermittences = (NumberOfIntermitences == 0) ? false : true;
+  m_restart = false;
 }
 
 
 void AIntermittentPlatform::Tick(float DeltaSeconds) {
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
-  if (m_countIntermittences && m_counterIntermittences <= 0)
+  if (m_restart) {
+    m_actualState = INITIALDELAY;
+    m_restart = false;
+    m_counterIntermittences = NumberOfIntermitences;
+  }
+ 
+  if(m_countIntermittences && m_counterIntermittences <= 0)
     m_actualState = ENDDELAY;
 
   runStateMachine(DeltaSeconds);
@@ -54,13 +63,12 @@ void AIntermittentPlatform::Tick(float DeltaSeconds) {
 
 void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
   if (Enabled) {
-    m_elapsedTime += DeltaSeconds;
+    if (!m_disableTimer)
+      m_elapsedTime += DeltaSeconds;
+
     switch (m_actualState)
     {
     case INITIALDELAY:
-      if (!StartVisible && m_playerIsTouching)
-        m_elapsedTime -= DeltaSeconds;
-
       if (m_elapsedTime >= InitialTimeDelay) {
         if (StartVisible)
           m_actualState = State::ON;
@@ -74,6 +82,10 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         if (m_countIntermittences)
           m_counterIntermittences--;
         m_isVisible = false;
+        if (m_playerIsTouching) {
+          m_disableTimer = true;
+          AlertPlayerTouching(true, this);
+        }
         m_actualState = State::OFF;
         this->SetActorHiddenInGame(true);
         this->Tags.Remove("Platform");
@@ -81,8 +93,6 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
       }
       break;
     case AIntermittentPlatform::OFF:
-      if (m_playerIsTouching)
-        m_elapsedTime -= DeltaSeconds;
       if (m_elapsedTime >= TimeInStateNoVisible) {
         if (m_countIntermittences)
           m_counterIntermittences--;
@@ -95,23 +105,13 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
       }
       break;
     case AIntermittentPlatform::ENDDELAY:
-      if (m_playerIsTouching && !m_isVisible)
-        m_elapsedTime -= DeltaSeconds;
       if (m_elapsedTime >= EndTimeDelay) {
         Enabled = Loop;
         m_elapsedTime = 0.0f;
-        m_actualState = (Loop) ? INITIALDELAY : ENDDELAY;
-        if (Loop) {
-          m_isVisible = StartVisible;
-          m_counterIntermittences = (Loop) ? NumberOfIntermitences : 0;
-          if (StartVisible) {
-            this->SetActorHiddenInGame(false);
-          }
-          else {
-            this->SetActorHiddenInGame(true);
-            this->Tags.Remove("Platform");
-          }
-        }
+        m_actualState = (Loop && !m_restart) ? INITIALDELAY : ENDDELAY;
+        //PROBANDO EL RESET
+        m_isVisible = StartVisible;
+        m_counterIntermittences = (Loop) ? NumberOfIntermitences : 0;        
       }
       break;
     default:
@@ -123,39 +123,46 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
 void AIntermittentPlatform::ReceiveActorBeginOverlap(AActor* OtherActor) {
   if (OtherActor->ActorHasTag("Player")) {
     m_playerIsTouching = true;
-    AlertPlayerTouching(true, this);
+    if (!m_isVisible) {
+      m_disableTimer = true;
+      AlertPlayerTouching(true, this);
+    }
   }
 }
 
 void AIntermittentPlatform::ReceiveActorEndOverlap(AActor* OtherActor) {
+  //nota para el futuro: puede darse que se procese primero todos los beginoverlap y luego los end, si estamos dentro de una no visible y pasamos a otra no visible es posible que le meta en una plataforma sino se respetan las distancias.
   if (OtherActor->ActorHasTag("Player")) {
     m_playerIsTouching = false;
+    m_disableTimer = false;
     AlertPlayerTouching(false, this);
   }
 
 }
 
-
 void AIntermittentPlatform::ChangeEnabled(bool enabled) {
   Enabled = enabled;
-  //se restaura las intermitencias
-  m_actualState = INITIALDELAY;
-  m_counterIntermittences = NumberOfIntermitences;
+  if (Enabled && m_actualState == ENDDELAY)
+    m_restart = true;
 }
 
 void AIntermittentPlatform::AlertPlayerTouching(bool player, AIntermittentPlatform *platform) {
-  //esto no funciona, tengo que plantearlo bien toda la estructura.
-  /*m_playerIsTouching = player;
-  
-  if (platform != this && m_playerIsTouching)
-    Enabled = false;
-  else if (platform != this && !m_playerIsTouching)
-    Enabled = true;
-
+  m_disableTimer = player;
+  //para evitar bucles infinitos de llamada los if
   if (Next && Next != platform) 
     Next->AlertPlayerTouching(player, this);
   if (Previous && Previous != platform) 
-    Previous->AlertPlayerTouching(player, this);*/
+    Previous->AlertPlayerTouching(player, this);
+}
+
+bool AIntermittentPlatform::isEnabled() {
+  return Enabled;
+}
+
+void AIntermittentPlatform::InitByMechanism(bool disableAtEnd, int32 numActions) {
+  Loop = !disableAtEnd;
+  m_counterIntermittences = NumberOfIntermitences;
+  m_countIntermittences = (NumberOfIntermitences == 0) ? false : true;
 }
 
 
