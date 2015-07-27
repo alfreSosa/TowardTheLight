@@ -32,10 +32,10 @@ public:
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformState)
     bool Enabled;
 
-  UPROPERTY(EditAnywhere, Category = PlatformSynchronize)
-    AIntermittentPlatform *Previous;
-  UPROPERTY(EditAnywhere, Category = PlatformSynchronize)
-    AIntermittentPlatform *Next;
+  //UPROPERTY(EditAnywhere, Category = PlatformSynchronize)
+  //  AIntermittentPlatform *Previous;
+  //UPROPERTY(EditAnywhere, Category = PlatformSynchronize)
+  //  AIntermittentPlatform *Next;
 
   //functions
   AIntermittentPlatform();
@@ -46,7 +46,7 @@ public:
   void ChangeEnabled(bool enabled);
   bool isEnabled();
   void InitByMechanism(bool disableAtEnd, int32 numActions);
-  void AlertPlayerTouching(bool player, AIntermittentPlatform *platform);
+  void AlertPlayerTouching(bool player);
 private:
   //functions
   void runStateMachine(float DeltaSeconds);
