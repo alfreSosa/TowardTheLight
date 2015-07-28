@@ -31,6 +31,9 @@ public:
   bool HasEffects();
   void SetEffects(bool enable);
 
+  FString GetLanguage();
+  void SetLanguage(FString language);
+
 protected:
   GameDataManager();
   ~GameDataManager();
@@ -44,4 +47,5 @@ private:
   enum BinaryOption { NONE = 0, YES = 1, NO = -1 };
   BinaryOption m_music;
   BinaryOption m_effects;
+  FString m_language;
 };

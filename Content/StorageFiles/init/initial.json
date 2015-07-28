@@ -2,7 +2,8 @@
 	"general":
 	{
 		"music": true,
-		"effects": true
+		"effects": true,
+		"language": "en"
 	},
 	"levels":
 	[

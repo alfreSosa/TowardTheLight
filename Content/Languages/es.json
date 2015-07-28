@@ -1,0 +1,8 @@
+{
+	"language": "es"
+	"keys":
+	[
+		{"key":"RETRY","value":"Reintentar"},
+		{"key":"BACK","value":"Volver"}
+	]
+}

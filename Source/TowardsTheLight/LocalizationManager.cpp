@@ -2,6 +2,7 @@
 
 #include "TowardsTheLight.h"
 #include "LocalizationManager.h"
+#include "GameDataManager.h"
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
@@ -10,8 +11,10 @@ using namespace rapidjson;
 
 //LangDef
 const FString& LangDef::GetString(const FString& key, const FString& defVal) const {
-  for (unsigned i = 0; i < mKeys.Num(); i++)
-    if (mKeys[i] == key) return mValues[i];
+  unsigned size = m_keys.Num();
+  for (unsigned i = 0; i < size; i++)
+    if (m_keys[i] == key)
+      return m_values[i];
   return defVal;
 }
 
@@ -25,6 +28,10 @@ LocalizationManager* LocalizationManager::Instance() {
 }
 
 LocalizationManager::LocalizationManager() {
+  ParseLanguage("en");
+  ParseLanguage("es");
+
+  SetLanguage(GameDataManager::Instance()->GetLanguage());
 }
 
 LocalizationManager::~LocalizationManager() {
@@ -42,50 +49,42 @@ bool LocalizationManager::ParseLanguage(const FString& lenguage) {
 
   if (!doc.HasParseError())
     if (doc.IsObject())
-      if (doc.HasMember("keys"))
-        if (doc["keys"].IsArray()){
-          SizeType numKeys = doc["keys"].Size();
-          const Value &keys = doc["keys"];
-          for (SizeType i = 0; i < numKeys; i++)
-            if (keys[i].IsObject())
-              if (keys[i].HasMember("key"))
-                if (keys[i]["key"].IsString()){
-                  FString k = keys[i]["key"].GetString();
-                  FString v;
-                  if (keys[i].HasMember("value"))
-                    if (keys[i]["value"].IsString()){
-                      v = keys[i]["value"].GetString();
+      if (doc.HasMember("language"))
+        if (doc["language"].IsString()){
+          FString langName = doc["language"].GetString();
+          LangDef langDef(langName);
+
+          if (doc.HasMember("keys")){
+            if (doc["keys"].IsArray()){
+              SizeType numKeys = doc["keys"].Size();
+              const Value &keys = doc["keys"];
+              for (SizeType i = 0; i < numKeys; i++)
+                if (keys[i].IsObject())
+                  if (keys[i].HasMember("key"))
+                    if (keys[i]["key"].IsString()){
+                      FString k = keys[i]["key"].GetString();
+                      if (keys[i].HasMember("value"))
+                        if (keys[i]["value"].IsString()){
+                          FString v = keys[i]["value"].GetString();
+
+                          langDef.AddString(k, v);
+                        }
                     }
+            }
+            m_languages.Add(langDef);
 
-                  //añadir k y v
-
-                }
+            return true;
+          }
         }
 
-
-  //xml_node<>* langNode = doc.first_node("language");
-  //String langName = langNode->first_attribute("name")->value();
-  //LangDef langDef(langName);
-
-  //xml_node<>* stringNode = langNode->first_node("string");
-  //if (!stringNode)
-  //  return false;
-  //while (stringNode) {
-  //  String key = stringNode->first_attribute("key")->value();
-  //  String value = stringNode->first_attribute("value")->value();
-  //  langDef.AddString(key, value);
-  //  stringNode = stringNode->next_sibling("string");
-  //}
-
-  //mLanguages.Add(langDef);
-
-  return true;
+  return false;
 }
 
 bool LocalizationManager::SetLanguage(const FString& name) {
-  for (unsigned i = 0; i < mLanguages.Num(); i++)
-    if (mLanguages[i].GetName() == name) {
-      mCurrentLanguage = i;
+  unsigned size = m_languages.Num();
+  for (unsigned i = 0; i < size; i++)
+    if (m_languages[i].GetName() == name) {
+      m_currentLanguage = i;
       return true;
     }
   return false;
