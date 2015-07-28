@@ -24,8 +24,8 @@ class TOWARDSTHELIGHT_API LocalizationManager {
 public:
   static LocalizationManager* Instance();
 
-  bool ParseLanguage(const FString& filename);
-  bool SetLanguage(const FString& name);
+  bool ParseLanguage(const FString& language);
+  bool SetLanguage(const FString& language);
   const FString& GetCurrentLanguage() const { return m_languages[m_currentLanguage].GetName(); }
   const FString& GetString(const FString& key, const FString& defVal = "") const { return m_languages[m_currentLanguage].GetString(key, defVal); }
 

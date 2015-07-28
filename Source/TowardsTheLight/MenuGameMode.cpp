@@ -3,6 +3,7 @@
 #include "TowardsTheLight.h"
 #include "MenuGameMode.h"
 #include "GameDataManager.h"
+#include "LocalizationManager.h"
 
 
 float AMenuGameMode::GetLevelOrbs(FString levelName){
@@ -35,4 +36,8 @@ bool AMenuGameMode::HasEffectsBP(){
 
 void AMenuGameMode::SetEffectsBP(bool enable){
   GameDataManager::Instance()->SetEffects(enable);
+}
+
+FString AMenuGameMode::GetString(FString key){
+  return LocalizationManager::Instance()->GetString(key);
 }

@@ -32,5 +32,7 @@ public:
     bool HasEffectsBP();
   UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
     void SetEffectsBP(bool enable);
-private:
+
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    FString GetString(FString key);
 };

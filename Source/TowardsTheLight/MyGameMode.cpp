@@ -5,6 +5,7 @@
 #include "PlayerOvi.h"
 #include "OviPlayerController.h"
 #include "GameDataManager.h"
+#include "LocalizationManager.h"
 #include "TimeManager.h"
 
 AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
@@ -91,6 +92,6 @@ FString AMyGameMode::GetLevelNameBP(){
   return levelName;
 }
 
-//bool AMyGameMode::SwipeControlBP(){
-//  return GameDataManager::Instance()->IsSwipeControl();
-//}
+FString AMyGameMode::GetString(FString key){
+  return LocalizationManager::Instance()->GetString(key);
+}

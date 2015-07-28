@@ -39,8 +39,8 @@ LocalizationManager::~LocalizationManager() {
   m_instance = nullptr;
 }
 
-bool LocalizationManager::ParseLanguage(const FString& lenguage) {
-  FString path = FPaths::GameContentDir() + "Languages/" + lenguage + ".json";
+bool LocalizationManager::ParseLanguage(const FString& language) {
+  FString path = FPaths::GameContentDir() + "Languages/" + language + ".json";
   FString buffer;
   FFileHelper::LoadFileToString(buffer, *path);
 
@@ -80,10 +80,10 @@ bool LocalizationManager::ParseLanguage(const FString& lenguage) {
   return false;
 }
 
-bool LocalizationManager::SetLanguage(const FString& name) {
+bool LocalizationManager::SetLanguage(const FString& language) {
   unsigned size = m_languages.Num();
   for (unsigned i = 0; i < size; i++)
-    if (m_languages[i].GetName() == name) {
+    if (m_languages[i].GetName() == language) {
       m_currentLanguage = i;
       return true;
     }

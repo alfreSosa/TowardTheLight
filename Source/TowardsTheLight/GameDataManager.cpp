@@ -349,7 +349,7 @@ void GameDataManager::SetLanguage(FString language){
         if (doc["general"].IsObject())
           if (doc["general"].HasMember("language"))
             if (doc["general"]["language"].IsString()){
-              doc["general"]["effects"].SetString(TCHAR_TO_ANSI(*language), language.Len());
+              doc["general"]["language"].SetString(TCHAR_TO_ANSI(*language), language.Len());
               m_language = language;
             }
 

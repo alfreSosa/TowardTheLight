@@ -1,5 +1,12 @@
-<<<<<<< HEAD
-{"general":{"music":false,"effects":"aaa","language":"en"},"levels":[{"name":"Publishers_05","orbs":3,"points":12300}]}
-=======
-{"general":{"music":false,"effects":false},"levels":[{"name":"Publishers_05","orbs":3,"points":12300},{"name":"Publishers_04","orbs":3,"points":11100}]}
->>>>>>> beda9fa146ec33ed565036f377de4a269b34ed22
+{
+	"general":
+	{
+		"music": true,
+		"effects": true,
+		"language": "es"
+	},
+	"levels":
+	[
+
+	]
+}
