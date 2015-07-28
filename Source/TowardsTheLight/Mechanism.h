@@ -19,8 +19,6 @@ public:
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
     TArray<AActor *> Targets;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
-    bool TargetsAreEnabled;
-  UPROPERTY(EditAnywhere, Category = MechanismTarget)
     bool CanActivate;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
     bool CanDisactivate;
