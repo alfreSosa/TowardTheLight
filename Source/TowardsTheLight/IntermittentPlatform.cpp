@@ -2,7 +2,7 @@
 
 #include "TowardsTheLight.h"
 #include "IntermittentPlatform.h"
-//#include "TimeManager.h"
+#include "IntermittentManager.h"
 
 AIntermittentPlatform::AIntermittentPlatform() {
   //PrimaryActorTick.bCanEverTick = true; //acordarse de desactivar esto con el manager
@@ -23,13 +23,21 @@ AIntermittentPlatform::AIntermittentPlatform() {
   m_elapsedTime = 0.0f;
   m_actualState = State::INITIALDELAY;
   m_playerIsTouching = false;
-  m_disableTimer = false;
-  m_restart = false;
+  m_owner = nullptr;
 }
 
 void AIntermittentPlatform::BeginPlay() {
   this->Tags.Add("IntermittentPlatform");
+  Init();
+}
+
+
+void AIntermittentPlatform::Init() {
+
+  if (this->ActorHasTag("Platform"))
+    this->Tags.Remove("Platform");
   m_actualState = State::INITIALDELAY;
+
   if (StartVisible) {
     this->SetActorHiddenInGame(false);
   }
@@ -37,22 +45,15 @@ void AIntermittentPlatform::BeginPlay() {
     this->SetActorHiddenInGame(true);
     this->Tags.Remove("Platform");
   }
+
   m_isVisible = StartVisible;
   m_playerIsTouching = false;
   m_counterIntermittences = NumberOfIntermitences;
   m_countIntermittences = (NumberOfIntermitences == 0) ? false : true;
-  m_restart = false;
+  m_elapsedTime = 0.0f;
 }
 
-
 void AIntermittentPlatform::Tick(float DeltaSeconds) {
-  //DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
-  //if (m_restart) {
-  //  m_actualState = INITIALDELAY;
-  //  m_restart = false;
-  //  m_counterIntermittences = NumberOfIntermitences;
-  //}
- 
   if(m_countIntermittences && m_counterIntermittences <= 0)
     m_actualState = ENDDELAY;
 
@@ -61,9 +62,7 @@ void AIntermittentPlatform::Tick(float DeltaSeconds) {
 
 void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
   if (Enabled) {
-    if (!m_disableTimer)
-      m_elapsedTime += DeltaSeconds;
-
+    m_elapsedTime += DeltaSeconds;
     switch (m_actualState)
     {
     case INITIALDELAY:
@@ -79,11 +78,11 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
       if (m_elapsedTime >= TimeInStateVisible) {
         if (m_countIntermittences)
           m_counterIntermittences--;
+
         m_isVisible = false;
-        if (m_playerIsTouching) {
-          m_disableTimer = true;
-          AlertPlayerTouching(true);
-        }
+        if (m_playerIsTouching)
+          m_owner->AlertBlocking(true);
+       
         m_actualState = State::OFF;
         this->SetActorHiddenInGame(true);
         this->Tags.Remove("Platform");
@@ -104,9 +103,11 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
       break;
     case AIntermittentPlatform::ENDDELAY:
       if (m_elapsedTime >= EndTimeDelay) {
-        Enabled = Loop;
+        //Enabled = Loop;
         m_elapsedTime = 0.0f;
-        m_actualState = (Loop && !m_restart) ? INITIALDELAY : ENDDELAY;
+        m_actualState = (Loop) ? INITIALDELAY : ENDDELAY;
+        if (!Loop)
+          m_owner->AlertFinish();
         //PROBANDO EL RESET
         m_isVisible = StartVisible;
         m_counterIntermittences = (Loop) ? NumberOfIntermitences : 0;        
@@ -122,45 +123,23 @@ void AIntermittentPlatform::ReceiveActorBeginOverlap(AActor* OtherActor) {
   if (OtherActor->ActorHasTag("Player")) {
     m_playerIsTouching = true;
     if (!m_isVisible) {
-      m_disableTimer = true;
-      AlertPlayerTouching(true);
+      m_owner->AlertBlocking(true);
     }
   }
 }
 
 void AIntermittentPlatform::ReceiveActorEndOverlap(AActor* OtherActor) {
-  //nota para el futuro: puede darse que se procese primero todos los beginoverlap y luego los end, si estamos dentro de una no visible y pasamos a otra no visible es posible que le meta en una plataforma sino se respetan las distancias.
   if (OtherActor->ActorHasTag("Player")) {
     m_playerIsTouching = false;
-    m_disableTimer = false;
-    AlertPlayerTouching(false);
+    m_owner->AlertBlocking(false);
   }
 
 }
 
-void AIntermittentPlatform::ChangeEnabled(bool enabled) {
-  /*Enabled = enabled;
-  if (Enabled && m_actualState == ENDDELAY)
-    m_restart = true;*/
+void AIntermittentPlatform::InitOwner(AIntermittentManager *owner) {
+  m_owner = owner;
 }
 
-void AIntermittentPlatform::AlertPlayerTouching(bool player) {
-  //m_disableTimer = player;
-  ////para evitar bucles infinitos de llamada los if
-  //if (Next && Next != platform) 
-  //  Next->AlertPlayerTouching(player, this);
-  //if (Previous && Previous != platform) 
-  //  Previous->AlertPlayerTouching(player, this);
-}
 
-bool AIntermittentPlatform::isEnabled() {
-  return Enabled;
-}
-
-void AIntermittentPlatform::InitByMechanism(bool disableAtEnd, int32 numActions) {
-  //Loop = !disableAtEnd;
-  //m_counterIntermittences = NumberOfIntermitences;
-  //m_countIntermittences = (NumberOfIntermitences == 0) ? false : true;
-}
 
 

@@ -5,31 +5,76 @@
 #include "IntermittentPlatform.h"
 #include "TimeManager.h"
 
-// Sets default values
 AIntermittentManager::AIntermittentManager()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	
 	PrimaryActorTick.bCanEverTick = true;
+  //public properties
+  Enabled = true;
+  //private properties
   m_numPlatforms = 0;
+  m_finishCounter = 0;
+  m_someBlocked = false;
+  m_restart = false;
+
 }
 
-// Called when the game starts or when spawned
 void AIntermittentManager::BeginPlay()
 {
 	Super::BeginPlay();
   m_numPlatforms = Platforms.Num();
-  for (int32 i = 0; i < m_numPlatforms; i++)
+  m_finishCounter = m_numPlatforms;
+  for(int32 i = 0; i < m_numPlatforms; i++) {
+    Platforms[i]->InitOwner(this);
     Platforms[i]->BeginPlay();
+  }
+  m_someBlocked = false;
+  m_restart = false;
 }
 
-// Called every frame
 void AIntermittentManager::Tick( float DeltaTime )
 {
   DeltaTime = TimeManager::Instance()->GetDeltaTime(DeltaTime);
 	Super::Tick( DeltaTime );
+  
+  if (m_finishCounter <= 0)
+    Enabled = false;
 
-  for (int32 i = 0; i < m_numPlatforms; i++)
-    Platforms[i]->Tick(DeltaTime);
+  if (m_restart) {
+    for (int32 i = 0; i < m_numPlatforms; i++)
+      Platforms[i]->Init();
+    m_restart = false;
+  }
 
+  if (Enabled)
+    if (!m_someBlocked)
+      for (int32 i = 0; i < m_numPlatforms; i++)
+        Platforms[i]->Tick(DeltaTime);
+
+}
+
+void AIntermittentManager::AlertBlocking(bool blocking) {
+  m_someBlocked = blocking;
+}
+
+void AIntermittentManager::ChangeEnabled(bool enabled) {
+  Enabled = enabled;
+  if (Enabled) {
+    m_restart = true;
+    m_finishCounter = m_numPlatforms;
+  }
+}
+
+bool AIntermittentManager::isEnabled() {
+  return Enabled;
+}
+
+void AIntermittentManager::InitByMechanism(bool disableAtEnd, int32 numActions) {
+  //Nothing
+}
+
+void AIntermittentManager::AlertFinish() {
+  m_finishCounter--;
+  m_finishCounter = (m_finishCounter <= 0) ? 0: m_finishCounter;
 }
 

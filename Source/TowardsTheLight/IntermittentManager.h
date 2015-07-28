@@ -15,13 +15,21 @@ public:
   //properties
   UPROPERTY(EditAnywhere, Category = PlatformManaged)
     TArray<AIntermittentPlatform *> Platforms;
-
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformState)
+    bool Enabled;
   //functions
 	AIntermittentManager();
 	virtual void BeginPlay() override;
 	virtual void Tick( float DeltaSeconds ) override;
-
+  void ChangeEnabled(bool enabled);
+  bool isEnabled();
+  void InitByMechanism(bool disableAtEnd, int32 numActions);
+  void AlertBlocking(bool blocking);
+  void AlertFinish();
 private:
   //properties
   int32 m_numPlatforms;
+  int32 m_finishCounter;
+  bool m_someBlocked;
+  bool m_restart;
 };

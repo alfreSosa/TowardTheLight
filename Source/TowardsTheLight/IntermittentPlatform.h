@@ -8,6 +8,7 @@
 /**
  * 
  */
+class AIntermittentManager;
 UCLASS()
 class TOWARDSTHELIGHT_API AIntermittentPlatform : public AStaticPlatform
 {
@@ -29,13 +30,6 @@ public:
     bool StartVisible;
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformState)
     bool Loop;
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatformState)
-    bool Enabled;
-
-  //UPROPERTY(EditAnywhere, Category = PlatformSynchronize)
-  //  AIntermittentPlatform *Previous;
-  //UPROPERTY(EditAnywhere, Category = PlatformSynchronize)
-  //  AIntermittentPlatform *Next;
 
   //functions
   AIntermittentPlatform();
@@ -43,13 +37,13 @@ public:
   virtual void Tick(float DeltaSeconds) override;
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
   virtual void ReceiveActorEndOverlap(AActor* OtherActor) override;
-  void ChangeEnabled(bool enabled);
-  bool isEnabled();
-  void InitByMechanism(bool disableAtEnd, int32 numActions);
-  void AlertPlayerTouching(bool player);
+  void InitOwner(AIntermittentManager *owner);
+  void Init();
 private:
   //functions
   void runStateMachine(float DeltaSeconds);
+  //manager
+  AIntermittentManager *m_owner;
   //properties
   enum State {INITIALDELAY, ON, OFF, ENDDELAY};
   State m_actualState;
@@ -57,8 +51,7 @@ private:
   bool m_countIntermittences;
   int32 m_counterIntermittences;
   bool m_playerIsTouching;
-  bool m_disableTimer;
   bool m_isVisible;
-  bool m_restart;
+  bool Enabled;
 	
 };
