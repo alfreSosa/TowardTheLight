@@ -27,7 +27,7 @@ public:
   bool ParseLanguage(const FString& language);
   bool SetLanguage(const FString& language);
   const FString& GetCurrentLanguage() const { return m_languages[m_currentLanguage].GetName(); }
-  const FString& GetString(const FString& key, const FString& defVal = "") const { return m_languages[m_currentLanguage].GetString(key, defVal); }
+  const FString& GetString(const FString& key, const FString& defVal = "Value not found") const { return m_languages[m_currentLanguage].GetString(key, defVal); }
 
 protected:
 	LocalizationManager();
