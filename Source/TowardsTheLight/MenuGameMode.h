@@ -35,4 +35,6 @@ public:
 
   UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
     FString GetString(FString key);
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    void ChangeLanguage(FString language);
 };
