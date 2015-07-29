@@ -31,7 +31,8 @@ LocalizationManager::LocalizationManager() {
   ParseLanguage("en");
   ParseLanguage("es");
 
-  SetLanguage(GameDataManager::Instance()->GetLanguage());
+  //SetLanguage(GameDataManager::Instance()->GetLanguage());
+  SetLanguage("en");
 }
 
 LocalizationManager::~LocalizationManager() {

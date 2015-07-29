@@ -6,7 +6,7 @@
  * 
  */
 
-class LangDef {
+class TOWARDSTHELIGHT_API LangDef {
 public:
   LangDef() {}
   LangDef(const FString& name) { m_name = name; }
