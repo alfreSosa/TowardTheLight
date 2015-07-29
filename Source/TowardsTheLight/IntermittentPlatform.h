@@ -8,41 +8,50 @@
 /**
  * 
  */
+class AIntermittentManager;
 UCLASS()
 class TOWARDSTHELIGHT_API AIntermittentPlatform : public AStaticPlatform
 {
   GENERATED_BODY()
 public:
   //properties
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     int32 NumberOfIntermitences;
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     float InitialTimeDelay;
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     float EndTimeDelay;
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     float TimeInStateVisible;
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     float TimeInStateNoVisible;
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
+
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformState)
     bool StartVisible;
-  UPROPERTY(EditAnywhere, Category = IntermittentPlatform)
-    bool RestartAtEnd;
-  UPROPERTY(EditAnywhere, Category = MechanismResponse)
-    bool Enabled;
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformState)
+    bool Loop;
+
   //functions
   AIntermittentPlatform();
   virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;
-  void ChangeEnabled(bool enabled);
+  virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
+  virtual void ReceiveActorEndOverlap(AActor* OtherActor) override;
+  void InitOwner(AIntermittentManager *owner);
+  void Init();
 private:
   //functions
   void runStateMachine(float DeltaSeconds);
+  //manager
+  AIntermittentManager *m_owner;
   //properties
   enum State {INITIALDELAY, ON, OFF, ENDDELAY};
   State m_actualState;
   float m_elapsedTime;
   bool m_countIntermittences;
   int32 m_counterIntermittences;
+  bool m_playerIsTouching;
+  bool m_isVisible;
+  bool Enabled;
 	
 };

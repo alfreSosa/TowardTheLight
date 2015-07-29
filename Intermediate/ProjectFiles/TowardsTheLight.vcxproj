@@ -46,6 +46,7 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\GameDataManager.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\InfoGameInstance.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\IntermittentManager.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\IntermittentPlatform.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\LocalizationManager.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Mechanism.cpp" />
@@ -62,6 +63,7 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\Altar.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\InfoGameInstance.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\IntermittentManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\IntermittentPlatform.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\LocalizationManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Mechanism.h" />

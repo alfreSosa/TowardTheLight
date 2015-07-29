@@ -2,10 +2,10 @@
 
 #include "TowardsTheLight.h"
 #include "IntermittentPlatform.h"
-#include "TimeManager.h"
+#include "IntermittentManager.h"
 
 AIntermittentPlatform::AIntermittentPlatform() {
-  PrimaryActorTick.bCanEverTick = true;
+  //PrimaryActorTick.bCanEverTick = true; //acordarse de desactivar esto con el manager
   this->SetActorEnableCollision(true);
 
   RootComponent->SetMobility(EComponentMobility::Movable);
@@ -16,17 +16,28 @@ AIntermittentPlatform::AIntermittentPlatform() {
   NumberOfIntermitences = 0;
   InitialTimeDelay = TimeInStateNoVisible = TimeInStateVisible = 1.0f;
   EndTimeDelay = 0.0f;
-  StartVisible = Enabled = true;
+  Loop = StartVisible = Enabled = true;
   //private
   m_countIntermittences = true;
   m_counterIntermittences = NumberOfIntermitences;
   m_elapsedTime = 0.0f;
   m_actualState = State::INITIALDELAY;
+  m_playerIsTouching = false;
+  m_owner = nullptr;
 }
 
 void AIntermittentPlatform::BeginPlay() {
   this->Tags.Add("IntermittentPlatform");
+  Init();
+}
+
+
+void AIntermittentPlatform::Init() {
+
+  if (this->ActorHasTag("Platform"))
+    this->Tags.Remove("Platform");
   m_actualState = State::INITIALDELAY;
+
   if (StartVisible) {
     this->SetActorHiddenInGame(false);
   }
@@ -34,14 +45,16 @@ void AIntermittentPlatform::BeginPlay() {
     this->SetActorHiddenInGame(true);
     this->Tags.Remove("Platform");
   }
+
+  m_isVisible = StartVisible;
+  m_playerIsTouching = false;
   m_counterIntermittences = NumberOfIntermitences;
   m_countIntermittences = (NumberOfIntermitences == 0) ? false : true;
+  m_elapsedTime = 0.0f;
 }
 
-
 void AIntermittentPlatform::Tick(float DeltaSeconds) {
-  DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
-  if (m_countIntermittences && m_counterIntermittences <= 0)
+  if(m_countIntermittences && m_counterIntermittences <= 0)
     m_actualState = ENDDELAY;
 
   runStateMachine(DeltaSeconds);
@@ -66,6 +79,10 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         if (m_countIntermittences)
           m_counterIntermittences--;
 
+        m_isVisible = false;
+        if (m_playerIsTouching)
+          m_owner->AlertBlocking(true);
+       
         m_actualState = State::OFF;
         this->SetActorHiddenInGame(true);
         this->Tags.Remove("Platform");
@@ -77,6 +94,7 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         if (m_countIntermittences)
           m_counterIntermittences--;
 
+        m_isVisible = true;
         m_actualState = State::ON;
         this->SetActorHiddenInGame(false);
         this->Tags.Add("Platform");
@@ -85,9 +103,14 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
       break;
     case AIntermittentPlatform::ENDDELAY:
       if (m_elapsedTime >= EndTimeDelay) {
-        Enabled = RestartAtEnd;
+        //Enabled = Loop;
         m_elapsedTime = 0.0f;
-        m_actualState = (RestartAtEnd) ? INITIALDELAY : ENDDELAY;
+        m_actualState = (Loop) ? INITIALDELAY : ENDDELAY;
+        if (!Loop)
+          m_owner->AlertFinish();
+        //PROBANDO EL RESET
+        m_isVisible = StartVisible;
+        m_counterIntermittences = (Loop) ? NumberOfIntermitences : 0;        
       }
       break;
     default:
@@ -96,11 +119,27 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
   }
 }
 
-void AIntermittentPlatform::ChangeEnabled(bool enabled) {
-  Enabled = enabled;
-  //se restaura las intermitencias
-  m_actualState = INITIALDELAY;
-  m_counterIntermittences = NumberOfIntermitences;
+void AIntermittentPlatform::ReceiveActorBeginOverlap(AActor* OtherActor) {
+  if (OtherActor->ActorHasTag("Player")) {
+    m_playerIsTouching = true;
+    if (!m_isVisible) {
+      m_owner->AlertBlocking(true);
+    }
+  }
 }
+
+void AIntermittentPlatform::ReceiveActorEndOverlap(AActor* OtherActor) {
+  if (OtherActor->ActorHasTag("Player")) {
+    m_playerIsTouching = false;
+    m_owner->AlertBlocking(false);
+  }
+
+}
+
+void AIntermittentPlatform::InitOwner(AIntermittentManager *owner) {
+  m_owner = owner;
+}
+
+
 
 

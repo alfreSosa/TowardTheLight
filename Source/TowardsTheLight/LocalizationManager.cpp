@@ -2,12 +2,23 @@
 
 #include "TowardsTheLight.h"
 #include "LocalizationManager.h"
+#include "GameDataManager.h"
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 
 using namespace rapidjson;
 
+//LangDef
+const FString& LangDef::GetString(const FString& key, const FString& defVal) const {
+  unsigned size = m_keys.Num();
+  for (unsigned i = 0; i < size; i++)
+    if (m_keys[i] == key)
+      return m_values[i];
+  return defVal;
+}
+
+//LocalizationManager
 LocalizationManager* LocalizationManager::m_instance = nullptr;
 
 LocalizationManager* LocalizationManager::Instance() {
@@ -17,9 +28,68 @@ LocalizationManager* LocalizationManager::Instance() {
 }
 
 LocalizationManager::LocalizationManager() {
+  ParseLanguage("en");
+  ParseLanguage("es");
+
+  SetLanguage(GameDataManager::Instance()->GetLanguage());
 }
 
 LocalizationManager::~LocalizationManager() {
   delete m_instance;
   m_instance = nullptr;
 }
+
+bool LocalizationManager::ParseLanguage(const FString& lenguage) {
+  FString path = FPaths::GameContentDir() + "Languages/" + lenguage + ".json";
+  FString buffer;
+  FFileHelper::LoadFileToString(buffer, *path);
+
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*buffer));
+
+  if (!doc.HasParseError())
+    if (doc.IsObject())
+      if (doc.HasMember("language"))
+        if (doc["language"].IsString()){
+          FString langName = doc["language"].GetString();
+          LangDef langDef(langName);
+
+          if (doc.HasMember("keys")){
+            if (doc["keys"].IsArray()){
+              SizeType numKeys = doc["keys"].Size();
+              const Value &keys = doc["keys"];
+              for (SizeType i = 0; i < numKeys; i++)
+                if (keys[i].IsObject())
+                  if (keys[i].HasMember("key"))
+                    if (keys[i]["key"].IsString()){
+                      FString k = keys[i]["key"].GetString();
+                      if (keys[i].HasMember("value"))
+                        if (keys[i]["value"].IsString()){
+                          FString v = keys[i]["value"].GetString();
+
+                          langDef.AddString(k, v);
+                        }
+                    }
+            }
+            m_languages.Add(langDef);
+
+            return true;
+          }
+        }
+
+  return false;
+}
+
+bool LocalizationManager::SetLanguage(const FString& name) {
+  unsigned size = m_languages.Num();
+  for (unsigned i = 0; i < size; i++)
+    if (m_languages[i].GetName() == name) {
+      m_currentLanguage = i;
+      return true;
+    }
+  return false;
+}
+
+
+
+
