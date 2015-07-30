@@ -133,6 +133,9 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\Tutorial.h">
       <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\CheckPoint.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp">
@@ -209,6 +212,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\Tutorial.cpp">
       <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\CheckPoint.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

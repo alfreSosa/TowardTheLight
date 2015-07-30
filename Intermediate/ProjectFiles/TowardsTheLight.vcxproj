@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\CheckPoint.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\GameDataManager.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\InfoGameInstance.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\IntermittentManager.cpp" />
@@ -62,6 +63,7 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\Tower.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Tutorial.cpp" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Altar.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\CheckPoint.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\InfoGameInstance.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\IntermittentManager.h" />
