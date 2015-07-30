@@ -60,6 +60,7 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\Tappable.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\TimeManager.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Tower.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\Tutorial.cpp" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Altar.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\InfoGameInstance.h" />
@@ -84,6 +85,7 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\Tappable.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\TimeManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Tower.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\Tutorial.h" />
     <None Include="..\..\TowardsTheLight.uproject" />
     <None Include="..\..\Source\TowardsTheLight.Target.cs" />
     <None Include="..\..\Source\TowardsTheLightEditor.Target.cs" />

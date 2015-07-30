@@ -1,8 +1,20 @@
 {
-	"language": "en"
+	"language": "en",
 	"keys":
 	[
 		{"key":"RETRY","value":"Retry"},
+		{"key":"MUSIC","value":"Music"},
+		{"key":"EFFECTS","value":"Effects"},
+		{"key":"QUIT","value":"Quit?"},
+		{"key":"NO","value":"No"},
+		{"key":"YES","value":"Yes"},
+		{"key":"DEFEAT","value":"Defeat"},
+		{"key":"EXIT","value":"Exit"},
+		{"key":"PAUSE","value":"Pause"},
+		{"key":"RESUME","value":"Resume"},
+		{"key":"OPTIONS","value":"Options"},
+		{"key":"VICTORY","value":"Victory"},
+		{"key":"LOADING","value":"Loading"},
 		{"key":"BACK","value":"Back"}
 	]
 }

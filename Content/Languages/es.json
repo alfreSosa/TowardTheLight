@@ -1,8 +1,20 @@
 {
-	"language": "es"
+	"language": "es",
 	"keys":
 	[
 		{"key":"RETRY","value":"Reintentar"},
-		{"key":"BACK","value":"Volver"}
+		{"key":"MUSIC","value":"Música"},
+		{"key":"EFFECTS","value":"Efectos"},
+		{"key":"QUIT","value":"¿Salir?"},
+		{"key":"NO","value":"No"},
+		{"key":"YES","value":"Si"},
+		{"key":"DEFEAT","value":"Derrota"},
+		{"key":"EXIT","value":"Salir"},
+		{"key":"PAUSE","value":"Pausa"},
+		{"key":"RESUME","value":"Continuar"},
+		{"key":"OPTIONS","value":"Opciones"},
+		{"key":"VICTORY","value":"Victoria"},
+		{"key":"LOADING","value":"Cargando"},
+		{"key":"BACK","value":"Atrás"}
 	]
 }

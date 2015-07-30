@@ -3,12 +3,12 @@
 #include "TowardsTheLight.h"
 #include "MenuGameMode.h"
 #include "GameDataManager.h"
+#include "LocalizationManager.h"
 
 
 float AMenuGameMode::GetLevelOrbs(FString levelName){
   return GameDataManager::Instance()->GetOrbsLevel(levelName);
 }
-
 float AMenuGameMode::GetLevelPoints(FString levelName){
   return GameDataManager::Instance()->GetPointsLevel(levelName);
 }
@@ -24,15 +24,20 @@ bool AMenuGameMode::LevelExists(FString levelName){
 bool AMenuGameMode::HasMusicBP(){
   return GameDataManager::Instance()->HasMusic();
 }
-
 void AMenuGameMode::SetMusicBP(bool enable){
   GameDataManager::Instance()->SetMusic(enable);
 }
-
 bool AMenuGameMode::HasEffectsBP(){
   return GameDataManager::Instance()->HasEffects();
 }
-
 void AMenuGameMode::SetEffectsBP(bool enable){
   GameDataManager::Instance()->SetEffects(enable);
+}
+
+FString AMenuGameMode::GetString(FString key){
+  return LocalizationManager::Instance()->GetString(key);
+}
+void AMenuGameMode::ChangeLanguage(FString language){
+  LocalizationManager::Instance()->SetLanguage(language);
+  GameDataManager::Instance()->SetLanguage(language);
 }
