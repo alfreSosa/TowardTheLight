@@ -10,7 +10,7 @@
 using namespace rapidjson;
 
 //LangDef
-const FString& LangDef::GetString(const FString& key, const FString& defVal) const {
+const FString& LocalizationManager::LangDef::GetString(const FString& key, const FString& defVal) const {
   unsigned size = m_keys.Num();
   for (unsigned i = 0; i < size; i++)
     if (m_keys[i] == key)
