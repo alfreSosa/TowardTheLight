@@ -10,7 +10,7 @@
 using namespace rapidjson;
 
 //LangDef
-const FString& LangDef::GetString(const FString& key, const FString& defVal) const {
+const FString& LocalizationManager::LangDef::GetString(const FString& key, const FString& defVal) const {
   unsigned size = m_keys.Num();
   for (unsigned i = 0; i < size; i++)
     if (m_keys[i] == key)
@@ -31,7 +31,8 @@ LocalizationManager::LocalizationManager() {
   ParseLanguage("en");
   ParseLanguage("es");
 
-  SetLanguage(GameDataManager::Instance()->GetLanguage());
+  //SetLanguage(GameDataManager::Instance()->GetLanguage());
+  SetLanguage("en");
 }
 
 LocalizationManager::~LocalizationManager() {
@@ -39,8 +40,8 @@ LocalizationManager::~LocalizationManager() {
   m_instance = nullptr;
 }
 
-bool LocalizationManager::ParseLanguage(const FString& lenguage) {
-  FString path = FPaths::GameContentDir() + "Languages/" + lenguage + ".json";
+bool LocalizationManager::ParseLanguage(const FString& language) {
+  FString path = FPaths::GameContentDir() + "Languages/" + language + ".json";
   FString buffer;
   FFileHelper::LoadFileToString(buffer, *path);
 
@@ -80,10 +81,10 @@ bool LocalizationManager::ParseLanguage(const FString& lenguage) {
   return false;
 }
 
-bool LocalizationManager::SetLanguage(const FString& name) {
+bool LocalizationManager::SetLanguage(const FString& language) {
   unsigned size = m_languages.Num();
   for (unsigned i = 0; i < size; i++)
-    if (m_languages[i].GetName() == name) {
+    if (m_languages[i].GetName() == language) {
       m_currentLanguage = i;
       return true;
     }
