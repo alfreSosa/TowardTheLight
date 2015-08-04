@@ -1,6 +1,8 @@
 #include "TowardsTheLight.h"
 #include "CheckPoint.h"
 #include "MyGameMode.h"
+#include "PickableItem.h"
+#include "PlayerOvi.h"
 
 ACheckPoint::ACheckPoint()
 {
@@ -30,8 +32,7 @@ void ACheckPoint::BeginPlay()
   RegisterDelegate();
   m_loaded = false;
   m_enter = false;
-  //recuperar todas las bichas aqui
-  //seguramente quitar lo de destruir monedas a moverlas al 0,0,0
+  m_gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
 }
 
 void ACheckPoint::Tick(float DeltaTime)
@@ -52,8 +53,17 @@ void ACheckPoint::RegisterDelegate() {
 
 void ACheckPoint::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
   if (OtherActor->ActorHasTag("Player") && !m_loaded && !m_enter) {
-    m_enter = true;
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GET CHECKPOINT")));
+    APlayerOvi *player = dynamic_cast<APlayerOvi *>(OtherActor);
+    if (player) {
+      m_enter = true;
+      GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GET CHECKPOINT")));
+      //rellenar checkPoint MyGameMode
+      
+      m_gameMode->SetPlayerCheckPoint(player, player->GetTransform(), player->PlayerisToRight());
+      for (TActorIterator<APickableItem> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+        if (ActorItr->IsItemPicked())
+          m_gameMode->AddItemPicked(*ActorItr);
+    }
   }
 
 }

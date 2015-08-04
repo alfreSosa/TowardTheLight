@@ -916,3 +916,10 @@ bool APlayerOvi::PlayerisPushinButton() {
 void  APlayerOvi::EnabledPushButton() { 
   m_isPushingButton = true; 
 }
+
+void APlayerOvi::ResetToCheckPoint(FTransform playerTransform, bool right) {
+  SetActorTransform(playerTransform);
+  bPlayerRunning = false;
+  m_state = (right) ? States::RIGHT : States::LEFT;
+  m_isPushingButton = false;
+}

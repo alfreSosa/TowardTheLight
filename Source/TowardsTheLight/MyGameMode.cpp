@@ -20,6 +20,10 @@ AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Su
 
   m_countOrbs = m_actualPoints = 0;
   state = EndGameType::NONE;
+
+  //initialize checkpoint
+  m_actualCheckPoint.IsPicked = false;
+  m_player = nullptr;
 }
 
 void AMyGameMode::AddPoints(float points) {
@@ -94,4 +98,26 @@ FString AMyGameMode::GetLevelNameBP(){
 
 FString AMyGameMode::GetString(FString key){
   return LocalizationManager::Instance()->GetString(key);
+}
+
+void AMyGameMode::SetPlayerCheckPoint(APlayerOvi *player, FTransform playerStatus, bool right) {
+  m_actualCheckPoint.IsPicked = true;
+  m_actualCheckPoint.PlayerToRight = right;
+  m_actualCheckPoint.PlayerStatus = playerStatus;
+  m_player = player;
+}
+
+void AMyGameMode::AddItemPicked(APickableItem *item) {
+  m_actualCheckPoint.ItemsPicked.Add(item);
+}
+
+bool AMyGameMode::IsCheckPointPicked() {
+  return m_actualCheckPoint.IsPicked;
+}
+
+void AMyGameMode::RestoreLevel(bool checkPoint) {
+  if (checkPoint) {
+    m_player->ResetToCheckPoint(m_actualCheckPoint.PlayerStatus, m_actualCheckPoint.PlayerToRight);
+    state = EndGameType::NONE;
+  }
 }
