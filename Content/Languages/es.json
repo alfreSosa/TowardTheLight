@@ -16,6 +16,11 @@
 		{"key":"VICTORY","value":"Victoria"},
 		{"key":"LOADING","value":"Cargando"},
 		{"key":"BACK","value":"Atrás"},
-		{"key":"CHECKPOINT","value":"Checkpoint"}
+		{"key":"CHECKPOINT","value":"Checkpoint"},
+		{"key":"CREDITS","value":"Créditos"},
+		{"key":"CONTACT","value":"Contacto"},
+		{"key":"DESIGN","value":"Diseñadores"},
+		{"key":"ART","value":"Artistas"},
+		{"key":"CODE","value":"Programadores"}
 	]
 }

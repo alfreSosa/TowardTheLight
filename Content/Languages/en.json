@@ -16,6 +16,11 @@
 		{"key":"VICTORY","value":"Victory"},
 		{"key":"LOADING","value":"Loading"},
 		{"key":"BACK","value":"Back"},
-		{"key":"CHECKPOINT","value":"Checkpoint"}
+		{"key":"CHECKPOINT","value":"Checkpoint"},
+		{"key":"CREDITS","value":"Credits"},
+		{"key":"CONTACT","value":"Contact"},
+		{"key":"DESIGN","value":"Designers"},
+		{"key":"ART","value":"Artists"},
+		{"key":"CODE","value":"Programmers"}
 	]
 }
