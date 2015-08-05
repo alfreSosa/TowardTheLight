@@ -134,7 +134,10 @@
       <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\TowardsTheLight\CheckPoint.h">
-      <Filter>Source</Filter>
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\SoundManager.h">
+      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -214,7 +217,10 @@
       <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\CheckPoint.cpp">
-      <Filter>Source</Filter>
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\SoundManager.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

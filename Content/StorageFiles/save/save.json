@@ -1,1 +1,1 @@
-{"general":{"music":true,"effects":true,"language":"es"},"levels":[{"name":"TEST_Tut_Portal_Jordi","orbs":2,"points":6000},{"name":"TEST_Tut_Mecan_Jordi","orbs":3,"points":9000},{"name":"TEST_Tutorial_Orientacion_Jordi","orbs":3,"points":9700}]}
+{"general":{"music":false,"effects":true,"language":"es"},"levels":[{"name":"TEST_Tut_Portal_Jordi","orbs":2,"points":6000},{"name":"TEST_Tut_Mecan_Jordi","orbs":3,"points":9000},{"name":"TEST_Tutorial_Orientacion_Jordi","orbs":3,"points":9700},{"name":"DevelopmentLevel","orbs":0,"points":0}]}

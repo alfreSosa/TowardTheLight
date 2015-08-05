@@ -15,6 +15,7 @@
 		{"key":"OPTIONS","value":"Options"},
 		{"key":"VICTORY","value":"Victory"},
 		{"key":"LOADING","value":"Loading"},
-		{"key":"BACK","value":"Back"}
+		{"key":"BACK","value":"Back"},
+		{"key":"CHECKPOINT","value":"Checkpoint"}
 	]
 }

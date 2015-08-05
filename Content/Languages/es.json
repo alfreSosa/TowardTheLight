@@ -15,6 +15,7 @@
 		{"key":"OPTIONS","value":"Opciones"},
 		{"key":"VICTORY","value":"Victoria"},
 		{"key":"LOADING","value":"Cargando"},
-		{"key":"BACK","value":"Atrás"}
+		{"key":"BACK","value":"Atrás"},
+		{"key":"CHECKPOINT","value":"Checkpoint"}
 	]
 }
