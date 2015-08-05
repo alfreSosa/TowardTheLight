@@ -7,6 +7,7 @@
 #include "GameDataManager.h"
 #include "LocalizationManager.h"
 #include "TimeManager.h"
+#include "PickableItem.h"
 
 AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
   PrimaryActorTick.bCanEverTick = true;
@@ -101,6 +102,9 @@ FString AMyGameMode::GetString(FString key){
 }
 
 void AMyGameMode::SetPlayerCheckPoint(APlayerOvi *player, FTransform playerStatus, bool right) {
+  //storage here points and orbs to avoid other functions
+  m_actualCheckPoint.Points = m_actualPoints;
+  m_actualCheckPoint.Orbs = m_countOrbs;
   m_actualCheckPoint.IsPicked = true;
   m_actualCheckPoint.PlayerToRight = right;
   m_actualCheckPoint.PlayerStatus = playerStatus;
@@ -108,7 +112,9 @@ void AMyGameMode::SetPlayerCheckPoint(APlayerOvi *player, FTransform playerStatu
 }
 
 void AMyGameMode::AddItemPicked(APickableItem *item) {
-  m_actualCheckPoint.ItemsPicked.Add(item);
+  //si no estan ya, lo guardo
+  if (m_actualCheckPoint.ItemsPicked.Find(item) == INDEX_NONE)
+    m_actualCheckPoint.ItemsPicked.Add(item);
 }
 
 bool AMyGameMode::IsCheckPointPicked() {
@@ -117,7 +123,19 @@ bool AMyGameMode::IsCheckPointPicked() {
 
 void AMyGameMode::RestoreLevel(bool checkPoint) {
   if (checkPoint) {
+    m_actualPoints = m_actualCheckPoint.Points;
+    m_countOrbs = m_actualCheckPoint.Orbs;
     m_player->ResetToCheckPoint(m_actualCheckPoint.PlayerStatus, m_actualCheckPoint.PlayerToRight);
     state = EndGameType::NONE;
+    //prueba de restaurar item cogidos despues del checkpoint
+    /*Si los he cogido y no estan en el array almacenado los restauro*/
+    for (TActorIterator<APickableItem> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
+      if (ActorItr->IsItemPicked()) {
+        if (m_actualCheckPoint.ItemsPicked.Find(*ActorItr) == INDEX_NONE) {
+          (*ActorItr)->RestoreInitialPosition();
+        }
+      }
+    }
+        
   }
 }

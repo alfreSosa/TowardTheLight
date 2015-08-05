@@ -56,4 +56,12 @@ bool APickableItem::IsItemPicked() {
   return m_collected;
 }
 
+void APickableItem::RestoreInitialPosition() {
+  this->SetActorEnableCollision(true);
+  PrimaryActorTick.bCanEverTick = true;
+  SetActorLocation(m_initialPosition);
+  m_collected = false;
+}
+
+
 

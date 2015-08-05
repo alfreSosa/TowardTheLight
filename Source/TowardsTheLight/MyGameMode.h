@@ -22,6 +22,8 @@ public:
     FTransform PlayerStatus;
     bool PlayerToRight;
     TArray<APickableItem *> ItemsPicked;
+    float Points;
+    float Orbs;
   };
 
   enum EndGameType { NONE = 0, VICTORY = 1, DEFEAT = -1 };

@@ -15,7 +15,7 @@ public:
   virtual void Tick(float DeltaSeconds) override;
   virtual void BeginPlay() override;
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
-
+  void RestoreInitialPosition();
   UPROPERTY(EditAnywhere)
     USceneComponent* OurVisibleComponent;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PickableItem)
