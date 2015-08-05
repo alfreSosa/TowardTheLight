@@ -20,6 +20,8 @@ public:
   struct CheckPointData {
     bool IsPicked;
     FTransform PlayerStatus;
+    bool PlayerHasKey;
+    FLinearColor ColorKey;
     bool PlayerToRight;
     TArray<APickableItem *> ItemsPicked;
     float Points;
@@ -72,6 +74,7 @@ public:
 
   //CheckPoint Functions
   void SetPlayerCheckPoint(APlayerOvi *player, FTransform playerStatus, bool right);
+  void SetPlayerKey(bool hasKey, FLinearColor colorKey);
   void AddItemPicked(APickableItem *item);
 
 private:

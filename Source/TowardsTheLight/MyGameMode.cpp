@@ -25,6 +25,8 @@ AMyGameMode::AMyGameMode(const class FObjectInitializer& ObjectInitializer) : Su
   //initialize checkpoint
   m_actualCheckPoint.IsPicked = false;
   m_player = nullptr;
+  m_actualCheckPoint.PlayerHasKey = false;
+  m_actualCheckPoint.ColorKey = FLinearColor(1,1,1); 
 }
 
 void AMyGameMode::AddPoints(float points) {
@@ -111,6 +113,11 @@ void AMyGameMode::SetPlayerCheckPoint(APlayerOvi *player, FTransform playerStatu
   m_player = player;
 }
 
+void AMyGameMode::SetPlayerKey(bool hasKey, FLinearColor colorKey) {
+  m_actualCheckPoint.PlayerHasKey = hasKey;
+  m_actualCheckPoint.ColorKey = colorKey;
+}
+
 void AMyGameMode::AddItemPicked(APickableItem *item) {
   //si no estan ya, lo guardo
   if (m_actualCheckPoint.ItemsPicked.Find(item) == INDEX_NONE)
@@ -126,6 +133,7 @@ void AMyGameMode::RestoreLevel(bool checkPoint) {
     m_actualPoints = m_actualCheckPoint.Points;
     m_countOrbs = m_actualCheckPoint.Orbs;
     m_player->ResetToCheckPoint(m_actualCheckPoint.PlayerStatus, m_actualCheckPoint.PlayerToRight);
+    m_player->SetKey(m_actualCheckPoint.PlayerHasKey, m_actualCheckPoint.ColorKey);
     state = EndGameType::NONE;
     //prueba de restaurar item cogidos despues del checkpoint
     /*Si los he cogido y no estan en el array almacenado los restauro*/

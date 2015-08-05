@@ -60,6 +60,7 @@ void ACheckPoint::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimiti
       //rellenar checkPoint MyGameMode
       
       m_gameMode->SetPlayerCheckPoint(player, player->GetTransform(), player->PlayerisToRight());
+      m_gameMode->SetPlayerKey(player->HasKey(), player->GetColorKey());
       for (TActorIterator<APickableItem> ActorItr(GetWorld()); ActorItr; ++ActorItr)
         if (ActorItr->IsItemPicked())
           m_gameMode->AddItemPicked(*ActorItr);
