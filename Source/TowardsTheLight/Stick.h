@@ -18,7 +18,7 @@ public:
 	//UE4 Functions
 	AStick();
 	virtual void BeginPlay() override;
-	virtual void Tick( float DeltaSeconds ) override;
+
   //Own functions
   void SetColor(FLinearColor colorKey, float shinnes);
 private:
