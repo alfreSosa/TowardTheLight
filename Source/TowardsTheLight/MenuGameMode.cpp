@@ -4,6 +4,7 @@
 #include "MenuGameMode.h"
 #include "GameDataManager.h"
 #include "LocalizationManager.h"
+#include "SoundManager.h"
 
 
 float AMenuGameMode::GetLevelOrbs(FString levelName){
@@ -26,12 +27,14 @@ bool AMenuGameMode::HasMusicBP(){
 }
 void AMenuGameMode::SetMusicBP(bool enable){
   GameDataManager::Instance()->SetMusic(enable);
+  SoundManager::Instance()->SetMusic(enable);
 }
 bool AMenuGameMode::HasEffectsBP(){
   return GameDataManager::Instance()->HasEffects();
 }
 void AMenuGameMode::SetEffectsBP(bool enable){
   GameDataManager::Instance()->SetEffects(enable);
+  SoundManager::Instance()->SetEffects(enable);
 }
 
 FString AMenuGameMode::GetString(FString key){

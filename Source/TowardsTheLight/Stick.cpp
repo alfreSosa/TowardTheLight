@@ -6,7 +6,6 @@
 
 AStick::AStick()
 {
-	PrimaryActorTick.bCanEverTick = true;
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   Stick = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
   Stick->SetMobility(EComponentMobility::Movable);
@@ -33,12 +32,6 @@ void AStick::BeginPlay()
 {
 	Super::BeginPlay();
   Stick->SetMaterial(0, StickMaterial);
-}
-
-void AStick::Tick( float DeltaTime )
-{
-	Super::Tick( DeltaTime );
-
 }
 
 void AStick::SetColor(FLinearColor colorKey, float shinnes) {
