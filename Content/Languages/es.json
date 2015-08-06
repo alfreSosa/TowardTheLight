@@ -17,10 +17,16 @@
 		{"key":"LOADING","value":"Cargando"},
 		{"key":"BACK","value":"Atrás"},
 		{"key":"CHECKPOINT","value":"Checkpoint"},
+		{"key":"ES","value":"Español"},
+		{"key":"EN","value":"English"},
+		{"key":"TITLE","value":"Towards the Light"},
 		{"key":"CREDITS","value":"Créditos"},
 		{"key":"CONTACT","value":"Contacto"},
 		{"key":"DESIGN","value":"Diseñadores"},
 		{"key":"ART","value":"Artistas"},
-		{"key":"CODE","value":"Programadores"}
+		{"key":"CODE","value":"Programadores"},
+		{"key":"DESIGNMEMBERS","value":"- Paula Cabarcos\n- Jordi Gutiérrez\n- David Neira\n- David Sánchez\n- Yoshikuni Takebe"},
+		{"key":"ARTMEMBERS","value":"- Pablo Bascón\n- Victor González\n- Carmen López\n- Álvaro Rivero\n- Santiago Roldán"},
+		{"key":"CODEMEMBERS","value":"- Manuel Cruz\n- Alfredo Sosa"}
 	]
 }
