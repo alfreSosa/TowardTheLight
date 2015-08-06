@@ -16,7 +16,14 @@ APickableItem::APickableItem() {
 
   Points = DEFAULT_POINTS;
   m_collected = false;
+  m_initialPosition = FVector::ZeroVector;
 }
+
+void APickableItem::BeginPlay() 
+{
+  m_initialPosition = GetActorLocation();
+}
+
 
 void APickableItem::Tick(float DeltaSeconds){
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
@@ -31,17 +38,30 @@ void APickableItem::Tick(float DeltaSeconds){
 
 void APickableItem::ReceiveActorBeginOverlap(AActor* OtherActor) {
   if (OtherActor->ActorHasTag("Player") && !m_collected) {
-    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Item Picked")));
     m_collected = true;  //auqnue el ojeto se destruya, es bueno dejarlo por si al frame siguiente la memoria no se ha liberado aún
-    //this->SetActorEnableCollision(false); //comentar si se pone el destroy
-    //SetActorLocation(FVector(0, 0, 0)); //comentar si se pone el destroy 
+    this->SetActorEnableCollision(false);
+    SetActorLocation(FVector(0, 0, 0));
+    PrimaryActorTick.bCanEverTick = false; //para que deje de actualizarse, si se recupera en un checkpoint, activar
     AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
     if (gameMode) {
       gameMode->AddPoints(this->Points);
       if (IsOrb)
         gameMode->OrbPicked();
     }
-    this->Destroy();
+    //this->Destroy();
   }
 }
+
+bool APickableItem::IsItemPicked() {
+  return m_collected;
+}
+
+void APickableItem::RestoreInitialPosition() {
+  this->SetActorEnableCollision(true);
+  PrimaryActorTick.bCanEverTick = true;
+  SetActorLocation(m_initialPosition);
+  m_collected = false;
+}
+
+
 

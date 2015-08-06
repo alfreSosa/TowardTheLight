@@ -28,6 +28,7 @@ public:
   bool HasKey();
   FLinearColor GetColorKey();
   void EnabledPushButton();
+  void ResetToCheckPoint(FTransform playerTransform, bool right);
 
   //public editor functions
   UFUNCTION(BlueprintCallable, Category = "PlayerInputTTL")
