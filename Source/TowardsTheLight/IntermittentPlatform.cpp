@@ -40,6 +40,7 @@ void AIntermittentPlatform::Init() {
 
   if (StartVisible) {
     this->SetActorHiddenInGame(false);
+    this->Tags.Add("Platform");
   }
   else {
     this->SetActorHiddenInGame(true);
