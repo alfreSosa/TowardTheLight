@@ -77,6 +77,8 @@ AMobileEnemy::AMobileEnemy() {
     EnemyAnimationMesh->bCanEverAffectNavigation = false;
     EnemyAnimationMesh->SetRelativeLocation(FVector(0, 0, 0));
     EnemyAnimationMesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
+    EnemyAnimationMesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
+    EnemyAnimationMesh->CastShadow = false;
   }
 }
 

@@ -10,6 +10,7 @@ AIntermittentPlatform::AIntermittentPlatform() {
 
   RootComponent->SetMobility(EComponentMobility::Movable);
   OurVisibleComponent->SetMobility(EComponentMobility::Movable);
+  OurVisibleComponent->CastShadow = false;
 
   //Init default properties
   //public

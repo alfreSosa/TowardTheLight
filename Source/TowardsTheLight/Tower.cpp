@@ -13,15 +13,18 @@ ATower::ATower() {
 //  Body->SetWorldScale3D(FVector(2.5, 2.5, 2.5));
   RootComponent->SetMobility(EComponentMobility::Static);
   Body->SetMobility(EComponentMobility::Static);
+  Body->CastShadow = false;
   Body->AttachTo(RootComponent);
   this->Tags.Add("Platform");
 
   Light = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Light"));
   Light->SetMobility(EComponentMobility::Static);
+  Light->CastShadow = false;
   Light->AttachTo(Body);
 
   Entrance = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Entrance"));
   Entrance->SetMobility(EComponentMobility::Static);
+  Entrance->CastShadow = false;
   Entrance->AttachTo(Body);
 
   Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));

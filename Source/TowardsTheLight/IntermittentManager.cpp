@@ -7,7 +7,6 @@
 
 AIntermittentManager::AIntermittentManager()
 {
- 	
 	PrimaryActorTick.bCanEverTick = true;
   //public properties
   Enabled = true;
