@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\CheckPoint.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\GameDataManager.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\InfoGameInstance.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\IntermittentManager.cpp" />
@@ -55,6 +56,7 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\MobilePlatform.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Portal.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\SoundManager.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\StaticEnemy.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Stick.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Tappable.cpp" />
@@ -62,6 +64,7 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\Tower.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Tutorial.cpp" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Altar.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\CheckPoint.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\InfoGameInstance.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\IntermittentManager.h" />
@@ -80,6 +83,7 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\reader.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\stringbuffer.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\writer.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\SoundManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\StaticEnemy.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Stick.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Tappable.h" />
