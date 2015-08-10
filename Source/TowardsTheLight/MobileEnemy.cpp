@@ -404,7 +404,7 @@ void AMobileEnemy::CheckCollision() {
   GetWorld()->LineTraceMulti(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionDown = OutTraceResultDown.Num() > 0;
   //DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-
+  bool eGravity = true;
   if (collisionDown || collisionDownLeftF || collisionDownRightF) {
     if (collisionDown) {
       int size = OutTraceResultDown.Num();
@@ -412,6 +412,7 @@ void AMobileEnemy::CheckCollision() {
         if (OutTraceResultDown[i].GetActor()->ActorHasTag("Platform")) {
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDown[i].Location, -m_capsuleHeight));
           m_enableGravity = false;
+          eGravity = false;
           m_actualJumpSpeed = 0;
           break;
         }
@@ -422,6 +423,7 @@ void AMobileEnemy::CheckCollision() {
         if (OutTraceResultDownLeftF[i].GetActor()->ActorHasTag("Platform")) {
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
           m_enableGravity = false;
+          eGravity = false;
           m_actualJumpSpeed = 0;
           break;
         }
@@ -432,10 +434,18 @@ void AMobileEnemy::CheckCollision() {
         if (OutTraceResultDownRigthF[i].GetActor()->ActorHasTag("Platform")) {
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownRigthF[i].Location, -m_capsuleHeight));
           m_enableGravity = false;
+          eGravity = false;
           m_actualJumpSpeed = 0;
           break;
         }
     }
+    else {
+      m_enableGravity = true;
+    }
+
+    if (eGravity) 
+      m_enableGravity = true;
+
   }
   else {
     m_enableGravity = true;
