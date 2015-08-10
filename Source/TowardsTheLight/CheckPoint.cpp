@@ -13,7 +13,7 @@ ACheckPoint::ACheckPoint()
   CheckPointVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CheckPointVisibleComponent"));
   CheckPointVisibleComponent->AttachTo(RootComponent);
   CheckPointVisibleComponent->bGenerateOverlapEvents = true;
-
+  CheckPointVisibleComponent->CastShadow = false;
   //tendra material dinamico
 
   Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
