@@ -10,6 +10,7 @@ APickableItem::APickableItem() {
   PrimaryActorTick.bCanEverTick = true;
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
+  OurVisibleComponent->CastShadow = false;
   OurVisibleComponent->AttachTo(RootComponent);
   
   this->SetActorEnableCollision(true);

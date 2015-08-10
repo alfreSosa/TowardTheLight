@@ -16,6 +16,7 @@ ATappable::ATappable()
   MeshActivator->AttachTo(RootComponent);
   RootComponent->SetMobility(EComponentMobility::Static);
   MeshActivator->SetMobility(EComponentMobility::Static);
+  MeshActivator->CastShadow = false;
   m_meshActivator = MeshActivator;
   //trigger component
   Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));

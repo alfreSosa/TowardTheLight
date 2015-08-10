@@ -86,6 +86,7 @@ APlayerOvi::APlayerOvi() {
     Mesh->bCanEverAffectNavigation = false;
     Mesh->SetRelativeLocation(FVector(0, 0, 0));
     Mesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
+    Mesh->CastShadow = false;
   }
 
   //private properties
