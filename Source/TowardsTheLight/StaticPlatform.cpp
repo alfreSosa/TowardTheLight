@@ -8,6 +8,7 @@ AStaticPlatform::AStaticPlatform() {
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
   RootComponent->SetMobility(EComponentMobility::Static);
   OurVisibleComponent->SetMobility(EComponentMobility::Static);
+  OurVisibleComponent->CastShadow = false;
   OurVisibleComponent->AttachTo(RootComponent);
   this->Tags.Add("Platform");
 }

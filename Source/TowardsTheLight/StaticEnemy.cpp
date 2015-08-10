@@ -11,6 +11,7 @@ AStaticEnemy::AStaticEnemy() {
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
   OurVisibleComponent->AttachTo(RootComponent);
   OurVisibleComponent->bGenerateOverlapEvents = true;
+  OurVisibleComponent->CastShadow = false;
   this->SetActorEnableCollision(true);
 }
 
