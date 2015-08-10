@@ -12,6 +12,7 @@ AMobilePlatform::AMobilePlatform() {
 
   RootComponent->SetMobility(EComponentMobility::Movable);
   OurVisibleComponent->SetMobility(EComponentMobility::Movable);
+  OurVisibleComponent->CastShadow = false;
 
   //setting
   RightDistance = 100.f;

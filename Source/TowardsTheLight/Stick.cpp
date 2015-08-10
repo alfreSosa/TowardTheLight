@@ -9,6 +9,7 @@ AStick::AStick()
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   Stick = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
   Stick->SetMobility(EComponentMobility::Movable);
+  Stick->CastShadow = false;
   Stick->AttachTo(RootComponent);
   UStaticMesh *mesh;
   static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshFinder(TEXT("StaticMesh'/Game/Models/Baculo/baculo_model.baculo_model'"));

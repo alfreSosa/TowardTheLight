@@ -17,7 +17,7 @@ public:
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
   void RestoreInitialPosition();
   UPROPERTY(EditAnywhere)
-    USceneComponent* OurVisibleComponent;
+    UStaticMeshComponent* OurVisibleComponent;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PickableItem)
     float Points;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PickableItem)

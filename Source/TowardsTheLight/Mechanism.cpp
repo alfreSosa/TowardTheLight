@@ -27,6 +27,7 @@ AMechanism::AMechanism()
     SkeletalMesh->bGenerateOverlapEvents = true;
     SkeletalMesh->bCanEverAffectNavigation = false;
     SkeletalMesh->SetRelativeLocation(FVector(0, 0, 0));
+    SkeletalMesh->CastShadow = false;
   }
   //Public properties
   CanActivate = CanDisactivate = true;
