@@ -7,7 +7,7 @@
 
 UInfoGameInstance::UInfoGameInstance(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer){
   m_galaxyName = "";
-
+  m_levelName = "";
   
   /*
   //static ConstructorHelpers::FObjectFinder<USoundCue> soundLoader(TEXT("SoundCue'/Game/Sounds/Menu_track_Cue.Menu_track_Cue'"));
@@ -28,3 +28,9 @@ FString UInfoGameInstance::GetCurrentGalaxy(){
   return m_galaxyName;
 }
 
+void UInfoGameInstance::SetCurrentLevel(FString levelName){
+  m_levelName = levelName;
+}
+FString UInfoGameInstance::GetCurrentLevel(){
+  return m_levelName;
+}
