@@ -3,7 +3,7 @@
 #include "TowardsTheLight.h"
 #include "PickableItem.h"
 #include "TimeManager.h"
-#include "MyGameMode.h"
+#include "TowardsTheLightGameMode.h"
 
 // Sets default values
 APickableItem::APickableItem() {
@@ -43,7 +43,7 @@ void APickableItem::ReceiveActorBeginOverlap(AActor* OtherActor) {
     this->SetActorEnableCollision(false);
     SetActorLocation(FVector(0, 0, 0));
     PrimaryActorTick.bCanEverTick = false; //para que deje de actualizarse, si se recupera en un checkpoint, activar
-    AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+    ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
     if (gameMode) {
       gameMode->AddPoints(this->Points);
       if (IsOrb)

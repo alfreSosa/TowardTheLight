@@ -4,7 +4,7 @@
 #include "MobileEnemy.h"
 #include "PlayerOvi.h"
 #include "TimeManager.h"
-#include "MyGameMode.h"
+#include "TowardsTheLightGameMode.h"
 
 const float DEFAULT_ENEMY_CAPSULE_RADIOUS = 45.0f;
 const float DEFAULT_ENEMY_CAPSULE_HEIGHT = 95.0f;
@@ -217,9 +217,9 @@ void AMobileEnemy::RegisterDelegate() {
 
 void AMobileEnemy::OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
   if (OtherActor->ActorHasTag("Player")){
-    AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+    ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
     if (gameMode)
-      gameMode->EndGame(AMyGameMode::DEFEAT);
+      gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
   }
 }
 

@@ -2,7 +2,7 @@
 
 #include "TowardsTheLight.h"
 #include "StaticEnemy.h"
-#include "MyGameMode.h"
+#include "TowardsTheLightGameMode.h"
 #include "PlayerOvi.h"
 
 // Sets default values
@@ -31,9 +31,9 @@ void AStaticEnemy::RegisterDelegate() {
 
 void AStaticEnemy::OnCollision(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
   if (OtherActor->ActorHasTag("Player")){
-    AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+    ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
     if (gameMode)
-      gameMode->EndGame(AMyGameMode::DEFEAT);
+      gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
   }
 }
 

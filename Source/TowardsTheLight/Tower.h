@@ -10,7 +10,6 @@ class TOWARDSTHELIGHT_API ATower : public APawn
 {
 	GENERATED_BODY()
 
- 
 public:	
 	// Sets default values for this actor's properties
 	ATower();
