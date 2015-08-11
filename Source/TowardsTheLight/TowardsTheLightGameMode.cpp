@@ -9,6 +9,7 @@
 #include "TimeManager.h"
 #include "PickableItem.h"
 #include "CheckPoint.h"
+#include "MobilePlatform.h"
 #include "SoundManager.h"
 #include "InfoGameInstance.h"
 
@@ -32,20 +33,20 @@ ATowardsTheLightGameMode::ATowardsTheLightGameMode(const class FObjectInitialize
   m_actualCheckPoint.ColorKey = FLinearColor(1, 1, 1);
 }
 
-void ATowardsTheLightGameMode::BeginPlay() {
-
-}
-
-void ATowardsTheLightGameMode::Tick(float DeltaSeconds) {
-  //esto era temporal
- /* if (!m_player)
-    for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
-      if (ActorItr->ActorHasTag("Player")) {
-        m_player = (APlayerOvi*)*ActorItr;
-        m_actualCheckPoint.InitialPlayerStatus = m_player->GetTransform();
-        m_actualCheckPoint.InitialPlayerToRight = m_player->PlayerisToRight();
-      }*/
-}
+//void ATowardsTheLightGameMode::BeginPlay() {
+//
+//}
+//
+//void ATowardsTheLightGameMode::Tick(float DeltaSeconds) {
+//  //esto era temporal
+// /* if (!m_player)
+//    for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
+//      if (ActorItr->ActorHasTag("Player")) {
+//        m_player = (APlayerOvi*)*ActorItr;
+//        m_actualCheckPoint.InitialPlayerStatus = m_player->GetTransform();
+//        m_actualCheckPoint.InitialPlayerToRight = m_player->PlayerisToRight();
+//      }*/
+//}
 
 void ATowardsTheLightGameMode::EndGame(EndGameType type) {
   switch (type){
@@ -69,7 +70,7 @@ void ATowardsTheLightGameMode::EndGame(EndGameType type) {
     //terminar la partida. volver al menú
     state = EndGameType::VICTORY;
   }
-               break;
+    break;
   case DEFEAT:
     //terminar la partida. volver al menú
     state = EndGameType::DEFEAT;
@@ -82,6 +83,7 @@ void ATowardsTheLightGameMode::AddPoints(float points) {
   //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ActualPoints: %f"), m_actualPoints));
   PointsSoundEvent();
 }
+
 void ATowardsTheLightGameMode::OrbPicked() {
   m_countOrbs++;
   //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Orbs: %d"), m_countOrbs));
@@ -91,6 +93,7 @@ void ATowardsTheLightGameMode::OrbPicked() {
 float ATowardsTheLightGameMode::GetActualPoints() {
   return m_actualPoints;
 }
+
 float ATowardsTheLightGameMode::GetActualOrbs() {
   return m_countOrbs;
 }
@@ -98,9 +101,11 @@ float ATowardsTheLightGameMode::GetActualOrbs() {
 void ATowardsTheLightGameMode::SetPauseBP(bool enable) {
   TimeManager::Instance()->SetPause(enable);
 }
+
 bool ATowardsTheLightGameMode::IsPausedBP() {
   return TimeManager::Instance()->IsPaused();
 }
+
 float ATowardsTheLightGameMode::EndGameBP() {
   return (float)state;
 }
@@ -161,23 +166,39 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
     m_player->SetKey(false, FLinearColor(1, 1, 1));
     state = EndGameType::NONE;
 
-    //restaurar checkpoints
-    for (TActorIterator<ACheckPoint> ActorItr(GetWorld()); ActorItr; ++ActorItr)
-      (*ActorItr)->RestoreInitialState();
-
-    //restauro monedas
-    for (TActorIterator<APickableItem> ActorItr2(GetWorld()); ActorItr2; ++ActorItr2)
-      (*ActorItr2)->RestoreInitialPosition();
 
     m_actualCheckPoint.ItemsPicked.Empty();
     m_actualCheckPoint.PlayerHasKey = false;
     m_actualCheckPoint.ColorKey = FLinearColor(1, 1, 1);
+
+    int sizeItems = m_levelItems.Num();
+    int sizeChecks = m_levelCheckPoints.Num();
+    int sizeMob = m_levelMobilePlatforms.Num();
+
+    //restore mobile platform
+    for (int i = 0; i < sizeItems; ++i)
+      m_levelItems[i]->RestoreInitialPosition();
+
+    //restaurar checkpoints
+    for (int i = 0; i < sizeChecks; ++i)
+      m_levelCheckPoints[i]->RestoreInitialState();
+
+    //restauro monedas
+    for (int i = 0; i < sizeMob; ++i)
+      m_levelMobilePlatforms[i]->RestoreInitialState();
+
+    //restaurar intermitentes y managers intermitentes
+
+    //restaurar enemigos
+
+    //preguntar manolo si restaurar torre
   }
 }
 
 float ATowardsTheLightGameMode::GetLevelOrbs(FString levelName) {
   return GameDataManager::Instance()->GetOrbsLevel(levelName);
 }
+
 float ATowardsTheLightGameMode::GetLevelPoints(FString levelName) {
   return GameDataManager::Instance()->GetPointsLevel(levelName);
 }
@@ -193,6 +214,7 @@ bool ATowardsTheLightGameMode::LevelExists(FString levelName){
 bool ATowardsTheLightGameMode::HasMusicBP(){
   return GameDataManager::Instance()->HasMusic();
 }
+
 void ATowardsTheLightGameMode::SetMusicBP(bool enable){
   GameDataManager::Instance()->SetMusic(enable);
   SoundManager::Instance()->SetMusic(enable);
@@ -200,6 +222,7 @@ void ATowardsTheLightGameMode::SetMusicBP(bool enable){
 bool ATowardsTheLightGameMode::HasEffectsBP(){
   return GameDataManager::Instance()->HasEffects();
 }
+
 void ATowardsTheLightGameMode::SetEffectsBP(bool enable){
   GameDataManager::Instance()->SetEffects(enable);
   SoundManager::Instance()->SetEffects(enable);
@@ -221,5 +244,17 @@ void ATowardsTheLightGameMode::FindActualPlayer() {
       m_actualCheckPoint.InitialPlayerStatus = m_player->GetTransform();
       m_actualCheckPoint.InitialPlayerToRight = m_player->PlayerisToRight();
     }
+
+  m_levelItems.Empty();
+  m_levelCheckPoints.Empty();
+  m_levelMobilePlatforms.Empty();
+
+  for (TActorIterator< APickableItem > pickItr(GetWorld()); pickItr; ++pickItr)
+    m_levelItems.Add(*pickItr);
+  for (TActorIterator< ACheckPoint > checkItr(GetWorld()); checkItr; ++checkItr)
+    m_levelCheckPoints.Add(*checkItr);
+  for (TActorIterator< AMobilePlatform > movItr(GetWorld()); movItr; ++movItr)
+    m_levelMobilePlatforms.Add(*movItr);
+
 }
 

@@ -18,16 +18,20 @@ APickableItem::APickableItem() {
   Points = DEFAULT_POINTS;
   m_collected = false;
   m_initialPosition = FVector::ZeroVector;
+  m_ciclesInRestore = 5;
 }
 
 void APickableItem::BeginPlay() 
 {
   m_initialPosition = GetActorLocation();
+  m_ciclesInRestore = 5;
 }
 
 
 void APickableItem::Tick(float DeltaSeconds){
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+  if (m_ciclesInRestore >= 0)
+    m_ciclesInRestore--;
 
   if (IsOrb){
     FRotator MyRot = GetActorRotation();
@@ -38,7 +42,7 @@ void APickableItem::Tick(float DeltaSeconds){
 }
 
 void APickableItem::ReceiveActorBeginOverlap(AActor* OtherActor) {
-  if (OtherActor->ActorHasTag("Player") && !m_collected) {
+  if (OtherActor->ActorHasTag("Player") && !m_collected && m_ciclesInRestore < 0) {
     m_collected = true;  //auqnue el ojeto se destruya, es bueno dejarlo por si al frame siguiente la memoria no se ha liberado aún
     this->SetActorEnableCollision(false);
     SetActorLocation(FVector(0, 0, 0));
@@ -60,8 +64,9 @@ bool APickableItem::IsItemPicked() {
 void APickableItem::RestoreInitialPosition() {
   this->SetActorEnableCollision(true);
   PrimaryActorTick.bCanEverTick = true;
-  SetActorLocation(m_initialPosition);
   m_collected = false;
+  SetActorLocation(m_initialPosition);
+  m_ciclesInRestore = 5;
 }
 
 

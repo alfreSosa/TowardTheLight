@@ -29,6 +29,11 @@ class TOWARDSTHELIGHT_API AMobilePlatform : public AStaticPlatform
   FLinearColor m_target;
   FLinearColor m_origin;
 
+  //variables for restore data
+  FVector m_initialPosition;
+  FLinearColor m_initialColor;
+  bool m_enabledInitial;
+
   enum state{
     INITIAL_DELAY,
     TO_RIGHT,
@@ -46,6 +51,7 @@ public:
   void ChangeEnabled(bool enabled);
   bool isEnabled();
   void InitByMechanism(bool disableAtEnd, int32 numActions);
+  void RestoreInitialState();
 
   UPROPERTY(EditAnywhere, Category = MobilePlatform)
     float RightDistance;

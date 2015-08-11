@@ -6,6 +6,8 @@
 #include "TowardsTheLightGameMode.generated.h"
 
 class APickableItem;
+class ACheckPoint;
+class AMobilePlatform;
 class APlayerOvi;
 class UInfoGameInstance;
 /**
@@ -32,8 +34,8 @@ public:
   };
 
   ATowardsTheLightGameMode(const FObjectInitializer& ObjectInitializer);  // Our added constructor
-  virtual void BeginPlay() override;
-  virtual void Tick(float DeltaSeconds) override;
+  /*virtual void BeginPlay() override;
+  virtual void Tick(float DeltaSeconds) override;*/
   enum EndGameType { NONE = 0, VICTORY = 1, DEFEAT = -1 };
   void EndGame(EndGameType type);
   
@@ -106,5 +108,8 @@ private:
   float m_actualPoints;
   float m_countOrbs;
   APlayerOvi *m_player;
+  TArray<APickableItem *> m_levelItems;
+  TArray<ACheckPoint *> m_levelCheckPoints;
+  TArray<AMobilePlatform *> m_levelMobilePlatforms;
   EndGameType state;
 };
