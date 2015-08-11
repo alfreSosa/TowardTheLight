@@ -214,9 +214,12 @@ void ATowardsTheLightGameMode::ChangeLanguage(FString language){
   GameDataManager::Instance()->SetLanguage(language);
 }
 
-void ATowardsTheLightGameMode::SetActualPlayer(APlayerOvi *player) {
-  m_player = player;
-  m_actualCheckPoint.InitialPlayerStatus = m_player->GetTransform();
-  m_actualCheckPoint.InitialPlayerToRight = m_player->PlayerisToRight();
+void ATowardsTheLightGameMode::FindActualPlayer() {
+  for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
+    if (ActorItr->ActorHasTag("Player")) {
+      m_player = (APlayerOvi*)*ActorItr;
+      m_actualCheckPoint.InitialPlayerStatus = m_player->GetTransform();
+      m_actualCheckPoint.InitialPlayerToRight = m_player->PlayerisToRight();
+    }
 }
 

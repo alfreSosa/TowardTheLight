@@ -43,8 +43,8 @@ public:
     void OrbPicked();
 
   //function for initialize level
-  UFUNCTION(BlueprintCallable, Category = TTLGameState)
-  void SetActualPlayer(APlayerOvi *player);
+  UFUNCTION(BlueprintCallable, Category = TTLFunctions)
+  void FindActualPlayer();
 
   UFUNCTION(BlueprintCallable, Category = TTLGameState)
     float GetActualPoints();
