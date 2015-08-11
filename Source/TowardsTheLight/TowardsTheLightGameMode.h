@@ -7,7 +7,7 @@
 
 class APickableItem;
 class APlayerOvi;
-
+class UInfoGameInstance;
 /**
  * 
  */
@@ -26,10 +26,14 @@ public:
     TArray<APickableItem *> ItemsPicked;
     float Points;
     float Orbs;
+    //player restore
+    FTransform InitialPlayerStatus;
+    bool InitialPlayerToRight;
   };
 
   ATowardsTheLightGameMode(const FObjectInitializer& ObjectInitializer);  // Our added constructor
-
+  virtual void BeginPlay() override;
+  virtual void Tick(float DeltaSeconds) override;
   enum EndGameType { NONE = 0, VICTORY = 1, DEFEAT = -1 };
   void EndGame(EndGameType type);
 
@@ -99,4 +103,5 @@ private:
   float m_countOrbs;
   APlayerOvi *m_player;
   EndGameType state;
+  UInfoGameInstance *m_gameInstance;
 };

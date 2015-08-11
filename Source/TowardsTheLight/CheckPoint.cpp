@@ -85,5 +85,9 @@ void ACheckPoint::EndPlay(const EEndPlayReason::Type EndPlayReason) {
   Super::EndPlay(EndPlayReason);
 }
 
+void ACheckPoint::RestoreInitialState() {
+  m_loaded = false;
+  m_enter = false;
+}
 
 

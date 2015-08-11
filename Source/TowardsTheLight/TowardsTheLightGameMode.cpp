@@ -8,7 +8,9 @@
 #include "LocalizationManager.h"
 #include "TimeManager.h"
 #include "PickableItem.h"
+#include "CheckPoint.h"
 #include "SoundManager.h"
+#include "InfoGameInstance.h"
 
 ATowardsTheLightGameMode::ATowardsTheLightGameMode(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
   PrimaryActorTick.bCanEverTick = true;
@@ -28,13 +30,28 @@ ATowardsTheLightGameMode::ATowardsTheLightGameMode(const class FObjectInitialize
   m_player = nullptr;
   m_actualCheckPoint.PlayerHasKey = false;
   m_actualCheckPoint.ColorKey = FLinearColor(1, 1, 1);
+  m_gameInstance = Cast<UInfoGameInstance>(GetGameInstance());
+}
+
+void ATowardsTheLightGameMode::BeginPlay() {
+
+}
+
+void ATowardsTheLightGameMode::Tick(float DeltaSeconds) {
+  if (!m_player)
+    for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
+      if (ActorItr->ActorHasTag("Player")) {
+        m_player = (APlayerOvi*)*ActorItr;
+        m_actualCheckPoint.InitialPlayerStatus = m_player->GetTransform();
+        m_actualCheckPoint.InitialPlayerToRight = m_player->PlayerisToRight();
+      }
 }
 
 void ATowardsTheLightGameMode::EndGame(EndGameType type) {
   switch (type){
   case VICTORY:{
     if (state == EndGameType::NONE){
-      LevelData data = GameDataManager::Instance()->ReadLevelData(GetWorld()->GetMapName());
+      LevelData data = GameDataManager::Instance()->ReadLevelData(m_gameInstance->GetCurrentLevel());
       //si la puntuacion actual es mejor que la que hay en el fichero, hay que almacenarla 
       bool write = false;
       if (m_countOrbs >= data.orbs){
@@ -89,9 +106,8 @@ float ATowardsTheLightGameMode::EndGameBP() {
 }
 
 FString ATowardsTheLightGameMode::GetLevelNameBP(){
-  FString levelName = GetWorld()->GetMapName();
-  levelName.RemoveFromStart(FString("UEDPIE_0_"));
-  return levelName;
+
+  return m_gameInstance->GetCurrentLevel();
 }
 
 void ATowardsTheLightGameMode::SetPlayerCheckPoint(APlayerOvi *player, FTransform playerStatus, bool right) {
@@ -136,12 +152,34 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
       }
     }
   }
+  else {
+    //ir reiniciando todos los objetos nuevos
+    m_actualCheckPoint.IsPicked = false;
+    m_actualCheckPoint.Orbs = m_actualCheckPoint.Points = 0;
+    m_countOrbs = 0.0f;
+    m_actualPoints = 0.0f;
+    m_player->ResetToCheckPoint(m_actualCheckPoint.InitialPlayerStatus, m_actualCheckPoint.InitialPlayerToRight);
+    m_player->SetKey(false, FLinearColor(1, 1, 1));
+    state = EndGameType::NONE;
+
+    //restaurar checkpoints
+    for (TActorIterator<ACheckPoint> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+      (*ActorItr)->RestoreInitialState();
+
+    //restauro monedas
+    for (TActorIterator<APickableItem> ActorItr2(GetWorld()); ActorItr2; ++ActorItr2)
+      (*ActorItr2)->RestoreInitialPosition();
+
+    m_actualCheckPoint.ItemsPicked.Empty();
+    m_actualCheckPoint.PlayerHasKey = false;
+    m_actualCheckPoint.ColorKey = FLinearColor(1, 1, 1);
+  }
 }
 
-float ATowardsTheLightGameMode::GetLevelOrbs(FString levelName){
+float ATowardsTheLightGameMode::GetLevelOrbs(FString levelName) {
   return GameDataManager::Instance()->GetOrbsLevel(levelName);
 }
-float ATowardsTheLightGameMode::GetLevelPoints(FString levelName){
+float ATowardsTheLightGameMode::GetLevelPoints(FString levelName) {
   return GameDataManager::Instance()->GetPointsLevel(levelName);
 }
 

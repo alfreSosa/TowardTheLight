@@ -23,6 +23,7 @@ public:
   virtual void Tick(float DeltaSeconds) override;
   void RegisterDelegate();
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
+  void RestoreInitialState();
   //Delegates
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
