@@ -30,7 +30,6 @@ ATowardsTheLightGameMode::ATowardsTheLightGameMode(const class FObjectInitialize
   m_player = nullptr;
   m_actualCheckPoint.PlayerHasKey = false;
   m_actualCheckPoint.ColorKey = FLinearColor(1, 1, 1);
-  m_gameInstance = Cast<UInfoGameInstance>(GetGameInstance());
 }
 
 void ATowardsTheLightGameMode::BeginPlay() {
@@ -51,7 +50,7 @@ void ATowardsTheLightGameMode::EndGame(EndGameType type) {
   switch (type){
   case VICTORY:{
     if (state == EndGameType::NONE){
-      LevelData data = GameDataManager::Instance()->ReadLevelData(m_gameInstance->GetCurrentLevel());
+      LevelData data = GameDataManager::Instance()->ReadLevelData(Cast<UInfoGameInstance>(GetGameInstance())->GetCurrentLevel());
       //si la puntuacion actual es mejor que la que hay en el fichero, hay que almacenarla 
       bool write = false;
       if (m_countOrbs >= data.orbs){
@@ -106,8 +105,7 @@ float ATowardsTheLightGameMode::EndGameBP() {
 }
 
 FString ATowardsTheLightGameMode::GetLevelNameBP(){
-
-  return m_gameInstance->GetCurrentLevel();
+  return Cast<UInfoGameInstance>(GetGameInstance())->GetCurrentLevel();
 }
 
 void ATowardsTheLightGameMode::SetPlayerCheckPoint(APlayerOvi *player, FTransform playerStatus, bool right) {

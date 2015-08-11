@@ -103,5 +103,4 @@ private:
   float m_countOrbs;
   APlayerOvi *m_player;
   EndGameType state;
-  UInfoGameInstance *m_gameInstance;
 };
