@@ -102,8 +102,23 @@ void AMobileEnemy::BeginPlay() {
   }
   m_isMoving = !HasTrigger;
 
-  RegisterDelegate();
+  m_initialStatus = GetTransform();
 
+  RegisterDelegate();
+}
+
+void AMobileEnemy::RestoreInitialState()
+{
+  SetActorTransform(m_initialStatus);
+  m_currentDistance = LeftDistance;
+  m_lastPosition = GetActorLocation();
+  m_isMoving = false;
+  m_timer = 0;
+  m_state = INITIAL_DELAY;
+  m_initMovement = false;
+  m_actualJumpSpeed = 0.0f;
+  m_enableGravity = true;
+  m_rightVector = GetActorRightVector();
 }
 
 void AMobileEnemy::Tick(float DeltaSeconds) {

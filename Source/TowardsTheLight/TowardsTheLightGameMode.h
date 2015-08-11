@@ -8,6 +8,7 @@
 class APickableItem;
 class ACheckPoint;
 class AMobilePlatform;
+class AMobileEnemy;
 class APlayerOvi;
 class UInfoGameInstance;
 /**
@@ -111,5 +112,6 @@ private:
   TArray<APickableItem *> m_levelItems;
   TArray<ACheckPoint *> m_levelCheckPoints;
   TArray<AMobilePlatform *> m_levelMobilePlatforms;
+  TArray<AMobileEnemy *> m_levelMobileEnemies;
   EndGameType state;
 };
