@@ -37,13 +37,14 @@ void ATowardsTheLightGameMode::BeginPlay() {
 }
 
 void ATowardsTheLightGameMode::Tick(float DeltaSeconds) {
-  if (!m_player)
+  //esto era temporal
+ /* if (!m_player)
     for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
       if (ActorItr->ActorHasTag("Player")) {
         m_player = (APlayerOvi*)*ActorItr;
         m_actualCheckPoint.InitialPlayerStatus = m_player->GetTransform();
         m_actualCheckPoint.InitialPlayerToRight = m_player->PlayerisToRight();
-      }
+      }*/
 }
 
 void ATowardsTheLightGameMode::EndGame(EndGameType type) {
@@ -207,7 +208,15 @@ void ATowardsTheLightGameMode::SetEffectsBP(bool enable){
 FString ATowardsTheLightGameMode::GetString(FString key){
   return LocalizationManager::Instance()->GetString(key);
 }
+
 void ATowardsTheLightGameMode::ChangeLanguage(FString language){
   LocalizationManager::Instance()->SetLanguage(language);
   GameDataManager::Instance()->SetLanguage(language);
 }
+
+void ATowardsTheLightGameMode::SetActualPlayer(APlayerOvi *player) {
+  m_player = player;
+  m_actualCheckPoint.InitialPlayerStatus = m_player->GetTransform();
+  m_actualCheckPoint.InitialPlayerToRight = m_player->PlayerisToRight();
+}
+

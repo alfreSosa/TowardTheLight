@@ -36,11 +36,15 @@ public:
   virtual void Tick(float DeltaSeconds) override;
   enum EndGameType { NONE = 0, VICTORY = 1, DEFEAT = -1 };
   void EndGame(EndGameType type);
-
+  
   UFUNCTION()
     void AddPoints(float points);
   UFUNCTION()
     void OrbPicked();
+
+  //function for initialize level
+  UFUNCTION(BlueprintCallable, Category = TTLGameState)
+  void SetActualPlayer(APlayerOvi *player);
 
   UFUNCTION(BlueprintCallable, Category = TTLGameState)
     float GetActualPoints();
