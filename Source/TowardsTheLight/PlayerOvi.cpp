@@ -177,12 +177,14 @@ void APlayerOvi::BeginPlay(){
   m_gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
 
   //Set player Stick in the animation socket
-  m_stick = GetWorld()->SpawnActor<AStick>(AStick::StaticClass());
-  const USkeletalMeshSocket *socket = Mesh->GetSocketByName("Puntodeacople_Baston");
-  if (socket)
-    socket->AttachActor(m_stick, Mesh);
-  m_colorKey = FLinearColor(FVector(1.0f));
-  m_stick->SetColor(FLinearColor(FVector(1.0f)), 5.0f);
+  if (Mesh) {
+    m_stick = GetWorld()->SpawnActor<AStick>(AStick::StaticClass());
+    const USkeletalMeshSocket *socket = Mesh->GetSocketByName("Puntodeacople_Baston");
+    if (socket)
+      socket->AttachActor(m_stick, Mesh);
+    m_colorKey = FLinearColor(FVector(1.0f));
+    m_stick->SetColor(FLinearColor(FVector(1.0f)), 5.0f);
+  }
 }
 
 void APlayerOvi::Tick(float DeltaSeconds){
