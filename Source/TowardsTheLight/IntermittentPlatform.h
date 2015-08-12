@@ -39,6 +39,7 @@ public:
   virtual void ReceiveActorEndOverlap(AActor* OtherActor) override;
   void InitOwner(AIntermittentManager *owner);
   void Init();
+  void RestoreInitialState();
 private:
   //functions
   void runStateMachine(float DeltaSeconds);

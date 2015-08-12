@@ -26,10 +26,14 @@ public:
   void InitByMechanism(bool disableAtEnd, int32 numActions);
   void AlertBlocking(bool blocking);
   void AlertFinish();
+
+  void RestoreInitialState();
 private:
   //properties
   int32 m_numPlatforms;
   int32 m_finishCounter;
   bool m_someBlocked;
   bool m_restart;
+
+  bool m_initialEnabled;
 };

@@ -142,6 +142,10 @@ void AIntermittentPlatform::InitOwner(AIntermittentManager *owner) {
   m_owner = owner;
 }
 
+void AIntermittentPlatform::RestoreInitialState() {
+  Init();
+}
+
 
 
 

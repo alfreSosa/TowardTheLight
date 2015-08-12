@@ -11,6 +11,8 @@ class AMobilePlatform;
 class AMobileEnemy;
 class APlayerOvi;
 class UInfoGameInstance;
+class AIntermittentManager;
+class AIntermittentPlatform;
 /**
  * 
  */
@@ -113,5 +115,7 @@ private:
   TArray<ACheckPoint *> m_levelCheckPoints;
   TArray<AMobilePlatform *> m_levelMobilePlatforms;
   TArray<AMobileEnemy *> m_levelMobileEnemies;
+  TArray<AIntermittentManager *> m_levelIntermittentManagers;
+  TArray<AIntermittentPlatform *> m_levelIntermittenPlatforms;
   EndGameType state;
 };

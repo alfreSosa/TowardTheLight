@@ -111,3 +111,10 @@ void ATower::EndPlay(const EEndPlayReason::Type EndPlayReason){
   }
   Super::EndPlay(EndPlayReason);
 }
+
+void ATower::RestoreInitialState() {
+  m_startVictory = false;
+  TowerLightMaterial->SetVectorParameterValue("Color", ColorDisabled);
+  m_timeToFinish = 2.0f;
+  m_elapsedTime = 0.0f;
+}
