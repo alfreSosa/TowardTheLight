@@ -13,6 +13,9 @@ UCLASS()
 class TOWARDSTHELIGHT_API AIntermittentPlatform : public AStaticPlatform
 {
   GENERATED_BODY()
+  //material
+  UMaterialInstanceDynamic *IntermittentPlatformMaterial;
+
 public:
   //properties
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
