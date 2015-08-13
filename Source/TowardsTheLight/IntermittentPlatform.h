@@ -18,6 +18,8 @@ class TOWARDSTHELIGHT_API AIntermittentPlatform : public AStaticPlatform
 
 public:
   //properties
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformEffects)
+    UParticleSystemComponent *DustParticles;
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     int32 NumberOfIntermitences;
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
