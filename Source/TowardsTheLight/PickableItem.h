@@ -28,4 +28,5 @@ private:
   const float DEFAULT_POINTS = 100.0f;
   bool m_collected;
   FVector m_initialPosition;
+  int m_ciclesInRestore;
 };

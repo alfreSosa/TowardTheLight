@@ -4,7 +4,7 @@
 #include "MobileEnemy.h"
 #include "PlayerOvi.h"
 #include "TimeManager.h"
-#include "MyGameMode.h"
+#include "TowardsTheLightGameMode.h"
 
 const float DEFAULT_ENEMY_CAPSULE_RADIOUS = 45.0f;
 const float DEFAULT_ENEMY_CAPSULE_HEIGHT = 95.0f;
@@ -102,8 +102,23 @@ void AMobileEnemy::BeginPlay() {
   }
   m_isMoving = !HasTrigger;
 
-  RegisterDelegate();
+  m_initialStatus = GetTransform();
 
+  RegisterDelegate();
+}
+
+void AMobileEnemy::RestoreInitialState()
+{
+  SetActorTransform(m_initialStatus);
+  m_currentDistance = LeftDistance;
+  m_lastPosition = GetActorLocation();
+  m_isMoving = false;
+  m_timer = 0;
+  m_state = INITIAL_DELAY;
+  m_initMovement = false;
+  m_actualJumpSpeed = 0.0f;
+  m_enableGravity = true;
+  m_rightVector = GetActorRightVector();
 }
 
 void AMobileEnemy::Tick(float DeltaSeconds) {
@@ -217,9 +232,9 @@ void AMobileEnemy::RegisterDelegate() {
 
 void AMobileEnemy::OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
   if (OtherActor->ActorHasTag("Player")){
-    AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+    ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
     if (gameMode)
-      gameMode->EndGame(AMyGameMode::DEFEAT);
+      gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
   }
 }
 

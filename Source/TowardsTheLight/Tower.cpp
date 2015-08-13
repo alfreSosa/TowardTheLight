@@ -2,7 +2,7 @@
 
 #include "TowardsTheLight.h"
 #include "Tower.h"
-#include "MyGameMode.h"
+#include "TowardsTheLightGameMode.h"
 #include "PlayerOvi.h"
 #include "TimeManager.h"
 
@@ -94,10 +94,10 @@ void ATower::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveCom
       dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
       if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05){
         if (!NeedKey || (NeedKey && player->HasKey() && ColorKey == player->GetColorKey())){
-          AMyGameMode *gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+          ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
           if (gameMode) {
             m_startVictory = true;
-            gameMode->EndGame(AMyGameMode::VICTORY);
+            gameMode->EndGame(ATowardsTheLightGameMode::VICTORY);
           }
         }
       }
@@ -110,4 +110,11 @@ void ATower::EndPlay(const EEndPlayReason::Type EndPlayReason){
     Trigger->OnComponentBeginOverlap.RemoveDynamic(this, &ATower::OnBeginTriggerOverlap);
   }
   Super::EndPlay(EndPlayReason);
+}
+
+void ATower::RestoreInitialState() {
+  m_startVictory = false;
+  TowerLightMaterial->SetVectorParameterValue("Color", ColorDisabled);
+  m_timeToFinish = 2.0f;
+  m_elapsedTime = 0.0f;
 }

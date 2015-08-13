@@ -46,6 +46,9 @@ private:
   APlayerOvi *m_player;
   FVector m_lastPosition;
 
+  //restore data variables
+  FTransform m_initialStatus;
+
   void doMovement(float DeltaSeconds);
   void CalculateGravity(float DeltaSeconds);
   void CheckCollision();
@@ -81,7 +84,7 @@ public:
   virtual void Tick(float DeltaSeconds) override;
   void RegisterDelegate();
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
-
+  void RestoreInitialState();
   UFUNCTION()
     void OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
   UFUNCTION()

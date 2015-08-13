@@ -5,7 +5,6 @@
 #include "IntermittentManager.h"
 
 AIntermittentPlatform::AIntermittentPlatform() {
-  //PrimaryActorTick.bCanEverTick = true; //acordarse de desactivar esto con el manager
   this->SetActorEnableCollision(true);
 
   RootComponent->SetMobility(EComponentMobility::Movable);
@@ -25,10 +24,21 @@ AIntermittentPlatform::AIntermittentPlatform() {
   m_actualState = State::INITIALDELAY;
   m_playerIsTouching = false;
   m_owner = nullptr;
+
+  //init default material
+  IntermittentPlatformMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
+  UMaterial* mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Plataforma_Intermit/Plat_intermit.Plat_intermit'"));
+  if (MatFinder.Succeeded())
+  {
+    mat = MatFinder.Object;
+    IntermittentPlatformMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
 }
 
 void AIntermittentPlatform::BeginPlay() {
   this->Tags.Add("IntermittentPlatform");
+  OurVisibleComponent->SetMaterial(0, IntermittentPlatformMaterial);
   Init();
 }
 
@@ -40,11 +50,13 @@ void AIntermittentPlatform::Init() {
   m_actualState = State::INITIALDELAY;
 
   if (StartVisible) {
-    this->SetActorHiddenInGame(false);
+    //this->SetActorHiddenInGame(false);
+    IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 0.0f);
     this->Tags.Add("Platform");
   }
   else {
-    this->SetActorHiddenInGame(true);
+    //this->SetActorHiddenInGame(true);
+    IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 1.0f);
     this->Tags.Remove("Platform");
   }
 
@@ -53,6 +65,7 @@ void AIntermittentPlatform::Init() {
   m_counterIntermittences = NumberOfIntermitences;
   m_countIntermittences = (NumberOfIntermitences == 0) ? false : true;
   m_elapsedTime = 0.0f;
+  m_finished = false;
 }
 
 void AIntermittentPlatform::Tick(float DeltaSeconds) {
@@ -86,7 +99,9 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
           m_owner->AlertBlocking(true);
        
         m_actualState = State::OFF;
-        this->SetActorHiddenInGame(true);
+        //this->SetActorHiddenInGame(true);
+        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 1.0f);
+
         this->Tags.Remove("Platform");
         m_elapsedTime = 0.0f;
       }
@@ -98,7 +113,9 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
 
         m_isVisible = true;
         m_actualState = State::ON;
-        this->SetActorHiddenInGame(false);
+        //this->SetActorHiddenInGame(false);
+        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 0.0f);;
+
         this->Tags.Add("Platform");
         m_elapsedTime = 0.0f;
       }
@@ -108,8 +125,10 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         //Enabled = Loop;
         m_elapsedTime = 0.0f;
         m_actualState = (Loop) ? INITIALDELAY : ENDDELAY;
-        if (!Loop)
+        if (!Loop && !m_finished) {
           m_owner->AlertFinish();
+          m_finished = true;
+        }
         //PROBANDO EL RESET
         m_isVisible = StartVisible;
         m_counterIntermittences = (Loop) ? NumberOfIntermitences : 0;        
@@ -140,6 +159,10 @@ void AIntermittentPlatform::ReceiveActorEndOverlap(AActor* OtherActor) {
 
 void AIntermittentPlatform::InitOwner(AIntermittentManager *owner) {
   m_owner = owner;
+}
+
+void AIntermittentPlatform::RestoreInitialState() {
+  Init();
 }
 
 

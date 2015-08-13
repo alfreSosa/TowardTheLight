@@ -56,6 +56,11 @@ void AMobilePlatform::BeginPlay() {
   m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
   FLinearColor color = (Enabled) ? ColorEnabled : ColorDisabled;
   MobilePlatformMaterial->SetVectorParameterValue("Color", color);
+
+  //variables restore
+  m_initialPosition = GetActorLocation();
+  m_initialColor = color;
+  m_enabledInitial = Enabled;
 }
 
 void AMobilePlatform::Tick(float DeltaSeconds) {
@@ -223,3 +228,17 @@ void AMobilePlatform::InitByMechanism(bool disableAtEnd, int32 numActions) {
 //FVector AMobilePlatform::GetPlatformMovement() const{
 //  return m_movement;
 //}
+
+void AMobilePlatform::RestoreInitialState() {
+  SetActorLocation(m_initialPosition);
+  MobilePlatformMaterial->SetVectorParameterValue("Color", m_initialColor);
+  Enabled = m_enabledInitial;
+  m_state = INITIAL_DELAY;
+  m_totalDistance = RightDistance;
+  m_actions = 0;
+  m_isPlayerOn = false;
+  intermitedOn = true;
+  m_elapsedIntermitence = 0.0f;
+  m_movement = FVector(0);
+  m_currentDistance = 0;
+}
