@@ -106,6 +106,12 @@ public:
   UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
     void ChangeLanguage(FString language);
 
+  //Tutorial
+  UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
+    void EnterTutorialEvent(const FString &Key);
+  UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
+    void ExitTutorialEvent();
+
 private:
   CheckPointData m_actualCheckPoint;
   float m_actualPoints;
