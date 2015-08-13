@@ -15,6 +15,7 @@ AMobileEnemy::AMobileEnemy() {
   this->SetActorEnableCollision(true);
   m_isMoving = false;
   //setting
+  Fly = false;
   RightDistance = 100.f;
   LeftDistance = 100.f;
   RightDelay = 1.f;
@@ -103,7 +104,8 @@ void AMobileEnemy::BeginPlay() {
   m_isMoving = !HasTrigger;
 
   m_initialStatus = GetTransform();
-
+  if (Fly)
+    m_enableGravity = false;
   RegisterDelegate();
 }
 
@@ -401,69 +403,71 @@ void AMobileEnemy::CheckCollision() {
       }
   }
 
-  FVector newLocationUp;
-  newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
-  newLocationUp.Y = (FMath::Abs(GetActorUpVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
-  newLocationUp.Z = (FMath::Abs(GetActorUpVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
+  if (!Fly) {
+    FVector newLocationUp;
+    newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
+    newLocationUp.Y = (FMath::Abs(GetActorUpVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
+    newLocationUp.Z = (FMath::Abs(GetActorUpVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
 
-  const FVector EndTraceDown = newLocationUp - GetActorUpVector() * m_capsuleHeight;
-  const FVector EndTraceDownLeftF = (newLocationUp + GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
-  const FVector EndTraceDownRightF = (newLocationUp - GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
+    const FVector EndTraceDown = newLocationUp - GetActorUpVector() * m_capsuleHeight;
+    const FVector EndTraceDownLeftF = (newLocationUp + GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
+    const FVector EndTraceDownRightF = (newLocationUp - GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
 
-  GetWorld()->LineTraceMulti(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_ENEMY, TraceParams, ResponseParam);
-  bool collisionDownLeftF = OutTraceResultDownLeftF.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceDownLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-  GetWorld()->LineTraceMulti(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_ENEMY, TraceParams, ResponseParam);
-  bool collisionDownRightF = OutTraceResultDownRigthF.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceDownRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-  GetWorld()->LineTraceMulti(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_ENEMY, TraceParams, ResponseParam);
-  bool collisionDown = OutTraceResultDown.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-  bool eGravity = true;
-  if (collisionDown || collisionDownLeftF || collisionDownRightF) {
-    if (collisionDown) {
-      int size = OutTraceResultDown.Num();
-      for (int i = 0; i < size; i++)
-        if (OutTraceResultDown[i].GetActor()->ActorHasTag("Platform")) {
+    GetWorld()->LineTraceMulti(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_ENEMY, TraceParams, ResponseParam);
+    bool collisionDownLeftF = OutTraceResultDownLeftF.Num() > 0;
+    //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceDownLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+    GetWorld()->LineTraceMulti(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_ENEMY, TraceParams, ResponseParam);
+    bool collisionDownRightF = OutTraceResultDownRigthF.Num() > 0;
+    //DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceDownRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+    GetWorld()->LineTraceMulti(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_ENEMY, TraceParams, ResponseParam);
+    bool collisionDown = OutTraceResultDown.Num() > 0;
+    //DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+    bool eGravity = true;
+    if (collisionDown || collisionDownLeftF || collisionDownRightF) {
+      if (collisionDown) {
+        int size = OutTraceResultDown.Num();
+        for (int i = 0; i < size; i++)
+          if (OutTraceResultDown[i].GetActor()->ActorHasTag("Platform")) {
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDown[i].Location, -m_capsuleHeight));
           m_enableGravity = false;
           eGravity = false;
           m_actualJumpSpeed = 0;
           break;
-        }
-    }
-    else if (collisionDownLeftF) {
-      int size = OutTraceResultDownLeftF.Num();
-      for (int i = 0; i < size; i++)
-        if (OutTraceResultDownLeftF[i].GetActor()->ActorHasTag("Platform")) {
+          }
+      }
+      else if (collisionDownLeftF) {
+        int size = OutTraceResultDownLeftF.Num();
+        for (int i = 0; i < size; i++)
+          if (OutTraceResultDownLeftF[i].GetActor()->ActorHasTag("Platform")) {
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
           m_enableGravity = false;
           eGravity = false;
           m_actualJumpSpeed = 0;
           break;
-        }
-    }
-    else if (collisionDownRightF) {
-      int size = OutTraceResultDownRigthF.Num();
-      for (int i = 0; i < size; i++)
-        if (OutTraceResultDownRigthF[i].GetActor()->ActorHasTag("Platform")) {
+          }
+      }
+      else if (collisionDownRightF) {
+        int size = OutTraceResultDownRigthF.Num();
+        for (int i = 0; i < size; i++)
+          if (OutTraceResultDownRigthF[i].GetActor()->ActorHasTag("Platform")) {
           SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownRigthF[i].Location, -m_capsuleHeight));
           m_enableGravity = false;
           eGravity = false;
           m_actualJumpSpeed = 0;
           break;
-        }
+          }
+      }
+      else {
+        m_enableGravity = true;
+      }
+
+      if (eGravity)
+        m_enableGravity = true;
+
     }
     else {
       m_enableGravity = true;
     }
-
-    if (eGravity) 
-      m_enableGravity = true;
-
-  }
-  else {
-    m_enableGravity = true;
   }
 }
 
