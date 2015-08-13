@@ -57,5 +57,6 @@ private:
   bool m_playerIsTouching;
   bool m_isVisible;
   bool Enabled;
+  bool m_finished;
 	
 };

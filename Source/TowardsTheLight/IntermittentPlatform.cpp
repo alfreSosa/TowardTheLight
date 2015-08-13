@@ -51,12 +51,12 @@ void AIntermittentPlatform::Init() {
 
   if (StartVisible) {
     //this->SetActorHiddenInGame(false);
-    IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 0.0f);
+    IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 0.0f);
     this->Tags.Add("Platform");
   }
   else {
     //this->SetActorHiddenInGame(true);
-    IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 1.0f);
+    IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 1.0f);
     this->Tags.Remove("Platform");
   }
 
@@ -65,6 +65,7 @@ void AIntermittentPlatform::Init() {
   m_counterIntermittences = NumberOfIntermitences;
   m_countIntermittences = (NumberOfIntermitences == 0) ? false : true;
   m_elapsedTime = 0.0f;
+  m_finished = false;
 }
 
 void AIntermittentPlatform::Tick(float DeltaSeconds) {
@@ -99,7 +100,7 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
        
         m_actualState = State::OFF;
         //this->SetActorHiddenInGame(true);
-        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 1.0f);
+        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 1.0f);
 
         this->Tags.Remove("Platform");
         m_elapsedTime = 0.0f;
@@ -113,7 +114,7 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         m_isVisible = true;
         m_actualState = State::ON;
         //this->SetActorHiddenInGame(false);
-        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 0.0f);;
+        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 0.0f);;
 
         this->Tags.Add("Platform");
         m_elapsedTime = 0.0f;
@@ -124,8 +125,10 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         //Enabled = Loop;
         m_elapsedTime = 0.0f;
         m_actualState = (Loop) ? INITIALDELAY : ENDDELAY;
-        if (!Loop)
+        if (!Loop && !m_finished) {
           m_owner->AlertFinish();
+          m_finished = true;
+        }
         //PROBANDO EL RESET
         m_isVisible = StartVisible;
         m_counterIntermittences = (Loop) ? NumberOfIntermitences : 0;        
