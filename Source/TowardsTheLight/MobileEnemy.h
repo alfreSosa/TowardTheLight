@@ -63,6 +63,8 @@ public:
   UPROPERTY()
     UBoxComponent *Trigger;
   UPROPERTY(EditAnywhere, Category = MobileEnemy)
+    bool Fly;
+  UPROPERTY(EditAnywhere, Category = MobileEnemy)
     float RightDistance;
   UPROPERTY(EditAnywhere, Category = MobileEnemy)
     float LeftDistance;
