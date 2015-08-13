@@ -3,7 +3,7 @@
 #include "MobilePlatform.h"
 #include "TimeManager.h"
 #include "Stick.h"
-#include "MyGameMode.h"
+#include "TowardsTheLightGameMode.h"
 #include "Tappable.h"
 
 /************************************/
@@ -131,7 +131,6 @@ APlayerOvi::APlayerOvi() {
 }
 
 void APlayerOvi::BeginPlay(){
-
   Super::BeginPlay();
 
   // time for button animation
@@ -174,16 +173,18 @@ void APlayerOvi::BeginPlay(){
   m_capsuleRadiousPadding = m_capsuleRadious * PADDING_COLLISION_PERCENT_RADIOUS;
   m_capsuleHeightPaddingFeet = m_capsuleHeight * PADDING_COLLISION_PERCENT_FEET;
 
-  //Get MyGameMode
-  m_gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+  //Get ATowardsTheLightGameMode
+  m_gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
 
   //Set player Stick in the animation socket
-  m_stick = GetWorld()->SpawnActor<AStick>(AStick::StaticClass());
-  const USkeletalMeshSocket *socket = Mesh->GetSocketByName("Puntodeacople_Baston");
-  if (socket)
-    socket->AttachActor(m_stick, Mesh);
-  m_colorKey = FLinearColor(FVector(1.0f));
-  m_stick->SetColor(FLinearColor(FVector(1.0f)), 5.0f);
+  if (Mesh) {
+    m_stick = GetWorld()->SpawnActor<AStick>(AStick::StaticClass());
+    const USkeletalMeshSocket *socket = Mesh->GetSocketByName("Puntodeacople_Baston");
+    if (socket)
+      socket->AttachActor(m_stick, Mesh);
+    m_colorKey = FLinearColor(FVector(1.0f));
+    m_stick->SetColor(FLinearColor(FVector(1.0f)), 5.0f);
+  }
 }
 
 void APlayerOvi::Tick(float DeltaSeconds){
@@ -224,7 +225,6 @@ void APlayerOvi::Tick(float DeltaSeconds){
   CalculateGravity(DeltaSeconds);
   CheckCollision();
   CalculateOrientation();
-  
 }
 
 float APlayerOvi::UpdateState() {

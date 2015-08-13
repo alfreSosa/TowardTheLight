@@ -4,11 +4,60 @@
 #include "Portal.h"
 #include "PlayerOvi.h"
 
+APortal::APortal(){
+  MeshBG = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshBG"));
+  MeshBG->AttachTo(RootComponent);
+  MeshBG->SetMobility(EComponentMobility::Static);
+  MeshBG->CastShadow = false;
+
+  MeshEffects = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshEffects"));
+  MeshEffects->AttachTo(RootComponent);
+  MeshEffects->SetMobility(EComponentMobility::Static);
+  MeshEffects->CastShadow = false;
+
+  ColorDisabled = FLinearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  ColorEnabled = FLinearColor(0.0f, 0.9490f, 1.0f, 1.0f);
+  PortalColor = FLinearColor(0.186f, 0.895f, 0.844f, 1.0f);
+
+  PortalMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
+  UMaterial* mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Portal/M_portalStructure.M_portalStructure'"));
+  if (MatFinder.Succeeded()) {
+    mat = MatFinder.Object;
+    PortalMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
+
+  PortalMaterialBG = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(1);
+  UMaterial* matBG = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinderBG(TEXT("Material'/Game/Models/Portal/M_portal_bg.M_portal_bg'"));
+  if (MatFinderBG.Succeeded()) {
+    matBG = MatFinderBG.Object;
+    PortalMaterialBG = UMaterialInstanceDynamic::Create(matBG, GetWorld());
+  }
+
+  PortalMaterialEffects = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(2);
+  UMaterial* matEffects = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinderEffects(TEXT("Material'/Game/Models/Portal/M_portal_effect.M_portal_effect'"));
+  if (MatFinderEffects.Succeeded()) {
+    matEffects = MatFinderEffects.Object;
+    PortalMaterialEffects = UMaterialInstanceDynamic::Create(matEffects, GetWorld());
+  }
+}
+
 void APortal::BeginPlay() {
   Super::BeginPlay();
+  MeshActivator->SetMaterial(0, PortalMaterial);
+  MeshBG->SetMaterial(0, PortalMaterialBG);
+  MeshEffects->SetMaterial(0, PortalMaterialEffects);
+
+  PortalMaterial->SetVectorParameterValue("Portal_structure_color", ColorDisabled);
+
+  PortalMaterialBG->SetVectorParameterValue("Portal_BG_color", PortalColor);
+  PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", PortalColor);
 }
 
 void APortal::Activate(bool enabled) {
+  PortalMaterial->SetVectorParameterValue("Portal_structure_color", (enabled) ? ColorEnabled : ColorDisabled);
 }
 
 void APortal::Execute() {

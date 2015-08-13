@@ -7,7 +7,7 @@
 
 class AMobilePlatform;
 class AStick;
-class AMyGameMode;
+class ATowardsTheLightGameMode;
 
 UCLASS()
 class TOWARDSTHELIGHT_API APlayerOvi : public APawn
@@ -94,7 +94,7 @@ private:
   FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
   
   //private propiertes
-  AMyGameMode *m_gameMode;
+  ATowardsTheLightGameMode *m_gameMode;
   
   //player movement propiertes
   FCollisionQueryParams m_TraceParams; 

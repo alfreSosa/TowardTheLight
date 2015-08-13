@@ -60,8 +60,8 @@ LevelData GameDataManager::ReadLevelData(FString levelName){
   Document doc;
   doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
 
-  //Quitar el inicio por defecto
-  levelName.RemoveFromStart(FString("UEDPIE_0_"));
+  ////Quitar el inicio por defecto
+  //levelName.RemoveFromStart(FString("UEDPIE_0_"));
 
   if (!doc.HasParseError())
     if (doc.IsObject())

@@ -3,9 +3,10 @@
 #include "GameFramework/Actor.h"
 #include "Tutorial.generated.h"
 
+class ATowardsTheLightGameMode;
+
 UCLASS()
-class TOWARDSTHELIGHT_API ATutorial : public AActor
-{
+class TOWARDSTHELIGHT_API ATutorial : public AActor {
 	GENERATED_BODY()
 	
 public:	
@@ -13,22 +14,24 @@ public:
   UPROPERTY()
     UBoxComponent *Trigger;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TutorialText)
-    FString Localizador;
+    FString Key;
   //functions
 	ATutorial();
 	virtual void BeginPlay() override;
-	virtual void Tick( float DeltaSeconds ) override;
   void RegisterDelegate();
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
+
+  void RestoreInitialState();
+
   //Delegates
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
   UFUNCTION()
     void OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 private:
+  ATowardsTheLightGameMode *m_gameMode;
   //properties
   bool m_loaded;
   bool m_enter;
-  FString m_text;
 	
 };
