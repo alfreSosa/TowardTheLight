@@ -29,6 +29,8 @@ void AIntermittentManager::BeginPlay()
   }
   m_someBlocked = false;
   m_restart = false;
+
+  m_initialEnabled = Enabled;
 }
 
 void AIntermittentManager::Tick( float DeltaTime )
@@ -75,5 +77,13 @@ void AIntermittentManager::InitByMechanism(bool disableAtEnd, int32 numActions) 
 void AIntermittentManager::AlertFinish() {
   m_finishCounter--;
   m_finishCounter = (m_finishCounter <= 0) ? 0: m_finishCounter;
+}
+
+
+void AIntermittentManager::RestoreInitialState() {
+  Enabled = m_initialEnabled;
+  m_finishCounter = m_numPlatforms;
+  m_someBlocked = false;
+  m_restart = false;
 }
 

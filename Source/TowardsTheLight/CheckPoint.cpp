@@ -1,6 +1,6 @@
 #include "TowardsTheLight.h"
 #include "CheckPoint.h"
-#include "MyGameMode.h"
+#include "TowardsTheLightGameMode.h"
 #include "PickableItem.h"
 #include "PlayerOvi.h"
 
@@ -32,7 +32,7 @@ void ACheckPoint::BeginPlay()
   RegisterDelegate();
   m_loaded = false;
   m_enter = false;
-  m_gameMode = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(this));
+  m_gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
 }
 
 void ACheckPoint::Tick(float DeltaTime)
@@ -57,8 +57,7 @@ void ACheckPoint::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimiti
     if (player) {
       m_enter = true;
       GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GET CHECKPOINT")));
-      //rellenar checkPoint MyGameMode
-      
+      //rellenar checkPoint ATowardsTheLightGameMode
       m_gameMode->SetPlayerCheckPoint(player, player->GetTransform(), player->PlayerisToRight());
       m_gameMode->SetPlayerKey(player->HasKey(), player->GetColorKey());
       for (TActorIterator<APickableItem> ActorItr(GetWorld()); ActorItr; ++ActorItr)
@@ -66,7 +65,6 @@ void ACheckPoint::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimiti
           m_gameMode->AddItemPicked(*ActorItr);
     }
   }
-
 }
 
 void ACheckPoint::OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
@@ -87,5 +85,9 @@ void ACheckPoint::EndPlay(const EEndPlayReason::Type EndPlayReason) {
   Super::EndPlay(EndPlayReason);
 }
 
+void ACheckPoint::RestoreInitialState() {
+  m_loaded = false;
+  m_enter = false;
+}
 
 

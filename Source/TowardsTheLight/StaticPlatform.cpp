@@ -13,9 +13,7 @@ AStaticPlatform::AStaticPlatform() {
   this->Tags.Add("Platform");
 }
 
-
 void AStaticPlatform::ChangeEnabled(bool enabled) {
-
 }
 
 bool AStaticPlatform::isEnabled() {
@@ -23,5 +21,4 @@ bool AStaticPlatform::isEnabled() {
 }
 
 void AStaticPlatform::InitByMechanism(bool disableAtEnd, int32 numActions) {
-
 }

@@ -5,7 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "CheckPoint.generated.h"
 
-class AMyGameMode;
+class ATowardsTheLightGameMode;
 UCLASS()
 class TOWARDSTHELIGHT_API ACheckPoint : public AActor
 {
@@ -23,6 +23,7 @@ public:
   virtual void Tick(float DeltaSeconds) override;
   void RegisterDelegate();
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
+  void RestoreInitialState();
   //Delegates
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -30,7 +31,7 @@ public:
     void OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 private:
   //properties
-  AMyGameMode *m_gameMode;
+  ATowardsTheLightGameMode *m_gameMode;
   bool m_loaded;
   bool m_enter;
 	
