@@ -14,6 +14,7 @@
 #include "Tower.h"
 #include "IntermittentManager.h"
 #include "IntermittentPlatform.h"
+#include "Tutorial.h"
 #include "SoundManager.h"
 #include "InfoGameInstance.h"
 
@@ -181,6 +182,7 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
     int sizeEne = m_levelMobileEnemies.Num();
     int sizeMana = m_levelIntermittentManagers.Num();
     int sizeInter = m_levelIntermittenPlatforms.Num();
+    int sizeTut = m_levelTutorials.Num();
 
     //restore mobile platform
     for (int i = 0; i < sizeItems; ++i)
@@ -189,6 +191,10 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
     //restaurar checkpoints
     for (int i = 0; i < sizeChecks; ++i)
       m_levelCheckPoints[i]->RestoreInitialState();
+
+    //restauro tutorial
+    for (int i = 0; i < sizeTut; ++i)
+      m_levelTutorials[i]->RestoreInitialState();
 
     //restauro monedas
     for (int i = 0; i < sizeMob; ++i)
@@ -264,11 +270,14 @@ void ATowardsTheLightGameMode::FindActualPlayer() {
   m_levelCheckPoints.Empty();
   m_levelMobilePlatforms.Empty();
   m_levelMobileEnemies.Empty();
+  m_levelTutorials.Empty();
 
   for (TActorIterator< APickableItem > pickItr(GetWorld()); pickItr; ++pickItr)
     m_levelItems.Add(*pickItr);
   for (TActorIterator< ACheckPoint > checkItr(GetWorld()); checkItr; ++checkItr)
     m_levelCheckPoints.Add(*checkItr);
+  for (TActorIterator< ATutorial> tutItr(GetWorld()); tutItr; ++tutItr)
+    m_levelTutorials.Add(*tutItr);
   for (TActorIterator< AMobilePlatform > movItr(GetWorld()); movItr; ++movItr)
     m_levelMobilePlatforms.Add(*movItr);
   for (TActorIterator< AMobileEnemy > eneItr(GetWorld()); eneItr; ++eneItr)
