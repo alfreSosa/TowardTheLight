@@ -27,6 +27,8 @@
 		{"key":"CODE","value":"Programmers"},
 		{"key":"DESIGNMEMBERS","value":"- Paula Cabarcos\n- Jordi Gutiérrez\n- David Neira\n- David Sánchez\n- Yoshikuni Takebe"},
 		{"key":"ARTMEMBERS","value":"- Pablo Bascón\n- Victor González\n- Carmen López\n- Álvaro Rivero\n- Santiago Roldán"},
-		{"key":"CODEMEMBERS","value":"- Manuel Cruz\n- Alfredo Sosa"}
+		{"key":"CODEMEMBERS","value":"- Manuel Cruz\n- Alfredo Sosa"},
+		{"key":"TUTOJUMP","value":"Tap in the green\nregion to jump (WIP)"},
+		{"key":"TUTOMOVEMENT","value":"Swipe to move (WIP)"}
 	]
 }

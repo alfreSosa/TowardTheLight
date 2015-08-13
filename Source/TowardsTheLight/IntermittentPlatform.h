@@ -13,6 +13,9 @@ UCLASS()
 class TOWARDSTHELIGHT_API AIntermittentPlatform : public AStaticPlatform
 {
   GENERATED_BODY()
+  //material
+  UMaterialInstanceDynamic *IntermittentPlatformMaterial;
+
 public:
   //properties
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
@@ -39,6 +42,7 @@ public:
   virtual void ReceiveActorEndOverlap(AActor* OtherActor) override;
   void InitOwner(AIntermittentManager *owner);
   void Init();
+  void RestoreInitialState();
 private:
   //functions
   void runStateMachine(float DeltaSeconds);
@@ -53,5 +57,6 @@ private:
   bool m_playerIsTouching;
   bool m_isVisible;
   bool Enabled;
+  bool m_finished;
 	
 };

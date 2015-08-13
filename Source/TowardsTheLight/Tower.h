@@ -10,7 +10,6 @@ class TOWARDSTHELIGHT_API ATower : public APawn
 {
 	GENERATED_BODY()
 
- 
 public:	
 	// Sets default values for this actor's properties
 	ATower();
@@ -39,6 +38,7 @@ public:
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
+  void RestoreInitialState();
 private:
   UMaterialInstanceDynamic *TowerLightMaterial;
   bool m_startVictory;

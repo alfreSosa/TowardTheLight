@@ -20,7 +20,13 @@ public:
     void SetCurrentGalaxy(FString galaxyName);
   UFUNCTION(BlueprintCallable, Category = "GameInfo")
     FString GetCurrentGalaxy();
+
+  UFUNCTION(BlueprintCallable, Category = "GameInfo")
+    void SetCurrentLevel(FString levelName);
+  UFUNCTION(BlueprintCallable, Category = "GameInfo")
+    FString GetCurrentLevel();
 	
 private:
   FString m_galaxyName;
+  FString m_levelName;
 };
