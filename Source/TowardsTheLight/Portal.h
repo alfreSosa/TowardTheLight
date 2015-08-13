@@ -18,6 +18,11 @@ public:
   APortal();
 
   //Properties
+  UPROPERTY(EditAnywhere)
+    UStaticMeshComponent* MeshBG;
+  UPROPERTY(EditAnywhere)
+    UStaticMeshComponent* MeshEffects;
+
   UPROPERTY(EditAnywhere, Category = Portal)
     AActor *Partner;
   UPROPERTY(EditAnywhere, Category = Portal)
