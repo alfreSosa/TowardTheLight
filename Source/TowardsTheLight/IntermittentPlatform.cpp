@@ -13,12 +13,9 @@ AIntermittentPlatform::AIntermittentPlatform() {
 
   //Init default properties
   //visible
-  //DustParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("RootComponent"));
-  // Create a particle system that we can activate or deactivate
-  DustParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("MovementParticles"));
+  DustParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("DissapearParticles"));
   DustParticles->AttachTo(OurVisibleComponent);
   DustParticles->bAutoActivate = false;
-  //DustParticles->SetRelativeLocation(FVector(-20.0f, 0.0f, 20.0f));
   static ConstructorHelpers::FObjectFinder<UParticleSystem> ParticleAsset(TEXT("/Game/Models/Plataforma_Intermit/Plat_int_smoke.Plat_int_smoke"));
   if (ParticleAsset.Succeeded())
     DustParticles->SetTemplate(ParticleAsset.Object);
@@ -50,6 +47,8 @@ AIntermittentPlatform::AIntermittentPlatform() {
 void AIntermittentPlatform::BeginPlay() {
   this->Tags.Add("IntermittentPlatform");
   OurVisibleComponent->SetMaterial(0, IntermittentPlatformMaterial);
+ // if (DustParticles)
+  DustParticles->SetActive(false);
   Init();
 }
 
@@ -112,6 +111,7 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         m_actualState = State::OFF;
         //this->SetActorHiddenInGame(true);
         IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 1.0f);
+        //if (DustParticles)
         DustParticles->SetActive(true);
         this->Tags.Remove("Platform");
         m_elapsedTime = 0.0f;
@@ -126,6 +126,7 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         m_actualState = State::ON;
         //this->SetActorHiddenInGame(false);
         IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 0.0f);;
+        //if (DustParticles)
         DustParticles->SetActive(false);
         this->Tags.Add("Platform");
         m_elapsedTime = 0.0f;
