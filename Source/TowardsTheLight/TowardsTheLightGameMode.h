@@ -13,6 +13,7 @@ class APlayerOvi;
 class UInfoGameInstance;
 class AIntermittentManager;
 class AIntermittentPlatform;
+class ATutorial;
 /**
  * 
  */
@@ -123,5 +124,6 @@ private:
   TArray<AMobileEnemy *> m_levelMobileEnemies;
   TArray<AIntermittentManager *> m_levelIntermittentManagers;
   TArray<AIntermittentPlatform *> m_levelIntermittenPlatforms;
+  TArray<ATutorial *> m_levelTutorials;
   EndGameType state;
 };
