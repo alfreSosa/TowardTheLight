@@ -88,12 +88,6 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h">
       <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\MenuGameMode.h">
-      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\MyGameMode.h">
-      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\TowardsTheLight\OviPlayerController.h">
       <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
     </ClInclude>
@@ -139,6 +133,9 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\SoundManager.h">
       <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\NoPawn.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp">
@@ -180,12 +177,6 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\GameDataManager.cpp">
       <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\TowardsTheLight\MenuGameMode.cpp">
-      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TowardsTheLight\MyGameMode.cpp">
-      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\OviPlayerController.cpp">
       <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
     </ClCompile>
@@ -221,6 +212,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\SoundManager.cpp">
       <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\NoPawn.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

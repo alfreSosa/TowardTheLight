@@ -13,7 +13,7 @@ class TOWARDSTHELIGHT_API ACheckPoint : public AActor
 	
 public:	
   //properties
-  UPROPERTY()
+  UPROPERTY(EditAnywhere)
     UBoxComponent *Trigger;
   UPROPERTY(EditAnywhere)
     UStaticMeshComponent* CheckPointVisibleComponent;

@@ -51,9 +51,9 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\IntermittentPlatform.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\LocalizationManager.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Mechanism.cpp" />
-    <ClCompile Include="..\..\Source\TowardsTheLight\MenuGameMode.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\MobileEnemy.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\MobilePlatform.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\NoPawn.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\PickableItem.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Portal.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\SoundManager.cpp" />
@@ -71,9 +71,9 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\IntermittentPlatform.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\LocalizationManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Mechanism.h" />
-    <ClInclude Include="..\..\Source\TowardsTheLight\MenuGameMode.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\MobileEnemy.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\MobilePlatform.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\NoPawn.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\PickableItem.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Portal.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\rapidjson\document.h" />
@@ -96,13 +96,11 @@
     <None Include="..\..\Config\DefaultEditor.ini" />
     <None Include="..\..\Config\DefaultEngine.ini" />
     <None Include="..\..\Source\TowardsTheLight\TowardsTheLight.Build.cs" />
-    <ClCompile Include="..\..\Source\TowardsTheLight\MyGameMode.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\OviCameraActor.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\OviPlayerController.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\PlayerOvi.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\StaticPlatform.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\TowardsTheLight.cpp" />
-    <ClInclude Include="..\..\Source\TowardsTheLight\MyGameMode.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\OviCameraActor.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\OviPlayerController.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\PlayerOvi.h" />
