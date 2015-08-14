@@ -18,10 +18,13 @@
 #include "SoundManager.h"
 #include "InfoGameInstance.h"
 
+#include "NoPawn.h"
+
+
 ATowardsTheLightGameMode::ATowardsTheLightGameMode(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
   PrimaryActorTick.bCanEverTick = true;
 
-//  DefaultPawnClass = APlayerOvi::StaticClass();
+  DefaultPawnClass = ANoPawn::StaticClass();
   PlayerControllerClass = AOviPlayerController::StaticClass();
 
   static ConstructorHelpers::FObjectFinder<UBlueprint> SomeBlueprint(TEXT("Blueprint'/Game/UIElementsBP/LevelHUD.LevelHUD'"));
