@@ -7,7 +7,7 @@
 	},
 	"levels":
 	[
-		{"name":"Publishers_01_Lighting","orbs":0,"points":0},
+		{"name":"Publishers_01","orbs":0,"points":0},
 		{"name":"Publishers_02","orbs":0,"points":0},
 		{"name":"Publishers_03","orbs":0,"points":0},
 		{"name":"Publishers_04","orbs":0,"points":0},
@@ -20,6 +20,8 @@
 		{"name":"TEST_Tut_Mecan_Jordi","orbs":0,"points":0},
 		{"name":"TEST_Tutorial_Orientacion_Jordi","orbs":0,"points":0},
 		{"name":"TEST_Tut_Altar_Jordi","orbs":0,"points":0},
-		{"name":"TEST_THE_TRAP_KUNI","orbs":0,"points":0}
+		{"name":"TEST_THE_TRAP_KUNI","orbs":0,"points":0},
+		{"name":"DevelopmentLevel","orbs":0,"points":0},
+		{"name":"manu","orbs":0,"points":0}
 	]
 }
