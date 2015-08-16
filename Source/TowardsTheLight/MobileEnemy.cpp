@@ -16,6 +16,7 @@ AMobileEnemy::AMobileEnemy() {
   m_isMoving = false;
   //setting
   Fly = false;
+  HasRotation = true;
   RightDistance = 100.f;
   LeftDistance = 100.f;
   RightDelay = 1.f;
@@ -200,10 +201,12 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
     else{
       m_timer = 0;
       m_state = TO_LEFT;
-      FTransform transform = GetTransform();
-      FQuat quat = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 180));
-      transform.SetRotation(quat);
-      SetActorTransform(transform);
+      if (HasRotation){
+        FTransform transform = GetTransform();
+        FQuat quat = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 180));
+        transform.SetRotation(quat);
+        SetActorTransform(transform);
+      }
     }
     break;
   case LEFT_DELAY:
@@ -213,10 +216,12 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
     else{
       m_timer = 0;
       m_state = TO_RIGHT;
-      FTransform transform = GetTransform();
-      FQuat quat = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 180));
-      transform.SetRotation(quat);
-      SetActorTransform(transform);
+      if (HasRotation){
+        FTransform transform = GetTransform();
+        FQuat quat = transform.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, 180));
+        transform.SetRotation(quat);
+        SetActorTransform(transform);
+      }
     }
     break;
   }
