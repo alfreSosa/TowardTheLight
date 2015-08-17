@@ -6,9 +6,15 @@
 
 
 UInfoGameInstance::UInfoGameInstance(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer){
-  m_galaxyName = "";
+  m_pageName = "";
   m_levelName = "";
-  
+  m_maxScore = 0.f;
+  m_silverPercentage = 0.f;
+  m_goldPercentage = 0.f;
+  m_silverScore = 0.f;
+  m_goldScore = 0.f;
+
+
   /*
   //static ConstructorHelpers::FObjectFinder<USoundCue> soundLoader(TEXT("SoundCue'/Game/Sounds/Menu_track_Cue.Menu_track_Cue'"));
   //USoundCue* m_pruebaCue = soundLoader.Object;
@@ -21,11 +27,11 @@ UInfoGameInstance::UInfoGameInstance(const class FObjectInitializer& ObjectIniti
 
 }
 
-void UInfoGameInstance::SetCurrentGalaxy(FString galaxyName){
-  m_galaxyName = galaxyName;
+void UInfoGameInstance::SetCurrentPage(FString pageName){
+  m_pageName = pageName;
 }
-FString UInfoGameInstance::GetCurrentGalaxy(){
-  return m_galaxyName;
+FString UInfoGameInstance::GetCurrentPage(){
+  return m_pageName;
 }
 
 void UInfoGameInstance::SetCurrentLevel(FString levelName){
@@ -33,4 +39,27 @@ void UInfoGameInstance::SetCurrentLevel(FString levelName){
 }
 FString UInfoGameInstance::GetCurrentLevel(){
   return m_levelName;
+}
+
+void UInfoGameInstance::SetMaxScoreCurrentLevel(float maxScore){
+  m_maxScore = maxScore;
+  m_silverScore = maxScore * m_silverPercentage;
+  m_goldScore = maxScore * m_goldPercentage;
+}
+float UInfoGameInstance::GetMaxScoreCurrentLevel(){
+  return m_maxScore;
+}
+
+void UInfoGameInstance::SetSilverPercentage(float silverPercentage){
+  m_silverPercentage = silverPercentage;
+}
+float UInfoGameInstance::GetSilverScore(){
+  return m_silverScore;
+}
+
+void UInfoGameInstance::SetGoldPercentage(float goldPercentage){
+  m_goldPercentage = goldPercentage;
+}
+float UInfoGameInstance::GetGoldScore(){
+  return m_goldScore;
 }

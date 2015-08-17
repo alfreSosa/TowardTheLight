@@ -13,6 +13,7 @@
 		{"key":"PAUSE","value":"Pausa"},
 		{"key":"RESUME","value":"Continuar"},
 		{"key":"OPTIONS","value":"Opciones"},
+		{"key":"NEXT","value":"Siguiente"},
 		{"key":"VICTORY","value":"Victoria"},
 		{"key":"LOADING","value":"Cargando"},
 		{"key":"BACK","value":"Atrás"},
@@ -21,7 +22,6 @@
 		{"key":"EN","value":"English"},
 		{"key":"TITLE","value":"Towards the Light"},
 		{"key":"CREDITS","value":"Créditos"},
-		{"key":"CONTACT","value":"Contacto"},
 		{"key":"DESIGN","value":"Diseñadores"},
 		{"key":"ART","value":"Artistas"},
 		{"key":"CODE","value":"Programadores"},
@@ -29,6 +29,18 @@
 		{"key":"ARTMEMBERS","value":"- Pablo Bascón\n- Victor González\n- Carmen López\n- Álvaro Rivero\n- Santiago Roldán"},
 		{"key":"CODEMEMBERS","value":"- Manuel Cruz\n- Alfredo Sosa"},
 		{"key":"TUTOJUMP","value":"Pulsa en la región\nverde para saltar (WIP)"},
-		{"key":"TUTOMOVEMENT","value":"Desliza para moverte (WIP)"}
+		{"key":"TUTOMOVEMENT","value":"Desliza para moverte (WIP)"},
+		{"key":"TITLE1","value":"Título del\nnivel 1"},
+		{"key":"TITLE2","value":"Título del\nnivel 2"},
+		{"key":"TITLE3","value":"Título del\nnivel 3"},
+		{"key":"TITLE4","value":"Título del\nnivel 4"},
+		{"key":"TITLE5","value":"Título del\nnivel 5"},
+		{"key":"TITLE6","value":"Título del\nnivel 6"},
+		{"key":"TITLE7","value":"Título del\nnivel 7"},
+		{"key":"TITLE8","value":"Título del\nnivel 8"},
+		{"key":"TITLE9","value":"Título del\nnivel 9"},
+		{"key":"TITLE10","value":"Título del\nnivel 10"},
+		{"key":"TITLE11","value":"Título del\nnivel 11"},
+		{"key":"TITLE12","value":"Título del\nnivel 12"}
 	]
 }
