@@ -13,6 +13,7 @@
 		{"key":"PAUSE","value":"Pause"},
 		{"key":"RESUME","value":"Resume"},
 		{"key":"OPTIONS","value":"Options"},
+		{"key":"NEXT","value":"Next"},
 		{"key":"VICTORY","value":"Victory"},
 		{"key":"LOADING","value":"Loading"},
 		{"key":"BACK","value":"Back"},
@@ -21,7 +22,6 @@
 		{"key":"EN","value":"English"},
 		{"key":"TITLE","value":"Towards the Light"},
 		{"key":"CREDITS","value":"Credits"},
-		{"key":"CONTACT","value":"Contact"},
 		{"key":"DESIGN","value":"Designers"},
 		{"key":"ART","value":"Artists"},
 		{"key":"CODE","value":"Programmers"},
@@ -29,6 +29,18 @@
 		{"key":"ARTMEMBERS","value":"- Pablo Bascón\n- Victor González\n- Carmen López\n- Álvaro Rivero\n- Santiago Roldán"},
 		{"key":"CODEMEMBERS","value":"- Manuel Cruz\n- Alfredo Sosa"},
 		{"key":"TUTOJUMP","value":"Tap in the green\nregion to jump (WIP)"},
-		{"key":"TUTOMOVEMENT","value":"Swipe to move (WIP)"}
+		{"key":"TUTOMOVEMENT","value":"Swipe to move (WIP)"},
+		{"key":"TITLE1","value":"Level 1 title"},
+		{"key":"TITLE2","value":"Level 2 title"},
+		{"key":"TITLE3","value":"Level 3 title"},
+		{"key":"TITLE4","value":"Level 4 title"},
+		{"key":"TITLE5","value":"Level 5 title"},
+		{"key":"TITLE6","value":"Level 6 title"},
+		{"key":"TITLE7","value":"Level 7 title"},
+		{"key":"TITLE8","value":"Level 8 title"},
+		{"key":"TITLE9","value":"Level 9 title"},
+		{"key":"TITLE10","value":"Level 10 title"},
+		{"key":"TITLE11","value":"Level 11 title"},
+		{"key":"TITLE12","value":"Level 12 title"}
 	]
 }
