@@ -61,12 +61,12 @@ void AIntermittentPlatform::Init() {
 
   if (StartVisible) {
     //this->SetActorHiddenInGame(false);
-    IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 0.0f);
+    IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 0.0f);
     this->Tags.Add("Platform");
   }
   else {
     //this->SetActorHiddenInGame(true);
-    IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 1.0f);
+    IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 1.0f);
     this->Tags.Remove("Platform");
   }
 
@@ -110,7 +110,7 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
        
         m_actualState = State::OFF;
         //this->SetActorHiddenInGame(true);
-        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 1.0f);
+        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 1.0f);
         //if (DustParticles)
         DustParticles->SetActive(true);
         this->Tags.Remove("Platform");
@@ -125,7 +125,7 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         m_isVisible = true;
         m_actualState = State::ON;
         //this->SetActorHiddenInGame(false);
-        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_interm", 0.0f);;
+        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 0.0f);;
         //if (DustParticles)
         DustParticles->SetActive(false);
         this->Tags.Add("Platform");
