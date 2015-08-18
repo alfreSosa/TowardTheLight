@@ -174,7 +174,6 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
     m_player->SetKey(false, FLinearColor(1, 1, 1));
     state = EndGameType::NONE;
 
-
     m_actualCheckPoint.ItemsPicked.Empty();
     m_actualCheckPoint.PlayerHasKey = false;
     m_actualCheckPoint.ColorKey = FLinearColor(1, 1, 1);
