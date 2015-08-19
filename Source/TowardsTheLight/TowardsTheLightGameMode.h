@@ -107,6 +107,11 @@ public:
   UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
     void ChangeLanguage(FString language);
 
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    FString GetPageName();
+  UFUNCTION(BlueprintCallable, Category = TTLMenuFunctions)
+    void SetPageName(FString pageName);
+
   //Tutorial
   UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
     void EnterTutorialEvent(const FString &Key);

@@ -24,6 +24,7 @@ GameDataManager::GameDataManager() {
   m_music = NONE;
   m_effects = NONE;
   m_language = "";
+  m_pageName = "";
 
   FFileHelper::LoadFileToString(m_data, *m_filePath);
   Document doc;
@@ -351,6 +352,44 @@ void GameDataManager::SetLanguage(FString language){
             if (doc["general"]["language"].IsString()){
               doc["general"]["language"].SetString(TCHAR_TO_ANSI(*language), language.Len());
               m_language = language;
+            }
+
+  StringBuffer buffer;
+  Writer<StringBuffer> writer(buffer);
+  doc.Accept(writer);
+  m_data = buffer.GetString();
+
+  SavedGame();
+}
+
+FString GameDataManager::GetPageName(){
+  if (m_pageName == ""){
+    Document doc;
+    doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+    if (!doc.HasParseError())
+      if (doc.IsObject())
+        if (doc.HasMember("general"))
+          if (doc["general"].IsObject())
+            if (doc["general"].HasMember("page"))
+              if (doc["general"]["page"].IsString())
+                m_pageName = doc["general"]["page"].GetString();
+  }
+
+  return m_pageName;
+}
+void GameDataManager::SetPageName(FString pageName){
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+  if (!doc.HasParseError())
+    if (doc.IsObject())
+      if (doc.HasMember("general"))
+        if (doc["general"].IsObject())
+          if (doc["general"].HasMember("page"))
+            if (doc["general"]["page"].IsString()){
+              doc["general"]["page"].SetString(TCHAR_TO_ANSI(*pageName), pageName.Len());
+              m_pageName = pageName;
             }
 
   StringBuffer buffer;
