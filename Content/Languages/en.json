@@ -61,6 +61,11 @@
 		{"key":"TITLE29","value":"Level 29 title"},
 		{"key":"TITLE30","value":"Level 30 title"},
 		{"key":"TITLE31","value":"Level 31 title"},
-		{"key":"TITLE32","value":"Level 32 title"}
+		{"key":"TITLE32","value":"Level 32 title"},
+		{"key":"TIP0","value":"Tip 0"},
+		{"key":"TIP1","value":"Tip 1"},
+		{"key":"TIP2","value":"Tip 2"},
+		{"key":"TIP3","value":"Tip 3"},
+		{"key":"TIP4","value":"Tip 4"}
 	]
 }

@@ -6,7 +6,7 @@
 
 
 UInfoGameInstance::UInfoGameInstance(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer){
-  m_pageName = "";
+  m_pageOpen = false;
   m_levelName = "";
   m_maxScore = 0.f;
   m_silverPercentage = 0.f;
@@ -27,11 +27,11 @@ UInfoGameInstance::UInfoGameInstance(const class FObjectInitializer& ObjectIniti
 
 }
 
-void UInfoGameInstance::SetCurrentPage(FString pageName){
-  m_pageName = pageName;
+void UInfoGameInstance::SetPageOpen(){
+  m_pageOpen = true;
 }
-FString UInfoGameInstance::GetCurrentPage(){
-  return m_pageName;
+bool UInfoGameInstance::IsPageOpen(){
+  return m_pageOpen;
 }
 
 void UInfoGameInstance::SetCurrentLevel(FString levelName){
