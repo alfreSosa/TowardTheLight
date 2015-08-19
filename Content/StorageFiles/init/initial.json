@@ -3,7 +3,8 @@
 	{
 		"music": true,
 		"effects": true,
-		"language": "en"
+		"language": "en",
+		"page": "Page1"
 	},
 	"levels":
 	[
