@@ -61,6 +61,11 @@
 		{"key":"TITLE29","value":"Título del\nnivel 29"},
 		{"key":"TITLE30","value":"Título del\nnivel 30"},
 		{"key":"TITLE31","value":"Título del\nnivel 31"},
-		{"key":"TITLE32","value":"Título del\nnivel 32"}
+		{"key":"TITLE32","value":"Título del\nnivel 32"},
+		{"key":"TIP0","value":"Consejo 0"},
+		{"key":"TIP1","value":"Consejo 1"},
+		{"key":"TIP2","value":"Consejo 2"},
+		{"key":"TIP3","value":"Consejo 3"},
+		{"key":"TIP4","value":"Consejo 4"}
 	]
 }

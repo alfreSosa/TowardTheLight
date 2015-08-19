@@ -260,6 +260,16 @@ void ATowardsTheLightGameMode::ChangeLanguage(FString language){
   GameDataManager::Instance()->SetLanguage(language);
 }
 
+FString ATowardsTheLightGameMode::GetPageName(){
+  return GameDataManager::Instance()->GetPageName();
+}
+
+void ATowardsTheLightGameMode::SetPageName(FString pageName){
+  GameDataManager::Instance()->SetPageName(pageName);
+}
+
+
+
 void ATowardsTheLightGameMode::FindActualPlayer() {
   for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
     if (ActorItr->ActorHasTag("Player")) {
@@ -288,6 +298,5 @@ void ATowardsTheLightGameMode::FindActualPlayer() {
     m_levelIntermittentManagers.Add(*manaItr);
   for (TActorIterator< AIntermittentPlatform > interItr(GetWorld()); interItr; ++interItr)
     m_levelIntermittenPlatforms.Add(*interItr);
-
 }
 

@@ -17,9 +17,9 @@ class TOWARDSTHELIGHT_API UInfoGameInstance : public UGameInstance
 
 public:
   UFUNCTION(BlueprintCallable, Category = "GameInfo")
-    void SetCurrentPage(FString pageName);
+    void SetPageOpen();
   UFUNCTION(BlueprintCallable, Category = "GameInfo")
-    FString GetCurrentPage();
+    bool IsPageOpen();
 
   UFUNCTION(BlueprintCallable, Category = "GameInfo")
     void SetCurrentLevel(FString levelName);
@@ -41,6 +41,7 @@ public:
     float GetGoldScore();
 
 private:
+  bool m_pageOpen;
   FString m_pageName;
   FString m_levelName;
   float m_maxScore;

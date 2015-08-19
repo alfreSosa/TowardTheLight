@@ -34,6 +34,9 @@ public:
   FString GetLanguage();
   void SetLanguage(FString language);
 
+  FString GetPageName();
+  void SetPageName(FString pageName);
+
 protected:
   GameDataManager();
   ~GameDataManager();
@@ -48,4 +51,5 @@ private:
   BinaryOption m_music;
   BinaryOption m_effects;
   FString m_language;
+  FString m_pageName;
 };
