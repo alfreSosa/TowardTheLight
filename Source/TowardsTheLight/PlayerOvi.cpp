@@ -182,8 +182,8 @@ void APlayerOvi::BeginPlay(){
     const USkeletalMeshSocket *socket = Mesh->GetSocketByName("Puntodeacople_Baston");
     if (socket)
       socket->AttachActor(m_stick, Mesh);
-    m_colorKey = FLinearColor(FVector(1.0f));
-    m_stick->SetColor(FLinearColor(FVector(1.0f)), 5.0f);
+    m_colorKey = FLinearColor(FVector(0.5f));
+    m_stick->SetColor(FLinearColor(FVector(0.5f)), 5.0f);
   }
 }
 

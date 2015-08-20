@@ -14,6 +14,8 @@ public:
 
   UPROPERTY(EditAnywhere)
     UStaticMeshComponent* Stick;
+  UPROPERTY(EditAnywhere)
+    UStaticMeshComponent* EffectsMesh;
 
 	//UE4 Functions
 	AStick();
@@ -23,5 +25,6 @@ public:
   void SetColor(FLinearColor colorKey, float shinnes);
 private:
   UMaterialInstanceDynamic *StickMaterial;
+  UMaterialInstanceDynamic *EffectsMaterial;
 	
 };
