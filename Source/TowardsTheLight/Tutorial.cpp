@@ -6,11 +6,17 @@
 ATutorial::ATutorial() {
   //initialize public properties
   //trigger component
-  Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
-  Trigger->SetCollisionProfileName(FName(TEXT("OverlapOnlyPawn")));
-  Trigger->bHiddenInGame = true;
-  Trigger->bGenerateOverlapEvents = true;
-  RootComponent = Trigger;
+  TriggerIn = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerIn"));
+  TriggerIn->SetCollisionProfileName(FName(TEXT("OverlapOnlyPawn")));
+  TriggerIn->bHiddenInGame = true;
+  TriggerIn->bGenerateOverlapEvents = true;
+  TriggerIn->AttachTo(RootComponent);
+
+  TriggerOut = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerOut"));
+  TriggerOut->SetCollisionProfileName(FName(TEXT("OverlapOnlyPawn")));
+  TriggerOut->bHiddenInGame = true;
+  TriggerOut->bGenerateOverlapEvents = true;
+  TriggerOut->AttachTo(RootComponent);
   //initialize private properties
   m_loaded = false;
   m_enter = false;
@@ -28,22 +34,22 @@ void ATutorial::BeginPlay() {
 }
 
 void ATutorial::RegisterDelegate() {
-  if (!Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &ATutorial::OnBeginTriggerOverlap)) {
-    Trigger->OnComponentBeginOverlap.AddDynamic(this, &ATutorial::OnBeginTriggerOverlap);
+  if (!TriggerIn->OnComponentBeginOverlap.IsAlreadyBound(this, &ATutorial::OnBeginTriggerOverlap)) {
+    TriggerIn->OnComponentBeginOverlap.AddDynamic(this, &ATutorial::OnBeginTriggerOverlap);
   }
 
-  if (!Trigger->OnComponentEndOverlap.IsAlreadyBound(this, &ATutorial::OnTriggerOverlapEnd)) {
-    Trigger->OnComponentEndOverlap.AddDynamic(this, &ATutorial::OnTriggerOverlapEnd);
+  if (!TriggerOut->OnComponentEndOverlap.IsAlreadyBound(this, &ATutorial::OnTriggerOverlapEnd)) {
+    TriggerOut->OnComponentEndOverlap.AddDynamic(this, &ATutorial::OnTriggerOverlapEnd);
   }
 }
 
 void ATutorial::EndPlay(const EEndPlayReason::Type EndPlayReason) {
-  if (Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &ATutorial::OnBeginTriggerOverlap))  {
-    Trigger->OnComponentBeginOverlap.RemoveDynamic(this, &ATutorial::OnBeginTriggerOverlap);
+  if (TriggerIn->OnComponentBeginOverlap.IsAlreadyBound(this, &ATutorial::OnBeginTriggerOverlap))  {
+    TriggerIn->OnComponentBeginOverlap.RemoveDynamic(this, &ATutorial::OnBeginTriggerOverlap);
   }
 
-  if (Trigger->OnComponentEndOverlap.IsAlreadyBound(this, &ATutorial::OnTriggerOverlapEnd))  {
-    Trigger->OnComponentEndOverlap.RemoveDynamic(this, &ATutorial::OnTriggerOverlapEnd);
+  if (TriggerOut->OnComponentEndOverlap.IsAlreadyBound(this, &ATutorial::OnTriggerOverlapEnd))  {
+    TriggerOut->OnComponentEndOverlap.RemoveDynamic(this, &ATutorial::OnTriggerOverlapEnd);
   }
   Super::EndPlay(EndPlayReason);
 }
