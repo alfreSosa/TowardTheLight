@@ -11,8 +11,10 @@ class TOWARDSTHELIGHT_API ATutorial : public AActor {
 	
 public:	
   //properties
-  UPROPERTY()
-    UBoxComponent *Trigger;
+  UPROPERTY(EditAnywhere)
+    UBoxComponent *TriggerIn;
+  UPROPERTY(EditAnywhere)
+    UBoxComponent *TriggerOut;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TutorialText)
     FString Key;
   //functions
