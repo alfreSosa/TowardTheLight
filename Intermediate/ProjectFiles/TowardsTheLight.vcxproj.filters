@@ -134,7 +134,7 @@
       <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\TowardsTheLight\NoPawn.h">
-      <Filter>Source</Filter>
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -214,7 +214,7 @@
       <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\NoPawn.cpp">
-      <Filter>Source</Filter>
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
