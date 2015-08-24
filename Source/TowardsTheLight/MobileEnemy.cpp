@@ -95,7 +95,7 @@ void AMobileEnemy::BeginPlay() {
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_ENEMY_COLLISION_PERCENT;
   m_capsuleRadiousPadding = m_capsuleRadious * 0.55f;
   m_lastPosition = GetActorLocation();
-  
+  m_rightVector = GetActorRightVector();
   {
     FVector right = GetActorRightVector();
     right = right;
@@ -115,12 +115,12 @@ void AMobileEnemy::RestoreInitialState()
   SetActorTransform(m_initialStatus);
   m_currentDistance = LeftDistance;
   m_lastPosition = GetActorLocation();
-  m_isMoving = false;
+  m_isMoving = !HasTrigger;
   m_timer = 0;
   m_state = INITIAL_DELAY;
   m_initMovement = false;
   m_actualJumpSpeed = 0.0f;
-  m_enableGravity = true;
+  m_enableGravity = (Fly) ? false : true;
   m_rightVector = GetActorRightVector();
 }
 
@@ -155,7 +155,7 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
     else{
       m_timer = 0;
       m_state = TO_RIGHT;
-      m_rightVector = GetActorRightVector();
+      //m_rightVector = GetActorRightVector();
     }
     break;
   case TO_RIGHT:{
