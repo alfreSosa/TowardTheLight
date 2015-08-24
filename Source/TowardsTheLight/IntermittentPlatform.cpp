@@ -23,6 +23,7 @@ AIntermittentPlatform::AIntermittentPlatform() {
   //public
   NumberOfIntermitences = 0;
   InitialTimeDelay = TimeInStateNoVisible = TimeInStateVisible = 1.0f;
+  TimeToStartFeedBack = 0.5f;
   EndTimeDelay = 0.0f;
   Loop = StartVisible = Enabled = true;
   //private
@@ -76,6 +77,7 @@ void AIntermittentPlatform::Init() {
   m_countIntermittences = (NumberOfIntermitences == 0) ? false : true;
   m_elapsedTime = 0.0f;
   m_finished = false;
+
 }
 
 void AIntermittentPlatform::Tick(float DeltaSeconds) {
@@ -100,6 +102,12 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
       }
       break;
     case AIntermittentPlatform::ON:
+      if (m_elapsedTime >= TimeToStartFeedBack) {
+        float t = 0 + m_elapsedTime / TimeInStateVisible;
+        t = (t > 1.0f) ? 1.0f : t;
+        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", t);
+      }
+
       if (m_elapsedTime >= TimeInStateVisible) {
         if (m_countIntermittences)
           m_counterIntermittences--;
@@ -115,9 +123,16 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         //DustParticles->SetActive(true);
         this->Tags.Remove("Platform");
         m_elapsedTime = 0.0f;
+
       }
       break;
     case AIntermittentPlatform::OFF:
+      if (m_elapsedTime >= TimeToStartFeedBack) {
+        float t = 1 - m_elapsedTime / TimeInStateNoVisible;
+        t = (t <= 0.0f) ? 0.0f : t;
+        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", t);
+      }
+
       if (m_elapsedTime >= TimeInStateNoVisible) {
         if (m_countIntermittences)
           m_counterIntermittences--;

@@ -30,7 +30,8 @@ public:
     float TimeInStateVisible;
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     float TimeInStateNoVisible;
-
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
+    float TimeToStartFeedBack;
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformState)
     bool StartVisible;
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformState)
