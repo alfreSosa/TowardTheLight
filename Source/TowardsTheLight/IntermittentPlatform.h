@@ -60,5 +60,5 @@ private:
   bool m_isVisible;
   bool Enabled;
   bool m_finished;
-  UParticleSystemComponent *DustParticles;
+  //UParticleSystemComponent *DustParticles;
 };
