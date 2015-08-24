@@ -24,6 +24,15 @@ ACheckPoint::ACheckPoint()
   //initialize private properties
   m_loaded = false;
   m_enter = false;
+
+  //particulas
+  //visible
+  FireParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("PickedParticles"));
+  FireParticles->bAutoActivate = false;
+  static ConstructorHelpers::FObjectFinder<UParticleSystem> ParticleAsset(TEXT("/Game/Models/CheckPoint/particulas/particulas_fuego_animadoazul2.particulas_fuego_animadoazul2"));
+  if (ParticleAsset.Succeeded())
+    FireParticles->SetTemplate(ParticleAsset.Object);
+  FireParticles->AttachTo(CheckPointVisibleComponent);
 }
 
 void ACheckPoint::BeginPlay()
@@ -33,6 +42,8 @@ void ACheckPoint::BeginPlay()
   m_loaded = false;
   m_enter = false;
   m_gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
+  FireParticles->SetActive(false);
+
 }
 
 void ACheckPoint::Tick(float DeltaTime)
@@ -58,6 +69,7 @@ void ACheckPoint::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimiti
       m_enter = true;
       GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GET CHECKPOINT")));
       //rellenar checkPoint ATowardsTheLightGameMode
+      FireParticles->SetActive(true);
       m_gameMode->SetPlayerCheckPoint(player, player->GetTransform(), player->PlayerisToRight());
       m_gameMode->SetPlayerKey(player->HasKey(), player->GetColorKey());
       for (TActorIterator<APickableItem> ActorItr(GetWorld()); ActorItr; ++ActorItr)
@@ -88,6 +100,7 @@ void ACheckPoint::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 void ACheckPoint::RestoreInitialState() {
   m_loaded = false;
   m_enter = false;
+  FireParticles->SetActive(false);
 }
 
 

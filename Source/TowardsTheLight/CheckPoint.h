@@ -17,6 +17,8 @@ public:
     UBoxComponent *Trigger;
   UPROPERTY(EditAnywhere)
     UStaticMeshComponent* CheckPointVisibleComponent;
+  UPROPERTY(EditAnywhere)
+    UParticleSystemComponent *FireParticles;
   //functions
   ACheckPoint();
   virtual void BeginPlay() override;
