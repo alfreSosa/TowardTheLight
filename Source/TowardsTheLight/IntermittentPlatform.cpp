@@ -13,16 +13,17 @@ AIntermittentPlatform::AIntermittentPlatform() {
 
   //Init default properties
   //visible
-  DustParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("DissapearParticles"));
+ /* DustParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("DissapearParticles"));
   DustParticles->AttachTo(OurVisibleComponent);
   DustParticles->bAutoActivate = false;
   static ConstructorHelpers::FObjectFinder<UParticleSystem> ParticleAsset(TEXT("/Game/Models/Plataforma_Intermit/Plat_int_smoke.Plat_int_smoke"));
   if (ParticleAsset.Succeeded())
-    DustParticles->SetTemplate(ParticleAsset.Object);
+    DustParticles->SetTemplate(ParticleAsset.Object);*/
 
   //public
   NumberOfIntermitences = 0;
   InitialTimeDelay = TimeInStateNoVisible = TimeInStateVisible = 1.0f;
+  TimeToStartFeedBack = 0.5f;
   EndTimeDelay = 0.0f;
   Loop = StartVisible = Enabled = true;
   //private
@@ -48,7 +49,7 @@ void AIntermittentPlatform::BeginPlay() {
   this->Tags.Add("IntermittentPlatform");
   OurVisibleComponent->SetMaterial(0, IntermittentPlatformMaterial);
  // if (DustParticles)
-  DustParticles->SetActive(false);
+  //DustParticles->SetActive(false);
   Init();
 }
 
@@ -76,6 +77,7 @@ void AIntermittentPlatform::Init() {
   m_countIntermittences = (NumberOfIntermitences == 0) ? false : true;
   m_elapsedTime = 0.0f;
   m_finished = false;
+
 }
 
 void AIntermittentPlatform::Tick(float DeltaSeconds) {
@@ -100,6 +102,12 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
       }
       break;
     case AIntermittentPlatform::ON:
+      if (m_elapsedTime >= TimeToStartFeedBack) {
+        float t = 0 + m_elapsedTime / TimeInStateVisible;
+        t = (t > 1.0f) ? 1.0f : t;
+        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", t);
+      }
+
       if (m_elapsedTime >= TimeInStateVisible) {
         if (m_countIntermittences)
           m_counterIntermittences--;
@@ -112,12 +120,19 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         //this->SetActorHiddenInGame(true);
         IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 1.0f);
         //if (DustParticles)
-        DustParticles->SetActive(true);
+        //DustParticles->SetActive(true);
         this->Tags.Remove("Platform");
         m_elapsedTime = 0.0f;
+
       }
       break;
     case AIntermittentPlatform::OFF:
+      if (m_elapsedTime >= TimeToStartFeedBack) {
+        float t = 1 - m_elapsedTime / TimeInStateNoVisible;
+        t = (t <= 0.0f) ? 0.0f : t;
+        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", t);
+      }
+
       if (m_elapsedTime >= TimeInStateNoVisible) {
         if (m_countIntermittences)
           m_counterIntermittences--;
@@ -127,7 +142,7 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         //this->SetActorHiddenInGame(false);
         IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 0.0f);;
         //if (DustParticles)
-        DustParticles->SetActive(false);
+        //DustParticles->SetActive(false);
         this->Tags.Add("Platform");
         m_elapsedTime = 0.0f;
       }

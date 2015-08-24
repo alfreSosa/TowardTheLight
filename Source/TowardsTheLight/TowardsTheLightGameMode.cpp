@@ -163,6 +163,10 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
         }
       }
     }
+    int sizeEne = m_levelMobileEnemies.Num();
+    //restaurar enemigos
+    for (int i = 0; i < sizeEne; ++i)
+      m_levelMobileEnemies[i]->RestoreInitialState();
   }
   else {
     //ir reiniciando todos los objetos nuevos
