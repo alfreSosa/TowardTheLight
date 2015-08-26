@@ -34,6 +34,7 @@ AMobileEnemy::AMobileEnemy() {
   m_actualJumpSpeed = m_accelerationJump = 0.0f;
   m_enableGravity = true;
   m_player = nullptr;
+  m_tickCounter = 0;
   //Capsule
   CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
   CapsuleComponent->InitCapsuleSize(DEFAULT_ENEMY_CAPSULE_RADIOUS, DEFAULT_ENEMY_CAPSULE_HEIGHT);
@@ -122,6 +123,7 @@ void AMobileEnemy::RestoreInitialState()
   m_actualJumpSpeed = 0.0f;
   m_enableGravity = (Fly) ? false : true;
   m_rightVector = GetActorRightVector();
+  m_tickCounter = 0;
 }
 
 void AMobileEnemy::Tick(float DeltaSeconds) {
@@ -139,6 +141,7 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
     }
   }
   if (!HasTrigger || (HasTrigger && m_initMovement)) {
+    m_tickCounter++;
     doMovement(DeltaSeconds);
     CalculateGravity(DeltaSeconds);
     CheckCollision();
@@ -240,7 +243,7 @@ void AMobileEnemy::RegisterDelegate() {
 void AMobileEnemy::OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
   if (OtherActor->ActorHasTag("Player")){
     ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
-    if (gameMode)
+    if (gameMode && m_tickCounter > 2)
       gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
   }
 }
