@@ -222,6 +222,18 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
   }
 }
 
+void ATowardsTheLightGameMode::RestoreGameMode() {
+  m_countOrbs = 0.0f;
+  m_actualPoints = 0.0f;
+  state = EndGameType::NONE;
+
+  m_actualCheckPoint.IsPicked = false;
+  m_actualCheckPoint.Orbs = m_actualCheckPoint.Points = 0;
+  m_actualCheckPoint.ItemsPicked.Empty();
+  m_actualCheckPoint.PlayerHasKey = false;
+  m_actualCheckPoint.ColorKey = FLinearColor(1, 1, 1);
+}
+
 float ATowardsTheLightGameMode::GetLevelOrbs(FString levelName) {
   return GameDataManager::Instance()->GetOrbsLevel(levelName);
 }
@@ -271,8 +283,6 @@ FString ATowardsTheLightGameMode::GetPageName(){
 void ATowardsTheLightGameMode::SetPageName(FString pageName){
   GameDataManager::Instance()->SetPageName(pageName);
 }
-
-
 
 void ATowardsTheLightGameMode::FindActualPlayer() {
   for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)

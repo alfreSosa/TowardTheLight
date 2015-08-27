@@ -5,6 +5,7 @@
 
 ATutorial::ATutorial() {
   //initialize public properties
+  AutoLoad = false;
   //trigger component
   TriggerIn = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerIn"));
   TriggerIn->SetCollisionProfileName(FName(TEXT("OverlapOnlyPawn")));
@@ -31,6 +32,10 @@ void ATutorial::BeginPlay() {
 
   m_loaded = false;
   m_enter = false;
+  if (AutoLoad) {
+    m_enter = true;
+    m_gameMode->EnterTutorialEvent(Key);
+  }
 }
 
 void ATutorial::RegisterDelegate() {
