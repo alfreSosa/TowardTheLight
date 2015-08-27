@@ -77,6 +77,8 @@ public:
     bool IsCheckPointPicked();
   UFUNCTION(BlueprintCallable, Category = TTLFunctions)
     void RestoreLevel(bool checkPoint);
+  UFUNCTION(BlueprintCallable, Category = TTLFunctions)
+    void RestoreGameMode();
   void SetPlayerCheckPoint(APlayerOvi *player, FTransform playerStatus, bool right);
   void SetPlayerKey(bool hasKey, FLinearColor colorKey);
   void AddItemPicked(APickableItem *item);

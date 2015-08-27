@@ -17,6 +17,8 @@ public:
     UBoxComponent *TriggerOut;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TutorialText)
     FString Key;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TutorialInit)
+    bool AutoLoad;
   //functions
 	ATutorial();
 	virtual void BeginPlay() override;
