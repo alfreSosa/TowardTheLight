@@ -46,6 +46,7 @@ private:
   APlayerOvi *m_player;
   FVector m_lastPosition;
 
+  int m_tickCounter;
   //restore data variables
   FTransform m_initialStatus;
 
