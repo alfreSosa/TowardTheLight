@@ -9,6 +9,7 @@
 AStaticEnemy::AStaticEnemy() {
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
+  OurVisibleComponent->SetMobility(EComponentMobility::Movable);
   OurVisibleComponent->AttachTo(RootComponent);
   OurVisibleComponent->bGenerateOverlapEvents = true;
   OurVisibleComponent->CastShadow = false;
