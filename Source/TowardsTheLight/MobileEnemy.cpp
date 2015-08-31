@@ -30,6 +30,7 @@ AMobileEnemy::AMobileEnemy() {
   m_state = INITIAL_DELAY;
   m_currentDistance = 0;
   m_initMovement = false;
+  m_initialMovement = true;
   m_jumpSpeed = 0.0f;
   m_actualJumpSpeed = m_accelerationJump = 0.0f;
   m_enableGravity = true;
@@ -105,7 +106,7 @@ void AMobileEnemy::BeginPlay() {
     m_leftPosition = (m_lastPosition + LeftDistance * -right) * right;
   }
   m_isMoving = !HasTrigger;
-
+  m_initialMovement = m_isMoving;
   m_initialStatus = GetTransform();
   if (Fly)
     m_enableGravity = false;
@@ -117,7 +118,7 @@ void AMobileEnemy::RestoreInitialState()
   SetActorTransform(m_initialStatus);
   m_currentDistance = LeftDistance;
   m_lastPosition = GetActorLocation();
-  m_isMoving = !HasTrigger;
+  m_isMoving = m_initialMovement;
   m_timer = 0;
   m_state = INITIAL_DELAY;
   m_initMovement = false;
@@ -142,7 +143,8 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
     }
   }
   if (!HasTrigger || (HasTrigger && m_initMovement)) {
-    m_tickCounter++;
+    if (DeltaSeconds >= 0.005f)
+      m_tickCounter++;
     doMovement(DeltaSeconds);
     CalculateGravity(DeltaSeconds);
     CheckCollision();
@@ -244,8 +246,10 @@ void AMobileEnemy::RegisterDelegate() {
 void AMobileEnemy::OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
   if (OtherActor->ActorHasTag("Player")){
     ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
-    if (gameMode && m_tickCounter > 2)
-      gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
+    if (gameMode && m_tickCounter > 5) {
+      if (gameMode->EndGameBP() > -0.05)
+        gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
+    }
   }
 }
 
