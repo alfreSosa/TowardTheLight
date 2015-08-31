@@ -50,10 +50,16 @@
 		{"key":"TITLE18","value":"Level 18 title"},
 		{"key":"TITLE19","value":"Level 19 title"},
 		{"key":"TITLE20","value":"Level 20 title"},
-		{"key":"TIP0","value":"Tip 0"},
-		{"key":"TIP1","value":"Tip 1"},
-		{"key":"TIP2","value":"Tip 2"},
-		{"key":"TIP3","value":"Tip 3"},
-		{"key":"TIP4","value":"Tip 4"}
+		{"key":"TIP0","value":"Find the three Orbs of each world!"},
+		{"key":"TIP1","value":"Swipe on the left side of the screen to move"},
+		{"key":"TIP2","value":"Tap on the right side of the screen to jump"},
+		{"key":"TIP3","value":"You can't activate the Light Tower with your feet!"},
+		{"key":"TIP4","value":"Activate the devices when they are glowing"},
+		{"key":"TIP5","value":"Get enough Orbs to unlock new levels"},
+		{"key":"TIP6","value":"Collect every coin to reach the highest score"},
+		{"key":"TIP7","value":"Jump to the upper side, or fall to the bottom side, and you will find a new perspective of the world"},
+		{"key":"TIP8","value":"Avoid thorn plants!"},
+		{"key":"TIP9","value":"Use the portals to reach remote areas"},
+		{"key":"TIP10","value":"If you can't activate the Light Tower, find an Altar where light your staff"}
 	]
 }
