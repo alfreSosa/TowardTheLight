@@ -143,8 +143,7 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
     }
   }
   if (!HasTrigger || (HasTrigger && m_initMovement)) {
-    if (DeltaSeconds >= 0.005f)
-      m_tickCounter++;
+    m_tickCounter++;
     doMovement(DeltaSeconds);
     CalculateGravity(DeltaSeconds);
     CheckCollision();
