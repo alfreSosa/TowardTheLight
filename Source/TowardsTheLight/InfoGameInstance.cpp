@@ -16,7 +16,6 @@ UInfoGameInstance::UInfoGameInstance(const class FObjectInitializer& ObjectIniti
 
   m_initialScreen = true;
 
-
   /*
   //static ConstructorHelpers::FObjectFinder<USoundCue> soundLoader(TEXT("SoundCue'/Game/Sounds/Menu_track_Cue.Menu_track_Cue'"));
   //USoundCue* m_pruebaCue = soundLoader.Object;
@@ -72,4 +71,3 @@ void UInfoGameInstance::SetInitialScreen(bool value){
 bool UInfoGameInstance::GetInitialScreen(){
   return m_initialScreen;
 }
-

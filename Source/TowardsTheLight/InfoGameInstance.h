@@ -44,6 +44,7 @@ public:
     void SetInitialScreen(bool value);
   UFUNCTION(BlueprintCallable, Category = "GameInfo")
     bool GetInitialScreen();
+
 private:
   bool m_pageOpen;
   FString m_pageName;
