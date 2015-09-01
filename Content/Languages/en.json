@@ -8,6 +8,7 @@
 		{"key":"QUIT","value":"Quit?"},
 		{"key":"NO","value":"No"},
 		{"key":"YES","value":"Yes"},
+		{"key":"SKIP","value":"Skip"},
 		{"key":"DEFEAT","value":"Defeat"},
 		{"key":"EXIT","value":"Exit"},
 		{"key":"PAUSE","value":"Pause"},

@@ -8,6 +8,7 @@
 		{"key":"QUIT","value":"¿Salir?"},
 		{"key":"NO","value":"No"},
 		{"key":"YES","value":"Si"},
+		{"key":"SKIP","value":"Saltar"},
 		{"key":"DEFEAT","value":"Derrota"},
 		{"key":"EXIT","value":"Salir"},
 		{"key":"PAUSE","value":"Pausa"},
