@@ -132,6 +132,8 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
   m_lastPosition = GetActorLocation();
 
+  EnemyAnimationMesh->bPauseAnims = TimeManager::Instance()->IsPaused();
+
   if (!m_player) {
     for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
       if (ActorItr->ActorHasTag("Player")) {
