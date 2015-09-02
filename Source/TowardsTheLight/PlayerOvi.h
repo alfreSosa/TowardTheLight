@@ -28,6 +28,8 @@ public:
   bool HasKey();
   FLinearColor GetColorKey();
   void EnabledPushButton();
+  void EnabledPickPortal();
+  void EnabledPickAltar();
   void ResetToCheckPoint(FTransform playerTransform, bool right);
 
   //public editor functions
@@ -59,6 +61,10 @@ public:
     bool PlayerisToRight();
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
     bool PlayerisPushinButton();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool PlayerisPickingPortal();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool PlayerisPickingAltar();
   UFUNCTION(BlueprintCallable, Category = "PlayerState")
     bool isPlayerPaused();
 
@@ -136,7 +142,11 @@ private:
 
   //animation boton
   bool m_isPushingButton;
+  bool m_isPickingAltar;
+  bool m_isPickingPortal;
   float m_elapsedButton;
+  float m_elapsedPortal;
+  float m_elapsedAltar;
 
   //key & stick
   bool m_hasKey;

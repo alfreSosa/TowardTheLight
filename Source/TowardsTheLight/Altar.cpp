@@ -35,5 +35,6 @@ void AAltar::Activate(bool enabled) {
 
 void AAltar::Execute() {
   m_player->SetKey(GiveKey, AltarColor);
+  m_player->EnabledPickAltar();
 }
 
