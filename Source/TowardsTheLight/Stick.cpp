@@ -25,19 +25,6 @@ AStick::AStick(){
     StickMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
   }
 
-  EffectsMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshEffects"));
-  EffectsMesh->AttachTo(RootComponent);
-  EffectsMesh->SetMobility(EComponentMobility::Movable);
-  EffectsMesh->CastShadow = false;
-  mesh = nullptr;
-  static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshFinderEffects(TEXT("StaticMesh'/Game/Models/Baculo/baculoBloom_mesh.baculoBloom_mesh'"));
-  if (MeshFinderEffects.Succeeded()){
-    mesh = MeshFinderEffects.Object;
-    EffectsMesh->SetStaticMesh(mesh);
-  }
-  EffectsMesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
-  EffectsMesh->SetRelativeLocation(FVector(0, 0, 70));
-  EffectsMesh->SetWorldScale3D(FVector(0.75, 0.75, 0.75));
   EffectsMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(1);
   mat = nullptr;
   static ConstructorHelpers::FObjectFinder<UMaterial> MatFinderEffects(TEXT("Material'/Game/Models/Baculo/baculoBloom_material.baculoBloom_material'"));
@@ -45,12 +32,18 @@ AStick::AStick(){
     mat = MatFinderEffects.Object;
     EffectsMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
   }
+
+  BBMaterial = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("BB"));
+  BBMaterial->AttachTo(RootComponent);
+  BBMaterial->SetMobility(EComponentMobility::Movable);
+  BBMaterial->CastShadow = false;
+  BBMaterial->SetRelativeLocation(FVector(0, 0, 70));
 }
 
 void AStick::BeginPlay(){
 	Super::BeginPlay();
   Stick->SetMaterial(0, StickMaterial);
-  EffectsMesh->SetMaterial(0, EffectsMaterial);
+  BBMaterial->AddElement(EffectsMaterial, NULL, false, 100, 100, NULL);
 }
 
 void AStick::SetColor(FLinearColor colorKey, float shinnes) {
