@@ -40,6 +40,11 @@ public:
   UFUNCTION(BlueprintCallable, Category = "GameInfo")
     float GetGoldScore();
 
+  UFUNCTION(BlueprintCallable, Category = "GameInfo")
+    void SetInitialScreen(bool value);
+  UFUNCTION(BlueprintCallable, Category = "GameInfo")
+    bool GetInitialScreen();
+
 private:
   bool m_pageOpen;
   FString m_pageName;
@@ -49,4 +54,6 @@ private:
   float m_goldPercentage;
   float m_silverScore;
   float m_goldScore;
+
+  bool m_initialScreen;
 };

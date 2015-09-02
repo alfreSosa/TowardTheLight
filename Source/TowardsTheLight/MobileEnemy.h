@@ -49,7 +49,7 @@ private:
   int m_tickCounter;
   //restore data variables
   FTransform m_initialStatus;
-
+  bool m_initialMovement;
   void doMovement(float DeltaSeconds);
   void CalculateGravity(float DeltaSeconds);
   void CheckCollision();

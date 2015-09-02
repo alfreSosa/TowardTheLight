@@ -14,6 +14,7 @@ UInfoGameInstance::UInfoGameInstance(const class FObjectInitializer& ObjectIniti
   m_silverScore = 0.f;
   m_goldScore = 0.f;
 
+  m_initialScreen = true;
 
   /*
   //static ConstructorHelpers::FObjectFinder<USoundCue> soundLoader(TEXT("SoundCue'/Game/Sounds/Menu_track_Cue.Menu_track_Cue'"));
@@ -62,4 +63,11 @@ void UInfoGameInstance::SetGoldPercentage(float goldPercentage){
 }
 float UInfoGameInstance::GetGoldScore(){
   return m_goldScore;
+}
+
+void UInfoGameInstance::SetInitialScreen(bool value){
+  m_initialScreen = value;
+}
+bool UInfoGameInstance::GetInitialScreen(){
+  return m_initialScreen;
 }
