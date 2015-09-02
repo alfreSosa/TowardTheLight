@@ -43,13 +43,6 @@ void ACheckPoint::BeginPlay()
   m_enter = false;
   m_gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
   FireParticles->SetActive(false);
-
-}
-
-void ACheckPoint::Tick(float DeltaTime)
-{
-  Super::Tick(DeltaTime);
-
 }
 
 void ACheckPoint::RegisterDelegate() {
@@ -67,7 +60,6 @@ void ACheckPoint::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimiti
     APlayerOvi *player = dynamic_cast<APlayerOvi *>(OtherActor);
     if (player) {
       m_enter = true;
-      GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GET CHECKPOINT")));
       //rellenar checkPoint ATowardsTheLightGameMode
       FireParticles->SetActive(true);
       m_gameMode->SetPlayerCheckPoint(player, player->GetTransform(), player->PlayerisToRight());
@@ -81,7 +73,6 @@ void ACheckPoint::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimiti
 
 void ACheckPoint::OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
   if (OtherActor->ActorHasTag("Player") && !m_loaded) {
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("SAliendo checkpoint")));
     m_loaded = true;
   }
 }
