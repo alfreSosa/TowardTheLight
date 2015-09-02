@@ -22,7 +22,6 @@ public:
   //functions
   ACheckPoint();
   virtual void BeginPlay() override;
-  virtual void Tick(float DeltaSeconds) override;
   void RegisterDelegate();
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
   void RestoreInitialState();

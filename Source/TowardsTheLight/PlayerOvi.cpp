@@ -30,9 +30,9 @@ APlayerOvi::APlayerOvi() {
   PrimaryActorTick.bCanEverTick = true;
 
   //Public properties
-  JumpSpeed = DEFAULT_JUMP_SPEED;
+  FallSpeed = JumpSpeed = DEFAULT_JUMP_SPEED;
   MovementSpeed = DEFAULT_MOVEMENT_SPEED;
-  AccelerationJump = DEFAULT_JUMP_ACC;
+  AccelerationFall = AccelerationJump = DEFAULT_JUMP_ACC;
   MarginInput = 50.f;
 
   //Pawn properties
@@ -401,10 +401,10 @@ void APlayerOvi::CalculateGravity(float DeltaSeconds){
   FVector location = GetActorLocation();
 
   if (m_enabledGravity && !m_hasLanded && !m_isOnMobilePlatform) {
-    if (m_actualJumpSpeed < JumpSpeed)
-      m_actualJumpSpeed += AccelerationJump * DeltaSeconds;
+    if (m_actualJumpSpeed < FallSpeed)
+      m_actualJumpSpeed += AccelerationFall * DeltaSeconds;
     else{
-      m_actualJumpSpeed = JumpSpeed;
+      m_actualJumpSpeed = FallSpeed;
     }
     location -= m_actualJumpSpeed * DeltaSeconds * up;
     SetActorLocation(location);

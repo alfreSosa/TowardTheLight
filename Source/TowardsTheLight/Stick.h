@@ -14,8 +14,6 @@ public:
 
   UPROPERTY(EditAnywhere)
     UStaticMeshComponent* Stick;
-  UPROPERTY(EditAnywhere)
-    UStaticMeshComponent* EffectsMesh;
 
 	//UE4 Functions
 	AStick();
@@ -26,5 +24,6 @@ public:
 private:
   UMaterialInstanceDynamic *StickMaterial;
   UMaterialInstanceDynamic *EffectsMaterial;
+  UMaterialBillboardComponent *BBMaterial;
 	
 };

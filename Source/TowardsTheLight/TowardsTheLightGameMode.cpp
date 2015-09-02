@@ -10,6 +10,7 @@
 #include "PickableItem.h"
 #include "CheckPoint.h"
 #include "MobilePlatform.h"
+#include "StaticEnemy.h"
 #include "MobileEnemy.h"
 #include "Tower.h"
 #include "IntermittentManager.h"
@@ -149,12 +150,6 @@ bool ATowardsTheLightGameMode::IsCheckPointPicked() {
 
 void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
   if (checkPoint) {
-    m_actualPoints = m_actualCheckPoint.Points;
-    m_countOrbs = m_actualCheckPoint.Orbs;
-    m_player->ResetToCheckPoint(m_actualCheckPoint.PlayerStatus, m_actualCheckPoint.PlayerToRight);
-    m_player->SetKey(m_actualCheckPoint.PlayerHasKey, m_actualCheckPoint.ColorKey);
-    state = EndGameType::NONE;
-    //prueba de restaurar item cogidos despues del checkpoint
     /*Si los he cogido y no estan en el array almacenado los restauro*/
     for (TActorIterator<APickableItem> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
       if (ActorItr->IsItemPicked()) {
@@ -163,13 +158,45 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
         }
       }
     }
-    int sizeEne = m_levelMobileEnemies.Num();
-    //restaurar enemigos
-    for (int i = 0; i < sizeEne; ++i)
-      m_levelMobileEnemies[i]->RestoreInitialState();
+    //restauro enemigos
+    for (TActorIterator< AStaticEnemy > staItr(GetWorld()); staItr; ++staItr)
+      staItr->RestoreInitialState();
+    for (TActorIterator< AMobileEnemy > eneItr(GetWorld()); eneItr; ++eneItr)
+      eneItr->RestoreInitialState();
+
+    m_actualPoints = m_actualCheckPoint.Points;
+    m_countOrbs = m_actualCheckPoint.Orbs;
+    m_player->ResetToCheckPoint(m_actualCheckPoint.PlayerStatus, m_actualCheckPoint.PlayerToRight);
+    m_player->SetKey(m_actualCheckPoint.PlayerHasKey, m_actualCheckPoint.ColorKey);
+    state = EndGameType::NONE;
   }
   else {
-    //ir reiniciando todos los objetos nuevos
+    //restauro pickables
+    for (TActorIterator< APickableItem > pickItr(GetWorld()); pickItr; ++pickItr)
+      pickItr->RestoreInitialPosition();
+    //restauro checkpoint
+    for (TActorIterator< ACheckPoint > checkItr(GetWorld()); checkItr; ++checkItr)
+      checkItr->RestoreInitialState();
+    //restauro tutoriales
+    for (TActorIterator< ATutorial> tutItr(GetWorld()); tutItr; ++tutItr)
+      tutItr->RestoreInitialState();
+    //restauro mobiles
+    for (TActorIterator< AMobilePlatform > movItr(GetWorld()); movItr; ++movItr)
+      movItr->RestoreInitialState();
+    //restauro enemigos
+    for (TActorIterator< AStaticEnemy > staItr(GetWorld()); staItr; ++staItr)
+      staItr->RestoreInitialState();
+    for (TActorIterator< AMobileEnemy > eneItr(GetWorld()); eneItr; ++eneItr)
+      eneItr->RestoreInitialState();
+    //restauro intermitentes y managers
+    for (TActorIterator< AIntermittentManager > manaItr(GetWorld()); manaItr; ++manaItr)
+      manaItr->RestoreInitialState();
+    for (TActorIterator< AIntermittentPlatform > interItr(GetWorld()); interItr; ++interItr)
+      interItr->RestoreInitialState();
+    //restauro torre
+    for (TActorIterator<ATower> towItr(GetWorld()); towItr; ++towItr)
+      (*towItr)->RestoreInitialState();
+
     m_actualCheckPoint.IsPicked = false;
     m_actualCheckPoint.Orbs = m_actualCheckPoint.Points = 0;
     m_countOrbs = 0.0f;
@@ -181,44 +208,6 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
     m_actualCheckPoint.ItemsPicked.Empty();
     m_actualCheckPoint.PlayerHasKey = false;
     m_actualCheckPoint.ColorKey = FLinearColor(1, 1, 1);
-
-    int sizeItems = m_levelItems.Num();
-    int sizeChecks = m_levelCheckPoints.Num();
-    int sizeMob = m_levelMobilePlatforms.Num();
-    int sizeEne = m_levelMobileEnemies.Num();
-    int sizeMana = m_levelIntermittentManagers.Num();
-    int sizeInter = m_levelIntermittenPlatforms.Num();
-    int sizeTut = m_levelTutorials.Num();
-
-    //restore mobile platform
-    for (int i = 0; i < sizeItems; ++i)
-      m_levelItems[i]->RestoreInitialPosition();
-
-    //restaurar checkpoints
-    for (int i = 0; i < sizeChecks; ++i)
-      m_levelCheckPoints[i]->RestoreInitialState();
-
-    //restauro tutorial
-    for (int i = 0; i < sizeTut; ++i)
-      m_levelTutorials[i]->RestoreInitialState();
-
-    //restauro monedas
-    for (int i = 0; i < sizeMob; ++i)
-      m_levelMobilePlatforms[i]->RestoreInitialState();
-
-    //restaurar intermitentes y managers intermitentes
-    for (int i = 0; i < sizeMana; ++i)
-      m_levelIntermittentManagers[i]->RestoreInitialState();
-
-    for (int i = 0; i < sizeInter; ++i)
-      m_levelIntermittenPlatforms[i]->RestoreInitialState();
-
-    //restaurar enemigos
-    for (int i = 0; i < sizeEne; ++i)
-      m_levelMobileEnemies[i]->RestoreInitialState();
-    //restauro torre
-    for (TActorIterator<ATower> towItr(GetWorld()); towItr; ++towItr)
-      (*towItr)->RestoreInitialState();
   }
 }
 
@@ -291,26 +280,5 @@ void ATowardsTheLightGameMode::FindActualPlayer() {
       m_actualCheckPoint.InitialPlayerStatus = m_player->GetTransform();
       m_actualCheckPoint.InitialPlayerToRight = m_player->PlayerisToRight();
     }
-
-  m_levelItems.Empty();
-  m_levelCheckPoints.Empty();
-  m_levelMobilePlatforms.Empty();
-  m_levelMobileEnemies.Empty();
-  m_levelTutorials.Empty();
-
-  for (TActorIterator< APickableItem > pickItr(GetWorld()); pickItr; ++pickItr)
-    m_levelItems.Add(*pickItr);
-  for (TActorIterator< ACheckPoint > checkItr(GetWorld()); checkItr; ++checkItr)
-    m_levelCheckPoints.Add(*checkItr);
-  for (TActorIterator< ATutorial> tutItr(GetWorld()); tutItr; ++tutItr)
-    m_levelTutorials.Add(*tutItr);
-  for (TActorIterator< AMobilePlatform > movItr(GetWorld()); movItr; ++movItr)
-    m_levelMobilePlatforms.Add(*movItr);
-  for (TActorIterator< AMobileEnemy > eneItr(GetWorld()); eneItr; ++eneItr)
-    m_levelMobileEnemies.Add(*eneItr);
-  for (TActorIterator< AIntermittentManager > manaItr(GetWorld()); manaItr; ++manaItr)
-    m_levelIntermittentManagers.Add(*manaItr);
-  for (TActorIterator< AIntermittentPlatform > interItr(GetWorld()); interItr; ++interItr)
-    m_levelIntermittenPlatforms.Add(*interItr);
 }
 

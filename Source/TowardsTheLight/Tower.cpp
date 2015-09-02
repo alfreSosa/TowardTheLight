@@ -48,6 +48,15 @@ ATower::ATower() {
     TowerLightMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
   }
 
+  TowerRunesMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(1);
+  UMaterial* mat2 = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatRunesFinder(TEXT("Material'/Game/Models/Tower/torre.torre'"));
+  if (MatRunesFinder.Succeeded())
+  {
+    mat2 = MatRunesFinder.Object;
+    TowerRunesMaterial = UMaterialInstanceDynamic::Create(mat2, GetWorld());
+  }
+
   m_startVictory = false;
   m_timeToFinish = 2.0f;
   m_elapsedTime = 0.0f;
@@ -58,7 +67,9 @@ ATower::ATower() {
 void ATower::BeginPlay() {
 	Super::BeginPlay();
   Light->SetMaterial(0, TowerLightMaterial);
+  Body->SetMaterial(0, TowerRunesMaterial);
   TowerLightMaterial->SetVectorParameterValue("Color", ColorDisabled);
+  TowerRunesMaterial->SetVectorParameterValue("ColorRunes", ColorKey);
   RegisterDelegate();
   m_startVictory = false;
   m_timeToFinish = 2.0f;

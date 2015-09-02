@@ -46,10 +46,13 @@ private:
   APlayerOvi *m_player;
   FVector m_lastPosition;
 
+  //kill variables
+  bool m_touchPlayer;
+  float m_elapsedKillTime;
   int m_tickCounter;
   //restore data variables
   FTransform m_initialStatus;
-
+  bool m_initialMovement;
   void doMovement(float DeltaSeconds);
   void CalculateGravity(float DeltaSeconds);
   void CheckCollision();
@@ -89,9 +92,12 @@ public:
   virtual void Tick(float DeltaSeconds) override;
   void RegisterDelegate();
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
-  void RestoreInitialState();
+  virtual void RestoreInitialState();
   UFUNCTION()
     void OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+  UFUNCTION()
+    void OnEndCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
   UFUNCTION(BlueprintCallable, Category = "EnemyLocomotion")

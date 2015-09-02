@@ -41,6 +41,7 @@ public:
   void RestoreInitialState();
 private:
   UMaterialInstanceDynamic *TowerLightMaterial;
+  UMaterialInstanceDynamic *TowerRunesMaterial;
   bool m_startVictory;
   float m_timeToFinish;
   float m_elapsedTime;
