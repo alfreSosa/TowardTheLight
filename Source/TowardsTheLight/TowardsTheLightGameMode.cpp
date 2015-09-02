@@ -10,6 +10,7 @@
 #include "PickableItem.h"
 #include "CheckPoint.h"
 #include "MobilePlatform.h"
+#include "StaticEnemy.h"
 #include "MobileEnemy.h"
 #include "Tower.h"
 #include "IntermittentManager.h"
@@ -158,6 +159,8 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
       }
     }
     //restauro enemigos
+    for (TActorIterator< AStaticEnemy > staItr(GetWorld()); staItr; ++staItr)
+      staItr->RestoreInitialState();
     for (TActorIterator< AMobileEnemy > eneItr(GetWorld()); eneItr; ++eneItr)
       eneItr->RestoreInitialState();
 
@@ -181,6 +184,8 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
     for (TActorIterator< AMobilePlatform > movItr(GetWorld()); movItr; ++movItr)
       movItr->RestoreInitialState();
     //restauro enemigos
+    for (TActorIterator< AStaticEnemy > staItr(GetWorld()); staItr; ++staItr)
+      staItr->RestoreInitialState();
     for (TActorIterator< AMobileEnemy > eneItr(GetWorld()); eneItr; ++eneItr)
       eneItr->RestoreInitialState();
     //restauro intermitentes y managers

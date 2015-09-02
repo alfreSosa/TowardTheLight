@@ -10,19 +10,26 @@ class TOWARDSTHELIGHT_API AStaticEnemy : public AActor
 {
 	GENERATED_BODY()
 
-  TScriptDelegate<FWeakObjectPtr> m_delegate;
-
 public:
-	// Sets default values for this pawn's properties
-	AStaticEnemy();
-
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
   UPROPERTY(EditAnywhere)
     UStaticMeshComponent* OurVisibleComponent;
-	
+  UPROPERTY(EditAnywhere)
+    float TimeToKill;
+
+	AStaticEnemy();
+  virtual void BeginPlay() override;
+  virtual void Tick(float DeltaSeconds) override;
   void RegisterDelegate();
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
+  virtual void RestoreInitialState();
   UFUNCTION()
     void OnCollision(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-  void EndPlay(const EEndPlayReason::Type EndPlayReason);
+  UFUNCTION()
+    void OnEndCollision(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+  
+private:
+  TScriptDelegate<FWeakObjectPtr> m_delegateEnd;
+  TScriptDelegate<FWeakObjectPtr> m_delegate;
+  bool m_touchingPlayer;
+  float m_elapsedTime;
 };
