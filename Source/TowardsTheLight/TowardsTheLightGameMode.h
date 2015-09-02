@@ -125,12 +125,5 @@ private:
   float m_actualPoints;
   float m_countOrbs;
   APlayerOvi *m_player;
-  TArray<APickableItem *> m_levelItems;
-  TArray<ACheckPoint *> m_levelCheckPoints;
-  TArray<AMobilePlatform *> m_levelMobilePlatforms;
-  TArray<AMobileEnemy *> m_levelMobileEnemies;
-  TArray<AIntermittentManager *> m_levelIntermittentManagers;
-  TArray<AIntermittentPlatform *> m_levelIntermittenPlatforms;
-  TArray<ATutorial *> m_levelTutorials;
   EndGameType state;
 };

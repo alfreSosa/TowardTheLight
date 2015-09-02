@@ -78,7 +78,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float JumpSpeed;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+    float FallSpeed;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
     float AccelerationJump;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+    float AccelerationFall;
 private:
   //private functions  
   float UpdateState();
