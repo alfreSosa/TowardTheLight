@@ -34,6 +34,7 @@ public:
 
   //Class Functions
   virtual void BeginPlay() override;
+  virtual void Tick(float DeltaSeconds) override;
   virtual void Activate(bool enabled);
   virtual void Execute();
 
@@ -41,4 +42,6 @@ private:
   UMaterialInstanceDynamic *PortalMaterial;
   UMaterialInstanceDynamic *PortalMaterialBG;
   UMaterialInstanceDynamic *PortalMaterialEffects;
+  bool m_activateTranslate;
+  float m_elapsedTranslate;
 };
