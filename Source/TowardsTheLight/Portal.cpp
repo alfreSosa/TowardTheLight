@@ -46,6 +46,18 @@ APortal::APortal(){
     matEffects = MatFinderEffects.Object;
     PortalMaterialEffects = UMaterialInstanceDynamic::Create(matEffects, GetWorld());
   }
+
+  MaterialBB = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(3);
+  mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinderEffectsBB(TEXT("Material'/Game/Models/Baculo/baculoBloom_material.baculoBloom_material'"));
+  if (MatFinderEffectsBB.Succeeded()){
+    mat = MatFinderEffectsBB.Object;
+    MaterialBB = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
+
+  EffectsBB = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("BB"));
+  EffectsBB->AttachTo(RootComponent);
+  EffectsBB->CastShadow = false;
 }
 
 void APortal::BeginPlay() {
@@ -54,11 +66,21 @@ void APortal::BeginPlay() {
   MeshActivator->SetMaterial(0, PortalMaterial);
   MeshBG->SetMaterial(0, PortalMaterialBG);
   MeshEffects->SetMaterial(0, PortalMaterialEffects);
+  EffectsBB->AddElement(MaterialBB, NULL, false, 100, 100, NULL);
 
   PortalMaterial->SetVectorParameterValue("Portal_structure_color", ColorDisabled);
 
   PortalMaterialBG->SetVectorParameterValue("Portal_BG_color", PortalColor);
-  PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", PortalColor);
+  if (NeedKey){
+    PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", FLinearColor(FVector(0.f)));
+
+    MaterialBB->SetVectorParameterValue("Bloom_Color", ColorKey);
+  }
+  else{
+    PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", PortalColor);
+
+    MaterialBB->SetVectorParameterValue("Bloom_Color", FLinearColor(FVector(0.f)));
+  }
 }
 
 void APortal::Tick(float DeltaSeconds) {
@@ -101,7 +123,20 @@ void APortal::Tick(float DeltaSeconds) {
 }
 
 void APortal::Activate(bool enabled) {
-  PortalMaterial->SetVectorParameterValue("Portal_structure_color", (enabled) ? ColorEnabled : ColorDisabled);
+  if (enabled){
+    PortalMaterial->SetVectorParameterValue("Portal_structure_color", ColorEnabled);
+    if (NeedKey){
+      PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", PortalColor);
+      Partner->Turn(true);
+    }
+  }
+  else{
+    PortalMaterial->SetVectorParameterValue("Portal_structure_color", ColorDisabled);
+    if (NeedKey){
+      PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", FLinearColor(FVector(0.f)));
+      Partner->Turn(false);
+    }
+  }
 }
 
 void APortal::Execute() {
@@ -143,3 +178,6 @@ void APortal::Execute() {
   }
 }
 
+void APortal::Turn(bool on){
+  PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", on ? PortalColor : FLinearColor(FVector(0.f)));
+}
