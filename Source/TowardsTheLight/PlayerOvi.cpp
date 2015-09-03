@@ -126,15 +126,15 @@ APlayerOvi::APlayerOvi() {
   m_currentMobile = nullptr;
   m_isOnMobilePlatform = false;
   //iteraction Tappables propierties
-  m_isPushingButton = false;
-  m_elapsedButton = 0.0f;
+  m_isPickingAltar = m_isPickingPortal = m_isPushingButton = false;
+  m_elapsedAltar = m_elapsedPortal = m_elapsedButton = 0.0f;
 }
 
 void APlayerOvi::BeginPlay(){
   Super::BeginPlay();
 
   // time for button animation
-  m_elapsedButton = 0.0f;
+  m_elapsedAltar = m_elapsedPortal = m_elapsedButton = 0.0f;
 
   //Initialize TraceParam
   static FName FireTraceIdent = FName(TEXT("Platform"));
@@ -209,6 +209,23 @@ void APlayerOvi::Tick(float DeltaSeconds){
       m_isPushingButton = false;
     }
   }
+
+  if (m_isPickingPortal) {
+    m_elapsedPortal += DeltaSeconds;
+    if (m_elapsedPortal >= 0.7f) {
+      m_elapsedPortal = 0.0f;
+      m_isPickingPortal = false;
+    }
+  }
+
+  if (m_isPickingAltar) {
+    m_elapsedAltar += DeltaSeconds;
+    if (m_elapsedAltar >= 0.7f) {
+      m_elapsedAltar = 0.0f;
+      m_isPickingAltar = false;
+    }
+  }
+
   //get last position for this frame.
   m_lastPosition = GetActorLocation();
   float value = 0.0f;
@@ -221,8 +238,10 @@ void APlayerOvi::Tick(float DeltaSeconds){
   }
 
   DoMovement(DeltaSeconds, value);
-  DoJump(DeltaSeconds);
-  CalculateGravity(DeltaSeconds);
+  if (!m_isPickingPortal) {
+    DoJump(DeltaSeconds);
+    CalculateGravity(DeltaSeconds);
+  }
   CheckCollision();
   CalculateOrientation();
 }
@@ -907,20 +926,36 @@ bool APlayerOvi::isPlayerPaused() {
 
 bool APlayerOvi::isInputEnabled() {
   float gameStatus = m_gameMode->EndGameBP();
-  return (gameStatus < 0.05f && gameStatus > -0.05f) && !m_isPushingButton;
+  return (gameStatus < 0.05f && gameStatus > -0.05f) && !m_isPushingButton && !m_isPickingPortal && !m_isPickingAltar;
 }
 
 bool APlayerOvi::PlayerisPushinButton() {
   return m_isPushingButton;
 }
 
+bool APlayerOvi::PlayerisPickingPortal() {
+  return m_isPickingPortal;
+}
+
+bool APlayerOvi::PlayerisPickingAltar() {
+  return m_isPickingAltar;
+}
+
 void  APlayerOvi::EnabledPushButton() { 
   m_isPushingButton = true; 
+}
+
+void  APlayerOvi::EnabledPickPortal() {
+  m_isPickingPortal = true;
+}
+
+void  APlayerOvi::EnabledPickAltar() {
+  m_isPickingAltar = true;
 }
 
 void APlayerOvi::ResetToCheckPoint(FTransform playerTransform, bool right) {
   SetActorTransform(playerTransform);
   bPlayerRunning = false;
   m_state = (right) ? States::RIGHT : States::LEFT;
-  m_isPushingButton = false;
+  m_isPickingAltar = m_isPickingPortal = m_isPushingButton = false;
 }

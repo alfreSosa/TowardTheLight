@@ -54,6 +54,18 @@ AMechanism::AMechanism()
   }
 
   m_isPushed = false;
+
+  MaterialBB = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(1);
+  mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinderEffectsBB(TEXT("Material'/Game/Models/Baculo/baculoBloom_material.baculoBloom_material'"));
+  if (MatFinderEffectsBB.Succeeded()){
+    mat = MatFinderEffectsBB.Object;
+    MaterialBB = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
+
+  EffectsBB = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("BB"));
+  EffectsBB->AttachTo(RootComponent);
+  EffectsBB->CastShadow = false;
 }
 
 void AMechanism::BeginPlay()
@@ -72,6 +84,12 @@ void AMechanism::BeginPlay()
   m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
   m_isPushed = false;
   m_elapsedAnimation = 0.0f;
+
+  EffectsBB->AddElement(MaterialBB, NULL, false, 100, 100, NULL);
+  if (NeedKey)
+    MaterialBB->SetVectorParameterValue("Bloom_Color", ColorKey);
+  else
+    MaterialBB->SetVectorParameterValue("Bloom_Color", FLinearColor(FVector(0.f)));
 }
 
 void AMechanism::Tick(float DeltaSeconds)

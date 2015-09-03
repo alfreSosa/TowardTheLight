@@ -35,6 +35,9 @@ public:
   UPROPERTY(EditAnywhere, Category = MechanismResponse)
     FLinearColor ColorEnabled;
 
+  UPROPERTY(EditAnywhere)
+    UMaterialBillboardComponent *EffectsBB;
+
 	//constructor
 	AMechanism();
 
@@ -59,4 +62,5 @@ private:
   FLinearColor m_origin;
   TArray<AStaticPlatform *> m_Targets;
   UMaterialInstanceDynamic *MechanismMaterial;
+  UMaterialInstanceDynamic *MaterialBB;
 };
