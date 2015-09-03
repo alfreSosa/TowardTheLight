@@ -32,6 +32,18 @@ ATappable::ATappable()
   NeedKey = false;
   ColorKey = FLinearColor(0.0f, 0.0f, 0.0f);
   this->Tags.Add("Tappable");
+
+  MaterialBB = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
+  UMaterial *mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinderEffectsBB(TEXT("Material'/Game/Models/Baculo/baculoBloom_material.baculoBloom_material'"));
+  if (MatFinderEffectsBB.Succeeded()){
+    mat = MatFinderEffectsBB.Object;
+    MaterialBB = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
+
+  EffectsBB = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("BB"));
+  EffectsBB->AttachTo(RootComponent);
+  EffectsBB->CastShadow = false;
 }
 
 // Called when the game starts or when spawned
@@ -40,6 +52,12 @@ void ATappable::BeginPlay()
 	Super::BeginPlay();
   m_meshActivator = MeshActivator;
   RegisterDelegate();
+
+  EffectsBB->AddElement(MaterialBB, NULL, false, 100, 100, NULL);
+  if (NeedKey)
+    MaterialBB->SetVectorParameterValue("Bloom_Color", ColorKey);
+  else
+    MaterialBB->SetVectorParameterValue("Bloom_Color", FLinearColor(FVector(0.f)));
 }
 
 // Called every frame
