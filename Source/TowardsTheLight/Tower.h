@@ -34,6 +34,9 @@ public:
   UPROPERTY(EditAnywhere, Category = Tower)
     FLinearColor ColorKey;
 
+  UPROPERTY(EditAnywhere)
+    UMaterialBillboardComponent *EffectsBB;
+
   void RegisterDelegate();
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -42,6 +45,8 @@ public:
 private:
   UMaterialInstanceDynamic *TowerLightMaterial;
   UMaterialInstanceDynamic *TowerRunesMaterial;
+  UMaterialInstanceDynamic *MaterialBB;
+
   bool m_startVictory;
   float m_timeToFinish;
   float m_elapsedTime;

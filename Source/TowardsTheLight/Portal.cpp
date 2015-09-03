@@ -46,18 +46,6 @@ APortal::APortal(){
     matEffects = MatFinderEffects.Object;
     PortalMaterialEffects = UMaterialInstanceDynamic::Create(matEffects, GetWorld());
   }
-
-  MaterialBB = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(3);
-  mat = nullptr;
-  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinderEffectsBB(TEXT("Material'/Game/Models/Baculo/baculoBloom_material.baculoBloom_material'"));
-  if (MatFinderEffectsBB.Succeeded()){
-    mat = MatFinderEffectsBB.Object;
-    MaterialBB = UMaterialInstanceDynamic::Create(mat, GetWorld());
-  }
-
-  EffectsBB = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("BB"));
-  EffectsBB->AttachTo(RootComponent);
-  EffectsBB->CastShadow = false;
 }
 
 void APortal::BeginPlay() {
@@ -71,16 +59,10 @@ void APortal::BeginPlay() {
   PortalMaterial->SetVectorParameterValue("Portal_structure_color", ColorDisabled);
 
   PortalMaterialBG->SetVectorParameterValue("Portal_BG_color", PortalColor);
-  if (NeedKey){
+  if (NeedKey)
     PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", FLinearColor(FVector(0.f)));
-
-    MaterialBB->SetVectorParameterValue("Bloom_Color", ColorKey);
-  }
-  else{
+  else
     PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", PortalColor);
-
-    MaterialBB->SetVectorParameterValue("Bloom_Color", FLinearColor(FVector(0.f)));
-  }
 }
 
 void APortal::Tick(float DeltaSeconds) {

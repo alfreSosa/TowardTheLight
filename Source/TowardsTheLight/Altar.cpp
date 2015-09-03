@@ -27,6 +27,7 @@ void AAltar::BeginPlay(){
 	Super::BeginPlay();
   m_meshActivator->SetMaterial(0, AltarMaterial);
   AltarMaterial->SetVectorParameterValue("Color", AltarColor);
+  MaterialBB->SetVectorParameterValue("Bloom_Color", AltarColor);
 }
 
 void AAltar::Activate(bool enabled) {

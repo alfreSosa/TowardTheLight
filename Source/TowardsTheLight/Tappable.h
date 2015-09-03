@@ -21,6 +21,10 @@ public:
     bool NeedKey;
   UPROPERTY(EditAnywhere, Category = Activator)
     FLinearColor ColorKey;
+
+  UPROPERTY(EditAnywhere)
+    UMaterialBillboardComponent *EffectsBB;
+
 	// Sets default values for this actor's properties
 	ATappable();
 
@@ -46,4 +50,7 @@ protected:
   UStaticMeshComponent* m_meshActivator;
   bool m_isPlayerOn;
   APlayerOvi *m_player;
+
+  UMaterialInstanceDynamic *MaterialBB;
+
 };

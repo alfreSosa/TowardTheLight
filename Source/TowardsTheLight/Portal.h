@@ -22,8 +22,6 @@ public:
     UStaticMeshComponent* MeshBG;
   UPROPERTY(EditAnywhere)
     UStaticMeshComponent* MeshEffects;
-  UPROPERTY(EditAnywhere)
-    UMaterialBillboardComponent *EffectsBB;
 
   UPROPERTY(EditAnywhere, Category = Portal)
     APortal *Partner;
@@ -45,7 +43,6 @@ private:
   UMaterialInstanceDynamic *PortalMaterial;
   UMaterialInstanceDynamic *PortalMaterialBG;
   UMaterialInstanceDynamic *PortalMaterialEffects;
-  UMaterialInstanceDynamic *MaterialBB;
   bool m_activateTranslate;
   float m_elapsedTranslate;
 };

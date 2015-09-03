@@ -57,6 +57,18 @@ ATower::ATower() {
     TowerRunesMaterial = UMaterialInstanceDynamic::Create(mat2, GetWorld());
   }
 
+  MaterialBB = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(2);
+  mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinderEffectsBB(TEXT("Material'/Game/Models/Baculo/baculoBloom_material.baculoBloom_material'"));
+  if (MatFinderEffectsBB.Succeeded()){
+    mat = MatFinderEffectsBB.Object;
+    MaterialBB = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
+
+  EffectsBB = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("BB"));
+  EffectsBB->AttachTo(RootComponent);
+  EffectsBB->CastShadow = false;
+
   m_startVictory = false;
   m_timeToFinish = 2.0f;
   m_elapsedTime = 0.0f;
@@ -74,6 +86,12 @@ void ATower::BeginPlay() {
   m_startVictory = false;
   m_timeToFinish = 2.0f;
   m_elapsedTime = 0.0f;
+
+  EffectsBB->AddElement(MaterialBB, NULL, false, 100, 100, NULL);
+  if (NeedKey)
+    MaterialBB->SetVectorParameterValue("Bloom_Color", ColorKey);
+  else
+    MaterialBB->SetVectorParameterValue("Bloom_Color", FLinearColor(FVector(0.f)));
 }
 
 void ATower::Tick(float DeltaSeconds) {
