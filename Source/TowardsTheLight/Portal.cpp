@@ -3,8 +3,12 @@
 #include "TowardsTheLight.h"
 #include "Portal.h"
 #include "PlayerOvi.h"
+#include "TimeManager.h"
 
 APortal::APortal(){
+  PrimaryActorTick.bCanEverTick = true;
+  m_activateTranslate = false;
+  m_elapsedTranslate = 0.0f;
   MeshBG = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshBG"));
   MeshBG->AttachTo(RootComponent);
   MeshBG->SetMobility(EComponentMobility::Static);
@@ -42,22 +46,97 @@ APortal::APortal(){
     matEffects = MatFinderEffects.Object;
     PortalMaterialEffects = UMaterialInstanceDynamic::Create(matEffects, GetWorld());
   }
+
+  MaterialBB = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(3);
+  mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinderEffectsBB(TEXT("Material'/Game/Models/Baculo/baculoBloom_material.baculoBloom_material'"));
+  if (MatFinderEffectsBB.Succeeded()){
+    mat = MatFinderEffectsBB.Object;
+    MaterialBB = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
+
+  EffectsBB = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("BB"));
+  EffectsBB->AttachTo(RootComponent);
+  EffectsBB->CastShadow = false;
 }
 
 void APortal::BeginPlay() {
   Super::BeginPlay();
+  m_elapsedTranslate = 0.0f;
   MeshActivator->SetMaterial(0, PortalMaterial);
   MeshBG->SetMaterial(0, PortalMaterialBG);
   MeshEffects->SetMaterial(0, PortalMaterialEffects);
+  EffectsBB->AddElement(MaterialBB, NULL, false, 100, 100, NULL);
 
   PortalMaterial->SetVectorParameterValue("Portal_structure_color", ColorDisabled);
 
   PortalMaterialBG->SetVectorParameterValue("Portal_BG_color", PortalColor);
-  PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", PortalColor);
+  if (NeedKey){
+    PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", FLinearColor(FVector(0.f)));
+
+    MaterialBB->SetVectorParameterValue("Bloom_Color", ColorKey);
+  }
+  else{
+    PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", PortalColor);
+
+    MaterialBB->SetVectorParameterValue("Bloom_Color", FLinearColor(FVector(0.f)));
+  }
+}
+
+void APortal::Tick(float DeltaSeconds) {
+  DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+  Super::Tick(DeltaSeconds);
+  if (m_activateTranslate) {
+    m_elapsedTranslate += DeltaSeconds;
+    if (m_elapsedTranslate >= 0.7f) {
+      m_activateTranslate = false;
+      m_elapsedTranslate = 0.0f;
+      FTransform newTransformPlayer = Partner->GetTransform();
+
+      newTransformPlayer.SetScale3D(m_player->GetTransform().GetScale3D());
+
+      float limitWorld = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorRightVector());
+      limitWorld = abs(limitWorld);
+      FVector pForward = Partner->GetActorForwardVector();
+      FVector pUp = Partner->GetActorUpVector();
+
+      //position
+      FVector location = newTransformPlayer.GetLocation();
+
+      if (pForward.X > 0.05 || pForward.X < -0.05)
+        location.X = (location.X > 0) ? limitWorld : -limitWorld;
+      if (pForward.Y > 0.05 || pForward.Y < -0.05)
+        location.Y = (location.Y > 0) ? limitWorld : -limitWorld;
+      if (pForward.Z > 0.05 || pForward.Z < -0.05)
+        location.Z = (location.Z > 0) ? limitWorld : -limitWorld;
+
+      newTransformPlayer.SetLocation(location);
+
+      //rotation
+      FQuat q = newTransformPlayer.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, (m_player->PlayerisToRight()) ? 90 : -90));
+
+      newTransformPlayer.SetRotation(q);
+
+      m_player->SetActorTransform(newTransformPlayer);
+    }
+  }
 }
 
 void APortal::Activate(bool enabled) {
-  PortalMaterial->SetVectorParameterValue("Portal_structure_color", (enabled) ? ColorEnabled : ColorDisabled);
+  if (enabled){
+    PortalMaterial->SetVectorParameterValue("Portal_structure_color", ColorEnabled);
+    if (NeedKey){
+      PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", PortalColor);
+      Partner->Turn(true);
+    }
+  }
+  else{
+    PortalMaterial->SetVectorParameterValue("Portal_structure_color", ColorDisabled);
+    if (NeedKey){
+      PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", FLinearColor(FVector(0.f)));
+      Partner->Turn(false);
+    }
+  }
 }
 
 void APortal::Execute() {
@@ -66,33 +145,39 @@ void APortal::Execute() {
   dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
   dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
   if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05) {
-    FTransform newTransformPlayer = Partner->GetTransform();
+    m_player->EnabledPickPortal();
+    m_activateTranslate = true;
+    m_elapsedTranslate = 0.0f;
+    //FTransform newTransformPlayer = Partner->GetTransform();
 
-    newTransformPlayer.SetScale3D(m_player->GetTransform().GetScale3D());
+    //newTransformPlayer.SetScale3D(m_player->GetTransform().GetScale3D());
 
-    float limitWorld = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorRightVector());
-    limitWorld = abs(limitWorld);
-    FVector pForward = Partner->GetActorForwardVector();
-    FVector pUp = Partner->GetActorUpVector();
+    //float limitWorld = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorRightVector());
+    //limitWorld = abs(limitWorld);
+    //FVector pForward = Partner->GetActorForwardVector();
+    //FVector pUp = Partner->GetActorUpVector();
 
-    //position
-    FVector location = newTransformPlayer.GetLocation();
+    ////position
+    //FVector location = newTransformPlayer.GetLocation();
 
-    if (pForward.X > 0.05 || pForward.X < -0.05)
-      location.X = (location.X > 0) ? limitWorld : -limitWorld;
-    if (pForward.Y > 0.05 || pForward.Y < -0.05)
-      location.Y = (location.Y > 0) ? limitWorld : -limitWorld;
-    if (pForward.Z > 0.05 || pForward.Z < -0.05)
-      location.Z = (location.Z > 0) ? limitWorld : -limitWorld;
+    //if (pForward.X > 0.05 || pForward.X < -0.05)
+    //  location.X = (location.X > 0) ? limitWorld : -limitWorld;
+    //if (pForward.Y > 0.05 || pForward.Y < -0.05)
+    //  location.Y = (location.Y > 0) ? limitWorld : -limitWorld;
+    //if (pForward.Z > 0.05 || pForward.Z < -0.05)
+    //  location.Z = (location.Z > 0) ? limitWorld : -limitWorld;
 
-    newTransformPlayer.SetLocation(location);
+    //newTransformPlayer.SetLocation(location);
 
-    //rotation
-    FQuat q = newTransformPlayer.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, (m_player->PlayerisToRight()) ? 90 : -90));
-    
-    newTransformPlayer.SetRotation(q);
-    
-    m_player->SetActorTransform(newTransformPlayer);
+    ////rotation
+    //FQuat q = newTransformPlayer.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, (m_player->PlayerisToRight()) ? 90 : -90));
+    //
+    //newTransformPlayer.SetRotation(q);
+    //
+    //m_player->SetActorTransform(newTransformPlayer);
   }
 }
 
+void APortal::Turn(bool on){
+  PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", on ? PortalColor : FLinearColor(FVector(0.f)));
+}

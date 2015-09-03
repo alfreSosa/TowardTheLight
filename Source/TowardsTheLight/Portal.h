@@ -22,9 +22,11 @@ public:
     UStaticMeshComponent* MeshBG;
   UPROPERTY(EditAnywhere)
     UStaticMeshComponent* MeshEffects;
+  UPROPERTY(EditAnywhere)
+    UMaterialBillboardComponent *EffectsBB;
 
   UPROPERTY(EditAnywhere, Category = Portal)
-    AActor *Partner;
+    APortal *Partner;
   UPROPERTY(EditAnywhere, Category = Portal)
     FLinearColor ColorDisabled;
   UPROPERTY(EditAnywhere, Category = Portal)
@@ -34,11 +36,16 @@ public:
 
   //Class Functions
   virtual void BeginPlay() override;
+  virtual void Tick(float DeltaSeconds) override;
   virtual void Activate(bool enabled);
   virtual void Execute();
+  void Turn(bool on);
 
 private:
   UMaterialInstanceDynamic *PortalMaterial;
   UMaterialInstanceDynamic *PortalMaterialBG;
   UMaterialInstanceDynamic *PortalMaterialEffects;
+  UMaterialInstanceDynamic *MaterialBB;
+  bool m_activateTranslate;
+  float m_elapsedTranslate;
 };
