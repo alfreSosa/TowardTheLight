@@ -50,7 +50,7 @@ void AIntermittentManager::Tick( float DeltaTime )
   if (Enabled)
     if (!m_someBlocked)
       for (int32 i = 0; i < m_numPlatforms; i++)
-        Platforms[i]->Tick(DeltaTime);
+        Platforms[i]->TickManager(DeltaTime);
 
 }
 
