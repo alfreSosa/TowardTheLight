@@ -195,6 +195,21 @@ void AIntermittentPlatform::RestoreInitialState() {
   Init();
 }
 
+void AIntermittentPlatform::ChangeEnabled(bool enabled) {
+  Enabled = enabled;
+  if (Enabled) {
+    RestoreInitialState();
+  }
+}
+
+bool AIntermittentPlatform::isEnabled() {
+  return Enabled;
+}
+
+void AIntermittentPlatform::InitByMechanism(bool disableAtEnd, int32 numActions) {
+  //Nothing
+}
+
 
 
 

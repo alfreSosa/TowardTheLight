@@ -44,6 +44,9 @@ public:
   virtual void TickManager(float DeltaSeconds);
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
   virtual void ReceiveActorEndOverlap(AActor* OtherActor) override;
+  void ChangeEnabled(bool enabled);
+  bool isEnabled();
+  void InitByMechanism(bool disableAtEnd, int32 numActions);
   void InitOwner(AIntermittentManager *owner);
   void Init();
   void RestoreInitialState();
