@@ -2,7 +2,7 @@
 	"language": "en",
 	"keys":
 	[
-		{"key":"RETRY","value":"Retry#"},
+		{"key":"RETRY","value":"Retry"},
 		{"key":"MUSIC","value":"Music"},
 		{"key":"EFFECTS","value":"Effects"},
 		{"key":"QUIT","value":"Quit?"},
@@ -19,7 +19,7 @@
 		{"key":"LOADING","value":"Loading"},
 		{"key":"BACK","value":"Back"},
 		{"key":"CHECKPOINT","value":"Checkpoint"},
-		{"key":"ES","value":"Español"},
+		{"key":"ES","value":"Espa+ol"},
 		{"key":"EN","value":"English"},
 		{"key":"TITLE","value":"Towards the Light"},
 		{"key":"CREDITS","value":"Credits"},

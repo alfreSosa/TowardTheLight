@@ -67,8 +67,7 @@ bool LocalizationManager::ParseLanguage(const FString& language) {
                         if (keys[i]["value"].IsString()){
                           FString v = keys[i]["value"].GetString();
 
-                          if (langName == "es")
-                            v = ChangeSpecialSimbols(v);
+                          v = ChangeSpecialSimbols(v);
 
                           langDef.AddString(k, v);
                         }
