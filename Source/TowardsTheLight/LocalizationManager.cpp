@@ -67,6 +67,8 @@ bool LocalizationManager::ParseLanguage(const FString& language) {
                         if (keys[i]["value"].IsString()){
                           FString v = keys[i]["value"].GetString();
 
+                          v = ChangeSpecialSimbols(v);
+
                           langDef.AddString(k, v);
                         }
                     }
@@ -90,6 +92,21 @@ bool LocalizationManager::SetLanguage(const FString& language) {
   return false;
 }
 
+FString LocalizationManager::ChangeSpecialSimbols(FString s){
+  s = s.Replace(TEXT("#"), TEXT("á"));
+  s = s.Replace(TEXT("$"), TEXT("é"));
+  s = s.Replace(TEXT("%"), TEXT("í"));
+  s = s.Replace(TEXT("'"), TEXT("ó"));
+  s = s.Replace(TEXT("*"), TEXT("ú"));
+  s = s.Replace(TEXT("+"), TEXT("ñ"));
+  s = s.Replace(TEXT("("), TEXT("¡"));
+  s = s.Replace(TEXT(")"), TEXT("¿"));
+  s = s.Replace(TEXT("^"), TEXT("Á"));
+  s = s.Replace(TEXT(";"), TEXT("É"));
+  s = s.Replace(TEXT("<"), TEXT("Í"));
+  s = s.Replace(TEXT("="), TEXT("Ó"));
+  s = s.Replace(TEXT(">"), TEXT("Ú"));
+  s = s.Replace(TEXT("@"), TEXT("Ñ"));
 
-
-
+  return s;
+}
