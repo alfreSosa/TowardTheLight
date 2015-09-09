@@ -16,6 +16,9 @@ UInfoGameInstance::UInfoGameInstance(const class FObjectInitializer& ObjectIniti
 
   m_initialScreen = true;
 
+  m_hasKey = false;
+  m_colorKey = FLinearColor(0.0f, 0.0f, 0.0f);
+
   /*
   //static ConstructorHelpers::FObjectFinder<USoundCue> soundLoader(TEXT("SoundCue'/Game/Sounds/Menu_track_Cue.Menu_track_Cue'"));
   //USoundCue* m_pruebaCue = soundLoader.Object;
@@ -70,4 +73,17 @@ void UInfoGameInstance::SetInitialScreen(bool value){
 }
 bool UInfoGameInstance::GetInitialScreen(){
   return m_initialScreen;
+}
+
+void UInfoGameInstance::SetTowerNeedKey(bool hasKey){
+  m_hasKey = hasKey;
+}
+bool UInfoGameInstance::GetTowerNeedKey(){
+  return m_hasKey;
+}
+void UInfoGameInstance::SetTowerKeyColor(FLinearColor colorKey){
+  m_colorKey = colorKey;
+}
+FLinearColor UInfoGameInstance::GetTowerKeyColor(){
+  return m_colorKey;
 }
