@@ -18,6 +18,8 @@ protected:
 	LocalizationManager();
 	~LocalizationManager();
 
+  FString ChangeSpecialSimbols(FString s);
+
 private:
   class TOWARDSTHELIGHT_API LangDef {
   public:

@@ -5,6 +5,8 @@
 #include "Stick.h"
 #include "TowardsTheLightGameMode.h"
 #include "Tappable.h"
+#include "CheckPoint.h"
+#include "Tutorial.h"
 
 /************************************/
 /*DEBUG ALTERNATIVO*/
@@ -147,6 +149,13 @@ void APlayerOvi::BeginPlay(){
     if (ActorItr->ActorHasTag("Tappable"))
       ignorados.Add(*ActorItr);
   }
+
+  for (TActorIterator<ACheckPoint > checkItr(GetWorld()); checkItr; ++checkItr)
+    ignorados.Add(*checkItr);
+
+  for (TActorIterator<ATutorial > tutItr(GetWorld()); tutItr; ++tutItr)
+    ignorados.Add(*tutItr);
+ 
   TraceParams.AddIgnoredActors(ignorados);
   m_TraceParams = TraceParams;
 
@@ -840,9 +849,9 @@ void APlayerOvi::Rotate(const FVector& rotation) {
 FVector APlayerOvi::AbsVector(const FVector& vector) {
   FVector absVector = FVector::ZeroVector;
 
-  absVector.X = (vector.X < 0) ? -vector.X : vector.X;
-  absVector.Y = (vector.Y < 0) ? -vector.Y : vector.Y;
-  absVector.Z = (vector.Z < 0) ? -vector.Z : vector.Z;
+  absVector.X = FMath::Abs(vector.X);
+  absVector.Y = FMath::Abs(vector.Y);
+  absVector.Z = FMath::Abs(vector.Z);
 
   return absVector;
 }
@@ -882,10 +891,7 @@ void APlayerOvi::OnMobilePlatform(AMobilePlatform *mp, FVector movement){
 void APlayerOvi::SetKey(bool key, FLinearColor colorKey) {
   m_hasKey = key;
   m_colorKey = colorKey;
-  //if (m_hasKey)
-    m_stick->SetColor(m_colorKey, 5.0f);
-  /*else
-    m_stick->SetColor(m_colorKey, 5.0f);  */
+  m_stick->SetColor(m_colorKey, 5.0f);
 }
 
 bool APlayerOvi::HasKey(){

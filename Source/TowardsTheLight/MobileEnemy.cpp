@@ -181,14 +181,15 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
     else{
       m_timer = 0;
       m_state = TO_RIGHT;
-      //m_rightVector = GetActorRightVector();
     }
     break;
-  case TO_RIGHT:{
+  case TO_RIGHT:
+  {
     m_isMoving = true;
     float dist = Speed * DeltaSeconds;
-    if (m_totalDistance - m_currentDistance < dist)
-      dist = m_totalDistance - m_currentDistance;
+    float difDistance = m_totalDistance - m_currentDistance;
+    if (difDistance < dist)
+      dist = difDistance;
 
     if (m_currentDistance < m_totalDistance){
       m_currentDistance += dist;
@@ -201,12 +202,14 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
       m_currentDistance = 0;
     }
   }
-                break;
-  case TO_LEFT:{
+    break;
+  case TO_LEFT:
+  {
     m_isMoving = true;
     float dist = Speed * DeltaSeconds;
-    if (m_totalDistance - m_currentDistance < dist)
-      dist = m_totalDistance - m_currentDistance;
+    float difDistance = m_totalDistance - m_currentDistance;
+    if (difDistance < dist)
+      dist = difDistance;
 
     if (m_currentDistance < m_totalDistance){
       m_currentDistance += dist;
@@ -381,22 +384,18 @@ void AMobileEnemy::CheckCollision() {
   //DrawDebugLine(GetWorld(), StartTraceTop, EndTraceTop, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   GetWorld()->LineTraceMulti(OutTraceResultBottom, StartTraceBottom, EndTraceBottom, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionBottom = OutTraceResultBottom.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTraceBottom, EndTraceBottom, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
   GetWorld()->LineTraceMulti(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionMidle = OutTraceResultMiddle.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTrace, EndTraceMidle, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
   GetWorld()->LineTraceMulti(OutTraceResultTopBack, StartTraceTopBack, EndTraceTopBack, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionTopBack = OutTraceResultTopBack.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTraceTopBack, EndTraceTopBack, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  
   GetWorld()->LineTraceMulti(OutTraceResultBottomBack, StartTraceBottomBack, EndTraceBottomBack, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionBottomBack = OutTraceResultBottomBack.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTraceBottomBack, EndTraceBottomBack, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
   GetWorld()->LineTraceMulti(OutTraceResultMiddleBack, StartTraceBack, EndTraceMidleBack, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionMidleBack = OutTraceResultMiddleBack.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTraceBack, EndTraceMidleBack, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
   if (collisionMidle) {
     int size = OutTraceResultMiddle.Num();
@@ -464,13 +463,10 @@ void AMobileEnemy::CheckCollision() {
 
     GetWorld()->LineTraceMulti(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_ENEMY, TraceParams, ResponseParam);
     bool collisionDownLeftF = OutTraceResultDownLeftF.Num() > 0;
-    //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceDownLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
     GetWorld()->LineTraceMulti(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_ENEMY, TraceParams, ResponseParam);
     bool collisionDownRightF = OutTraceResultDownRigthF.Num() > 0;
-    //DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceDownRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
     GetWorld()->LineTraceMulti(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_ENEMY, TraceParams, ResponseParam);
     bool collisionDown = OutTraceResultDown.Num() > 0;
-    //DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
     bool eGravity = true;
     if (collisionDown || collisionDownLeftF || collisionDownRightF) {
       if (collisionDown) {
@@ -523,9 +519,9 @@ void AMobileEnemy::CheckCollision() {
 FVector AMobileEnemy::AbsVector(const FVector& vector) {
   FVector absVector = FVector::ZeroVector;
 
-  absVector.X = (vector.X < 0) ? -vector.X : vector.X;
-  absVector.Y = (vector.Y < 0) ? -vector.Y : vector.Y;
-  absVector.Z = (vector.Z < 0) ? -vector.Z : vector.Z;
+  absVector.X = FMath::Abs(vector.X);
+  absVector.Y = FMath::Abs(vector.Y); 
+  absVector.Z = FMath::Abs(vector.Z); 
 
   return absVector;
 }
