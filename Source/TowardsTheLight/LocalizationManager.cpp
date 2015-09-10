@@ -93,20 +93,32 @@ bool LocalizationManager::SetLanguage(const FString& language) {
 }
 
 FString LocalizationManager::ChangeSpecialSimbols(FString s){
-  s = s.Replace(TEXT("#"), TEXT("á"));
-  s = s.Replace(TEXT("$"), TEXT("é"));
-  s = s.Replace(TEXT("%"), TEXT("í"));
-  s = s.Replace(TEXT("'"), TEXT("ó"));
-  s = s.Replace(TEXT("*"), TEXT("ú"));
-  s = s.Replace(TEXT("+"), TEXT("ñ"));
-  s = s.Replace(TEXT("("), TEXT("¡"));
-  s = s.Replace(TEXT(")"), TEXT("¿"));
-  s = s.Replace(TEXT("^"), TEXT("Á"));
-  s = s.Replace(TEXT(";"), TEXT("É"));
-  s = s.Replace(TEXT("<"), TEXT("Í"));
-  s = s.Replace(TEXT("="), TEXT("Ó"));
-  s = s.Replace(TEXT(">"), TEXT("Ú"));
-  s = s.Replace(TEXT("@"), TEXT("Ñ"));
+  //s.ReplaceInline(TEXT("#"), TEXT("á"));
+  //s.ReplaceInline(TEXT("$"), TEXT("é"));
+  //s.ReplaceInline(TEXT("%"), TEXT("í"));
+  //s.ReplaceInline(TEXT("'"), TEXT("ó"));
+  //s.ReplaceInline(TEXT("*"), TEXT("ú"));
+
+	//char e = 'ñ';
+
+	//TCHAR ene(e);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, &ene);
+
+	//s.ReplaceInline(TEXT("+"), &ene);
+	
+
+
+  //s.ReplaceInline(TEXT("+"), TEXT("ñ"));
+
+
+  //s.ReplaceInline(TEXT("("), TEXT("¡"));
+  //s.ReplaceInline(TEXT(")"), TEXT("¿"));
+  //s.ReplaceInline(TEXT("^"), TEXT("Á"));
+  //s.ReplaceInline(TEXT(";"), TEXT("É"));
+  //s.ReplaceInline(TEXT("<"), TEXT("Í"));
+  //s.ReplaceInline(TEXT("="), TEXT("Ó"));
+  //s.ReplaceInline(TEXT(">"), TEXT("Ú"));
+  //s.ReplaceInline(TEXT("@"), TEXT("Ñ"));
 
   return s;
 }
