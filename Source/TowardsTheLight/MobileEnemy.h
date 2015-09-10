@@ -47,8 +47,6 @@ private:
   FVector m_lastPosition;
 
   //kill variables
-  bool m_touchPlayer;
-  float m_elapsedKillTime;
   int m_tickCounter;
   //restore data variables
   FTransform m_initialStatus;
@@ -95,8 +93,6 @@ public:
   virtual void RestoreInitialState();
   UFUNCTION()
     void OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-  UFUNCTION()
-    void OnEndCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

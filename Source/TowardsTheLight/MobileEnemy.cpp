@@ -36,8 +36,6 @@ AMobileEnemy::AMobileEnemy() {
   m_enableGravity = true;
   m_player = nullptr;
   m_tickCounter = 0;
-  m_elapsedKillTime = 0.0f;
-  m_touchPlayer = false;
   //Capsule
   CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
   CapsuleComponent->InitCapsuleSize(DEFAULT_ENEMY_CAPSULE_RADIOUS, DEFAULT_ENEMY_CAPSULE_HEIGHT);
@@ -92,8 +90,6 @@ AMobileEnemy::AMobileEnemy() {
 
 void AMobileEnemy::BeginPlay() {
   Super::BeginPlay();
-  m_elapsedKillTime = 0.0f;
-  m_touchPlayer = false;
   m_totalDistance = RightDistance + LeftDistance;
   m_currentDistance = LeftDistance;
   m_actualJumpSpeed = 0.0f;
@@ -119,10 +115,6 @@ void AMobileEnemy::BeginPlay() {
 
 void AMobileEnemy::RestoreInitialState()
 {
-  AStaticEnemy::RestoreInitialState();
-  m_elapsedKillTime = 0.0f;
-  m_touchPlayer = false;
-
   SetActorTransform(m_initialStatus);
   m_currentDistance = LeftDistance;
   m_lastPosition = GetActorLocation();
@@ -153,17 +145,6 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
     }
   }
   m_tickCounter++;
-
-  if (m_touchPlayer) {
-    m_elapsedKillTime += DeltaSeconds;
-    if (m_elapsedKillTime >= TimeToKill) {
-      ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
-      if (gameMode)
-        if (gameMode->EndGameBP() > -0.05)
-          gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
-    }
-  }
-
   if (!HasTrigger || (HasTrigger && m_initMovement)) { 
     doMovement(DeltaSeconds);
     CalculateGravity(DeltaSeconds);
@@ -265,25 +246,16 @@ void AMobileEnemy::RegisterDelegate() {
     m_delegate.BindUFunction(this, TEXT("OnCollisionSkeletal"));
     EnemyAnimationMesh->OnComponentBeginOverlap.Add(m_delegate);
   }
-
-  if (!EnemyAnimationMesh->OnComponentEndOverlap.IsBound()) {
-    EnemyAnimationMesh->OnComponentEndOverlap.AddDynamic(this, &AMobileEnemy::OnEndCollisionSkeletal);
-  }
 }
 
 void AMobileEnemy::OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
   if (OtherActor->ActorHasTag("Player")){
     if (m_tickCounter > 5) {
-      m_touchPlayer = true;
-      m_elapsedKillTime = 0.0f;
+      ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
+      if (gameMode)
+        if (gameMode->EndGameBP() > -0.05)
+          gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
     }
-  }
-}
-
-void AMobileEnemy::OnEndCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-  if (OtherActor->ActorHasTag("Player")){
-    m_touchPlayer = false;
-    m_elapsedKillTime = 0.0f;
   }
 }
 
@@ -300,10 +272,6 @@ void AMobileEnemy::EndPlay(const EEndPlayReason::Type EndPlayReason){
 
   if (EnemyAnimationMesh->OnComponentBeginOverlap.IsBound())
     EnemyAnimationMesh->OnComponentBeginOverlap.Remove(m_delegate);
-
-  if (EnemyAnimationMesh->OnComponentEndOverlap.IsAlreadyBound(this, &AMobileEnemy::OnEndCollisionSkeletal))  {
-    EnemyAnimationMesh->OnComponentEndOverlap.RemoveDynamic(this, &AMobileEnemy::OnEndCollisionSkeletal);
-  }
 
   Super::EndPlay(EndPlayReason);
 }
