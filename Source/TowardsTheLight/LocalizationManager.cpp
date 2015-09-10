@@ -99,9 +99,17 @@ FString LocalizationManager::ChangeSpecialSimbols(FString s){
   //s.ReplaceInline(TEXT("'"), TEXT("ó"));
   //s.ReplaceInline(TEXT("*"), TEXT("ú"));
 
-  TCHAR ene = 'ñ';
-  TCHAR *e = &ene;
-  s.ReplaceInline(TEXT("+"), &ene);
+	char e = "0x08";
+
+	TCHAR ene(e);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, &ene);
+
+	s.ReplaceInline(TEXT("+"), &ene);
+	
+
+  //s.ReplaceInline(TEXT("+"), TEXT("ñ"));
+
+
   //s.ReplaceInline(TEXT("("), TEXT("¡"));
   //s.ReplaceInline(TEXT(")"), TEXT("¿"));
   //s.ReplaceInline(TEXT("^"), TEXT("Á"));
