@@ -3,8 +3,10 @@
 #include "TowardsTheLight.h"
 #include "IntermittentPlatform.h"
 #include "IntermittentManager.h"
+#include "TimeManager.h"
 
 AIntermittentPlatform::AIntermittentPlatform() {
+  this->PrimaryActorTick.bCanEverTick = true;
   this->SetActorEnableCollision(true);
 
   RootComponent->SetMobility(EComponentMobility::Movable);
@@ -13,14 +15,8 @@ AIntermittentPlatform::AIntermittentPlatform() {
 
   //Init default properties
   //visible
- /* DustParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("DissapearParticles"));
-  DustParticles->AttachTo(OurVisibleComponent);
-  DustParticles->bAutoActivate = false;
-  static ConstructorHelpers::FObjectFinder<UParticleSystem> ParticleAsset(TEXT("/Game/Models/Plataforma_Intermit/Plat_int_smoke.Plat_int_smoke"));
-  if (ParticleAsset.Succeeded())
-    DustParticles->SetTemplate(ParticleAsset.Object);*/
-
   //public
+  NoUsesManager = false;
   NumberOfIntermitences = 0;
   InitialTimeDelay = TimeInStateNoVisible = TimeInStateVisible = 1.0f;
   TimeToStartFeedBack = 0.5f;
@@ -46,10 +42,9 @@ AIntermittentPlatform::AIntermittentPlatform() {
 }
 
 void AIntermittentPlatform::BeginPlay() {
+  Super::BeginPlay();
   this->Tags.Add("IntermittentPlatform");
   OurVisibleComponent->SetMaterial(0, IntermittentPlatformMaterial);
- // if (DustParticles)
-  //DustParticles->SetActive(false);
   Init();
 }
 
@@ -61,12 +56,10 @@ void AIntermittentPlatform::Init() {
   m_actualState = State::INITIALDELAY;
 
   if (StartVisible) {
-    //this->SetActorHiddenInGame(false);
     IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 0.0f);
     this->Tags.Add("Platform");
   }
   else {
-    //this->SetActorHiddenInGame(true);
     IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 1.0f);
     this->Tags.Remove("Platform");
   }
@@ -81,7 +74,24 @@ void AIntermittentPlatform::Init() {
 }
 
 void AIntermittentPlatform::Tick(float DeltaSeconds) {
-  if(m_countIntermittences && m_counterIntermittences <= 0)
+  if (NoUsesManager) {
+    DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+    Super::Tick(DeltaSeconds);
+
+    if (m_countIntermittences && m_counterIntermittences <= 0)
+      m_actualState = ENDDELAY;
+
+    runStateMachine(DeltaSeconds);
+  }
+  else{
+    this->PrimaryActorTick.UnRegisterTickFunction();
+    this->PrimaryActorTick.bCanEverTick = false;
+    this->SetActorTickEnabled(false);
+  }
+}
+
+void AIntermittentPlatform::TickManager(float DeltaSeconds) {
+  if (m_countIntermittences && m_counterIntermittences <= 0)
     m_actualState = ENDDELAY;
 
   runStateMachine(DeltaSeconds);
@@ -104,7 +114,7 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
     case AIntermittentPlatform::ON:
       if (m_elapsedTime >= TimeToStartFeedBack) {
         float t = 0 + m_elapsedTime / TimeInStateVisible;
-        t = (t > 1.0f) ? 1.0f : t;
+        t = (t > 0.7f) ? 0.7f : t;
         IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", t);
       }
 
@@ -114,49 +124,40 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
 
         m_isVisible = false;
         if (m_playerIsTouching)
-          m_owner->AlertBlocking(true);
+          if (!NoUsesManager)
+            m_owner->AlertBlocking(true);
        
         m_actualState = State::OFF;
-        //this->SetActorHiddenInGame(true);
         IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 1.0f);
-        //if (DustParticles)
-        //DustParticles->SetActive(true);
         this->Tags.Remove("Platform");
         m_elapsedTime = 0.0f;
 
       }
       break;
     case AIntermittentPlatform::OFF:
-      if (m_elapsedTime >= TimeToStartFeedBack) {
-        float t = 1 - m_elapsedTime / TimeInStateNoVisible;
-        t = (t <= 0.0f) ? 0.0f : t;
-        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", t);
-      }
-
       if (m_elapsedTime >= TimeInStateNoVisible) {
         if (m_countIntermittences)
           m_counterIntermittences--;
 
         m_isVisible = true;
         m_actualState = State::ON;
-        //this->SetActorHiddenInGame(false);
+        
         IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 0.0f);;
-        //if (DustParticles)
-        //DustParticles->SetActive(false);
         this->Tags.Add("Platform");
         m_elapsedTime = 0.0f;
       }
       break;
     case AIntermittentPlatform::ENDDELAY:
       if (m_elapsedTime >= EndTimeDelay) {
-        //Enabled = Loop;
+        
         m_elapsedTime = 0.0f;
         m_actualState = (Loop) ? INITIALDELAY : ENDDELAY;
         if (!Loop && !m_finished) {
-          m_owner->AlertFinish();
+          if (!NoUsesManager)
+            m_owner->AlertFinish();
           m_finished = true;
         }
-        //PROBANDO EL RESET
+        
         m_isVisible = StartVisible;
         m_counterIntermittences = (Loop) ? NumberOfIntermitences : 0;        
       }
@@ -171,7 +172,8 @@ void AIntermittentPlatform::ReceiveActorBeginOverlap(AActor* OtherActor) {
   if (OtherActor->ActorHasTag("Player")) {
     m_playerIsTouching = true;
     if (!m_isVisible) {
-      m_owner->AlertBlocking(true);
+      if (!NoUsesManager)
+        m_owner->AlertBlocking(true);
     }
   }
 }
@@ -179,7 +181,8 @@ void AIntermittentPlatform::ReceiveActorBeginOverlap(AActor* OtherActor) {
 void AIntermittentPlatform::ReceiveActorEndOverlap(AActor* OtherActor) {
   if (OtherActor->ActorHasTag("Player")) {
     m_playerIsTouching = false;
-    m_owner->AlertBlocking(false);
+    if (!NoUsesManager)
+      m_owner->AlertBlocking(false);
   }
 
 }
@@ -190,6 +193,21 @@ void AIntermittentPlatform::InitOwner(AIntermittentManager *owner) {
 
 void AIntermittentPlatform::RestoreInitialState() {
   Init();
+}
+
+void AIntermittentPlatform::ChangeEnabled(bool enabled) {
+  Enabled = enabled;
+  if (Enabled) {
+    RestoreInitialState();
+  }
+}
+
+bool AIntermittentPlatform::isEnabled() {
+  return Enabled;
+}
+
+void AIntermittentPlatform::InitByMechanism(bool disableAtEnd, int32 numActions) {
+  //Nothing
 }
 
 
