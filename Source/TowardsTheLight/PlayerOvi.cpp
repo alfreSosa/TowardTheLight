@@ -221,9 +221,12 @@ void APlayerOvi::Tick(float DeltaSeconds){
 
   if (m_isPickingPortal) {
     m_elapsedPortal += DeltaSeconds;
-    if (m_elapsedPortal >= 0.7f) {
-      m_elapsedPortal = 0.0f;
-      m_isPickingPortal = false;
+    float t = 1.0f - (m_elapsedPortal / 1.2f);
+    Mesh->SetRelativeScale3D(FVector(t, t, t));
+    if (m_elapsedPortal >= 0.6f) {
+        m_elapsedPortal = 0.0f;
+        m_isPickingPortal = false;
+        Mesh->SetRelativeScale3D(FVector(1, 1, 1));
     }
   }
 
