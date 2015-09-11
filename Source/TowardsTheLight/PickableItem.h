@@ -18,6 +18,8 @@ public:
   void RestoreInitialPosition();
   UPROPERTY(EditAnywhere)
     UStaticMeshComponent* OurVisibleComponent;
+  UPROPERTY(EditAnywhere)
+    UParticleSystemComponent *FeedBackParticles;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PickableItem)
     float Points;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PickableItem)
@@ -29,4 +31,5 @@ private:
   bool m_collected;
   FVector m_initialPosition;
   int m_ciclesInRestore;
+  float m_elapsedParticle;
 };
