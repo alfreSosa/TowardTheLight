@@ -36,8 +36,6 @@ AMobileEnemy::AMobileEnemy() {
   m_enableGravity = true;
   m_player = nullptr;
   m_tickCounter = 0;
-  m_elapsedKillTime = 0.0f;
-  m_touchPlayer = false;
   //Capsule
   CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
   CapsuleComponent->InitCapsuleSize(DEFAULT_ENEMY_CAPSULE_RADIOUS, DEFAULT_ENEMY_CAPSULE_HEIGHT);
@@ -92,8 +90,6 @@ AMobileEnemy::AMobileEnemy() {
 
 void AMobileEnemy::BeginPlay() {
   Super::BeginPlay();
-  m_elapsedKillTime = 0.0f;
-  m_touchPlayer = false;
   m_totalDistance = RightDistance + LeftDistance;
   m_currentDistance = LeftDistance;
   m_actualJumpSpeed = 0.0f;
@@ -119,10 +115,6 @@ void AMobileEnemy::BeginPlay() {
 
 void AMobileEnemy::RestoreInitialState()
 {
-  AStaticEnemy::RestoreInitialState();
-  m_elapsedKillTime = 0.0f;
-  m_touchPlayer = false;
-
   SetActorTransform(m_initialStatus);
   m_currentDistance = LeftDistance;
   m_lastPosition = GetActorLocation();
@@ -153,17 +145,6 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
     }
   }
   m_tickCounter++;
-
-  if (m_touchPlayer) {
-    m_elapsedKillTime += DeltaSeconds;
-    if (m_elapsedKillTime >= TimeToKill) {
-      ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
-      if (gameMode)
-        if (gameMode->EndGameBP() > -0.05)
-          gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
-    }
-  }
-
   if (!HasTrigger || (HasTrigger && m_initMovement)) { 
     doMovement(DeltaSeconds);
     CalculateGravity(DeltaSeconds);
@@ -181,14 +162,15 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
     else{
       m_timer = 0;
       m_state = TO_RIGHT;
-      //m_rightVector = GetActorRightVector();
     }
     break;
-  case TO_RIGHT:{
+  case TO_RIGHT:
+  {
     m_isMoving = true;
     float dist = Speed * DeltaSeconds;
-    if (m_totalDistance - m_currentDistance < dist)
-      dist = m_totalDistance - m_currentDistance;
+    float difDistance = m_totalDistance - m_currentDistance;
+    if (difDistance < dist)
+      dist = difDistance;
 
     if (m_currentDistance < m_totalDistance){
       m_currentDistance += dist;
@@ -201,12 +183,14 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
       m_currentDistance = 0;
     }
   }
-                break;
-  case TO_LEFT:{
+    break;
+  case TO_LEFT:
+  {
     m_isMoving = true;
     float dist = Speed * DeltaSeconds;
-    if (m_totalDistance - m_currentDistance < dist)
-      dist = m_totalDistance - m_currentDistance;
+    float difDistance = m_totalDistance - m_currentDistance;
+    if (difDistance < dist)
+      dist = difDistance;
 
     if (m_currentDistance < m_totalDistance){
       m_currentDistance += dist;
@@ -262,25 +246,16 @@ void AMobileEnemy::RegisterDelegate() {
     m_delegate.BindUFunction(this, TEXT("OnCollisionSkeletal"));
     EnemyAnimationMesh->OnComponentBeginOverlap.Add(m_delegate);
   }
-
-  if (!EnemyAnimationMesh->OnComponentEndOverlap.IsBound()) {
-    EnemyAnimationMesh->OnComponentEndOverlap.AddDynamic(this, &AMobileEnemy::OnEndCollisionSkeletal);
-  }
 }
 
 void AMobileEnemy::OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
   if (OtherActor->ActorHasTag("Player")){
     if (m_tickCounter > 5) {
-      m_touchPlayer = true;
-      m_elapsedKillTime = 0.0f;
+      ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
+      if (gameMode)
+        if (gameMode->EndGameBP() > -0.05)
+          gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
     }
-  }
-}
-
-void AMobileEnemy::OnEndCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-  if (OtherActor->ActorHasTag("Player")){
-    m_touchPlayer = false;
-    m_elapsedKillTime = 0.0f;
   }
 }
 
@@ -297,10 +272,6 @@ void AMobileEnemy::EndPlay(const EEndPlayReason::Type EndPlayReason){
 
   if (EnemyAnimationMesh->OnComponentBeginOverlap.IsBound())
     EnemyAnimationMesh->OnComponentBeginOverlap.Remove(m_delegate);
-
-  if (EnemyAnimationMesh->OnComponentEndOverlap.IsAlreadyBound(this, &AMobileEnemy::OnEndCollisionSkeletal))  {
-    EnemyAnimationMesh->OnComponentEndOverlap.RemoveDynamic(this, &AMobileEnemy::OnEndCollisionSkeletal);
-  }
 
   Super::EndPlay(EndPlayReason);
 }
@@ -381,22 +352,18 @@ void AMobileEnemy::CheckCollision() {
   //DrawDebugLine(GetWorld(), StartTraceTop, EndTraceTop, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   GetWorld()->LineTraceMulti(OutTraceResultBottom, StartTraceBottom, EndTraceBottom, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionBottom = OutTraceResultBottom.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTraceBottom, EndTraceBottom, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
   GetWorld()->LineTraceMulti(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionMidle = OutTraceResultMiddle.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTrace, EndTraceMidle, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
   GetWorld()->LineTraceMulti(OutTraceResultTopBack, StartTraceTopBack, EndTraceTopBack, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionTopBack = OutTraceResultTopBack.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTraceTopBack, EndTraceTopBack, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  
   GetWorld()->LineTraceMulti(OutTraceResultBottomBack, StartTraceBottomBack, EndTraceBottomBack, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionBottomBack = OutTraceResultBottomBack.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTraceBottomBack, EndTraceBottomBack, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
   GetWorld()->LineTraceMulti(OutTraceResultMiddleBack, StartTraceBack, EndTraceMidleBack, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionMidleBack = OutTraceResultMiddleBack.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTraceBack, EndTraceMidleBack, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
   if (collisionMidle) {
     int size = OutTraceResultMiddle.Num();
@@ -464,13 +431,10 @@ void AMobileEnemy::CheckCollision() {
 
     GetWorld()->LineTraceMulti(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_ENEMY, TraceParams, ResponseParam);
     bool collisionDownLeftF = OutTraceResultDownLeftF.Num() > 0;
-    //DrawDebugLine(GetWorld(), StartTraceLeftF, EndTraceDownLeftF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
     GetWorld()->LineTraceMulti(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_ENEMY, TraceParams, ResponseParam);
     bool collisionDownRightF = OutTraceResultDownRigthF.Num() > 0;
-    //DrawDebugLine(GetWorld(), StartTraceRigthF, EndTraceDownRightF, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
     GetWorld()->LineTraceMulti(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_ENEMY, TraceParams, ResponseParam);
     bool collisionDown = OutTraceResultDown.Num() > 0;
-    //DrawDebugLine(GetWorld(), StartTrace, EndTraceDown, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
     bool eGravity = true;
     if (collisionDown || collisionDownLeftF || collisionDownRightF) {
       if (collisionDown) {
@@ -523,9 +487,9 @@ void AMobileEnemy::CheckCollision() {
 FVector AMobileEnemy::AbsVector(const FVector& vector) {
   FVector absVector = FVector::ZeroVector;
 
-  absVector.X = (vector.X < 0) ? -vector.X : vector.X;
-  absVector.Y = (vector.Y < 0) ? -vector.Y : vector.Y;
-  absVector.Z = (vector.Z < 0) ? -vector.Z : vector.Z;
+  absVector.X = FMath::Abs(vector.X);
+  absVector.Y = FMath::Abs(vector.Y); 
+  absVector.Z = FMath::Abs(vector.Z); 
 
   return absVector;
 }

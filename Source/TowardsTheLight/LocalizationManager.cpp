@@ -67,6 +67,8 @@ bool LocalizationManager::ParseLanguage(const FString& language) {
                         if (keys[i]["value"].IsString()){
                           FString v = keys[i]["value"].GetString();
 
+                          v = ChangeSpecialSimbols(v);
+
                           langDef.AddString(k, v);
                         }
                     }
@@ -90,6 +92,33 @@ bool LocalizationManager::SetLanguage(const FString& language) {
   return false;
 }
 
+FString LocalizationManager::ChangeSpecialSimbols(FString s){
+  //s.ReplaceInline(TEXT("#"), TEXT("á"));
+  //s.ReplaceInline(TEXT("$"), TEXT("é"));
+  //s.ReplaceInline(TEXT("%"), TEXT("í"));
+  //s.ReplaceInline(TEXT("'"), TEXT("ó"));
+  //s.ReplaceInline(TEXT("*"), TEXT("ú"));
+
+	//char e = 'ñ';
+
+	//TCHAR ene(e);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, &ene);
+
+	//s.ReplaceInline(TEXT("+"), &ene);
+	
 
 
+  //s.ReplaceInline(TEXT("+"), TEXT("ñ"));
 
+
+  //s.ReplaceInline(TEXT("("), TEXT("¡"));
+  //s.ReplaceInline(TEXT(")"), TEXT("¿"));
+  //s.ReplaceInline(TEXT("^"), TEXT("Á"));
+  //s.ReplaceInline(TEXT(";"), TEXT("É"));
+  //s.ReplaceInline(TEXT("<"), TEXT("Í"));
+  //s.ReplaceInline(TEXT("="), TEXT("Ó"));
+  //s.ReplaceInline(TEXT(">"), TEXT("Ú"));
+  //s.ReplaceInline(TEXT("@"), TEXT("Ñ"));
+
+  return s;
+}

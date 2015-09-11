@@ -18,8 +18,8 @@ class TOWARDSTHELIGHT_API AIntermittentPlatform : public AStaticPlatform
 
 public:
   //properties
-  //UPROPERTY(EditAnywhere, Category = IntermittentPlatformEffects)
-  //  
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformConfig)
+    bool NoUsesManager;
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     int32 NumberOfIntermitences;
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
@@ -41,8 +41,12 @@ public:
   AIntermittentPlatform();
   virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;
+  virtual void TickManager(float DeltaSeconds);
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
   virtual void ReceiveActorEndOverlap(AActor* OtherActor) override;
+  void ChangeEnabled(bool enabled);
+  bool isEnabled();
+  void InitByMechanism(bool disableAtEnd, int32 numActions);
   void InitOwner(AIntermittentManager *owner);
   void Init();
   void RestoreInitialState();
@@ -61,5 +65,4 @@ private:
   bool m_isVisible;
   bool Enabled;
   bool m_finished;
-  //UParticleSystemComponent *DustParticles;
 };

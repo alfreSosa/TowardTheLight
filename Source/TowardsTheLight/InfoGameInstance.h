@@ -45,6 +45,15 @@ public:
   UFUNCTION(BlueprintCallable, Category = "GameInfo")
     bool GetInitialScreen();
 
+  UFUNCTION(BlueprintCallable, Category = "GameInfo")
+    void SetTowerNeedKey(bool hasKey);
+  UFUNCTION(BlueprintCallable, Category = "GameInfo")
+    bool GetTowerNeedKey();
+  UFUNCTION(BlueprintCallable, Category = "GameInfo")
+    void SetTowerKeyColor(FLinearColor colorKey);
+  UFUNCTION(BlueprintCallable, Category = "GameInfo")
+    FLinearColor GetTowerKeyColor();
+
 private:
   bool m_pageOpen;
   FString m_pageName;
@@ -56,4 +65,7 @@ private:
   float m_goldScore;
 
   bool m_initialScreen;
+
+  bool m_hasKey;
+  FLinearColor m_colorKey;
 };

@@ -5,6 +5,7 @@
 #include "TowardsTheLightGameMode.h"
 #include "PlayerOvi.h"
 #include "TimeManager.h"
+#include "InfoGameInstance.h"
 
 // Sets default values
 ATower::ATower() {
@@ -92,6 +93,9 @@ void ATower::BeginPlay() {
     MaterialBB->SetVectorParameterValue("Bloom_Color", ColorKey);
   else
     MaterialBB->SetVectorParameterValue("Bloom_Color", FLinearColor(FVector(0.f)));
+
+  Cast<UInfoGameInstance>(GetGameInstance())->SetTowerNeedKey(NeedKey);
+  Cast<UInfoGameInstance>(GetGameInstance())->SetTowerKeyColor(ColorKey);
 }
 
 void ATower::Tick(float DeltaSeconds) {
