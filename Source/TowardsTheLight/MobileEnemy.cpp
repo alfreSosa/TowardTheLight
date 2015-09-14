@@ -123,7 +123,7 @@ void AMobileEnemy::RestoreInitialState()
   m_state = INITIAL_DELAY;
   m_initMovement = false;
   m_actualJumpSpeed = 0.0f;
-  m_enableGravity = (Fly) ? false : true;
+  m_enableGravity = !Fly;
   m_rightVector = GetActorRightVector();
   m_tickCounter = 0;
 }
