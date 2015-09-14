@@ -42,6 +42,7 @@ AStick::AStick(){
 
 void AStick::BeginPlay(){
 	Super::BeginPlay();
+  this->Tags.Add("Stick");
   Stick->SetMaterial(0, StickMaterial);
   BBMaterial->AddElement(EffectsMaterial, NULL, false, 100, 100, NULL);
 }

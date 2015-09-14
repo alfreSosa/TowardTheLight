@@ -45,4 +45,5 @@ private:
   UMaterialInstanceDynamic *PortalMaterialEffects;
   bool m_activateTranslate;
   float m_elapsedTranslate;
+  bool m_isRunning;
 };
