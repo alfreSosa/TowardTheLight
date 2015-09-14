@@ -9,6 +9,7 @@ APortal::APortal(){
   PrimaryActorTick.bCanEverTick = true;
   m_activateTranslate = false;
   m_elapsedTranslate = 0.0f;
+  m_isRunning = false;
   MeshBG = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshBG"));
   MeshBG->AttachTo(RootComponent);
   MeshBG->SetMobility(EComponentMobility::Static);
@@ -46,11 +47,13 @@ APortal::APortal(){
     matEffects = MatFinderEffects.Object;
     PortalMaterialEffects = UMaterialInstanceDynamic::Create(matEffects, GetWorld());
   }
+
 }
 
 void APortal::BeginPlay() {
   Super::BeginPlay();
   m_elapsedTranslate = 0.0f;
+  m_isRunning = false;
   MeshActivator->SetMaterial(0, PortalMaterial);
   MeshBG->SetMaterial(0, PortalMaterialBG);
   MeshEffects->SetMaterial(0, PortalMaterialEffects);
@@ -100,6 +103,7 @@ void APortal::Tick(float DeltaSeconds) {
       newTransformPlayer.SetRotation(q);
 
       m_player->SetActorTransform(newTransformPlayer);
+      m_isRunning = false;
     }
   }
 }
@@ -126,10 +130,11 @@ void APortal::Execute() {
   dif.X = (dif.X < 0) ? -dif.X : dif.X;
   dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
   dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
-  if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05) {
+  if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05 && !m_isRunning) {
     m_player->EnabledPickPortal();
     m_activateTranslate = true;
     m_elapsedTranslate = 0.0f;
+    m_isRunning = true;
     //FTransform newTransformPlayer = Partner->GetTransform();
 
     //newTransformPlayer.SetScale3D(m_player->GetTransform().GetScale3D());
