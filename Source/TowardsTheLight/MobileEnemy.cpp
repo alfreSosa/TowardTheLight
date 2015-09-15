@@ -12,6 +12,7 @@ const float PADDING_ENEMY_COLLISION_PERCENT = 0.05f;
 
 AMobileEnemy::AMobileEnemy() {
   PrimaryActorTick.bCanEverTick = true;
+  PrimaryActorTick.TickGroup = TG_PrePhysics;
   this->SetActorEnableCollision(true);
   m_isMoving = false;
   //setting
@@ -148,7 +149,6 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
   if (!HasTrigger || (HasTrigger && m_initMovement)) { 
     doMovement(DeltaSeconds);
     CalculateGravity(DeltaSeconds);
-    CheckCollision();
   }
 }
 
@@ -177,6 +177,8 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
       FVector location = GetActorLocation();
       location += dist * m_rightVector;
       SetActorLocation(location);
+      CheckCollision();
+
     }
     else{
       m_state = RIGHT_DELAY;
@@ -197,6 +199,7 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
       FVector location = GetActorLocation();
       location += dist * -m_rightVector;
       SetActorLocation(location);
+      CheckCollision();
     }
     else{
       m_state = LEFT_DELAY;
@@ -257,7 +260,7 @@ void AMobileEnemy::OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiv
       newLocationForward.X = (FMath::Abs(GetActorRightVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
       newLocationForward.Y = (FMath::Abs(GetActorRightVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
       newLocationForward.Z = (FMath::Abs(GetActorRightVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
-      const FVector EndTraceMidle = newLocationForward + GetActorRightVector() * (m_capsuleRadious + 100);
+      const FVector EndTraceMidle = newLocationForward + GetActorRightVector() * (m_capsuleRadious + 200);
       // Setup the trace query  
       static FName FireTraceIdent = FName(TEXT("Platform"));
       FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
@@ -269,6 +272,8 @@ void AMobileEnemy::OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiv
       TArray<FHitResult> OutTraceResultMiddle;
 
       GetWorld()->LineTraceMulti(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_ENEMY, TraceParams, ResponseParam);
+      DrawDebugLine(GetWorld(), StartTrace, EndTraceMidle, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+
       bool collisionMidle = OutTraceResultMiddle.Num() > 0;
 
       bool kill = true;
@@ -319,6 +324,7 @@ void AMobileEnemy::CalculateGravity(float DeltaSeconds){
     }
     location -= m_actualJumpSpeed * DeltaSeconds * up;
     SetActorLocation(location);
+    CheckCollision();
   }
   else {
     m_actualJumpSpeed = 0;
