@@ -39,6 +39,7 @@ ATower::ATower() {
 
   NeedKey = false;
   ColorKey = FLinearColor(0.0f, 0.0f, 0.0f);
+  TimeRunes = 1.0f;
 
   TowerLightMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
   UMaterial* mat = nullptr;
@@ -73,7 +74,7 @@ ATower::ATower() {
   m_startVictory = false;
   m_timeToFinish = 2.0f;
   m_elapsedTime = 0.0f;
-
+  m_elapsedTimeRunes = 0.0f;
 }
 
 // Called when the game starts or when spawned
@@ -87,12 +88,15 @@ void ATower::BeginPlay() {
   m_startVictory = false;
   m_timeToFinish = 2.0f;
   m_elapsedTime = 0.0f;
-
+  m_elapsedTimeRunes = 0.0f;
   EffectsBB->AddElement(MaterialBB, NULL, false, 100, 100, NULL);
   if (NeedKey)
     MaterialBB->SetVectorParameterValue("Bloom_Color", ColorKey);
   else
     MaterialBB->SetVectorParameterValue("Bloom_Color", FLinearColor(FVector(0.f)));
+
+  m_origin = ColorKey;
+  m_target = ColorDisabled;
 
   Cast<UInfoGameInstance>(GetGameInstance())->SetTowerNeedKey(NeedKey);
   Cast<UInfoGameInstance>(GetGameInstance())->SetTowerKeyColor(ColorKey);
@@ -101,7 +105,19 @@ void ATower::BeginPlay() {
 void ATower::Tick(float DeltaSeconds) {
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
   Super::Tick(DeltaSeconds);
-  
+
+  m_elapsedTimeRunes += DeltaSeconds;
+  float x = m_elapsedTimeRunes / TimeRunes;
+  x = (x > 1.0f) ? 1.0f : x;
+  FLinearColor actual = FMath::Lerp(m_origin, m_target, x);
+  TowerRunesMaterial->SetVectorParameterValue("ColorRunes", actual);
+  if (m_elapsedTimeRunes >= TimeRunes) {
+    m_elapsedTimeRunes = 0.0f;
+    FLinearColor sav = m_origin;
+    m_origin = m_target;
+    m_target = sav;
+  }
+
   if (m_startVictory) {
     float t = m_elapsedTime / m_timeToFinish;
     t = (t > 1.0f) ? 1.0f : t;
