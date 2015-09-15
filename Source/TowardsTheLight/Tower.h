@@ -33,7 +33,8 @@ public:
     bool NeedKey;
   UPROPERTY(EditAnywhere, Category = Tower)
     FLinearColor ColorKey;
-
+  UPROPERTY(EditAnywhere, Category = Tower)
+    float TimeRunes;
   UPROPERTY(EditAnywhere)
     UMaterialBillboardComponent *EffectsBB;
 
@@ -50,4 +51,7 @@ private:
   bool m_startVictory;
   float m_timeToFinish;
   float m_elapsedTime;
+  float m_elapsedTimeRunes;
+  FLinearColor m_origin;
+  FLinearColor m_target;
 };
