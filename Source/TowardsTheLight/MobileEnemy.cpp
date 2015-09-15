@@ -86,6 +86,7 @@ AMobileEnemy::AMobileEnemy() {
     EnemyAnimationMesh->SetMobility(EComponentMobility::Movable);
 
   }
+  m_nextPosition = m_lastPosition;
 }
 
 
@@ -99,6 +100,7 @@ void AMobileEnemy::BeginPlay() {
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_ENEMY_COLLISION_PERCENT;
   m_capsuleRadiousPadding = m_capsuleRadious * 0.55f;
   m_lastPosition = GetActorLocation();
+  m_nextPosition = m_lastPosition;
   m_rightVector = GetActorRightVector();
   {
     FVector right = GetActorRightVector();
@@ -119,6 +121,7 @@ void AMobileEnemy::RestoreInitialState()
   SetActorTransform(m_initialStatus);
   m_currentDistance = LeftDistance;
   m_lastPosition = GetActorLocation();
+  m_nextPosition = m_lastPosition;
   m_isMoving = m_initialMovement;
   m_timer = 0;
   m_state = INITIAL_DELAY;
@@ -132,7 +135,7 @@ void AMobileEnemy::RestoreInitialState()
 void AMobileEnemy::Tick(float DeltaSeconds) {
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
   m_lastPosition = GetActorLocation();
-
+  m_nextPosition = m_lastPosition;
   EnemyAnimationMesh->bPauseAnims = TimeManager::Instance()->IsPaused();
 
   if (!m_player) {
@@ -146,9 +149,12 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
     }
   }
   m_tickCounter++;
-  if (!HasTrigger || (HasTrigger && m_initMovement)) { 
+  if (!HasTrigger || (HasTrigger && m_initMovement)) {
+    CheckCollision();
     doMovement(DeltaSeconds);
     CalculateGravity(DeltaSeconds);
+    CheckCollision();
+    SetActorLocation(m_nextPosition);
   }
 }
 
@@ -174,11 +180,11 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
 
     if (m_currentDistance < m_totalDistance){
       m_currentDistance += dist;
-      FVector location = GetActorLocation();
+      FVector location = m_nextPosition;
       location += dist * m_rightVector;
-      SetActorLocation(location);
+      //SetActorLocation(location);
+      m_nextPosition = location;
       CheckCollision();
-
     }
     else{
       m_state = RIGHT_DELAY;
@@ -196,9 +202,10 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
 
     if (m_currentDistance < m_totalDistance){
       m_currentDistance += dist;
-      FVector location = GetActorLocation();
+      FVector location = m_nextPosition;
       location += dist * -m_rightVector;
-      SetActorLocation(location);
+      m_nextPosition = location;
+      //SetActorLocation(location);
       CheckCollision();
     }
     else{
@@ -260,7 +267,7 @@ void AMobileEnemy::OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiv
       newLocationForward.X = (FMath::Abs(GetActorRightVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
       newLocationForward.Y = (FMath::Abs(GetActorRightVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
       newLocationForward.Z = (FMath::Abs(GetActorRightVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
-      const FVector EndTraceMidle = newLocationForward + GetActorRightVector() * (m_capsuleRadious + 200);
+      const FVector EndTraceMidle = newLocationForward + GetActorRightVector() * (m_capsuleRadious + 150);
       // Setup the trace query  
       static FName FireTraceIdent = FName(TEXT("Platform"));
       FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
@@ -315,7 +322,7 @@ void AMobileEnemy::EndPlay(const EEndPlayReason::Type EndPlayReason){
 
 void AMobileEnemy::CalculateGravity(float DeltaSeconds){
   FVector up = GetActorUpVector();
-  FVector location = GetActorLocation();
+  FVector location = m_nextPosition;
   if (m_enableGravity) {
     if (m_actualJumpSpeed < m_jumpSpeed)
       m_actualJumpSpeed += m_accelerationJump * DeltaSeconds;
@@ -323,7 +330,7 @@ void AMobileEnemy::CalculateGravity(float DeltaSeconds){
       m_actualJumpSpeed = m_jumpSpeed;
     }
     location -= m_actualJumpSpeed * DeltaSeconds * up;
-    SetActorLocation(location);
+    m_nextPosition = location;
     CheckCollision();
   }
   else {
@@ -358,9 +365,9 @@ void AMobileEnemy::CheckCollision() {
   // Calculate the end location for trace  
   //horizontal
   FVector newLocationForward;
-  newLocationForward.X = (FMath::Abs(GetActorRightVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
-  newLocationForward.Y = (FMath::Abs(GetActorRightVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
-  newLocationForward.Z = (FMath::Abs(GetActorRightVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
+  newLocationForward.X = (FMath::Abs(GetActorRightVector().X) <= 0.01) ? m_lastPosition.X : m_nextPosition.X;
+  newLocationForward.Y = (FMath::Abs(GetActorRightVector().Y) <= 0.01) ? m_lastPosition.Y : m_nextPosition.Y;
+  newLocationForward.Z = (FMath::Abs(GetActorRightVector().Z) <= 0.01) ? m_lastPosition.Z : m_nextPosition.Z;
 
   // Calculate the start location for trace back
   FVector StartTraceBack = newLocationForward;
@@ -407,7 +414,7 @@ void AMobileEnemy::CheckCollision() {
     int size = OutTraceResultMiddle.Num();
     for (int i = 0; i < size; i++)
       if (OutTraceResultMiddle[i].GetActor()->ActorHasTag("Platform") || OutTraceResultMiddle[i].GetActor()->ActorHasTag("Player")) {
-        SetActorLocation(RecalculateLocation(GetActorRightVector(), GetActorLocation(), OutTraceResultMiddle[i].Location, m_capsuleRadious));
+        m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultMiddle[i].Location, m_capsuleRadious);
         ResponseCollision();
         break;
       }
@@ -416,7 +423,7 @@ void AMobileEnemy::CheckCollision() {
     int size = OutTraceResultTop.Num();
     for (int i = 0; i < size; i++)
       if (OutTraceResultTop[i].GetActor()->ActorHasTag("Platform") || OutTraceResultTop[i].GetActor()->ActorHasTag("Player")) {
-        SetActorLocation(RecalculateLocation(GetActorRightVector(), GetActorLocation(), OutTraceResultTop[i].Location, m_capsuleRadious));
+        m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultTop[i].Location, m_capsuleRadious);
         ResponseCollision();
         break;
       }
@@ -425,7 +432,7 @@ void AMobileEnemy::CheckCollision() {
     int size = OutTraceResultBottom.Num();
     for (int i = 0; i < size; i++)
       if (OutTraceResultBottom[i].GetActor()->ActorHasTag("Platform") || OutTraceResultBottom[i].GetActor()->ActorHasTag("Player")) {
-        SetActorLocation(RecalculateLocation(GetActorRightVector(), GetActorLocation(), OutTraceResultBottom[i].Location, m_capsuleRadious));
+        m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultBottom[i].Location, m_capsuleRadious);
         ResponseCollision();
         break;
       }
@@ -437,7 +444,7 @@ void AMobileEnemy::CheckCollision() {
       int size = OutTraceResultMiddleBack.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultMiddleBack[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(-GetActorRightVector(), GetActorLocation(), OutTraceResultMiddleBack[i].Location, m_capsuleRadious));
+          m_nextPosition = RecalculateLocation(-GetActorRightVector(), m_nextPosition, OutTraceResultMiddleBack[i].Location, m_capsuleRadious);
           break;
         }
     }
@@ -445,7 +452,7 @@ void AMobileEnemy::CheckCollision() {
       int size = OutTraceResultTopBack.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultTopBack[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(-GetActorRightVector(), GetActorLocation(), OutTraceResultTopBack[i].Location, m_capsuleRadious));
+          m_nextPosition = RecalculateLocation(-GetActorRightVector(), m_nextPosition, OutTraceResultTopBack[i].Location, m_capsuleRadious);
           break;
         }
     }
@@ -453,16 +460,16 @@ void AMobileEnemy::CheckCollision() {
       int size = OutTraceResultBottomBack.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultBottomBack[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(-GetActorRightVector(), GetActorLocation(), OutTraceResultBottomBack[i].Location, m_capsuleRadious));
+          m_nextPosition = RecalculateLocation(-GetActorRightVector(), m_nextPosition, OutTraceResultBottomBack[i].Location, m_capsuleRadious);
           break;
         }
     }
   }
   if (!Fly) {
     FVector newLocationUp;
-    newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
-    newLocationUp.Y = (FMath::Abs(GetActorUpVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
-    newLocationUp.Z = (FMath::Abs(GetActorUpVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
+    newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : m_nextPosition.X;
+    newLocationUp.Y = (FMath::Abs(GetActorUpVector().Y) <= 0.01) ? m_lastPosition.Y : m_nextPosition.Y;
+    newLocationUp.Z = (FMath::Abs(GetActorUpVector().Z) <= 0.01) ? m_lastPosition.Z : m_nextPosition.Z;
 
     const FVector EndTraceDown = newLocationUp - GetActorUpVector() * m_capsuleHeight;
     const FVector EndTraceDownLeftF = (newLocationUp + GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
@@ -480,7 +487,7 @@ void AMobileEnemy::CheckCollision() {
         int size = OutTraceResultDown.Num();
         for (int i = 0; i < size; i++)
           if (OutTraceResultDown[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDown[i].Location, -m_capsuleHeight));
+            m_nextPosition = RecalculateLocation(GetActorUpVector(), m_nextPosition, OutTraceResultDown[i].Location, -m_capsuleHeight);
           m_enableGravity = false;
           eGravity = false;
           m_actualJumpSpeed = 0;
@@ -491,7 +498,7 @@ void AMobileEnemy::CheckCollision() {
         int size = OutTraceResultDownLeftF.Num();
         for (int i = 0; i < size; i++)
           if (OutTraceResultDownLeftF[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
+            m_nextPosition = RecalculateLocation(GetActorUpVector(), m_nextPosition, OutTraceResultDownLeftF[i].Location, -m_capsuleHeight);
           m_enableGravity = false;
           eGravity = false;
           m_actualJumpSpeed = 0;
@@ -502,7 +509,7 @@ void AMobileEnemy::CheckCollision() {
         int size = OutTraceResultDownRigthF.Num();
         for (int i = 0; i < size; i++)
           if (OutTraceResultDownRigthF[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownRigthF[i].Location, -m_capsuleHeight));
+            m_nextPosition = RecalculateLocation(GetActorUpVector(), m_nextPosition, OutTraceResultDownRigthF[i].Location, -m_capsuleHeight);
           m_enableGravity = false;
           eGravity = false;
           m_actualJumpSpeed = 0;
@@ -554,7 +561,7 @@ FVector AMobileEnemy::RecalculateLocation(FVector Direction, FVector Location, F
 }
 
 void AMobileEnemy::ResponseCollision() {
-  FVector location = GetActorLocation();
+  FVector location = m_nextPosition;
   float val = 0.0f;
   switch (m_state) {
   case TO_RIGHT:
@@ -580,7 +587,7 @@ void AMobileEnemy::ResponseCollision() {
 }
 
 void AMobileEnemy::ResponseCollisionBackward() {
-  FVector location = GetActorLocation();
+  FVector location = m_nextPosition;
   float val = 0.0f;
   switch (m_state) {
   case TO_RIGHT:
