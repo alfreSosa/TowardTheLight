@@ -73,7 +73,7 @@ void ATutorial::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitive
 }
 
 void ATutorial::OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-  if (OtherActor->ActorHasTag("Player") && !m_loaded) {
+  if (OtherActor->ActorHasTag("Player") && !m_loaded && m_enter) {
     m_loaded = true;
 
     m_gameMode->ExitTutorialEvent();
