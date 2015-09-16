@@ -259,48 +259,48 @@ void AMobileEnemy::RegisterDelegate() {
 }
 
 void AMobileEnemy::OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-  if (OtherActor->ActorHasTag("Player") && !OtherActor->ActorHasTag("Stick")) {
-    if (m_tickCounter > 5) {
+  //if (OtherActor->ActorHasTag("Player") && !OtherActor->ActorHasTag("Stick")) {
+  //  if (m_tickCounter > 5) {
 
-      FVector StartTrace = m_lastPosition;
-      FVector newLocationForward;
-      newLocationForward.X = (FMath::Abs(GetActorRightVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
-      newLocationForward.Y = (FMath::Abs(GetActorRightVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
-      newLocationForward.Z = (FMath::Abs(GetActorRightVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
-      const FVector EndTraceMidle = newLocationForward + GetActorRightVector() * (m_capsuleRadious + 150);
-      // Setup the trace query  
-      static FName FireTraceIdent = FName(TEXT("Platform"));
-      FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
-      TraceParams.bTraceAsyncScene = true;
-      TraceParams.bFindInitialOverlaps = true;
-      TraceParams.bTraceComplex = true;
+  //    FVector StartTrace = m_lastPosition;
+  //    FVector newLocationForward;
+  //    newLocationForward.X = (FMath::Abs(GetActorRightVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
+  //    newLocationForward.Y = (FMath::Abs(GetActorRightVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
+  //    newLocationForward.Z = (FMath::Abs(GetActorRightVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
+  //    const FVector EndTraceMidle = newLocationForward + GetActorRightVector() * (m_capsuleRadious + 150);
+  //    // Setup the trace query  
+  //    static FName FireTraceIdent = FName(TEXT("Platform"));
+  //    FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
+  //    TraceParams.bTraceAsyncScene = true;
+  //    TraceParams.bFindInitialOverlaps = true;
+  //    TraceParams.bTraceComplex = true;
 
-      FCollisionResponseParams ResponseParam(ECollisionResponse::ECR_Overlap);
-      TArray<FHitResult> OutTraceResultMiddle;
+  //    FCollisionResponseParams ResponseParam(ECollisionResponse::ECR_Overlap);
+  //    TArray<FHitResult> OutTraceResultMiddle;
 
-      GetWorld()->LineTraceMulti(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_ENEMY, TraceParams, ResponseParam);
-      DrawDebugLine(GetWorld(), StartTrace, EndTraceMidle, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  //    GetWorld()->LineTraceMulti(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_ENEMY, TraceParams, ResponseParam);
+  //    DrawDebugLine(GetWorld(), StartTrace, EndTraceMidle, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
 
-      bool collisionMidle = OutTraceResultMiddle.Num() > 0;
+  //    bool collisionMidle = OutTraceResultMiddle.Num() > 0;
 
-      bool kill = true;
-      if (collisionMidle) {
-        int size = OutTraceResultMiddle.Num();
-        for (int i = 0; i < size; i++)
-          if (OutTraceResultMiddle[i].GetActor()->ActorHasTag("Platform")) {
-            kill = false;
-            break;
-          }
-      }
+  //    bool kill = true;
+  //    if (collisionMidle) {
+  //      int size = OutTraceResultMiddle.Num();
+  //      for (int i = 0; i < size; i++)
+  //        if (OutTraceResultMiddle[i].GetActor()->ActorHasTag("Platform")) {
+  //          kill = false;
+  //          break;
+  //        }
+  //    }
 
-      if (kill) {
-        ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
-        if (gameMode)
-          if (gameMode->EndGameBP() > -0.05)
-            gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
-      }
-    }
-  }
+  //    if (kill) {
+  //      ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
+  //      if (gameMode)
+  //        if (gameMode->EndGameBP() > -0.05)
+  //          gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
+  //    }
+  //  }
+  //}
 }
 
 void AMobileEnemy::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
@@ -339,49 +339,27 @@ void AMobileEnemy::CalculateGravity(float DeltaSeconds){
 }
 
 void AMobileEnemy::CheckCollision() {
-  TArray<FHitResult> OutTraceResultDown;
-  TArray<FHitResult> OutTraceResultDownLeftF;
-  TArray<FHitResult> OutTraceResultDownRigthF;
-
-  TArray<FHitResult> OutTraceResultTop;
+  //Arrays RayCasting Results
+  
   TArray<FHitResult> OutTraceResultMiddle;
+  TArray<FHitResult> OutTraceResultTop;
   TArray<FHitResult> OutTraceResultBottom;
 
-  TArray<FHitResult> OutTraceResultTopBack;
-  TArray<FHitResult> OutTraceResultMiddleBack;
-  TArray<FHitResult> OutTraceResultBottomBack;
-
-
-  // Calculate the start location for trace  
+  //RayCasting StartPoint
   FVector StartTrace = m_lastPosition;
   FVector StartTraceTop = StartTrace + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding);
   FVector StartTraceBottom = StartTrace - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding);
 
-  FVector StartTraceBody = StartTrace + GetActorUpVector() * m_capsuleHeight;
-  FVector StartTraceLegs = StartTrace - GetActorUpVector() * m_capsuleHeight;
-
-  FVector StartTraceLeftF = StartTrace + GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
-  FVector StartTraceRigthF = StartTrace - GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
-  // Calculate the end location for trace  
-  //horizontal
+  //Calculate de horizontal ray, to avoid "Y-AXIS Affect"
   FVector newLocationForward;
   newLocationForward.X = (FMath::Abs(GetActorRightVector().X) <= 0.01) ? m_lastPosition.X : m_nextPosition.X;
   newLocationForward.Y = (FMath::Abs(GetActorRightVector().Y) <= 0.01) ? m_lastPosition.Y : m_nextPosition.Y;
   newLocationForward.Z = (FMath::Abs(GetActorRightVector().Z) <= 0.01) ? m_lastPosition.Z : m_nextPosition.Z;
 
-  // Calculate the start location for trace back
-  FVector StartTraceBack = newLocationForward;
-  FVector StartTraceTopBack = StartTraceBack + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding);
-  FVector StartTraceBottomBack = StartTraceBack - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding);
-
+  //RayCasting EndPoint
+  const FVector EndTraceMidle = newLocationForward + GetActorRightVector() * m_capsuleRadious;
   const FVector EndTraceTop = (newLocationForward + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) + GetActorRightVector() * m_capsuleRadious;
   const FVector EndTraceBottom = (newLocationForward - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) + GetActorRightVector() * m_capsuleRadious;
-  const FVector EndTraceMidle = newLocationForward + GetActorRightVector() * m_capsuleRadious;
-
-  //cambiado a last_position porque va hacia atras y la posicion nueva siempre sera hacia adelante.
-  const FVector EndTraceTopBack = (m_lastPosition + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) - GetActorRightVector() * (m_capsuleRadious - 5);
-  const FVector EndTraceBottomBack = (m_lastPosition - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) - GetActorRightVector() * (m_capsuleRadious - 5); 
-  const FVector EndTraceMidleBack = m_lastPosition - GetActorRightVector() * (m_capsuleRadious - 5);
 
   // Setup the trace query  
   static FName FireTraceIdent = FName(TEXT("Platform"));
@@ -392,80 +370,200 @@ void AMobileEnemy::CheckCollision() {
 
   FCollisionResponseParams ResponseParam(ECollisionResponse::ECR_Overlap);
 
+  //FORWARD RAYCASTING
+  GetWorld()->LineTraceMulti(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_ENEMY, TraceParams, ResponseParam);
+  bool collisionMidle = OutTraceResultMiddle.Num() > 0;
+  //DrawDebugLine(GetWorld(), StartTraceTop, EndTraceTop, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
   GetWorld()->LineTraceMulti(OutTraceResultTop, StartTraceTop, EndTraceTop, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionTop = OutTraceResultTop.Num() > 0;
-  //DrawDebugLine(GetWorld(), StartTraceTop, EndTraceTop, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
+  
   GetWorld()->LineTraceMulti(OutTraceResultBottom, StartTraceBottom, EndTraceBottom, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionBottom = OutTraceResultBottom.Num() > 0;
 
-  GetWorld()->LineTraceMulti(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_ENEMY, TraceParams, ResponseParam);
-  bool collisionMidle = OutTraceResultMiddle.Num() > 0;
+  //check midle raycast
+  if (collisionMidle) {
+    int size = OutTraceResultMiddle.Num();
+    for (int i = 0; i < size; i++)
+      if (OutTraceResultMiddle[i].GetActor()->ActorHasTag("Platform")) {
+        m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultMiddle[i].Location, m_capsuleRadious);
+        ResponseCollision();
+        break;
+      }
+      else if (OutTraceResultMiddle[i].GetActor()->ActorHasTag("Player")) {
+        if (m_tickCounter > 5) {
+          ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
+          if (gameMode)
+            if (gameMode->EndGameBP() > -0.05)
+              gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
+
+          if (!Fly)
+            m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultMiddle[i].Location, m_capsuleRadious);
+          ResponseCollision();
+          break;
+        }
+
+      }
+  }
+  //check top raycast
+  if (collisionTop) {
+    int size = OutTraceResultTop.Num();
+    for (int i = 0; i < size; i++)
+      if (OutTraceResultTop[i].GetActor()->ActorHasTag("Platform")) {
+      m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultTop[i].Location, m_capsuleRadious);
+      ResponseCollision();
+      break;
+      }
+      else if (OutTraceResultTop[i].GetActor()->ActorHasTag("Player")) {
+        if (m_tickCounter > 5) {
+          ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
+          if (gameMode)
+            if (gameMode->EndGameBP() > -0.05)
+              gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
+
+          if (!Fly)
+            m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultTop[i].Location, m_capsuleRadious);
+          ResponseCollision();
+          break;
+        }
+
+      }
+  }
+
+  //check bottom raycast
+  if (collisionBottom) {
+    int size = OutTraceResultBottom.Num();
+    for (int i = 0; i < size; i++)
+      if (OutTraceResultBottom[i].GetActor()->ActorHasTag("Platform")) {
+      m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultBottom[i].Location, m_capsuleRadious);
+      ResponseCollision();
+      break;
+      }
+      else if (OutTraceResultBottom[i].GetActor()->ActorHasTag("Player")) {
+        if (m_tickCounter > 5) {
+          ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
+          if (gameMode)
+            if (gameMode->EndGameBP() > -0.05)
+              gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
+
+          if (!Fly)
+            m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultBottom[i].Location, m_capsuleRadious);
+          ResponseCollision();
+          break;
+        }
+
+      }
+  }
+
+  //BACKWARD RAYCASTING
+  TArray<FHitResult> OutTraceResultTopBack;
+  TArray<FHitResult> OutTraceResultMiddleBack;
+  TArray<FHitResult> OutTraceResultBottomBack;
+
+  newLocationForward.X = (FMath::Abs(GetActorRightVector().X) <= 0.01) ? m_lastPosition.X : m_nextPosition.X;
+  newLocationForward.Y = (FMath::Abs(GetActorRightVector().Y) <= 0.01) ? m_lastPosition.Y : m_nextPosition.Y;
+  newLocationForward.Z = (FMath::Abs(GetActorRightVector().Z) <= 0.01) ? m_lastPosition.Z : m_nextPosition.Z;
+
+  // Calculate the start location for trace back
+  FVector StartTraceBack = newLocationForward;
+  FVector StartTraceTopBack = StartTraceBack + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding);
+  FVector StartTraceBottomBack = StartTraceBack - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding);
+
+  const FVector EndTraceTopBack = (m_lastPosition + GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) - GetActorRightVector() * (m_capsuleRadious - 5);
+  const FVector EndTraceBottomBack = (m_lastPosition - GetActorUpVector() * (m_capsuleHeight - m_capsuleHeightPadding)) - GetActorRightVector() * (m_capsuleRadious - 5);
+  const FVector EndTraceMidleBack = m_lastPosition - GetActorRightVector() * (m_capsuleRadious - 5);
 
   GetWorld()->LineTraceMulti(OutTraceResultTopBack, StartTraceTopBack, EndTraceTopBack, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionTopBack = OutTraceResultTopBack.Num() > 0;
-  
+
   GetWorld()->LineTraceMulti(OutTraceResultBottomBack, StartTraceBottomBack, EndTraceBottomBack, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionBottomBack = OutTraceResultBottomBack.Num() > 0;
 
   GetWorld()->LineTraceMulti(OutTraceResultMiddleBack, StartTraceBack, EndTraceMidleBack, COLLISION_ENEMY, TraceParams, ResponseParam);
   bool collisionMidleBack = OutTraceResultMiddleBack.Num() > 0;
 
-  if (collisionMidle) {
-    int size = OutTraceResultMiddle.Num();
+  //check midle raycast
+  if (collisionMidleBack) {
+    int size = OutTraceResultMiddleBack.Num();
     for (int i = 0; i < size; i++)
-      if (OutTraceResultMiddle[i].GetActor()->ActorHasTag("Platform") || OutTraceResultMiddle[i].GetActor()->ActorHasTag("Player")) {
-        m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultMiddle[i].Location, m_capsuleRadious);
-        ResponseCollision();
-        break;
+      if (OutTraceResultMiddleBack[i].GetActor()->ActorHasTag("Platform")) {
+      m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultMiddleBack[i].Location, m_capsuleRadious);
+      ResponseCollision();
+      break;
+      }
+      else if (OutTraceResultMiddleBack[i].GetActor()->ActorHasTag("Player")) {
+        if (m_tickCounter > 5) {
+          ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
+          if (gameMode)
+            if (gameMode->EndGameBP() > -0.05)
+              gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
+
+          if (!Fly)
+            m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultMiddleBack[i].Location, m_capsuleRadious);
+          ResponseCollision();
+          break;
+        }
+
       }
   }
-  else if (collisionTop) {
-    int size = OutTraceResultTop.Num();
+  //check top raycast
+  if (collisionTopBack) {
+    int size = OutTraceResultTopBack.Num();
     for (int i = 0; i < size; i++)
-      if (OutTraceResultTop[i].GetActor()->ActorHasTag("Platform") || OutTraceResultTop[i].GetActor()->ActorHasTag("Player")) {
-        m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultTop[i].Location, m_capsuleRadious);
-        ResponseCollision();
-        break;
+      if (OutTraceResultTopBack[i].GetActor()->ActorHasTag("Platform")) {
+      m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultTopBack[i].Location, m_capsuleRadious);
+      ResponseCollision();
+      break;
+      }
+      else if (OutTraceResultTopBack[i].GetActor()->ActorHasTag("Player")) {
+        if (m_tickCounter > 5) {
+          ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
+          if (gameMode)
+            if (gameMode->EndGameBP() > -0.05)
+              gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
+
+          if (!Fly)
+            m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultTopBack[i].Location, m_capsuleRadious);
+          ResponseCollision();
+          break;
+        }
+
       }
   }
-  else if (collisionBottom) {
-    int size = OutTraceResultBottom.Num();
+
+  //check bottom raycast
+  if (collisionBottomBack) {
+    int size = OutTraceResultBottomBack.Num();
     for (int i = 0; i < size; i++)
-      if (OutTraceResultBottom[i].GetActor()->ActorHasTag("Platform") || OutTraceResultBottom[i].GetActor()->ActorHasTag("Player")) {
-        m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultBottom[i].Location, m_capsuleRadious);
-        ResponseCollision();
-        break;
+      if (OutTraceResultBottomBack[i].GetActor()->ActorHasTag("Platform")) {
+      m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultBottomBack[i].Location, m_capsuleRadious);
+      ResponseCollision();
+      break;
+      }
+      else if (OutTraceResultBottomBack[i].GetActor()->ActorHasTag("Player")) {
+        if (m_tickCounter > 5) {
+          ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
+          if (gameMode)
+            if (gameMode->EndGameBP() > -0.05)
+              gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
+
+          if (!Fly)
+            m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultBottomBack[i].Location, m_capsuleRadious);
+          ResponseCollision();
+          break;
+        }
+
       }
   }
-  else {
 
 
-    if (collisionMidleBack) {
-      int size = OutTraceResultMiddleBack.Num();
-      for (int i = 0; i < size; i++)
-        if (OutTraceResultMiddleBack[i].GetActor()->ActorHasTag("Platform")) {
-          m_nextPosition = RecalculateLocation(-GetActorRightVector(), m_nextPosition, OutTraceResultMiddleBack[i].Location, m_capsuleRadious);
-          break;
-        }
-    }
-    else if (collisionTopBack) {
-      int size = OutTraceResultTopBack.Num();
-      for (int i = 0; i < size; i++)
-        if (OutTraceResultTopBack[i].GetActor()->ActorHasTag("Platform")) {
-          m_nextPosition = RecalculateLocation(-GetActorRightVector(), m_nextPosition, OutTraceResultTopBack[i].Location, m_capsuleRadious);
-          break;
-        }
-    }
-    else if (collisionBottomBack) {
-      int size = OutTraceResultBottomBack.Num();
-      for (int i = 0; i < size; i++)
-        if (OutTraceResultBottomBack[i].GetActor()->ActorHasTag("Platform")) {
-          m_nextPosition = RecalculateLocation(-GetActorRightVector(), m_nextPosition, OutTraceResultBottomBack[i].Location, m_capsuleRadious);
-          break;
-        }
-    }
-  }
   if (!Fly) {
+    TArray<FHitResult> OutTraceResultDown;
+    TArray<FHitResult> OutTraceResultDownLeftF;
+    TArray<FHitResult> OutTraceResultDownRigthF;
+
+    FVector StartTraceLeftF = StartTrace + GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
+    FVector StartTraceRigthF = StartTrace - GetActorRightVector() * (m_capsuleRadious - m_capsuleRadiousPadding);
+
     FVector newLocationUp;
     newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : m_nextPosition.X;
     newLocationUp.Y = (FMath::Abs(GetActorUpVector().Y) <= 0.01) ? m_lastPosition.Y : m_nextPosition.Y;
@@ -477,17 +575,20 @@ void AMobileEnemy::CheckCollision() {
 
     GetWorld()->LineTraceMulti(OutTraceResultDownLeftF, StartTraceLeftF, EndTraceDownLeftF, COLLISION_ENEMY, TraceParams, ResponseParam);
     bool collisionDownLeftF = OutTraceResultDownLeftF.Num() > 0;
+
     GetWorld()->LineTraceMulti(OutTraceResultDownRigthF, StartTraceRigthF, EndTraceDownRightF, COLLISION_ENEMY, TraceParams, ResponseParam);
     bool collisionDownRightF = OutTraceResultDownRigthF.Num() > 0;
+
     GetWorld()->LineTraceMulti(OutTraceResultDown, StartTrace, EndTraceDown, COLLISION_ENEMY, TraceParams, ResponseParam);
     bool collisionDown = OutTraceResultDown.Num() > 0;
+
     bool eGravity = true;
     if (collisionDown || collisionDownLeftF || collisionDownRightF) {
       if (collisionDown) {
         int size = OutTraceResultDown.Num();
         for (int i = 0; i < size; i++)
           if (OutTraceResultDown[i].GetActor()->ActorHasTag("Platform")) {
-            m_nextPosition = RecalculateLocation(GetActorUpVector(), m_nextPosition, OutTraceResultDown[i].Location, -m_capsuleHeight);
+          m_nextPosition = RecalculateLocation(GetActorUpVector(), m_nextPosition, OutTraceResultDown[i].Location, -m_capsuleHeight);
           m_enableGravity = false;
           eGravity = false;
           m_actualJumpSpeed = 0;
@@ -498,7 +599,7 @@ void AMobileEnemy::CheckCollision() {
         int size = OutTraceResultDownLeftF.Num();
         for (int i = 0; i < size; i++)
           if (OutTraceResultDownLeftF[i].GetActor()->ActorHasTag("Platform")) {
-            m_nextPosition = RecalculateLocation(GetActorUpVector(), m_nextPosition, OutTraceResultDownLeftF[i].Location, -m_capsuleHeight);
+          m_nextPosition = RecalculateLocation(GetActorUpVector(), m_nextPosition, OutTraceResultDownLeftF[i].Location, -m_capsuleHeight);
           m_enableGravity = false;
           eGravity = false;
           m_actualJumpSpeed = 0;
@@ -509,7 +610,7 @@ void AMobileEnemy::CheckCollision() {
         int size = OutTraceResultDownRigthF.Num();
         for (int i = 0; i < size; i++)
           if (OutTraceResultDownRigthF[i].GetActor()->ActorHasTag("Platform")) {
-            m_nextPosition = RecalculateLocation(GetActorUpVector(), m_nextPosition, OutTraceResultDownRigthF[i].Location, -m_capsuleHeight);
+          m_nextPosition = RecalculateLocation(GetActorUpVector(), m_nextPosition, OutTraceResultDownRigthF[i].Location, -m_capsuleHeight);
           m_enableGravity = false;
           eGravity = false;
           m_actualJumpSpeed = 0;
