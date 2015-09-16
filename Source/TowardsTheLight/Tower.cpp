@@ -67,6 +67,15 @@ ATower::ATower() {
     MaterialBB = UMaterialInstanceDynamic::Create(mat, GetWorld());
   }
 
+  TowerEntranceMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(3);
+  UMaterial* mat3 = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatEntranceFinder(TEXT("Material'/Game/Models/Entrance/Entrance_light_mat.Entrance_light_mat'"));
+  if (MatEntranceFinder.Succeeded())
+  {
+    mat3 = MatEntranceFinder.Object;
+    TowerEntranceMaterial = UMaterialInstanceDynamic::Create(mat3, GetWorld());
+  }
+
   EffectsBB = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("BB"));
   EffectsBB->AttachTo(RootComponent);
   EffectsBB->CastShadow = false;
@@ -80,10 +89,16 @@ ATower::ATower() {
 // Called when the game starts or when spawned
 void ATower::BeginPlay() {
 	Super::BeginPlay();
+  
   Light->SetMaterial(0, TowerLightMaterial);
   Body->SetMaterial(0, TowerRunesMaterial);
+  Entrance->SetMaterial(0, TowerEntranceMaterial);
+
+
   TowerLightMaterial->SetVectorParameterValue("Color", ColorDisabled);
   TowerRunesMaterial->SetVectorParameterValue("ColorRunes", ColorKey);
+  TowerEntranceMaterial->SetVectorParameterValue("TowerDoor_color", ColorKey);
+
   RegisterDelegate();
   m_startVictory = false;
   m_timeToFinish = 2.0f;
