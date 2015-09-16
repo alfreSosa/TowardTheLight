@@ -45,6 +45,7 @@ public:
   void RestoreInitialState();
 private:
   UMaterialInstanceDynamic *TowerLightMaterial;
+  UMaterialInstanceDynamic *TowerEntranceMaterial;
   UMaterialInstanceDynamic *TowerRunesMaterial;
   UMaterialInstanceDynamic *MaterialBB;
 
