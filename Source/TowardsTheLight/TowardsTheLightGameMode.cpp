@@ -238,17 +238,20 @@ bool ATowardsTheLightGameMode::LevelExists(FString levelName){
 }
 
 bool ATowardsTheLightGameMode::HasMusicBP(){
-  return GameDataManager::Instance()->HasMusic();
+  bool value = GameDataManager::Instance()->HasMusic();
+  SoundManager::Instance()->SetMusic(value);
+  return value;
 }
-
 void ATowardsTheLightGameMode::SetMusicBP(bool enable){
   GameDataManager::Instance()->SetMusic(enable);
   SoundManager::Instance()->SetMusic(enable);
 }
-bool ATowardsTheLightGameMode::HasEffectsBP(){
-  return GameDataManager::Instance()->HasEffects();
-}
 
+bool ATowardsTheLightGameMode::HasEffectsBP(){
+  bool value = GameDataManager::Instance()->HasEffects();
+  SoundManager::Instance()->SetEffects(value);
+  return value;
+}
 void ATowardsTheLightGameMode::SetEffectsBP(bool enable){
   GameDataManager::Instance()->SetEffects(enable);
   SoundManager::Instance()->SetEffects(enable);
