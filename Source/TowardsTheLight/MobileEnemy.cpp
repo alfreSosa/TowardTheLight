@@ -156,6 +156,7 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
     CheckCollision();
     SetActorLocation(m_nextPosition);
   }
+  CheckCollision();
 }
 
 void AMobileEnemy::doMovement(float DeltaSeconds){
@@ -486,7 +487,7 @@ void AMobileEnemy::CheckCollision() {
     int size = OutTraceResultMiddleBack.Num();
     for (int i = 0; i < size; i++)
       if (OutTraceResultMiddleBack[i].GetActor()->ActorHasTag("Platform")) {
-      m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultMiddleBack[i].Location, m_capsuleRadious);
+      m_nextPosition = RecalculateLocation(-GetActorRightVector(), m_nextPosition, OutTraceResultMiddleBack[i].Location, m_capsuleRadious);
       ResponseCollision();
       break;
       }
@@ -498,7 +499,7 @@ void AMobileEnemy::CheckCollision() {
               gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
 
           if (!Fly)
-            m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultMiddleBack[i].Location, m_capsuleRadious);
+            m_nextPosition = RecalculateLocation(-GetActorRightVector(), m_nextPosition, OutTraceResultMiddleBack[i].Location, m_capsuleRadious);
           ResponseCollision();
           break;
         }
@@ -510,7 +511,7 @@ void AMobileEnemy::CheckCollision() {
     int size = OutTraceResultTopBack.Num();
     for (int i = 0; i < size; i++)
       if (OutTraceResultTopBack[i].GetActor()->ActorHasTag("Platform")) {
-      m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultTopBack[i].Location, m_capsuleRadious);
+      m_nextPosition = RecalculateLocation(-GetActorRightVector(), m_nextPosition, OutTraceResultTopBack[i].Location, m_capsuleRadious);
       ResponseCollision();
       break;
       }
@@ -522,7 +523,7 @@ void AMobileEnemy::CheckCollision() {
               gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
 
           if (!Fly)
-            m_nextPosition = RecalculateLocation(GetActorRightVector(), m_nextPosition, OutTraceResultTopBack[i].Location, m_capsuleRadious);
+            m_nextPosition = RecalculateLocation(-GetActorRightVector(), m_nextPosition, OutTraceResultTopBack[i].Location, m_capsuleRadious);
           ResponseCollision();
           break;
         }
@@ -530,7 +531,7 @@ void AMobileEnemy::CheckCollision() {
       }
   }
 
-  //check bottom raycast
+  //check bottom back raycast
   if (collisionBottomBack) {
     int size = OutTraceResultBottomBack.Num();
     for (int i = 0; i < size; i++)
