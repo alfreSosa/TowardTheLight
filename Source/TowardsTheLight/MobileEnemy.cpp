@@ -156,6 +156,7 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
     CheckCollision();
     SetActorLocation(m_nextPosition);
   }
+  CheckCollision();
 }
 
 void AMobileEnemy::doMovement(float DeltaSeconds){
