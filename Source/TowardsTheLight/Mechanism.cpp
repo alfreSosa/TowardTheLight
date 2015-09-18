@@ -9,7 +9,6 @@
 AMechanism::AMechanism()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
   //skeletal mesh
   SkeletalMesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalComponent"));
   if (SkeletalMesh) {
@@ -54,6 +53,7 @@ AMechanism::AMechanism()
   }
 
   m_isPushed = false;
+  m_justOff = false;
 }
 
 void AMechanism::BeginPlay()
@@ -61,17 +61,14 @@ void AMechanism::BeginPlay()
 	Super::BeginPlay();
   SkeletalMesh->SetMaterial(0, MechanismMaterial);
   int32 numTargets = Targets.Num();
-  m_Targets.Init(numTargets);
   for (int32 i = 0; i < numTargets; i++)
-    m_Targets[i] = dynamic_cast<AStaticPlatform *>(Targets[i]);
-
-  for (int32 i = 0; i < numTargets; i++)
-    m_Targets[i]->InitByMechanism(DisableAtEndAction, NumberOfActions);
+    Targets[i]->InitByMechanism(DisableAtEndAction, NumberOfActions);
 
   m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
   m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
   m_isPushed = false;
   m_elapsedAnimation = 0.0f;
+  m_justOff = false;
 }
 
 void AMechanism::Tick(float DeltaSeconds)
@@ -80,13 +77,14 @@ void AMechanism::Tick(float DeltaSeconds)
   Super::Tick(DeltaSeconds);
   m_elapsedStartIntermitence += DeltaSeconds;
   if (m_isPlayerOn) {
-    if (m_elapsedStartIntermitence >= TimeToStartIntermittence) {
+    m_justOff = false;
+    if (m_elapsedStartIntermitence > TimeToStartIntermittence) {
       m_elapsedIntermitence += DeltaSeconds;
       float t = (m_elapsedIntermitence / TimeInIntermittence);
       t = (t > 1.0f) ? 1.0f : t;
       FLinearColor actual = FMath::Lerp(m_origin, m_target, t);
       MechanismMaterial->SetVectorParameterValue("Color", actual);
-      if (m_elapsedIntermitence >= TimeInIntermittence) {
+      if (m_elapsedIntermitence > TimeInIntermittence) {
         m_elapsedIntermitence = 0.0f;
         intermitedOn = !intermitedOn;
         m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
@@ -95,18 +93,21 @@ void AMechanism::Tick(float DeltaSeconds)
     }
   }
   else {
-    m_elapsedStartIntermitence = TimeToStartIntermittence;
-    int32 numTargets = m_Targets.Num();
-    bool some = false;
-    for (int32 i = 0; i < numTargets; i++) 
-      if (m_Targets[i]->isEnabled()) {
-        some = true;
-        break;
-      }
-    FLinearColor actual = (some) ? ColorEnabled : ColorDisabled;
-    m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
-    m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
-    MechanismMaterial->SetVectorParameterValue("Color", actual);
+    if (!m_justOff) {
+      m_justOff = true;
+      m_elapsedStartIntermitence = TimeToStartIntermittence;
+      int32 numTargets = Targets.Num();
+      bool some = false;
+      for (int32 i = 0; i < numTargets; i++)
+        if (Targets[i]->isEnabled()) {
+          some = true;
+          break;
+        }
+      FLinearColor actual = (some) ? ColorEnabled : ColorDisabled;
+      m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
+      m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
+      MechanismMaterial->SetVectorParameterValue("Color", actual);
+    }
   }
   
   //animation
@@ -126,28 +127,28 @@ void AMechanism::Activate(bool enabled) {
 void AMechanism::Execute() {
   if (!m_isPushed) {
     m_player->EnabledPushButton();
-    int32 numTargets = m_Targets.Num();
+    int32 numTargets = Targets.Num();
 
     bool canUse = true;
-    bool prevEnabled = m_Targets[0]->isEnabled();
+    bool prevEnabled = Targets[0]->isEnabled();
     for (int32 i = 0; i < numTargets; i++) {
-      if (prevEnabled != m_Targets[i]->isEnabled()) {
+      if (prevEnabled != Targets[i]->isEnabled()) {
         canUse = false;
         break;
       }
-      prevEnabled = m_Targets[i]->isEnabled();
+      prevEnabled = Targets[i]->isEnabled();
     }
 
     if (canUse) {
       for (int32 i = 0; i < numTargets; i++) {
-        if (m_Targets[i]->isEnabled()) {
+        if (Targets[i]->isEnabled()) {
           if (CanDisactivate) {
             m_isPushed = true;
             m_elapsedStartIntermitence = 0.0f;
             MechanismMaterial->SetVectorParameterValue("Color", ColorDisabled);
             m_target = ColorEnabled;
             m_origin = ColorDisabled;
-            m_Targets[i]->ChangeEnabled(false);
+            Targets[i]->ChangeEnabled(false);
           }
         }
         else {
@@ -157,7 +158,7 @@ void AMechanism::Execute() {
             MechanismMaterial->SetVectorParameterValue("Color", ColorEnabled);
             m_target = ColorDisabled;
             m_origin = ColorEnabled;
-            m_Targets[i]->ChangeEnabled(true);
+            Targets[i]->ChangeEnabled(true);
           }
         }
       }

@@ -5,6 +5,7 @@
 
 
 AStick::AStick(){
+  PrimaryActorTick.bCanEverTick = false;
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   Stick = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
   Stick->SetMobility(EComponentMobility::Movable);

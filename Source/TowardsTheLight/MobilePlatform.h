@@ -33,6 +33,7 @@ class TOWARDSTHELIGHT_API AMobilePlatform : public AStaticPlatform
   FVector m_initialPosition;
   FLinearColor m_initialColor;
   bool m_enabledInitial;
+  bool m_controlOff;
 
   enum state{
     INITIAL_DELAY,
@@ -73,6 +74,4 @@ public:
     FLinearColor ColorDisabled;
   UPROPERTY(EditAnywhere, Category = MechanismResponse)
     FLinearColor ColorEnabled;
-
-  //FVector GetPlatformMovement() const;
 };

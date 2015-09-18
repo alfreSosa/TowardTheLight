@@ -14,7 +14,6 @@ AIntermittentPlatform::AIntermittentPlatform() {
   OurVisibleComponent->CastShadow = false;
 
   //Init default properties
-  //visible
   //public
   NoUsesManager = false;
   NumberOfIntermitences = 0;
@@ -41,7 +40,8 @@ AIntermittentPlatform::AIntermittentPlatform() {
   }
 }
 
-void AIntermittentPlatform::BeginPlay() {
+void AIntermittentPlatform::BeginPlay()
+{
   Super::BeginPlay();
   this->Tags.Add("IntermittentPlatform");
   OurVisibleComponent->SetMaterial(0, IntermittentPlatformMaterial);
@@ -49,8 +49,8 @@ void AIntermittentPlatform::BeginPlay() {
 }
 
 
-void AIntermittentPlatform::Init() {
-
+void AIntermittentPlatform::Init() 
+{
   if (this->ActorHasTag("Platform"))
     this->Tags.Remove("Platform");
   m_actualState = State::INITIALDELAY;
@@ -70,7 +70,6 @@ void AIntermittentPlatform::Init() {
   m_countIntermittences = (NumberOfIntermitences == 0) ? false : true;
   m_elapsedTime = 0.0f;
   m_finished = false;
-
 }
 
 void AIntermittentPlatform::Tick(float DeltaSeconds) {
@@ -84,7 +83,7 @@ void AIntermittentPlatform::Tick(float DeltaSeconds) {
     runStateMachine(DeltaSeconds);
   }
   else{
-    this->PrimaryActorTick.UnRegisterTickFunction();
+    this->PrimaryActorTick.UnRegisterTickFunction(); //this functions only works at tick function and it's the only way to remove the tick
     this->PrimaryActorTick.bCanEverTick = false;
     this->SetActorTickEnabled(false);
   }
@@ -103,22 +102,19 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
     switch (m_actualState)
     {
     case INITIALDELAY:
-      if (m_elapsedTime >= InitialTimeDelay) {
-        if (StartVisible)
-          m_actualState = State::ON;
-        else
-          m_actualState = State::OFF;
+      if (m_elapsedTime > InitialTimeDelay) {
+        m_actualState = (StartVisible) ? State::ON : State::OFF;
         m_elapsedTime = 0.0f;
       }
       break;
     case AIntermittentPlatform::ON:
-      if (m_elapsedTime >= TimeToStartFeedBack) {
-        float t = 0 + m_elapsedTime / TimeInStateVisible;
+      if (m_elapsedTime > TimeToStartFeedBack) {
+        float t = m_elapsedTime / TimeInStateVisible;
         t = (t > 0.7f) ? 0.7f : t;
         IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", t);
       }
 
-      if (m_elapsedTime >= TimeInStateVisible) {
+      if (m_elapsedTime > TimeInStateVisible) {
         if (m_countIntermittences)
           m_counterIntermittences--;
 
@@ -131,11 +127,10 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 1.0f);
         this->Tags.Remove("Platform");
         m_elapsedTime = 0.0f;
-
       }
       break;
     case AIntermittentPlatform::OFF:
-      if (m_elapsedTime >= TimeInStateNoVisible) {
+      if (m_elapsedTime > TimeInStateNoVisible) {
         if (m_countIntermittences)
           m_counterIntermittences--;
 
@@ -148,8 +143,7 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
       }
       break;
     case AIntermittentPlatform::ENDDELAY:
-      if (m_elapsedTime >= EndTimeDelay) {
-        
+      if (m_elapsedTime > EndTimeDelay) {
         m_elapsedTime = 0.0f;
         m_actualState = (Loop) ? INITIALDELAY : ENDDELAY;
         if (!Loop && !m_finished) {
@@ -157,7 +151,6 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
             m_owner->AlertFinish();
           m_finished = true;
         }
-        
         m_isVisible = StartVisible;
         m_counterIntermittences = (Loop) ? NumberOfIntermitences : 0;        
       }

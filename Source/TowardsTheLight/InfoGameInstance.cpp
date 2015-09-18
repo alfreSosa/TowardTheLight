@@ -2,8 +2,6 @@
 
 #include "TowardsTheLight.h"
 #include "InfoGameInstance.h"
-//#include "SoundManager.h"
-
 
 UInfoGameInstance::UInfoGameInstance(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer){
   m_pageOpen = false;
@@ -18,17 +16,6 @@ UInfoGameInstance::UInfoGameInstance(const class FObjectInitializer& ObjectIniti
 
   m_hasKey = false;
   m_colorKey = FLinearColor(0.0f, 0.0f, 0.0f);
-
-  /*
-  //static ConstructorHelpers::FObjectFinder<USoundCue> soundLoader(TEXT("SoundCue'/Game/Sounds/Menu_track_Cue.Menu_track_Cue'"));
-  //USoundCue* m_pruebaCue = soundLoader.Object;
-
-  static ConstructorHelpers::FObjectFinder<USoundWave> soundLoader(TEXT("SoundWave'/Game/Sounds/Menu_track.Menu_track'"));
-  USoundWave* m_pruebaCue = soundLoader.Object;
-
-  SoundManager::Instance()->SetSound(m_pruebaCue);
-  */
-
 }
 
 void UInfoGameInstance::SetPageOpen(){

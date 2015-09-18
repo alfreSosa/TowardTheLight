@@ -14,6 +14,7 @@ class UInfoGameInstance;
 class AIntermittentManager;
 class AIntermittentPlatform;
 class ATutorial;
+
 /**
  * 
  */
@@ -32,14 +33,14 @@ public:
     TArray<APickableItem *> ItemsPicked;
     float Points;
     float Orbs;
+
     //player restore
     FTransform InitialPlayerStatus;
     bool InitialPlayerToRight;
   };
 
-  ATowardsTheLightGameMode(const FObjectInitializer& ObjectInitializer);  // Our added constructor
-  /*virtual void BeginPlay() override;
-  virtual void Tick(float DeltaSeconds) override;*/
+  ATowardsTheLightGameMode(const FObjectInitializer& ObjectInitializer);
+
   enum EndGameType { NONE = 0, VICTORY = 1, DEFEAT = -1 };
   void EndGame(EndGameType type);
   

@@ -8,9 +8,7 @@
 AIntermittentManager::AIntermittentManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
-  //public properties
   Enabled = true;
-  //private properties
   m_numPlatforms = 0;
   m_finishCounter = 0;
   m_someBlocked = false;
@@ -29,7 +27,6 @@ void AIntermittentManager::BeginPlay()
   }
   m_someBlocked = false;
   m_restart = false;
-
   m_initialEnabled = Enabled;
 }
 

@@ -12,8 +12,6 @@ UCLASS()
 class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
 {
 	GENERATED_BODY()
-  TScriptDelegate<FWeakObjectPtr> m_delegate;
-
 private:
 
   enum state{
@@ -56,7 +54,6 @@ private:
   void CalculateGravity(float DeltaSeconds);
   void CheckCollision();
   void ResponseCollision();
-  void ResponseCollisionBackward();
   FVector AbsVector(const FVector& vector);
   FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
 
@@ -92,8 +89,6 @@ public:
   void RegisterDelegate();
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
   virtual void RestoreInitialState();
-  UFUNCTION()
-    void OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

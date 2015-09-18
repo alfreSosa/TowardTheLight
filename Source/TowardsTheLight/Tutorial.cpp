@@ -4,6 +4,7 @@
 
 
 ATutorial::ATutorial() {
+  PrimaryActorTick.bCanEverTick = false;
   //initialize public properties
   AutoLoad = false;
   //trigger component
