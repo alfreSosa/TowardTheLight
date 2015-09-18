@@ -71,7 +71,7 @@
 		{"key":"TIP9","value":"Use the portals to reach remote areas"},
 		{"key":"TIP10","value":"If you can't activate the Light Tower,\nfind an Altar where light your staff"},
 		{"key":"SUP","value":"Direction"},
-		{"key":"SUP","value":"DIRECTION"},
+		{"key":"SUP_CAPS","value":"DIRECTION"},
 		{"key":"DIR","value":"Project Director: DANIEL S^NCHEZ"},
 		{"key":"PRO","value":"Project Producer: DANIEL PASTOR"},
 		{"key":"GD","value":"Dir. Master in Game Design:"},
