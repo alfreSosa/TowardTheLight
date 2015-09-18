@@ -43,27 +43,11 @@ ATowardsTheLightGameMode::ATowardsTheLightGameMode(const class FObjectInitialize
   m_actualCheckPoint.ColorKey = FLinearColor(1, 1, 1);
 }
 
-//void ATowardsTheLightGameMode::BeginPlay() {
-//
-//}
-//
-//void ATowardsTheLightGameMode::Tick(float DeltaSeconds) {
-//  //esto era temporal
-// /* if (!m_player)
-//    for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
-//      if (ActorItr->ActorHasTag("Player")) {
-//        m_player = (APlayerOvi*)*ActorItr;
-//        m_actualCheckPoint.InitialPlayerStatus = m_player->GetTransform();
-//        m_actualCheckPoint.InitialPlayerToRight = m_player->PlayerisToRight();
-//      }*/
-//}
-
 void ATowardsTheLightGameMode::EndGame(EndGameType type) {
   switch (type){
   case VICTORY:{
     if (state == EndGameType::NONE){
       LevelData data = GameDataManager::Instance()->ReadLevelData(Cast<UInfoGameInstance>(GetGameInstance())->GetCurrentLevel());
-      //si la puntuacion actual es mejor que la que hay en el fichero, hay que almacenarla 
       bool write = false;
       if (m_countOrbs >= data.orbs){
         data.orbs = m_countOrbs;
@@ -77,12 +61,10 @@ void ATowardsTheLightGameMode::EndGame(EndGameType type) {
         GameDataManager::Instance()->WriteLevelData(data);
     }
 
-    //terminar la partida. volver al menú
     state = EndGameType::VICTORY;
   }
     break;
   case DEFEAT:
-    //terminar la partida. volver al menú
     state = EndGameType::DEFEAT;
     break;
   }
@@ -90,13 +72,11 @@ void ATowardsTheLightGameMode::EndGame(EndGameType type) {
 
 void ATowardsTheLightGameMode::AddPoints(float points) {
   m_actualPoints += points;
-  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ActualPoints: %f"), m_actualPoints));
   PointsSoundEvent();
 }
 
 void ATowardsTheLightGameMode::OrbPicked() {
   m_countOrbs++;
-  //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Orbs: %d"), m_countOrbs));
   OrbsSoundEvent();
 }
 
@@ -140,7 +120,6 @@ void ATowardsTheLightGameMode::SetPlayerKey(bool hasKey, FLinearColor colorKey) 
 }
 
 void ATowardsTheLightGameMode::AddItemPicked(APickableItem *item) {
-  //si no estan ya, lo guardo
   if (m_actualCheckPoint.ItemsPicked.Find(item) == INDEX_NONE)
     m_actualCheckPoint.ItemsPicked.Add(item);
 }
@@ -173,7 +152,6 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
     state = EndGameType::NONE;
   }
   else {
-
     m_player->ResetToCheckPoint(m_actualCheckPoint.InitialPlayerStatus, m_actualCheckPoint.InitialPlayerToRight);
     m_player->SetKey(false, FLinearColor(1, 1, 1));
     //restauro pickables

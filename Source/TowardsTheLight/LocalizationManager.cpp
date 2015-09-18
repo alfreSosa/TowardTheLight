@@ -7,9 +7,24 @@
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 
-#include <string>
-
 using namespace rapidjson;
+
+/////////
+// # -> á
+// $ -> é
+// % -> í
+// ' -> ó
+// * -> ú
+// + -> ñ
+// { -> ¡
+// } -> ¿
+// ^ -> Á
+// ; -> É
+// < -> Í
+// = -> Ó
+// > -> Ú
+// @ -> Ñ
+/////////
 
 //LangDef
 const FString& LocalizationManager::LangDef::GetString(const FString& key, const FString& defVal) const {
@@ -91,18 +106,3 @@ bool LocalizationManager::SetLanguage(const FString& language) {
     }
   return false;
 }
-
-  //s.ReplaceInline(TEXT("#"), TEXT("á"));
-  //s.ReplaceInline(TEXT("$"), TEXT("é"));
-  //s.ReplaceInline(TEXT("%"), TEXT("í"));
-  //s.ReplaceInline(TEXT("'"), TEXT("ó"));
-  //s.ReplaceInline(TEXT("*"), TEXT("ú"));
-  //s.ReplaceInline(TEXT("+"), TEXT("ñ"));
-  //s.ReplaceInline(TEXT("("), TEXT("¡"));
-  //s.ReplaceInline(TEXT(")"), TEXT("¿"));
-  //s.ReplaceInline(TEXT("^"), TEXT("Á"));
-  //s.ReplaceInline(TEXT(";"), TEXT("É"));
-  //s.ReplaceInline(TEXT("<"), TEXT("Í"));
-  //s.ReplaceInline(TEXT("="), TEXT("Ó"));
-  //s.ReplaceInline(TEXT(">"), TEXT("Ú"));
-  //s.ReplaceInline(TEXT("@"), TEXT("Ñ"));
