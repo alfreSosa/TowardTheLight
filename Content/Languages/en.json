@@ -69,6 +69,17 @@
 		{"key":"TIP7","value":"Jump to the upper side, or fall to the bottom side,\nand you will find a new perspective of the world"},
 		{"key":"TIP8","value":"Avoid thorn plants!"},
 		{"key":"TIP9","value":"Use the portals to reach remote areas"},
-		{"key":"TIP10","value":"If you can't activate the Light Tower,\nfind an Altar where light your staff"}
-	]
+		{"key":"TIP10","value":"If you can't activate the Light Tower,\nfind an Altar where light your staff"},
+		{"key":"SUP","value":"Direction"},
+		{"key":"SUP","value":"DIRECTION"},
+		{"key":"DIR","value":"Project Director: DANIEL S^NCHEZ"},
+		{"key":"PRO","value":"Project Producer: DANIEL PASTOR"},
+		{"key":"GD","value":"Dir. Master in Game Design:"},
+		{"key":"GDNAME","value":"JOS; MANUEL GARC<A - JUANCHO CARRILLO"},
+		{"key":"A","value":"Dir. Master in Game Art and Visual Design:"},
+		{"key":"ANAME","value":"FRANCISCO JAVIER SOLER - GUILLERMO TOST=N"},
+		{"key":"C","value":"Dir. Master in Game Programming:"},
+		{"key":"CNAME","value":"JAVIER SAN JUAN - JON BELTR^N DE HEREDIA"},
+		{"key":"JARE","value":"Academic Director: JAVIER AR;VALO"}
+		]
 }

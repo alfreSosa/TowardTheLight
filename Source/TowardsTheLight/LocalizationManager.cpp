@@ -23,7 +23,6 @@ using namespace rapidjson;
 // < -> Í
 // = -> Ó
 // > -> Ú
-// @ -> Ñ
 /////////
 
 //LangDef
