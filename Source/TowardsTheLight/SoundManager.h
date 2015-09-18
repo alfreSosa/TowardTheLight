@@ -9,9 +9,6 @@ class TOWARDSTHELIGHT_API SoundManager {
 public:
   static SoundManager* Instance();
 
-  //void SetSound(USoundWave* cue);
-  //void SetSound(USoundCue* cue);
-
   void SetMusic(bool enable);
   void SetEffects(bool enable);
 
@@ -21,7 +18,4 @@ protected:
 
 private:
   static SoundManager* m_instance;
-
-  //USoundWave* m_pruebaCue;
-  //USoundCue* m_pruebaCue;
 };

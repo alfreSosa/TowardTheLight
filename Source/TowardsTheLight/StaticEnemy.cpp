@@ -7,6 +7,7 @@
 
 // Sets default values
 AStaticEnemy::AStaticEnemy() {
+  PrimaryActorTick.bCanEverTick = false;
   //public properties
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));

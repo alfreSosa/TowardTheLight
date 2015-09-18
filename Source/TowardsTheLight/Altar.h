@@ -22,7 +22,6 @@ public:
   virtual void Tick(float DeltaSeconds) override;
   virtual void Activate(bool enabled);
   virtual void Execute();
-  UMaterialInstanceDynamic *AltarMaterial;
 private:
-  bool m_colorControl;
+  UMaterialInstanceDynamic *AltarMaterial;
 };

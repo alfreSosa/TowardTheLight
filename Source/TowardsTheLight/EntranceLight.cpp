@@ -5,6 +5,7 @@
 
 AEntranceLight::AEntranceLight()
 {
+  PrimaryActorTick.bCanEverTick = false;
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   LightMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LigtMesh"));
   RootComponent->SetMobility(EComponentMobility::Static);
@@ -23,11 +24,9 @@ AEntranceLight::AEntranceLight()
   }
 }
 
-// Called when the game starts or when spawned
 void AEntranceLight::BeginPlay()
 {
 	Super::BeginPlay();
-
   LightMesh->SetMaterial(0, TowerLightMaterial);
   TowerLightMaterial->SetVectorParameterValue("TowerDoor_color", ColorKey);
 }

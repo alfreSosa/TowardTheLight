@@ -17,7 +17,7 @@ public:
   UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
   class USkeletalMeshComponent* SkeletalMesh;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
-    TArray<AActor *> Targets;
+    TArray<AStaticPlatform *> Targets;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
     bool CanActivate;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
@@ -57,6 +57,6 @@ private:
   bool intermitedOn;
   FLinearColor m_target;
   FLinearColor m_origin;
-  TArray<AStaticPlatform *> m_Targets;
   UMaterialInstanceDynamic *MechanismMaterial;
+  bool m_justOff;
 };

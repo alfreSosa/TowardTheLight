@@ -36,6 +36,7 @@ AMobilePlatform::AMobilePlatform() {
   intermitedOn = true;
   m_target = ColorEnabled;
   m_origin = ColorDisabled;
+  m_controlOff = false;
 
   MobilePlatformMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
   UMaterial* mat = nullptr;
@@ -61,6 +62,7 @@ void AMobilePlatform::BeginPlay() {
   m_initialPosition = GetActorLocation();
   m_initialColor = color;
   m_enabledInitial = Enabled;
+  m_controlOff = false;
 }
 
 void AMobilePlatform::Tick(float DeltaSeconds) {
@@ -72,12 +74,15 @@ void AMobilePlatform::Tick(float DeltaSeconds) {
           m_player = (APlayerOvi*)*ActorItr;
           break;
         }
-
+    m_controlOff = false;
     doMovement(DeltaSeconds);
     if (m_player && m_isPlayerOn)
       m_player->OnMobilePlatform(this, m_movement);
   } else {
-    MobilePlatformMaterial->SetVectorParameterValue("Color", ColorDisabled);
+    if (!m_controlOff) {
+      m_controlOff = true;
+      MobilePlatformMaterial->SetVectorParameterValue("Color", ColorDisabled); // I think this functions is worst than an 'if'
+    }
   }
 }
 
@@ -90,7 +95,7 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
     t = (t > 1.0f) ? 1.0f : t;
     FLinearColor actual = FMath::Lerp(m_origin, m_target, t);
     MobilePlatformMaterial->SetVectorParameterValue("Color", actual);
-    if (m_elapsedIntermitence >= TimeInIntermittence) {
+    if (m_elapsedIntermitence > TimeInIntermittence) {
       m_elapsedIntermitence = 0.0f;
       intermitedOn = !intermitedOn;
       m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
@@ -171,7 +176,7 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
     t = (t > 1.0f) ? 1.0f : t;
     FLinearColor actual = FMath::Lerp(m_origin, m_target, t);
     MobilePlatformMaterial->SetVectorParameterValue("Color", actual);
-    if (m_elapsedIntermitence >= TimeInIntermittence) {
+    if (m_elapsedIntermitence > TimeInIntermittence) {
       m_elapsedIntermitence = 0.0f;
       intermitedOn = !intermitedOn;
       m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
@@ -191,7 +196,7 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
     t = (t > 1.0f) ? 1.0f : t;
     FLinearColor actual = FMath::Lerp(m_origin, m_target, t);
     MobilePlatformMaterial->SetVectorParameterValue("Color", actual);
-    if (m_elapsedIntermitence >= TimeInIntermittence) {
+    if (m_elapsedIntermitence > TimeInIntermittence) {
       m_elapsedIntermitence = 0.0f;
       intermitedOn = !intermitedOn;
       m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
@@ -224,10 +229,6 @@ void AMobilePlatform::InitByMechanism(bool disableAtEnd, int32 numActions) {
   m_disableAtEndAction = disableAtEnd;
   m_maxActions = numActions;
 }
-
-//FVector AMobilePlatform::GetPlatformMovement() const{
-//  return m_movement;
-//}
 
 void AMobilePlatform::RestoreInitialState() {
   SetActorLocation(m_initialPosition);
