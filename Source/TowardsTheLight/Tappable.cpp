@@ -60,7 +60,7 @@ void ATappable::BeginPlay()
     MaterialBB->SetVectorParameterValue("Bloom_Color", FLinearColor(FVector(0.f)));
 }
 
-// Called every frame
+//necesario por herencia
 void ATappable::Tick( float DeltaTime )
 {
   DeltaTime = TimeManager::Instance()->GetDeltaTime(DeltaTime);
@@ -79,7 +79,7 @@ void ATappable::RegisterDelegate() {
 }
 
 void ATappable::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-  if (OtherActor->ActorHasTag("Player")){
+  if (OtherActor->ActorHasTag("Player")) {
     m_player = dynamic_cast<APlayerOvi *>(OtherActor);
     FVector dif = m_player->GetActorUpVector() - GetActorUpVector();
     dif.X = (dif.X < 0) ? -dif.X : dif.X;

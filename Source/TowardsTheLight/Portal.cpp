@@ -71,9 +71,10 @@ void APortal::BeginPlay() {
 void APortal::Tick(float DeltaSeconds) {
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
   Super::Tick(DeltaSeconds);
+
   if (m_activateTranslate) {
     m_elapsedTranslate += DeltaSeconds;
-    if (m_elapsedTranslate >= 0.7f) {
+    if (m_elapsedTranslate > 0.7f) {
       m_activateTranslate = false;
       m_elapsedTranslate = 0.0f;
       FTransform newTransformPlayer = Partner->GetTransform();
@@ -135,33 +136,6 @@ void APortal::Execute() {
     m_activateTranslate = true;
     m_elapsedTranslate = 0.0f;
     m_isRunning = true;
-    //FTransform newTransformPlayer = Partner->GetTransform();
-
-    //newTransformPlayer.SetScale3D(m_player->GetTransform().GetScale3D());
-
-    //float limitWorld = FVector::DotProduct(m_player->GetActorLocation(), m_player->GetActorRightVector());
-    //limitWorld = abs(limitWorld);
-    //FVector pForward = Partner->GetActorForwardVector();
-    //FVector pUp = Partner->GetActorUpVector();
-
-    ////position
-    //FVector location = newTransformPlayer.GetLocation();
-
-    //if (pForward.X > 0.05 || pForward.X < -0.05)
-    //  location.X = (location.X > 0) ? limitWorld : -limitWorld;
-    //if (pForward.Y > 0.05 || pForward.Y < -0.05)
-    //  location.Y = (location.Y > 0) ? limitWorld : -limitWorld;
-    //if (pForward.Z > 0.05 || pForward.Z < -0.05)
-    //  location.Z = (location.Z > 0) ? limitWorld : -limitWorld;
-
-    //newTransformPlayer.SetLocation(location);
-
-    ////rotation
-    //FQuat q = newTransformPlayer.GetRotation() * FQuat::MakeFromEuler(FVector(0, 0, (m_player->PlayerisToRight()) ? 90 : -90));
-    //
-    //newTransformPlayer.SetRotation(q);
-    //
-    //m_player->SetActorTransform(newTransformPlayer);
   }
 }
 

@@ -4,6 +4,7 @@
 #include "StaticPlatform.h"
 
 AStaticPlatform::AStaticPlatform() {
+  PrimaryActorTick.bCanEverTick = false;
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
   OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OurVisibleComponent"));
   RootComponent->SetMobility(EComponentMobility::Static);

@@ -20,10 +20,8 @@ AAltar::AAltar()
     mat = MatFinder.Object;
     AltarMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
   }
-  m_colorControl = false;
 }
 
-// Called when the game starts or when spawned
 void AAltar::BeginPlay(){
 	Super::BeginPlay();
   m_meshActivator->SetMaterial(0, AltarMaterial);
@@ -32,7 +30,7 @@ void AAltar::BeginPlay(){
 }
 
 void  AAltar::Tick(float DeltaSeconds) {
-  if (m_player)
+  if (m_player) // este if es necesario porque el m_player se inicializa cuando el player entra en el trigger del tapable
     if (m_player->GetColorKey() != AltarColor) {
       AltarMaterial->SetVectorParameterValue("Color", AltarColor);
       MaterialBB->SetVectorParameterValue("Bloom_Color", AltarColor);
@@ -48,6 +46,5 @@ void AAltar::Execute() {
   m_player->EnabledPickAltar();
   AltarMaterial->SetVectorParameterValue("Color", DisableColor);
   MaterialBB->SetVectorParameterValue("Bloom_Color", DisableColor);
-  //m_colorControl = true;
 }
 

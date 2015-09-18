@@ -12,7 +12,6 @@ const float PADDING_ENEMY_COLLISION_PERCENT = 0.05f;
 
 AMobileEnemy::AMobileEnemy() {
   PrimaryActorTick.bCanEverTick = true;
-  PrimaryActorTick.TickGroup = TG_PrePhysics;
   this->SetActorEnableCollision(true);
   m_isMoving = false;
   //setting
@@ -150,7 +149,6 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
   }
   m_tickCounter++;
   if (!HasTrigger || (HasTrigger && m_initMovement)) {
-    CheckCollision();
     doMovement(DeltaSeconds);
     CalculateGravity(DeltaSeconds);
     CheckCollision();
@@ -183,7 +181,6 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
       m_currentDistance += dist;
       FVector location = m_nextPosition;
       location += dist * m_rightVector;
-      //SetActorLocation(location);
       m_nextPosition = location;
       CheckCollision();
     }
@@ -206,7 +203,6 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
       FVector location = m_nextPosition;
       location += dist * -m_rightVector;
       m_nextPosition = location;
-      //SetActorLocation(location);
       CheckCollision();
     }
     else{
@@ -214,7 +210,7 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
       m_currentDistance = 0;
     }
   }
-               break;
+     break;
   case RIGHT_DELAY:
     m_isMoving = false;
     if (m_timer < RightDelay)
@@ -249,74 +245,18 @@ void AMobileEnemy::doMovement(float DeltaSeconds){
 }
 
 void AMobileEnemy::RegisterDelegate() {
-  if (!Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AMobileEnemy::OnBeginTriggerOverlap)) {
+  if (!Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AMobileEnemy::OnBeginTriggerOverlap)) 
     Trigger->OnComponentBeginOverlap.AddDynamic(this, &AMobileEnemy::OnBeginTriggerOverlap);
-  }
-
-  if (!EnemyAnimationMesh->OnComponentBeginOverlap.IsBound()) {
-    m_delegate.BindUFunction(this, TEXT("OnCollisionSkeletal"));
-    EnemyAnimationMesh->OnComponentBeginOverlap.Add(m_delegate);
-  }
-}
-
-void AMobileEnemy::OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-  //if (OtherActor->ActorHasTag("Player") && !OtherActor->ActorHasTag("Stick")) {
-  //  if (m_tickCounter > 5) {
-
-  //    FVector StartTrace = m_lastPosition;
-  //    FVector newLocationForward;
-  //    newLocationForward.X = (FMath::Abs(GetActorRightVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
-  //    newLocationForward.Y = (FMath::Abs(GetActorRightVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
-  //    newLocationForward.Z = (FMath::Abs(GetActorRightVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
-  //    const FVector EndTraceMidle = newLocationForward + GetActorRightVector() * (m_capsuleRadious + 150);
-  //    // Setup the trace query  
-  //    static FName FireTraceIdent = FName(TEXT("Platform"));
-  //    FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
-  //    TraceParams.bTraceAsyncScene = true;
-  //    TraceParams.bFindInitialOverlaps = true;
-  //    TraceParams.bTraceComplex = true;
-
-  //    FCollisionResponseParams ResponseParam(ECollisionResponse::ECR_Overlap);
-  //    TArray<FHitResult> OutTraceResultMiddle;
-
-  //    GetWorld()->LineTraceMulti(OutTraceResultMiddle, StartTrace, EndTraceMidle, COLLISION_ENEMY, TraceParams, ResponseParam);
-  //    DrawDebugLine(GetWorld(), StartTrace, EndTraceMidle, FColor(1.0f, 0.f, 0.f, 1.f), false, 10.f);
-
-  //    bool collisionMidle = OutTraceResultMiddle.Num() > 0;
-
-  //    bool kill = true;
-  //    if (collisionMidle) {
-  //      int size = OutTraceResultMiddle.Num();
-  //      for (int i = 0; i < size; i++)
-  //        if (OutTraceResultMiddle[i].GetActor()->ActorHasTag("Platform")) {
-  //          kill = false;
-  //          break;
-  //        }
-  //    }
-
-  //    if (kill) {
-  //      ATowardsTheLightGameMode *gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
-  //      if (gameMode)
-  //        if (gameMode->EndGameBP() > -0.05)
-  //          gameMode->EndGame(ATowardsTheLightGameMode::DEFEAT);
-  //    }
-  //  }
-  //}
 }
 
 void AMobileEnemy::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-  if (OtherActor->ActorHasTag("Player")){
+  if (OtherActor->ActorHasTag("Player"))
     m_initMovement = true;
-  }
 }
 
 void AMobileEnemy::EndPlay(const EEndPlayReason::Type EndPlayReason){
-  if (Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AMobileEnemy::OnBeginTriggerOverlap))  {
+  if (Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AMobileEnemy::OnBeginTriggerOverlap))
     Trigger->OnComponentBeginOverlap.RemoveDynamic(this, &AMobileEnemy::OnBeginTriggerOverlap);
-  }
-
-  if (EnemyAnimationMesh->OnComponentBeginOverlap.IsBound())
-    EnemyAnimationMesh->OnComponentBeginOverlap.Remove(m_delegate);
 
   Super::EndPlay(EndPlayReason);
 }
@@ -341,7 +281,6 @@ void AMobileEnemy::CalculateGravity(float DeltaSeconds){
 
 void AMobileEnemy::CheckCollision() {
   //Arrays RayCasting Results
-  
   TArray<FHitResult> OutTraceResultMiddle;
   TArray<FHitResult> OutTraceResultTop;
   TArray<FHitResult> OutTraceResultBottom;
@@ -698,30 +637,6 @@ void AMobileEnemy::ResponseCollision() {
     break;
   case LEFT_DELAY:
     val = (m_leftPosition - location * m_rightVector).Size();
-    m_currentDistance = val;
-    break;
-
-  }
-}
-
-void AMobileEnemy::ResponseCollisionBackward() {
-  FVector location = m_nextPosition;
-  float val = 0.0f;
-  switch (m_state) {
-  case TO_RIGHT:
-    val = (m_leftPosition - location * m_rightVector).Size();
-    m_currentDistance = val;
-    break;
-  case TO_LEFT:
-    val = (m_rightPosition - location * m_rightVector).Size();
-    m_currentDistance = val;
-    break;
-  case RIGHT_DELAY:
-    val = (m_leftPosition - location * m_rightVector).Size();
-    m_currentDistance = val;
-    break;
-  case LEFT_DELAY:
-    val = (m_rightPosition - location * m_rightVector).Size();
     m_currentDistance = val;
     break;
 
