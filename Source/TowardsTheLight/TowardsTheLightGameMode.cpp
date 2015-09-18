@@ -12,6 +12,7 @@
 #include "MobilePlatform.h"
 #include "StaticEnemy.h"
 #include "MobileEnemy.h"
+#include "MobilePlatform.h"
 #include "Tower.h"
 #include "IntermittentManager.h"
 #include "IntermittentPlatform.h"
@@ -161,6 +162,9 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
     //restauro enemigos
     for (TActorIterator< AMobileEnemy > eneItr(GetWorld()); eneItr; ++eneItr)
       eneItr->RestoreInitialState();
+    //restauro mobiles
+    for (TActorIterator< AMobilePlatform > movItr(GetWorld()); movItr; ++movItr)
+      movItr->RestoreInitialState();
 
     m_actualPoints = m_actualCheckPoint.Points;
     m_countOrbs = m_actualCheckPoint.Orbs;
