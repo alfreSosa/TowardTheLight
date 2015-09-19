@@ -1,12 +1,15 @@
 #include "TowardsTheLight.h"
 #include "Tutorial.h"
+#include "TimeManager.h"
 #include "TowardsTheLightGameMode.h"
 
 
 ATutorial::ATutorial() {
-  PrimaryActorTick.bCanEverTick = false;
+  PrimaryActorTick.bCanEverTick = true;
   //initialize public properties
   AutoLoad = false;
+  TimeAfterOut = 2.f;
+
   //trigger component
   TriggerIn = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerIn"));
   TriggerIn->SetCollisionProfileName(FName(TEXT("OverlapOnlyPawn")));
@@ -14,14 +17,17 @@ ATutorial::ATutorial() {
   TriggerIn->bGenerateOverlapEvents = true;
   TriggerIn->AttachTo(RootComponent);
 
-  TriggerOut = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerOut"));
-  TriggerOut->SetCollisionProfileName(FName(TEXT("OverlapOnlyPawn")));
-  TriggerOut->bHiddenInGame = true;
-  TriggerOut->bGenerateOverlapEvents = true;
-  TriggerOut->AttachTo(RootComponent);
+  //TriggerOut = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerOut"));
+  //TriggerOut->SetCollisionProfileName(FName(TEXT("OverlapOnlyPawn")));
+  //TriggerOut->bHiddenInGame = true;
+  //TriggerOut->bGenerateOverlapEvents = true;
+  //TriggerOut->AttachTo(RootComponent);
+
   //initialize private properties
   m_loaded = false;
   m_enter = false;
+  m_end = false;
+  m_currentTime = 0.f;
 }
 
 void ATutorial::BeginPlay() {
@@ -39,13 +45,26 @@ void ATutorial::BeginPlay() {
   }
 }
 
+void ATutorial::Tick(float DeltaSeconds) {
+  DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+  Super::Tick(DeltaSeconds);
+
+  if (m_loaded && !m_end){
+    m_currentTime += DeltaSeconds;
+    if (m_currentTime > TimeAfterOut){
+      m_end = true;
+      m_gameMode->ExitTutorialEvent(Key);
+    }
+  }
+}
+
 void ATutorial::RegisterDelegate() {
   if (!TriggerIn->OnComponentBeginOverlap.IsAlreadyBound(this, &ATutorial::OnBeginTriggerOverlap)) {
     TriggerIn->OnComponentBeginOverlap.AddDynamic(this, &ATutorial::OnBeginTriggerOverlap);
   }
 
-  if (!TriggerOut->OnComponentEndOverlap.IsAlreadyBound(this, &ATutorial::OnTriggerOverlapEnd)) {
-    TriggerOut->OnComponentEndOverlap.AddDynamic(this, &ATutorial::OnTriggerOverlapEnd);
+  if (!TriggerIn->OnComponentEndOverlap.IsAlreadyBound(this, &ATutorial::OnTriggerOverlapEnd)) {
+    TriggerIn->OnComponentEndOverlap.AddDynamic(this, &ATutorial::OnTriggerOverlapEnd);
   }
 }
 
@@ -54,8 +73,8 @@ void ATutorial::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     TriggerIn->OnComponentBeginOverlap.RemoveDynamic(this, &ATutorial::OnBeginTriggerOverlap);
   }
 
-  if (TriggerOut->OnComponentEndOverlap.IsAlreadyBound(this, &ATutorial::OnTriggerOverlapEnd))  {
-    TriggerOut->OnComponentEndOverlap.RemoveDynamic(this, &ATutorial::OnTriggerOverlapEnd);
+  if (TriggerIn->OnComponentEndOverlap.IsAlreadyBound(this, &ATutorial::OnTriggerOverlapEnd))  {
+    TriggerIn->OnComponentEndOverlap.RemoveDynamic(this, &ATutorial::OnTriggerOverlapEnd);
   }
   Super::EndPlay(EndPlayReason);
 }
@@ -74,9 +93,6 @@ void ATutorial::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitive
 }
 
 void ATutorial::OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-  if (OtherActor->ActorHasTag("Player") && !m_loaded && m_enter) {
+  if (OtherActor->ActorHasTag("Player") && !m_loaded && m_enter)
     m_loaded = true;
-
-    m_gameMode->ExitTutorialEvent();
-  }
 }
