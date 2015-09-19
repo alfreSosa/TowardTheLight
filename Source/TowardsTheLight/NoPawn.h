@@ -9,4 +9,5 @@ UCLASS()
 class TOWARDSTHELIGHT_API ANoPawn : public APawn {
 	GENERATED_BODY()
 public:
+  ANoPawn();
 };

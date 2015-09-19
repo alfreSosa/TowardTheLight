@@ -2,3 +2,7 @@
 
 #include "TowardsTheLight.h"
 #include "NoPawn.h"
+
+ANoPawn::ANoPawn() {
+  PrimaryActorTick.bCanEverTick = false;
+}
