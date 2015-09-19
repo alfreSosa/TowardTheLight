@@ -119,7 +119,7 @@ public:
   UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
     void EnterTutorialEvent(const FString &Key);
   UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
-    void ExitTutorialEvent();
+    void ExitTutorialEvent(const FString &Key);
 
 private:
   CheckPointData m_actualCheckPoint;

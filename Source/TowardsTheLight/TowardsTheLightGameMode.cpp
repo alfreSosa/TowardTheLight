@@ -24,7 +24,7 @@
 
 
 ATowardsTheLightGameMode::ATowardsTheLightGameMode(const class FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
-  PrimaryActorTick.bCanEverTick = true;
+  PrimaryActorTick.bCanEverTick = false;
 
   DefaultPawnClass = ANoPawn::StaticClass();
   PlayerControllerClass = AOviPlayerController::StaticClass();
