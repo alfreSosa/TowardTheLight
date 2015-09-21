@@ -139,6 +139,9 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\EntranceLight.h">
       <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\KeysTappable.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\TowardsTheLight\Altar.cpp">
@@ -220,6 +223,9 @@
       <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\EntranceLight.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\KeysTappable.cpp">
       <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
     </ClCompile>
   </ItemGroup>
