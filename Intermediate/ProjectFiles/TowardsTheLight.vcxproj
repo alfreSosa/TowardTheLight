@@ -50,6 +50,7 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\InfoGameInstance.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\IntermittentManager.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\IntermittentPlatform.cpp" />
+    <ClCompile Include="..\..\Source\TowardsTheLight\KeysTappable.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\LocalizationManager.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\Mechanism.cpp" />
     <ClCompile Include="..\..\Source\TowardsTheLight\MobileEnemy.cpp" />
@@ -71,6 +72,7 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\InfoGameInstance.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\IntermittentManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\IntermittentPlatform.h" />
+    <ClInclude Include="..\..\Source\TowardsTheLight\KeysTappable.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\LocalizationManager.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\Mechanism.h" />
     <ClInclude Include="..\..\Source\TowardsTheLight\MobileEnemy.h" />
