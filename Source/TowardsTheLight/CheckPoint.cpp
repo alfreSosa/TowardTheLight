@@ -54,20 +54,25 @@ void ACheckPoint::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimiti
   if (OtherActor->ActorHasTag("Player") && !m_loaded && !m_enter) {
     APlayerOvi *player = dynamic_cast<APlayerOvi *>(OtherActor);
     if (player) {
-      m_enter = true;
-      FireParticles->SetActive(true);
-      //storege information in checkpoint
-      m_gameMode->SetPlayerCheckPoint(player, player->GetTransform(), player->PlayerisToRight());
-      m_gameMode->SetPlayerKey(player->HasKey(), player->GetColorKey());
-      for (TActorIterator<APickableItem> ActorItr(GetWorld()); ActorItr; ++ActorItr)
-        if (ActorItr->IsItemPicked())
-          m_gameMode->AddItemPicked(*ActorItr);
+	  FVector dif = player->GetActorUpVector() - CheckPointVisibleComponent->GetUpVector();
+	  dif.X = (dif.X < 0) ? -dif.X : dif.X;
+	  dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
+	  dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
+	  if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05) {
+		m_enter = true;
+		FireParticles->SetActive(true);
+		//storege information in checkpoint
+		m_gameMode->SetPlayerCheckPoint(player, player->GetTransform(), player->PlayerisToRight());
+		m_gameMode->SetPlayerKey(player->HasKey(), player->GetColorKey());
+		for (TActorIterator<APickableItem> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+		  if (ActorItr->IsItemPicked())
+		    m_gameMode->AddItemPicked(*ActorItr);
+	  }
     }
   }
 }
 
-void ACheckPoint::OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex
-  ) {
+void ACheckPoint::OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
   if (OtherActor->ActorHasTag("Player") && !m_loaded) 
     m_loaded = true;
 }
