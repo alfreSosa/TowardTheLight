@@ -85,12 +85,25 @@ ATower::ATower() {
   m_timeToFinish = 2.0f;
   m_elapsedTime = 0.0f;
   m_elapsedTimeRunes = 0.0f;
+
+  //particulas
+  //visible
+  LightParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("PickedParticles"));
+  LightParticles->bAutoActivate = false;
+  static ConstructorHelpers::FObjectFinder<UParticleSystem> ParticleAsset(TEXT("/Game/Models/Tower/Sphere_Light_Particle.Sphere_Light_Particle"));
+  if (ParticleAsset.Succeeded())
+    LightParticles->SetTemplate(ParticleAsset.Object);
+  LightParticles->AttachTo(RootComponent);
+  m_lightZAngle = 0.0f;
 }
 
 // Called when the game starts or when spawned
 void ATower::BeginPlay() {
 	Super::BeginPlay();
-  
+
+  LightParticles->SetActive(true);
+  LightParticles->SetRelativeScale3D(FVector(0.2f));
+
   Light->SetMaterial(0, TowerLightMaterial);
   Body->SetMaterial(0, TowerRunesMaterial);
   Entrance->SetMaterial(0, TowerEntranceMaterial);
@@ -137,9 +150,12 @@ void ATower::Tick(float DeltaSeconds) {
   if (m_startVictory) {
     float t = m_elapsedTime / m_timeToFinish;
     t = (t > 1.0f) ? 1.0f : t;
+    LightParticles->SetRelativeScale3D(FVector(t));
     FLinearColor color = FMath::Lerp(ColorDisabled, ColorEnabled, t);
     TowerLightMaterial->SetVectorParameterValue("Color", color);
     m_elapsedTime += DeltaSeconds;
+    /*m_lightZAngle += 180 * DeltaSeconds;
+    Light->SetWorldRotation(FRotator::MakeFromEuler(FVector(0, 0, m_lightZAngle)));*/
   }
 }
 
@@ -182,4 +198,5 @@ void ATower::RestoreInitialState() {
   TowerLightMaterial->SetVectorParameterValue("Color", ColorDisabled);
   m_timeToFinish = 2.0f;
   m_elapsedTime = 0.0f;
+  LightParticles->SetRelativeScale3D(FVector(0.2f));
 }
