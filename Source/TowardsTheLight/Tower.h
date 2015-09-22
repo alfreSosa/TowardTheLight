@@ -37,6 +37,8 @@ public:
     float TimeRunes;
   UPROPERTY(EditAnywhere)
     UMaterialBillboardComponent *EffectsBB;
+  UPROPERTY(EditAnywhere)
+    UParticleSystemComponent *LightParticles;
 
   void RegisterDelegate();
   UFUNCTION()
@@ -53,6 +55,7 @@ private:
   float m_timeToFinish;
   float m_elapsedTime;
   float m_elapsedTimeRunes;
+  float m_lightZAngle;
   FLinearColor m_origin;
   FLinearColor m_target;
 };
