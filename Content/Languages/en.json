@@ -29,7 +29,7 @@
 		{"key":"CODE","value":"Programmers"},
 		{"key":"EMAIL","value":"Contact us:"},
 		{"key":"DESIGNMEMBERS","value":"- Paula Cabarcos\n- Jordi Guti$rrez\n- David Neira\n- David S#nchez\n- Yoshikuni Takebe"},
-		{"key":"ARTMEMBERS","value":"- Pablo Basc'n\n- Victor Gonz#lez\n- Carmen L'pez\n- ^lvaro Rivero\n- Santiago Rold#n"},
+		{"key":"ARTMEMBERS","value":"- Pablo Basc/n\n- Victor Gonz#lez\n- Carmen L/pez\n- ^lvaro Rivero\n- Santiago Rold#n"},
 		{"key":"CODEMEMBERS","value":"- Manuel Cruz\n- Alfredo Sosa"},
 		{"key":"TUTOJUMP","value":"Tap here\nto jump"},
 		{"key":"TUTOMOVEMENT","value":"Tap and swipe here\nto move"},
@@ -74,11 +74,11 @@
 		{"key":"SUP_CAPS","value":"DIRECTION"},
 		{"key":"DIR","value":"Project Director: DANIEL S^NCHEZ"},
 		{"key":"PRO","value":"Project Producer: DANIEL PASTOR"},
-		{"key":"GD","value":"Dir. Master in Game Design:"},
+		{"key":"GD","value":"Game Design Directors:"},
 		{"key":"GDNAME","value":"JOS; MANUEL GARC<A - JUANCHO CARRILLO"},
-		{"key":"A","value":"Dir. Master in Game Art and Visual Design:"},
+		{"key":"A","value":"Game Art and Visual Design Directors:"},
 		{"key":"ANAME","value":"FRANCISCO JAVIER SOLER - GUILLERMO TOST=N"},
-		{"key":"C","value":"Dir. Master in Game Programming:"},
+		{"key":"C","value":"Game Coding Directors:"},
 		{"key":"CNAME","value":"JAVIER SAN JUAN - JON BELTR^N DE HEREDIA"},
 		{"key":"JARE","value":"Academic Director: JAVIER AR;VALO"}
 		]
