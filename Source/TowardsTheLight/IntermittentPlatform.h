@@ -15,11 +15,14 @@ class TOWARDSTHELIGHT_API AIntermittentPlatform : public AStaticPlatform
   GENERATED_BODY()
   //material
   UMaterialInstanceDynamic *IntermittentPlatformMaterial;
+  UMaterialInstanceDynamic *IPMaterialLarge;
 
 public:
   //properties
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformConfig)
     bool NoUsesManager;
+  UPROPERTY(EditAnywhere, Category = IntermittentPlatformConfig)
+    bool IsLarge;
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)
     int32 NumberOfIntermitences;
   UPROPERTY(EditAnywhere, Category = IntermittentPlatformTiming)

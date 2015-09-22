@@ -15,6 +15,7 @@ AIntermittentPlatform::AIntermittentPlatform() {
 
   //Init default properties
   //public
+  IsLarge = false;
   NoUsesManager = false;
   NumberOfIntermitences = 0;
   InitialTimeDelay = TimeInStateNoVisible = TimeInStateVisible = 1.0f;
@@ -38,13 +39,26 @@ AIntermittentPlatform::AIntermittentPlatform() {
     mat = MatFinder.Object;
     IntermittentPlatformMaterial = UMaterialInstanceDynamic::Create(mat, GetWorld());
   }
+
+  IPMaterialLarge = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(1);
+  mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder2(TEXT("Material'/Game/Models/Plataforma_Intermit/Plat_intermi_big.Plat_intermi_big'"));
+  if (MatFinder2.Succeeded())
+  {
+    mat = MatFinder2.Object;
+    IPMaterialLarge = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
 }
 
 void AIntermittentPlatform::BeginPlay()
 {
   Super::BeginPlay();
   this->Tags.Add("IntermittentPlatform");
-  OurVisibleComponent->SetMaterial(0, IntermittentPlatformMaterial);
+  if (IsLarge)
+    OurVisibleComponent->SetMaterial(0, IPMaterialLarge);
+  else
+    OurVisibleComponent->SetMaterial(0, IntermittentPlatformMaterial);
+
   Init();
 }
 
@@ -56,11 +70,17 @@ void AIntermittentPlatform::Init()
   m_actualState = State::INITIALDELAY;
 
   if (StartVisible) {
-    IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 0.0f);
+    if (IsLarge)
+      IPMaterialLarge->SetScalarParameterValue("alpha_txt_inter", 0.0f);
+    else
+      IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 0.0f);
     this->Tags.Add("Platform");
   }
   else {
-    IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 1.0f);
+    if (IsLarge)
+      IPMaterialLarge->SetScalarParameterValue("alpha_txt_inter", 1.0f);
+    else
+      IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 1.0f);
     this->Tags.Remove("Platform");
   }
 
@@ -111,7 +131,10 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
       if (m_elapsedTime > TimeToStartFeedBack) {
         float t = m_elapsedTime / TimeInStateVisible;
         t = (t > 0.7f) ? 0.7f : t;
-        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", t);
+        if (IsLarge)
+          IPMaterialLarge->SetScalarParameterValue("alpha_txt_inter", t);
+        else
+          IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", t);
       }
 
       if (m_elapsedTime > TimeInStateVisible) {
@@ -124,7 +147,10 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
             m_owner->AlertBlocking(true);
        
         m_actualState = State::OFF;
-        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 1.0f);
+        if (IsLarge)
+          IPMaterialLarge->SetScalarParameterValue("alpha_txt_inter", 1.0f);
+        else
+          IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 1.0f);
         this->Tags.Remove("Platform");
         m_elapsedTime = 0.0f;
       }
@@ -136,8 +162,10 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
 
         m_isVisible = true;
         m_actualState = State::ON;
-        
-        IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 0.0f);;
+        if (IsLarge)
+          IPMaterialLarge->SetScalarParameterValue("alpha_txt_inter", 0.0f);
+        else
+          IntermittentPlatformMaterial->SetScalarParameterValue("alpha_txt_inter", 0.0f);;
         this->Tags.Add("Platform");
         m_elapsedTime = 0.0f;
       }
