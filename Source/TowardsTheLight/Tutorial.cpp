@@ -18,20 +18,20 @@ ATutorial::ATutorial() {
   TriggerIn->AttachTo(RootComponent);
 
   //initialize private properties
-  m_loaded = false;
+  //m_loaded = false;
   m_enter = false;
-  m_end = false;
-  m_currentTime = 0.f;
+  //m_end = false;
+  //m_currentTime = 0.f;
 }
 
 void ATutorial::BeginPlay() {
-	Super::BeginPlay();
+  Super::BeginPlay();
   RegisterDelegate();
 
   //Get ATowardsTheLightGameMode
   m_gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
 
-  m_loaded = false;
+  //m_loaded = false;
   m_enter = false;
 }
 
@@ -44,13 +44,13 @@ void ATutorial::Tick(float DeltaSeconds) {
     m_gameMode->EnterTutorialEvent(Key);
   }
 
-  if (m_loaded && !m_end){
-    m_currentTime += DeltaSeconds;
-    if (m_currentTime > TimeAfterOut){
-      m_end = true;
-      m_gameMode->ExitTutorialEvent(Key);
-    }
-  }
+  //if (m_loaded && !m_end){
+  //  m_currentTime += DeltaSeconds;
+  //  if (m_currentTime > TimeAfterOut){
+  //    m_end = true;
+  //    m_gameMode->ExitTutorialEvent(Key);
+  //  }
+  //}
 }
 
 void ATutorial::RegisterDelegate() {
@@ -58,9 +58,9 @@ void ATutorial::RegisterDelegate() {
     TriggerIn->OnComponentBeginOverlap.AddDynamic(this, &ATutorial::OnBeginTriggerOverlap);
   }
 
-  if (!TriggerIn->OnComponentEndOverlap.IsAlreadyBound(this, &ATutorial::OnTriggerOverlapEnd)) {
-    TriggerIn->OnComponentEndOverlap.AddDynamic(this, &ATutorial::OnTriggerOverlapEnd);
-  }
+  //if (!TriggerIn->OnComponentEndOverlap.IsAlreadyBound(this, &ATutorial::OnTriggerOverlapEnd)) {
+  //  TriggerIn->OnComponentEndOverlap.AddDynamic(this, &ATutorial::OnTriggerOverlapEnd);
+  //}
 }
 
 void ATutorial::EndPlay(const EEndPlayReason::Type EndPlayReason) {
@@ -68,30 +68,29 @@ void ATutorial::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     TriggerIn->OnComponentBeginOverlap.RemoveDynamic(this, &ATutorial::OnBeginTriggerOverlap);
   }
 
-  if (TriggerIn->OnComponentEndOverlap.IsAlreadyBound(this, &ATutorial::OnTriggerOverlapEnd))  {
-    TriggerIn->OnComponentEndOverlap.RemoveDynamic(this, &ATutorial::OnTriggerOverlapEnd);
-  }
+  //if (TriggerIn->OnComponentEndOverlap.IsAlreadyBound(this, &ATutorial::OnTriggerOverlapEnd))  {
+  //  TriggerIn->OnComponentEndOverlap.RemoveDynamic(this, &ATutorial::OnTriggerOverlapEnd);
+  //}
   
   Super::EndPlay(EndPlayReason);
 }
 
 void ATutorial::RestoreInitialState(){
-  m_loaded = false;
+  //m_loaded = false;
   m_enter = false;
-  m_end = false;
-  m_currentTime = 0.f;
+  //m_end = false;
+  //m_currentTime = 0.f;
 }
 
 void ATutorial::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-  if (OtherActor->ActorHasTag("Player") && !m_loaded && !m_enter) {
+  if (OtherActor->ActorHasTag("Player") && !m_enter){// && !m_loaded) {
     m_enter = true;
 
     m_gameMode->EnterTutorialEvent(Key);
   }
 }
 
-void ATutorial::OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-  if (OtherActor->ActorHasTag("Player") && !m_loaded && m_enter)
-    m_loaded = true;
-  
-}
+//void ATutorial::OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
+//  if (OtherActor->ActorHasTag("Player") && !m_loaded && m_enter)
+//    m_loaded = true;
+//}
