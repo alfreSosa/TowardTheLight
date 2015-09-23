@@ -130,6 +130,7 @@ APlayerOvi::APlayerOvi() {
   //iteraction Tappables propierties
   m_isPickingAltar = m_isPickingPortal = m_isPushingButton = false;
   m_elapsedAltar = m_elapsedPortal = m_elapsedButton = 0.0f;
+  m_inTutorial = false;
 }
 
 void APlayerOvi::BeginPlay(){
@@ -879,7 +880,6 @@ FVector APlayerOvi::RecalculateLocation(FVector Direction, FVector Location, FVe
   return loc;
 }
 
-
 void APlayerOvi::OnMobilePlatform(AMobilePlatform *mp, FVector movement){
   if (!m_isJumping){
     FVector loc = GetActorLocation();
@@ -888,7 +888,6 @@ void APlayerOvi::OnMobilePlatform(AMobilePlatform *mp, FVector movement){
   } else{
     m_isOnMobilePlatform = false;
   }
-  
 }
 
 void APlayerOvi::SetKey(bool key, FLinearColor colorKey) {
@@ -935,7 +934,7 @@ bool APlayerOvi::isPlayerPaused() {
 
 bool APlayerOvi::isInputEnabled() {
   float gameStatus = m_gameMode->EndGameBP();
-  return (gameStatus < 0.05f && gameStatus > -0.05f) && !m_isPushingButton && !m_isPickingPortal && !m_isPickingAltar;
+  return (gameStatus < 0.05f && gameStatus > -0.05f) && !m_isPushingButton && !m_isPickingPortal && !m_isPickingAltar && !m_inTutorial;
 }
 
 bool APlayerOvi::PlayerisPushinButton() {
@@ -962,9 +961,16 @@ void  APlayerOvi::EnabledPickAltar() {
   m_isPickingAltar = true;
 }
 
+void APlayerOvi::inTutorial(bool value){
+  m_inTutorial = value;
+  if (value)
+	bPlayerRunning = false;
+}
+
 void APlayerOvi::ResetToCheckPoint(FTransform playerTransform, bool right) {
   SetActorTransform(playerTransform);
   bPlayerRunning = false;
   m_state = (right) ? States::RIGHT : States::LEFT;
   m_isPickingAltar = m_isPickingPortal = m_isPushingButton = false;
+  m_inTutorial = false;
 }

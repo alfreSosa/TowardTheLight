@@ -13,8 +13,6 @@ public:
   //properties
   UPROPERTY(EditAnywhere)
     UBoxComponent *TriggerIn;
-//  UPROPERTY(EditAnywhere)
-//    UBoxComponent *TriggerOut;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TutorialText)
     FString Key;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TutorialInit)
@@ -22,8 +20,8 @@ public:
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TutorialTime)
     float TimeAfterOut;
   //functions
-	ATutorial();
-	virtual void BeginPlay() override;
+  ATutorial();
+  virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;
   void RegisterDelegate();
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
@@ -33,13 +31,13 @@ public:
   //Delegates
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-  UFUNCTION()
-    void OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+  //UFUNCTION()
+  //  void OnTriggerOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 private:
   ATowardsTheLightGameMode *m_gameMode;
   //properties
-  bool m_loaded;
+  //bool m_loaded;
   bool m_enter;
-  bool m_end;
-  float m_currentTime;
+  //bool m_end;
+  //float m_currentTime;
 };
