@@ -108,7 +108,6 @@ void ATower::BeginPlay() {
   Body->SetMaterial(0, TowerRunesMaterial);
   Entrance->SetMaterial(0, TowerEntranceMaterial);
 
-
   TowerLightMaterial->SetVectorParameterValue("Color", ColorDisabled);
   TowerRunesMaterial->SetVectorParameterValue("ColorRunes", ColorKey);
   TowerEntranceMaterial->SetVectorParameterValue("TowerDoor_color", ColorKey);
@@ -129,6 +128,8 @@ void ATower::BeginPlay() {
 
   Cast<UInfoGameInstance>(GetGameInstance())->SetTowerNeedKey(NeedKey);
   Cast<UInfoGameInstance>(GetGameInstance())->SetTowerKeyColor(ColorKey);
+
+  Light->SetRelativeScale3D(FVector(0.5f));
 }
 
 void ATower::Tick(float DeltaSeconds) {
@@ -153,6 +154,9 @@ void ATower::Tick(float DeltaSeconds) {
     LightParticles->SetRelativeScale3D(FVector(t));
     FLinearColor color = FMath::Lerp(ColorDisabled, ColorEnabled, t);
     TowerLightMaterial->SetVectorParameterValue("Color", color);
+
+	Light->SetRelativeScale3D(FVector(t/2.f + 0.5f));
+
     m_elapsedTime += DeltaSeconds;
   }
 
@@ -200,4 +204,5 @@ void ATower::RestoreInitialState() {
   m_timeToFinish = 2.0f;
   m_elapsedTime = 0.0f;
   LightParticles->SetRelativeScale3D(FVector(0.2f));
+  Light->SetRelativeScale3D(FVector(0.5f));
 }
