@@ -195,6 +195,8 @@ void APlayerOvi::BeginPlay(){
     m_colorKey = FLinearColor(FVector(0.5f));
     m_stick->SetColor(FLinearColor(FVector(0.5f)), 5.0f);
   }
+
+  m_inTutorial = false;
 }
 
 void APlayerOvi::Tick(float DeltaSeconds){
@@ -243,11 +245,11 @@ void APlayerOvi::Tick(float DeltaSeconds){
   m_lastPosition = GetActorLocation();
   float value = 0.0f;
   if (isInputEnabled())
-    value = UpdateState();
-
-  if (!isInputEnabled()){
+	  value = UpdateState();
+  else{
     value = 0;
     m_doJump = false;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("dentro false ")));
   }
 
   DoMovement(DeltaSeconds, value);
@@ -963,8 +965,10 @@ void  APlayerOvi::EnabledPickAltar() {
 
 void APlayerOvi::inTutorial(bool value){
   m_inTutorial = value;
-  if (value)
-	bPlayerRunning = false;
+  if (value){
+	  bPlayerRunning = false;
+	  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Some variable ")));
+  }
 }
 
 void APlayerOvi::ResetToCheckPoint(FTransform playerTransform, bool right) {

@@ -266,7 +266,6 @@ void ATowardsTheLightGameMode::FindActualPlayer() {
 }
 
 void ATowardsTheLightGameMode::PlayerInTutorial(bool value){
-  if (!m_player)
-	FindActualPlayer();
+  FindActualPlayer();
   m_player->inTutorial(value);
 }
