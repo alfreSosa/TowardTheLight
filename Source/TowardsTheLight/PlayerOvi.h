@@ -68,6 +68,9 @@ public:
   UFUNCTION(BlueprintCallable, Category = "PlayerState")
     bool isPlayerPaused();
 
+  UFUNCTION(BlueprintCallable, Category = "PlayerInputTTL")
+    void inTutorial(bool value);
+
   //public editor propierties
   UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	  class UCapsuleComponent* CapsuleComponent;
@@ -147,6 +150,9 @@ private:
   float m_elapsedButton;
   float m_elapsedPortal;
   float m_elapsedAltar;
+
+  //tutorial
+  bool m_inTutorial;
 
   //key & stick
   bool m_hasKey;

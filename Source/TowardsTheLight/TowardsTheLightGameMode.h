@@ -121,6 +121,9 @@ public:
   UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
     void ExitTutorialEvent(const FString &Key);
 
+  UFUNCTION(BlueprintCallable, Category = TTLEvents)
+	void PlayerInTutorial(bool value);
+
 private:
   CheckPointData m_actualCheckPoint;
   float m_actualPoints;
