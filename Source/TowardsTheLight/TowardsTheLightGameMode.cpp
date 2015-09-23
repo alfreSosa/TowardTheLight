@@ -266,6 +266,9 @@ void ATowardsTheLightGameMode::FindActualPlayer() {
 }
 
 void ATowardsTheLightGameMode::PlayerInTutorial(bool value){
-  FindActualPlayer();
+  for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
+    if (ActorItr->ActorHasTag("Player"))
+      m_player = (APlayerOvi*)*ActorItr;
+
   m_player->inTutorial(value);
 }
