@@ -249,7 +249,6 @@ void APlayerOvi::Tick(float DeltaSeconds){
   else{
     value = 0;
     m_doJump = false;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("dentro false ")));
   }
 
   DoMovement(DeltaSeconds, value);
@@ -965,10 +964,8 @@ void  APlayerOvi::EnabledPickAltar() {
 
 void APlayerOvi::inTutorial(bool value){
   m_inTutorial = value;
-  if (value){
+  if (value)
 	  bPlayerRunning = false;
-	  GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Some variable ")));
-  }
 }
 
 void APlayerOvi::ResetToCheckPoint(FTransform playerTransform, bool right) {

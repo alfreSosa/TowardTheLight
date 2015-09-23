@@ -20,7 +20,7 @@ ATower::ATower() {
   this->Tags.Add("Platform");
 
   Light = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Light"));
-  Light->SetMobility(EComponentMobility::Static);
+  //Light->SetMobility(EComponentMobility::Static);
   Light->CastShadow = false;
   Light->AttachTo(Body);
 
@@ -44,7 +44,7 @@ ATower::ATower() {
 
   TowerLightMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
   UMaterial* mat = nullptr;
-  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Tower/Tower_sphere_material.Tower_sphere_material'"));
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Tower/Particle_02/Crystal_Mat.Crystal_Mat'"));
   if (MatFinder.Succeeded())
   {
     mat = MatFinder.Object;
@@ -108,7 +108,6 @@ void ATower::BeginPlay() {
   Body->SetMaterial(0, TowerRunesMaterial);
   Entrance->SetMaterial(0, TowerEntranceMaterial);
 
-
   TowerLightMaterial->SetVectorParameterValue("Color", ColorDisabled);
   TowerRunesMaterial->SetVectorParameterValue("ColorRunes", ColorKey);
   TowerEntranceMaterial->SetVectorParameterValue("TowerDoor_color", ColorKey);
@@ -129,6 +128,8 @@ void ATower::BeginPlay() {
 
   Cast<UInfoGameInstance>(GetGameInstance())->SetTowerNeedKey(NeedKey);
   Cast<UInfoGameInstance>(GetGameInstance())->SetTowerKeyColor(ColorKey);
+
+  Light->SetRelativeScale3D(FVector(0.5f));
 }
 
 void ATower::Tick(float DeltaSeconds) {
@@ -153,10 +154,14 @@ void ATower::Tick(float DeltaSeconds) {
     LightParticles->SetRelativeScale3D(FVector(t));
     FLinearColor color = FMath::Lerp(ColorDisabled, ColorEnabled, t);
     TowerLightMaterial->SetVectorParameterValue("Color", color);
+
+	Light->SetRelativeScale3D(FVector(t/2.f + 0.5f));
+
     m_elapsedTime += DeltaSeconds;
-    /*m_lightZAngle += 180 * DeltaSeconds;
-    Light->SetWorldRotation(FRotator::MakeFromEuler(FVector(0, 0, m_lightZAngle)));*/
   }
+
+  m_lightZAngle += 100 * DeltaSeconds;
+  Light->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, m_lightZAngle)));
 }
 
 void ATower::RegisterDelegate() {
@@ -199,4 +204,5 @@ void ATower::RestoreInitialState() {
   m_timeToFinish = 2.0f;
   m_elapsedTime = 0.0f;
   LightParticles->SetRelativeScale3D(FVector(0.2f));
+  Light->SetRelativeScale3D(FVector(0.5f));
 }
