@@ -163,7 +163,7 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
     //restauro tutoriales
     for (TActorIterator< ATutorial> tutItr(GetWorld()); tutItr; ++tutItr)
       tutItr->RestoreInitialState();
-    //restauro mobiles
+    //restauro móviles
     for (TActorIterator< AMobilePlatform > movItr(GetWorld()); movItr; ++movItr)
       movItr->RestoreInitialState();
     //restauro enemigos

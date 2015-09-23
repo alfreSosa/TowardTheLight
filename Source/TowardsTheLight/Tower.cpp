@@ -20,7 +20,7 @@ ATower::ATower() {
   this->Tags.Add("Platform");
 
   Light = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Light"));
-  Light->SetMobility(EComponentMobility::Static);
+  //Light->SetMobility(EComponentMobility::Static);
   Light->CastShadow = false;
   Light->AttachTo(Body);
 
@@ -44,7 +44,7 @@ ATower::ATower() {
 
   TowerLightMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
   UMaterial* mat = nullptr;
-  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Tower/Tower_sphere_material.Tower_sphere_material'"));
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinder(TEXT("Material'/Game/Models/Tower/Particle_02/Crystal_Mat.Crystal_Mat'"));
   if (MatFinder.Succeeded())
   {
     mat = MatFinder.Object;
@@ -154,9 +154,10 @@ void ATower::Tick(float DeltaSeconds) {
     FLinearColor color = FMath::Lerp(ColorDisabled, ColorEnabled, t);
     TowerLightMaterial->SetVectorParameterValue("Color", color);
     m_elapsedTime += DeltaSeconds;
-    /*m_lightZAngle += 180 * DeltaSeconds;
-    Light->SetWorldRotation(FRotator::MakeFromEuler(FVector(0, 0, m_lightZAngle)));*/
   }
+
+  m_lightZAngle += 100 * DeltaSeconds;
+  Light->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, m_lightZAngle)));
 }
 
 void ATower::RegisterDelegate() {
