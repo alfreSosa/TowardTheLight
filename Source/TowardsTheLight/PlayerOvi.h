@@ -138,6 +138,7 @@ private:
 
   //origin ray position
   FVector m_lastPosition;
+  FVector m_desiredPosition;
 
   //mobile platform interaction propierties
   bool m_isOnMobilePlatform;
