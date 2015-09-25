@@ -62,10 +62,10 @@ void APortal::BeginPlay() {
   PortalMaterial->SetVectorParameterValue("Portal_structure_color", ColorDisabled);
 
   PortalMaterialBG->SetVectorParameterValue("Portal_BG_color", PortalColor);
-  if (NeedKey)
+  //if (NeedKey)
     PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", FLinearColor(FVector(0.f)));
-  else
-    PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", PortalColor);
+  //else
+    //PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", PortalColor);
 }
 
 void APortal::Tick(float DeltaSeconds) {
@@ -112,17 +112,17 @@ void APortal::Tick(float DeltaSeconds) {
 void APortal::Activate(bool enabled) {
   if (enabled){
     PortalMaterial->SetVectorParameterValue("Portal_structure_color", ColorEnabled);
-    if (NeedKey){
+    //if (NeedKey){
       PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", PortalColor);
       Partner->Turn(true);
-    }
+    //}
   }
   else{
     PortalMaterial->SetVectorParameterValue("Portal_structure_color", ColorDisabled);
-    if (NeedKey){
+    //if (NeedKey){
       PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", FLinearColor(FVector(0.f)));
       Partner->Turn(false);
-    }
+    //}
   }
 }
 
