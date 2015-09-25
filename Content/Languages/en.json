@@ -16,7 +16,7 @@
 		{"key":"OPTIONS","value":"OPTIONS"},
 		{"key":"NEXT","value":"Next"},
 		{"key":"VICTORY","value":"VICTORY"},
-		{"key":"LOADING","value":"Loading"},
+		{"key":"LOADING","value":"Traveling to:"},
 		{"key":"BACK","value":"Back"},
 		{"key":"CHECKPOINT","value":"Checkpoint"},
 		{"key":"ES","value":"Espa+ol"},
