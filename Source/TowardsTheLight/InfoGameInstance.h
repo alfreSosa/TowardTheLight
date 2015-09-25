@@ -27,6 +27,11 @@ public:
     FString GetCurrentLevel();
 	
   UFUNCTION(BlueprintCallable, Category = "GameInfo")
+	  void SetCurrentLevelKeytitle(FString keyTitle);
+  UFUNCTION(BlueprintCallable, Category = "GameInfo")
+	  FString GetCurrentLevelKeyTitle();
+
+  UFUNCTION(BlueprintCallable, Category = "GameInfo")
     void SetMaxScoreCurrentLevel(float maxScore);
   UFUNCTION(BlueprintCallable, Category = "GameInfo")
     float GetMaxScoreCurrentLevel();
@@ -58,6 +63,7 @@ private:
   bool m_pageOpen;
   FString m_pageName;
   FString m_levelName;
+  FString m_keyTitle;
   float m_maxScore;
   float m_silverPercentage;
   float m_goldPercentage;

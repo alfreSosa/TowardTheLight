@@ -243,6 +243,7 @@ void APlayerOvi::Tick(float DeltaSeconds){
 
   //get last position for this frame.
   m_lastPosition = GetActorLocation();
+  m_desiredPosition = m_lastPosition;
   float value = 0.0f;
   if (isInputEnabled())
 	  value = UpdateState();
@@ -252,11 +253,13 @@ void APlayerOvi::Tick(float DeltaSeconds){
   }
 
   DoMovement(DeltaSeconds, value);
+  CheckCollision();
   if (!m_isPickingPortal) {
     DoJump(DeltaSeconds);
     CalculateGravity(DeltaSeconds);
+    CheckCollision();
   }
-  CheckCollision();
+  SetActorLocation(m_desiredPosition);
   CalculateOrientation();
 }
 
@@ -386,9 +389,9 @@ void APlayerOvi::OnStopJump() {
 
 void  APlayerOvi::DoMovement(float DeltaSeconds, float value){
   FVector forward = GetActorForwardVector();
-  FVector location = GetActorLocation();
-  location += MovementSpeed * DeltaSeconds * value * forward;
-  SetActorLocation(location);
+  //FVector location = GetActorLocation();
+  m_desiredPosition += MovementSpeed * DeltaSeconds * value * forward;
+  //SetActorLocation(location);
 }
 
 void APlayerOvi::DoJump(float DeltaSeconds){
@@ -405,7 +408,7 @@ void APlayerOvi::DoJump(float DeltaSeconds){
   }
 
   FVector up = GetActorUpVector();
-  FVector location = GetActorLocation();
+  FVector location = m_desiredPosition;
 
   if (m_isJumping && !m_headCollision) {
     if (m_actualJumpSpeed > 0) {
@@ -425,13 +428,13 @@ void APlayerOvi::DoJump(float DeltaSeconds){
       m_isFalling = !m_hasLanded;
     m_enabledGravity = true;
   }
-
-  SetActorLocation(location);
+  m_desiredPosition = location;
+  //SetActorLocation(location);
 }
 
 void APlayerOvi::CalculateGravity(float DeltaSeconds){
   FVector up = GetActorUpVector();
-  FVector location = GetActorLocation();
+  FVector location = m_desiredPosition;
 
   if (m_enabledGravity && !m_hasLanded && !m_isOnMobilePlatform) {
     if (m_actualJumpSpeed < FallSpeed)
@@ -440,7 +443,7 @@ void APlayerOvi::CalculateGravity(float DeltaSeconds){
       m_actualJumpSpeed = FallSpeed;
     }
     location -= m_actualJumpSpeed * DeltaSeconds * up;
-    SetActorLocation(location);
+    m_desiredPosition = location;
   }
 }
 
@@ -530,9 +533,9 @@ void APlayerOvi::CheckCollision() {
   // Calculate the end location for trace  
   //horizontal
   FVector newLocationForward;
-  newLocationForward.X = (FMath::Abs(GetActorForwardVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
-  newLocationForward.Y = (FMath::Abs(GetActorForwardVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
-  newLocationForward.Z = (FMath::Abs(GetActorForwardVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
+  newLocationForward.X = (FMath::Abs(GetActorForwardVector().X) <= 0.01) ? m_lastPosition.X : m_desiredPosition.X;
+  newLocationForward.Y = (FMath::Abs(GetActorForwardVector().Y) <= 0.01) ? m_lastPosition.Y : m_desiredPosition.Y;
+  newLocationForward.Z = (FMath::Abs(GetActorForwardVector().Z) <= 0.01) ? m_lastPosition.Z : m_desiredPosition.Z;
 
   // Calculate the start location for trace back
   FVector StartTraceBack = newLocationForward;
@@ -601,7 +604,7 @@ void APlayerOvi::CheckCollision() {
       int size = OutTraceResultTop.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultTop[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultTop[i].Location, m_capsuleRadious));
+          m_desiredPosition = RecalculateLocation(GetActorForwardVector(), m_desiredPosition, OutTraceResultTop[i].Location, m_capsuleRadious);
           break;
         }
     }
@@ -609,7 +612,7 @@ void APlayerOvi::CheckCollision() {
       int size = OutTraceResultBottom.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultBottom[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultBottom[i].Location, m_capsuleRadious));
+          m_desiredPosition = RecalculateLocation(GetActorForwardVector(), m_desiredPosition, OutTraceResultBottom[i].Location, m_capsuleRadious);
           break;
         }
     }
@@ -617,7 +620,7 @@ void APlayerOvi::CheckCollision() {
       int size = OutTraceResultMiddle.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultMiddle[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(GetActorForwardVector(), GetActorLocation(), OutTraceResultMiddle[i].Location, m_capsuleRadious));
+          m_desiredPosition = RecalculateLocation(GetActorForwardVector(), m_desiredPosition, OutTraceResultMiddle[i].Location, m_capsuleRadious);
           break;
         }
     }
@@ -630,7 +633,7 @@ void APlayerOvi::CheckCollision() {
         for (int i = 0; i < size; i++)
           if (OutTraceResultTopBack[i].GetActor()->ActorHasTag("MobilePlatform")) {
             if (!isPlayerRunning())
-              SetActorLocation(RecalculateLocation(-GetActorForwardVector(), GetActorLocation(), OutTraceResultTopBack[i].Location, m_capsuleRadious));
+              m_desiredPosition = RecalculateLocation(-GetActorForwardVector(), m_desiredPosition, OutTraceResultTopBack[i].Location, m_capsuleRadious);
             break;
           }
       }
@@ -641,7 +644,7 @@ void APlayerOvi::CheckCollision() {
         for (int i = 0; i < size; i++)
           if (OutTraceResultBottomBack[i].GetActor()->ActorHasTag("MobilePlatform")) {
             if (!isPlayerRunning())
-              SetActorLocation(RecalculateLocation(-GetActorForwardVector(), GetActorLocation(), OutTraceResultBottomBack[i].Location, m_capsuleRadious));
+              m_desiredPosition = RecalculateLocation(-GetActorForwardVector(), m_desiredPosition, OutTraceResultBottomBack[i].Location, m_capsuleRadious);
             break;
           }
       }
@@ -651,7 +654,7 @@ void APlayerOvi::CheckCollision() {
       for (int i = 0; i < size; i++)
         if (OutTraceResultMiddleBack[i].GetActor()->ActorHasTag("MobilePlatform")) {
           if (!isPlayerRunning())
-            SetActorLocation(RecalculateLocation(-GetActorForwardVector(), GetActorLocation(), OutTraceResultMiddleBack[i].Location, m_capsuleRadious));
+            m_desiredPosition = RecalculateLocation(-GetActorForwardVector(), m_desiredPosition, OutTraceResultMiddleBack[i].Location, m_capsuleRadious);
           break;
         }
     }
@@ -659,9 +662,9 @@ void APlayerOvi::CheckCollision() {
   // Calculate the end location for trace  
   // Vertical 
   FVector newLocationUp;
-  newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
-  newLocationUp.Y = (FMath::Abs(GetActorUpVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
-  newLocationUp.Z = (FMath::Abs(GetActorUpVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
+  newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : m_desiredPosition.X;
+  newLocationUp.Y = (FMath::Abs(GetActorUpVector().Y) <= 0.01) ? m_lastPosition.Y : m_desiredPosition.Y;
+  newLocationUp.Z = (FMath::Abs(GetActorUpVector().Z) <= 0.01) ? m_lastPosition.Z : m_desiredPosition.Z;
 
   const FVector EndTraceDown = newLocationUp - GetActorUpVector() * m_capsuleHeight;
   const FVector EndTraceDownLeftF = (newLocationUp + GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) - GetActorUpVector() * m_capsuleHeight;
@@ -701,7 +704,7 @@ void APlayerOvi::CheckCollision() {
           }
           FVector localizaion = OutTraceResultDown[i].Location;
           action = true;
-          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDown[i].Location, -m_capsuleHeight));
+          m_desiredPosition = RecalculateLocation(GetActorUpVector(), m_desiredPosition, OutTraceResultDown[i].Location, -m_capsuleHeight);
           m_hasLanded = true;
           m_isFalling = false;
           m_actualJumpSpeed = JumpSpeed; 
@@ -732,7 +735,7 @@ void APlayerOvi::CheckCollision() {
             }
             FVector localizaion = OutTraceResultDownLeftF[i].Location;
             action = true;
-            SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownLeftF[i].Location, -m_capsuleHeight));
+            m_desiredPosition = RecalculateLocation(GetActorUpVector(), m_desiredPosition, OutTraceResultDownLeftF[i].Location, -m_capsuleHeight);
             m_hasLanded = true;
             m_isFalling = false; 
             m_actualJumpSpeed = JumpSpeed;
@@ -763,7 +766,7 @@ void APlayerOvi::CheckCollision() {
           }
           action = true;
           FVector localizaion = OutTraceResultDownRigthF[i].Location;
-          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultDownRigthF[i].Location, -m_capsuleHeight));
+          m_desiredPosition = RecalculateLocation(GetActorUpVector(), m_desiredPosition, OutTraceResultDownRigthF[i].Location, -m_capsuleHeight);
           m_hasLanded = true;
           m_isFalling = false;
           m_actualJumpSpeed = JumpSpeed;
@@ -790,9 +793,9 @@ void APlayerOvi::CheckCollision() {
     m_hasLanded = false;
   }
 
-  newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : GetActorLocation().X;
-  newLocationUp.Y = (FMath::Abs(GetActorUpVector().Y) <= 0.01) ? m_lastPosition.Y : GetActorLocation().Y;
-  newLocationUp.Z = (FMath::Abs(GetActorUpVector().Z) <= 0.01) ? m_lastPosition.Z : GetActorLocation().Z;
+  newLocationUp.X = (FMath::Abs(GetActorUpVector().X) <= 0.01) ? m_lastPosition.X : m_desiredPosition.X;
+  newLocationUp.Y = (FMath::Abs(GetActorUpVector().Y) <= 0.01) ? m_lastPosition.Y : m_desiredPosition.Y;
+  newLocationUp.Z = (FMath::Abs(GetActorUpVector().Z) <= 0.01) ? m_lastPosition.Z : m_desiredPosition.Z;
 
   const FVector EndTraceUp = newLocationUp + GetActorUpVector() * m_capsuleHeight;
   const FVector EndTraceUpLeftF = (newLocationUp + GetActorForwardVector() * (m_capsuleRadious - m_capsuleRadiousPadding)) + GetActorUpVector() * m_capsuleHeight;
@@ -813,10 +816,10 @@ void APlayerOvi::CheckCollision() {
       int size = OutTraceResultUp.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultUp[i].GetActor()->ActorHasTag("Platform")) {
-        SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUp[i].Location, m_capsuleHeight));
-        m_headCollision = true;
-        m_actualJumpSpeed = 0.0f;
-        break;
+          m_desiredPosition = RecalculateLocation(GetActorUpVector(), m_desiredPosition, OutTraceResultUp[i].Location, m_capsuleHeight);
+          m_headCollision = true;
+          m_actualJumpSpeed = 0.0f;
+          break;
         }
     }
     else if (collisionUpLeftF) {
@@ -824,10 +827,10 @@ void APlayerOvi::CheckCollision() {
         int size = OutTraceResultUpLeftF.Num();
         for (int i = 0; i < size; i++)
           if (OutTraceResultUpLeftF[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpLeftF[i].Location, m_capsuleHeight));
-          m_headCollision = true;
-          m_actualJumpSpeed = 0.0f;
-          break;
+            m_desiredPosition = RecalculateLocation(GetActorUpVector(), m_desiredPosition, OutTraceResultUpLeftF[i].Location, m_capsuleHeight);
+            m_headCollision = true;
+            m_actualJumpSpeed = 0.0f;
+            break;
           }
       }
     }
@@ -835,10 +838,10 @@ void APlayerOvi::CheckCollision() {
       int size = OutTraceResultUpRigthF.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultUpRigthF[i].GetActor()->ActorHasTag("Platform")) {
-        SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpRigthF[i].Location, m_capsuleHeight));
-        m_headCollision = true;
-        m_actualJumpSpeed = 0.0f;
-        break;
+          m_desiredPosition = RecalculateLocation(GetActorUpVector(), m_desiredPosition, OutTraceResultUpRigthF[i].Location, m_capsuleHeight);
+          m_headCollision = true;
+          m_actualJumpSpeed = 0.0f;
+          break;
         }
     }
   }

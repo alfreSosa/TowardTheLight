@@ -25,11 +25,18 @@ bool UInfoGameInstance::IsPageOpen(){
   return m_pageOpen;
 }
 
+void UInfoGameInstance::SetCurrentLevelKeytitle(FString keyTitle){
+	m_keyTitle = keyTitle;
+}
+FString UInfoGameInstance::GetCurrentLevelKeyTitle(){
+	return m_keyTitle;
+}
+
 void UInfoGameInstance::SetCurrentLevel(FString levelName){
-  m_levelName = levelName;
+	m_levelName = levelName;
 }
 FString UInfoGameInstance::GetCurrentLevel(){
-  return m_levelName;
+	return m_levelName;
 }
 
 void UInfoGameInstance::SetMaxScoreCurrentLevel(float maxScore){
