@@ -833,9 +833,13 @@ void APlayerOvi::CheckCollision() {
       int size = OutTraceResultUp.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultUp[i].GetActor()->ActorHasTag("Platform")) {
-        SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUp[i].Location, m_capsuleHeight));
-        m_headCollision = true;
-        m_actualJumpSpeed = 0.0f;
+          if (OutTraceResultUp[i].GetActor()->ActorHasTag("Platform"))
+            SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUp[i].Location, m_capsuleHeight + 20));
+          else
+            SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUp[i].Location, m_capsuleHeight));
+
+          m_headCollision = true;
+          m_actualJumpSpeed = 0.0f;
         break;
         }
     }
@@ -844,7 +848,10 @@ void APlayerOvi::CheckCollision() {
         int size = OutTraceResultUpLeftF.Num();
         for (int i = 0; i < size; i++)
           if (OutTraceResultUpLeftF[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpLeftF[i].Location, m_capsuleHeight));
+          if (OutTraceResultUp[i].GetActor()->ActorHasTag("Platform"))
+            SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpLeftF[i].Location, m_capsuleHeight + 20));
+          else
+            SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpLeftF[i].Location, m_capsuleHeight));
           m_headCollision = true;
           m_actualJumpSpeed = 0.0f;
           break;
@@ -855,7 +862,10 @@ void APlayerOvi::CheckCollision() {
       int size = OutTraceResultUpRigthF.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultUpRigthF[i].GetActor()->ActorHasTag("Platform")) {
-        SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpRigthF[i].Location, m_capsuleHeight));
+        if (OutTraceResultUp[i].GetActor()->ActorHasTag("Platform"))
+          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpRigthF[i].Location, m_capsuleHeight + 20));
+        else
+          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpRigthF[i].Location, m_capsuleHeight));
         m_headCollision = true;
         m_actualJumpSpeed = 0.0f;
         break;
