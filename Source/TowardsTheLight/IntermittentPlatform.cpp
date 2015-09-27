@@ -144,7 +144,8 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         m_isVisible = false;
         if (m_playerIsTouching)
           if (!NoUsesManager)
-            m_owner->AlertBlocking(true);
+            if (m_owner != nullptr)
+              m_owner->AlertBlocking(true);
        
         m_actualState = State::OFF;
         if (IsLarge)
@@ -176,7 +177,8 @@ void AIntermittentPlatform::runStateMachine(float DeltaSeconds) {
         m_actualState = (Loop) ? INITIALDELAY : ENDDELAY;
         if (!Loop && !m_finished) {
           if (!NoUsesManager)
-            m_owner->AlertFinish();
+            if (m_owner != nullptr)
+              m_owner->AlertFinish();
           m_finished = true;
         }
         m_isVisible = StartVisible;
@@ -194,7 +196,8 @@ void AIntermittentPlatform::ReceiveActorBeginOverlap(AActor* OtherActor) {
     m_playerIsTouching = true;
     if (!m_isVisible) {
       if (!NoUsesManager)
-        m_owner->AlertBlocking(true);
+        if (m_owner != nullptr)
+          m_owner->AlertBlocking(true);
     }
   }
 }
@@ -203,7 +206,8 @@ void AIntermittentPlatform::ReceiveActorEndOverlap(AActor* OtherActor) {
   if (OtherActor->ActorHasTag("Player")) {
     m_playerIsTouching = false;
     if (!NoUsesManager)
-      m_owner->AlertBlocking(false);
+      if (m_owner != nullptr)
+        m_owner->AlertBlocking(false);
   }
 
 }

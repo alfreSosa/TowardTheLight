@@ -136,7 +136,7 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
   m_lastPosition = GetActorLocation();
   m_nextPosition = m_lastPosition;
   EnemyAnimationMesh->bPauseAnims = TimeManager::Instance()->IsPaused();
-
+  //y si resulta que recuperar la referencia a otro player
   if (!m_player) {
     for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
       if (ActorItr->ActorHasTag("Player")) {
