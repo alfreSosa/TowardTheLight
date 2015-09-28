@@ -67,12 +67,13 @@ void AMobilePlatform::BeginPlay() {
 
 void AMobilePlatform::Tick(float DeltaSeconds) {
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+  Super::Tick(DeltaSeconds);
   if (Enabled) {
     if (!m_player)
       for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
         if (ActorItr->ActorHasTag("Player")){
           m_player = (APlayerOvi*)*ActorItr;
-          break;
+          //break;
         }
     m_controlOff = false;
     doMovement(DeltaSeconds);

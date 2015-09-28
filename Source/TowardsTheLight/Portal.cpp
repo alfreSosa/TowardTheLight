@@ -71,8 +71,7 @@ void APortal::BeginPlay() {
 void APortal::Tick(float DeltaSeconds) {
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
   Super::Tick(DeltaSeconds);
-
-  if (m_activateTranslate) {
+  if (m_activateTranslate && m_player) {
     m_elapsedTranslate += DeltaSeconds;
     if (m_elapsedTranslate > 0.7f) {
       m_activateTranslate = false;

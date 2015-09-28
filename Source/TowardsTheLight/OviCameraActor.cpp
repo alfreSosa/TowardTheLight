@@ -25,6 +25,7 @@ void AOviCameraActor::BeginPlay(){
 
 void AOviCameraActor::Tick(float DeltaSeconds){
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+  Super::Tick(DeltaSeconds);
 
   if (!m_player)
     for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
@@ -40,7 +41,7 @@ void AOviCameraActor::Tick(float DeltaSeconds){
         if (oviPlayerController)
           oviPlayerController->SetViewTarget(this);
 
-        break;
+        //break;
       }
     }
 

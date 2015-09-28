@@ -62,7 +62,8 @@ void AMechanism::BeginPlay()
   SkeletalMesh->SetMaterial(0, MechanismMaterial);
   int32 numTargets = Targets.Num();
   for (int32 i = 0; i < numTargets; i++)
-    Targets[i]->InitByMechanism(DisableAtEndAction, NumberOfActions);
+    if (Targets[i] != nullptr)
+      Targets[i]->InitByMechanism(DisableAtEndAction, NumberOfActions);
 
   m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
   m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
@@ -99,10 +100,11 @@ void AMechanism::Tick(float DeltaSeconds)
       int32 numTargets = Targets.Num();
       bool some = false;
       for (int32 i = 0; i < numTargets; i++)
-        if (Targets[i]->isEnabled()) {
-          some = true;
-          break;
-        }
+        if (Targets[i] != nullptr)
+          if (Targets[i]->isEnabled()) {
+            some = true;
+            break;
+          }
       FLinearColor actual = (some) ? ColorEnabled : ColorDisabled;
       m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
       m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
@@ -126,44 +128,47 @@ void AMechanism::Activate(bool enabled) {
 
 void AMechanism::Execute() {
   if (!m_isPushed) {
-    m_player->EnabledPushButton();
-    int32 numTargets = Targets.Num();
+    if (m_player) {
+      m_player->EnabledPushButton();
+      int32 numTargets = Targets.Num();
 
-    bool canUse = true;
-    bool prevEnabled = Targets[0]->isEnabled();
-    for (int32 i = 0; i < numTargets; i++) {
-      if (prevEnabled != Targets[i]->isEnabled()) {
-        canUse = false;
-        break;
-      }
-      prevEnabled = Targets[i]->isEnabled();
-    }
-
-    if (canUse) {
+      bool canUse = true;
+      bool prevEnabled = Targets[0]->isEnabled();
       for (int32 i = 0; i < numTargets; i++) {
-        if (Targets[i]->isEnabled()) {
-          if (CanDisactivate) {
-            m_isPushed = true;
-            m_elapsedStartIntermitence = 0.0f;
-            MechanismMaterial->SetVectorParameterValue("Color", ColorDisabled);
-            m_target = ColorEnabled;
-            m_origin = ColorDisabled;
-            Targets[i]->ChangeEnabled(false);
-          }
+        if (prevEnabled != Targets[i]->isEnabled()) {
+          canUse = false;
+          break;
         }
-        else {
-          if (CanActivate) {
-            m_isPushed = true;
-            m_elapsedStartIntermitence = 0.0f;
-            MechanismMaterial->SetVectorParameterValue("Color", ColorEnabled);
-            m_target = ColorDisabled;
-            m_origin = ColorEnabled;
-            Targets[i]->ChangeEnabled(true);
+        prevEnabled = Targets[i]->isEnabled();
+      }
+
+      if (canUse) {
+        for (int32 i = 0; i < numTargets; i++) {
+          if (Targets[i]->isEnabled()) {
+            if (CanDisactivate) {
+              m_isPushed = true;
+              m_elapsedStartIntermitence = 0.0f;
+              MechanismMaterial->SetVectorParameterValue("Color", ColorDisabled);
+              m_target = ColorEnabled;
+              m_origin = ColorDisabled;
+              Targets[i]->ChangeEnabled(false);
+            }
+          }
+          else {
+            if (CanActivate) {
+              m_isPushed = true;
+              m_elapsedStartIntermitence = 0.0f;
+              MechanismMaterial->SetVectorParameterValue("Color", ColorEnabled);
+              m_target = ColorDisabled;
+              m_origin = ColorEnabled;
+              Targets[i]->ChangeEnabled(true);
+            }
           }
         }
       }
     }
   }
+
 }
 
 bool AMechanism::isPushingButton() {

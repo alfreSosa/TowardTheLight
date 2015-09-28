@@ -43,6 +43,7 @@ void APickableItem::BeginPlay()
 
 void APickableItem::Tick(float DeltaSeconds){
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+  Super::Tick(DeltaSeconds);
   if (m_ciclesInRestore >= 0)
     m_ciclesInRestore--;
   

@@ -136,25 +136,27 @@ void AMobileEnemy::Tick(float DeltaSeconds) {
   m_lastPosition = GetActorLocation();
   m_nextPosition = m_lastPosition;
   EnemyAnimationMesh->bPauseAnims = TimeManager::Instance()->IsPaused();
-
+  //y si resulta que recuperar la referencia a otro player
   if (!m_player) {
     for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
       if (ActorItr->ActorHasTag("Player")) {
         m_player = (APlayerOvi*)*ActorItr;
         m_jumpSpeed = m_player->JumpSpeed;
         m_accelerationJump = m_player->AccelerationJump;
-        break;
+        //break;
       }
     }
   }
-  m_tickCounter++;
-  if (!HasTrigger || (HasTrigger && m_initMovement)) {
-    doMovement(DeltaSeconds);
-    CalculateGravity(DeltaSeconds);
-    CheckCollision();
-    SetActorLocation(m_nextPosition);
+  if (m_player){
+	 m_tickCounter++;
+	 if (!HasTrigger || (HasTrigger && m_initMovement)) {
+	  doMovement(DeltaSeconds);
+	  CalculateGravity(DeltaSeconds);
+	  CheckCollision();
+	  SetActorLocation(m_nextPosition);
+	}
+	CheckCollision();
   }
-  CheckCollision();
 }
 
 void AMobileEnemy::doMovement(float DeltaSeconds){
