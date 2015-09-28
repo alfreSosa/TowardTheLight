@@ -93,6 +93,8 @@ public:
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
     float AccelerationFall;
 private:
+
+  bool m_isValid;
   //private functions  
   float UpdateState();
   void CalculateOrientation();

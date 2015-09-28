@@ -30,7 +30,7 @@ const float DEFAULT_JUMP_ACC = 3300.0f;
 
 APlayerOvi::APlayerOvi() {
   PrimaryActorTick.bCanEverTick = true;
-
+  m_isValid = false;
   //Public properties
   FallSpeed = JumpSpeed = DEFAULT_JUMP_SPEED;
   MovementSpeed = DEFAULT_MOVEMENT_SPEED;
@@ -131,38 +131,18 @@ APlayerOvi::APlayerOvi() {
   m_isPickingAltar = m_isPickingPortal = m_isPushingButton = false;
   m_elapsedAltar = m_elapsedPortal = m_elapsedButton = 0.0f;
   m_inTutorial = false;
+  m_gameMode = nullptr;
 }
 
-void APlayerOvi::BeginPlay(){
+void APlayerOvi::BeginPlay() {
   Super::BeginPlay();
+  //tag player
+  this->Tags.Add("Player");
 
   // time for button animation
   m_elapsedAltar = m_elapsedPortal = m_elapsedButton = 0.0f;
-
-  //Initialize TraceParam
-  static FName FireTraceIdent = FName(TEXT("Platform"));
-  FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
-  TraceParams.bTraceAsyncScene = true;
-  TraceParams.bFindInitialOverlaps = false;
-  TraceParams.bTraceComplex = true;
-  TArray<AActor *> ignorados;
-  for (TActorIterator<ATappable > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
-    if (ActorItr->ActorHasTag("Tappable"))
-      ignorados.Add(*ActorItr);
-  }
-
-  for (TActorIterator<ACheckPoint > checkItr(GetWorld()); checkItr; ++checkItr)
-    ignorados.Add(*checkItr);
-
-  for (TActorIterator<ATutorial > tutItr(GetWorld()); tutItr; ++tutItr)
-    ignorados.Add(*tutItr);
-
-  TraceParams.AddIgnoredActors(ignorados);
-  m_TraceParams = TraceParams;
-
   // material for capsule
   CapsuleComponent->SetMaterial(0, nullptr);
-
   // calculate limit world & initial orientation
   float dotForward = FVector::DotProduct(FVector(1, 1, 1), GetActorForwardVector());
   if (dotForward < 0)
@@ -173,18 +153,12 @@ void APlayerOvi::BeginPlay(){
   m_limit = FVector::DotProduct(GetActorLocation(), GetActorRightVector());
   m_limit = abs(m_limit);
 
-  //tag player
-  this->Tags.Add("Player");
-
   //GetCaspuleValues for simulate physics
   m_capsuleHeight = CapsuleComponent->GetScaledCapsuleHalfHeight();
   m_capsuleRadious = CapsuleComponent->GetScaledCapsuleRadius();
   m_capsuleHeightPadding = m_capsuleHeight * PADDING_COLLISION_PERCENT;
   m_capsuleRadiousPadding = m_capsuleRadious * PADDING_COLLISION_PERCENT_RADIOUS;
   m_capsuleHeightPaddingFeet = m_capsuleHeight * PADDING_COLLISION_PERCENT_FEET;
-
-  //Get ATowardsTheLightGameMode
-  m_gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
 
   //Set player Stick in the animation socket
   if (Mesh) {
@@ -197,12 +171,43 @@ void APlayerOvi::BeginPlay(){
   }
 
   m_inTutorial = false;
+  m_isValid = false;
 }
 
 void APlayerOvi::Tick(float DeltaSeconds){
   //get own deltaTime
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
   Super::Tick(DeltaSeconds);
+
+  //initilize raycast query param
+  //Initialize TraceParam
+  if (!m_isValid) {
+    //Get ATowardsTheLightGameMode
+    if (!m_gameMode)
+      m_gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
+
+    static FName FireTraceIdent = FName(TEXT("Platform"));
+    FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
+    TraceParams.bTraceAsyncScene = true;
+    TraceParams.bFindInitialOverlaps = false;
+    TraceParams.bTraceComplex = true;
+
+    TArray<AActor *> ignorados;
+    for (TActorIterator<ATappable > ActorItr(GetWorld()); ActorItr; ++ActorItr) {
+      if (ActorItr->ActorHasTag("Tappable"))
+        ignorados.Add(*ActorItr);
+    }
+
+    for (TActorIterator<ACheckPoint > checkItr(GetWorld()); checkItr; ++checkItr)
+      ignorados.Add(*checkItr);
+
+    for (TActorIterator<ATutorial > tutItr(GetWorld()); tutItr; ++tutItr)
+      ignorados.Add(*tutItr);
+
+    TraceParams.AddIgnoredActors(ignorados);
+    m_TraceParams = TraceParams;
+    m_isValid = true;
+  }
 
   //pause animations if is game paused
   Mesh->bPauseAnims = isPlayerPaused();

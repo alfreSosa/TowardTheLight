@@ -20,6 +20,7 @@ ATutorial::ATutorial() {
   //initialize private properties
   //m_loaded = false;
   m_enter = false;
+  m_gameMode = nullptr;
   //m_end = false;
   //m_currentTime = 0.f;
 }
@@ -28,14 +29,15 @@ void ATutorial::BeginPlay() {
   Super::BeginPlay();
   RegisterDelegate();
 
-  //Get ATowardsTheLightGameMode
-  m_gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
-
   //m_loaded = false;
   m_enter = false;
 }
 
 void ATutorial::Tick(float DeltaSeconds) {
+  //Get ATowardsTheLightGameMode
+  if (!m_gameMode)
+    m_gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
+
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
   Super::Tick(DeltaSeconds);
 

@@ -8,6 +8,7 @@
 
 AMobilePlatform::AMobilePlatform() {
   PrimaryActorTick.bCanEverTick = true;
+  OurVisibleComponent->bGenerateOverlapEvents = true;
   this->SetActorEnableCollision(true);
 
   RootComponent->SetMobility(EComponentMobility::Movable);

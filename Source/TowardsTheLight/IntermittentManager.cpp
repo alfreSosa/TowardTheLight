@@ -22,8 +22,10 @@ void AIntermittentManager::BeginPlay()
   m_numPlatforms = Platforms.Num();
   m_finishCounter = m_numPlatforms;
   for(int32 i = 0; i < m_numPlatforms; i++) {
-    Platforms[i]->InitOwner(this);
-    Platforms[i]->BeginPlay();
+    if (Platforms[i] != nullptr) {
+      Platforms[i]->InitOwner(this);
+      //Platforms[i]->Init();
+    }
   }
   m_someBlocked = false;
   m_restart = false;

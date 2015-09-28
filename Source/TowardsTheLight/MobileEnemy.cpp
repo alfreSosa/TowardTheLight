@@ -12,7 +12,9 @@ const float PADDING_ENEMY_COLLISION_PERCENT = 0.05f;
 
 AMobileEnemy::AMobileEnemy() {
   PrimaryActorTick.bCanEverTick = true;
+  OurVisibleComponent->bGenerateOverlapEvents = false;
   this->SetActorEnableCollision(true);
+
   m_isMoving = false;
   //setting
   Fly = false;
@@ -44,10 +46,10 @@ AMobileEnemy::AMobileEnemy() {
   CapsuleComponent->SetCollisionProfileName(CollisionProfileName);
 
   CapsuleComponent->CanCharacterStepUpOn = ECB_No;
-  CapsuleComponent->bShouldUpdatePhysicsVolume = true;
+  CapsuleComponent->bShouldUpdatePhysicsVolume = false;
   CapsuleComponent->bCheckAsyncSceneOnMove = false;
   CapsuleComponent->bCanEverAffectNavigation = false;
-  CapsuleComponent->bGenerateOverlapEvents = true;
+  CapsuleComponent->bGenerateOverlapEvents = false;
   //Fijamos por defecto la rotacion de la capsula para que el forward este de cara a la camara
   CapsuleComponent->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 0)));
   CapsuleComponent->SetCapsuleHalfHeight(DEFAULT_ENEMY_CAPSULE_HEIGHT);
@@ -77,7 +79,7 @@ AMobileEnemy::AMobileEnemy() {
     EnemyAnimationMesh->AttachParent = RootComponent;
     static FName CollisionProfileName(TEXT("OverlapAll"));
     EnemyAnimationMesh->SetCollisionProfileName(CollisionProfileName);
-    EnemyAnimationMesh->bGenerateOverlapEvents = true;
+    EnemyAnimationMesh->bGenerateOverlapEvents = false;
     EnemyAnimationMesh->bCanEverAffectNavigation = false;
     EnemyAnimationMesh->SetRelativeLocation(FVector(0, 0, 0));
     EnemyAnimationMesh->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, 90)));
