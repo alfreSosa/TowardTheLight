@@ -18,6 +18,7 @@ public:
 	//UE4 Functions
 	AStick();
 	virtual void BeginPlay() override;
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
 
   //Own functions
   void SetColor(FLinearColor colorKey, float shinnes);

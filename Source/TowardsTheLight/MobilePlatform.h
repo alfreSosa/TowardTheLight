@@ -48,6 +48,7 @@ public:
   AMobilePlatform();
   virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
   void SetPlayerOn(bool on);
   void ChangeEnabled(bool enabled);
   bool isEnabled();

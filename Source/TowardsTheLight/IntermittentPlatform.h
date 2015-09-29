@@ -45,6 +45,7 @@ public:
   virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;
   virtual void TickManager(float DeltaSeconds);
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
   virtual void ReceiveActorEndOverlap(AActor* OtherActor) override;
   void ChangeEnabled(bool enabled);

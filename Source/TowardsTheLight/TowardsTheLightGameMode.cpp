@@ -279,3 +279,7 @@ void ATowardsTheLightGameMode::PlayerInTutorial(bool value){
 
   m_player->inTutorial(value);
 }
+
+void ATowardsTheLightGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+  GetWorld()->ForceGarbageCollection(true);
+}

@@ -32,3 +32,8 @@ void AKeysTappable::BeginPlay()
 	
 }
 
+void AKeysTappable::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+  KeyMesh->SetMaterial(0, nullptr);
+  TowerLightMaterial = nullptr;
+}
+

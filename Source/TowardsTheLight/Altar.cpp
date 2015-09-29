@@ -48,3 +48,8 @@ void AAltar::Execute() {
   MaterialBB->SetVectorParameterValue("Bloom_Color", DisableColor);
 }
 
+
+void AAltar::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+  m_meshActivator->SetMaterial(0, nullptr);
+  AltarMaterial = nullptr;
+}

@@ -53,3 +53,9 @@ void AStick::SetColor(FLinearColor colorKey, float shinnes) {
   StickMaterial->SetVectorParameterValue("BaculoColor", colorKey);
   EffectsMaterial->SetVectorParameterValue("Bloom_Color", colorKey);
 }
+
+void AStick::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+  Stick->SetMaterial(0, nullptr);
+  StickMaterial = nullptr;
+  EffectsMaterial = nullptr;
+}

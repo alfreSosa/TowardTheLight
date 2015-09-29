@@ -245,3 +245,8 @@ void AMobilePlatform::RestoreInitialState() {
   m_movement = FVector(0);
   m_currentDistance = 0;
 }
+
+void AMobilePlatform::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+  OurVisibleComponent->SetMaterial(0, nullptr);
+  MobilePlatformMaterial = nullptr;
+}

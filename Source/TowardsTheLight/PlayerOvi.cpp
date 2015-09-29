@@ -934,8 +934,8 @@ void APlayerOvi::ResetToCheckPoint(FTransform playerTransform, bool right) {
 }
 
 void APlayerOvi::EndPlay(const EEndPlayReason::Type EndPlayReason) {
-  if (m_stick) {
+  if (m_stick)
     GetWorld()->DestroyActor(m_stick);
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Destroying baculo")));
-  }
+   
+ 
 }

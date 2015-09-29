@@ -31,3 +31,7 @@ void AEntranceLight::BeginPlay()
   TowerLightMaterial->SetVectorParameterValue("TowerDoor_color", ColorKey);
 }
 
+void AEntranceLight::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+  LightMesh->SetMaterial(0, nullptr);
+  TowerLightMaterial = nullptr;
+}

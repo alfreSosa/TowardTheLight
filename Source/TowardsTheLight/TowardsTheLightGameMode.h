@@ -40,7 +40,7 @@ public:
   };
 
   ATowardsTheLightGameMode(const FObjectInitializer& ObjectInitializer);
-
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
   enum EndGameType { NONE = 0, VICTORY = 1, DEFEAT = -1 };
   void EndGame(EndGameType type);
   

@@ -174,3 +174,8 @@ void AMechanism::Execute() {
 bool AMechanism::isPushingButton() {
   return m_isPushed;
 }
+
+void AMechanism::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+  SkeletalMesh->SetMaterial(0, nullptr);
+  MechanismMaterial = nullptr;
+}
