@@ -58,4 +58,5 @@ private:
   float m_lightZAngle;
   FLinearColor m_origin;
   FLinearColor m_target;
+  bool m_init;
 };

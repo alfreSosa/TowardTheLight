@@ -7,6 +7,7 @@
 
 AIntermittentPlatform::AIntermittentPlatform() {
   this->PrimaryActorTick.bCanEverTick = true;
+  OurVisibleComponent->bGenerateOverlapEvents = true;
   this->SetActorEnableCollision(true);
 
   RootComponent->SetMobility(EComponentMobility::Movable);
@@ -48,6 +49,7 @@ AIntermittentPlatform::AIntermittentPlatform() {
     mat = MatFinder2.Object;
     IPMaterialLarge = UMaterialInstanceDynamic::Create(mat, GetWorld());
   }
+
 }
 
 void AIntermittentPlatform::BeginPlay()

@@ -16,6 +16,8 @@ UInfoGameInstance::UInfoGameInstance(const class FObjectInitializer& ObjectIniti
 
   m_hasKey = false;
   m_colorKey = FLinearColor(0.0f, 0.0f, 0.0f);
+
+  m_inMenu = true;
 }
 
 void UInfoGameInstance::SetPageOpen(){
@@ -80,4 +82,11 @@ void UInfoGameInstance::SetTowerKeyColor(FLinearColor colorKey){
 }
 FLinearColor UInfoGameInstance::GetTowerKeyColor(){
   return m_colorKey;
+}
+
+void UInfoGameInstance::SetInMenu(bool inMenu){
+  m_inMenu = inMenu;
+}
+bool UInfoGameInstance::GetInMenu(){
+  return m_inMenu;
 }

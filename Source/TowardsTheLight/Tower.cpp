@@ -95,6 +95,7 @@ ATower::ATower() {
     LightParticles->SetTemplate(ParticleAsset.Object);
   LightParticles->AttachTo(RootComponent);
   m_lightZAngle = 0.0f;
+  m_init = false;
 }
 
 // Called when the game starts or when spawned
@@ -126,13 +127,22 @@ void ATower::BeginPlay() {
   m_origin = ColorKey;
   m_target = ColorDisabled;
 
-  Cast<UInfoGameInstance>(GetGameInstance())->SetTowerNeedKey(NeedKey);
-  Cast<UInfoGameInstance>(GetGameInstance())->SetTowerKeyColor(ColorKey);
+  if (GetGameInstance()) {
+    Cast<UInfoGameInstance>(GetGameInstance())->SetTowerNeedKey(NeedKey);
+    Cast<UInfoGameInstance>(GetGameInstance())->SetTowerKeyColor(ColorKey);
+    m_init = true;
+  }
 
   Light->SetRelativeScale3D(FVector(0.5f));
 }
 
 void ATower::Tick(float DeltaSeconds) {
+  if (!m_init) {
+    Cast<UInfoGameInstance>(GetGameInstance())->SetTowerNeedKey(NeedKey);
+    Cast<UInfoGameInstance>(GetGameInstance())->SetTowerKeyColor(ColorKey);
+    m_init = true;
+  }
+
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
   Super::Tick(DeltaSeconds);
 

@@ -20,6 +20,7 @@ public:
 	APlayerOvi();
 	virtual void BeginPlay() override;
 	virtual void Tick( float DeltaSeconds ) override;
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
   void TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location);
   void TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location);
@@ -93,6 +94,8 @@ public:
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
     float AccelerationFall;
 private:
+
+  bool m_isValid;
   //private functions  
   float UpdateState();
   void CalculateOrientation();
@@ -138,7 +141,6 @@ private:
 
   //origin ray position
   FVector m_lastPosition;
-
   //mobile platform interaction propierties
   bool m_isOnMobilePlatform;
   AMobilePlatform *m_currentMobile;

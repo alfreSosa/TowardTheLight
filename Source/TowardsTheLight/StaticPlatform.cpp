@@ -10,6 +10,7 @@ AStaticPlatform::AStaticPlatform() {
   RootComponent->SetMobility(EComponentMobility::Static);
   OurVisibleComponent->SetMobility(EComponentMobility::Static);
   OurVisibleComponent->CastShadow = false;
+  OurVisibleComponent->bGenerateOverlapEvents = false;
   OurVisibleComponent->AttachTo(RootComponent);
   this->Tags.Add("Platform");
 }

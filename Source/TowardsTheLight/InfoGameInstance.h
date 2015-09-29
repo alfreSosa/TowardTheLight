@@ -59,6 +59,10 @@ public:
   UFUNCTION(BlueprintCallable, Category = "GameInfo")
     FLinearColor GetTowerKeyColor();
 
+  UFUNCTION(BlueprintCallable, Category = "GameInfo")
+    void SetInMenu(bool inMenu);
+  UFUNCTION(BlueprintCallable, Category = "GameInfo")
+    bool GetInMenu();
 private:
   bool m_pageOpen;
   FString m_pageName;
@@ -74,4 +78,6 @@ private:
 
   bool m_hasKey;
   FLinearColor m_colorKey;
+
+  bool m_inMenu;
 };
