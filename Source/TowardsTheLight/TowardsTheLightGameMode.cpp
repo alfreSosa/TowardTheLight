@@ -129,6 +129,11 @@ bool ATowardsTheLightGameMode::IsCheckPointPicked() {
 }
 
 void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
+  if (!m_player){
+    for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
+      if (ActorItr->ActorHasTag("Player"))
+        m_player = (APlayerOvi*)*ActorItr;
+  }
   if (checkPoint) {
     /*Si los he cogido y no estan en el array almacenado los restauro*/
     for (TActorIterator<APickableItem> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
@@ -266,9 +271,11 @@ void ATowardsTheLightGameMode::FindActualPlayer() {
 }
 
 void ATowardsTheLightGameMode::PlayerInTutorial(bool value){
-  for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
-    if (ActorItr->ActorHasTag("Player"))
-      m_player = (APlayerOvi*)*ActorItr;
+  if (!m_player){
+    for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
+      if (ActorItr->ActorHasTag("Player"))
+        m_player = (APlayerOvi*)*ActorItr;
+  }
 
   m_player->inTutorial(value);
 }

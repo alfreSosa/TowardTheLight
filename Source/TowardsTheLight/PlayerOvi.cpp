@@ -186,6 +186,8 @@ void APlayerOvi::Tick(float DeltaSeconds){
     if (!m_gameMode)
       m_gameMode = Cast<ATowardsTheLightGameMode>(UGameplayStatics::GetGameMode(this));
 
+    m_gameMode->FindActualPlayer();
+
     static FName FireTraceIdent = FName(TEXT("Platform"));
     FCollisionQueryParams TraceParams(FireTraceIdent, true, this);
     TraceParams.bTraceAsyncScene = true;
