@@ -37,7 +37,7 @@
 		{"key":"TUTOORIENTATION","value":"You have to reach the Light\nTower on the right direction"},
 		{"key":"TUTOKEY","value":"Tap to get the colour of\nthe Light with your staff"},
 		{"key":"TUTOPORTAL","value":"Tap on the portal\nto teleport"},
-		{"key":"TUTOKEYUSE","value":"You will need specific light colours\nto activate some elements"},
+		{"key":"TUTOTOWERHUD","value":"You will need specific light colours\nto activate some elements"},
 		{"key":"TITLE1","value":"1. Meet The\nLight Bearer"},
 		{"key":"TITLE2","value":"2. Elevators"},
 		{"key":"TITLE3","value":"3. Enter\nthe Tower"},
