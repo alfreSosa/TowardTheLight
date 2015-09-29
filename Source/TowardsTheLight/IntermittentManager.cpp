@@ -80,7 +80,9 @@ void AIntermittentManager::AlertFinish() {
   m_finishCounter = (m_finishCounter <= 0) ? 0: m_finishCounter;
 }
 
-
+void AIntermittentManager::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+  Platforms.Empty();
+}
 void AIntermittentManager::RestoreInitialState() {
   Enabled = m_initialEnabled;
   m_finishCounter = m_numPlatforms;

@@ -86,6 +86,10 @@ void ACheckPoint::EndPlay(const EEndPlayReason::Type EndPlayReason)
     Trigger->OnComponentEndOverlap.RemoveDynamic(this, &ACheckPoint::OnTriggerOverlapEnd);
 
   FireParticles->DestroyComponent(true);
+  m_gameMode = nullptr;
+  Trigger = nullptr;
+  CheckPointVisibleComponent = nullptr;
+  FireParticles = nullptr;
   Super::EndPlay(EndPlayReason);
 }
 

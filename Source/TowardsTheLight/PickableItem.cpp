@@ -94,6 +94,7 @@ void APickableItem::RestoreInitialPosition() {
 
 void APickableItem::EndPlay(const EEndPlayReason::Type EndPlayReason) {
   FeedBackParticles->DestroyComponent(true);
+  PrimaryActorTick.UnRegisterTickFunction();
 }
 
 
