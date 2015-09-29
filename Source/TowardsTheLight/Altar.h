@@ -20,6 +20,7 @@ public:
   AAltar();
   virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
   virtual void Activate(bool enabled);
   virtual void Execute();
 private:

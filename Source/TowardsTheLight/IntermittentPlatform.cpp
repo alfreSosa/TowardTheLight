@@ -237,6 +237,12 @@ void AIntermittentPlatform::InitByMechanism(bool disableAtEnd, int32 numActions)
   //Nothing
 }
 
+void AIntermittentPlatform::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+  OurVisibleComponent->SetMaterial(0, nullptr);
+  IntermittentPlatformMaterial = nullptr;
+  IPMaterialLarge = nullptr;
+}
+
 
 
 

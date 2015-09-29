@@ -15,6 +15,7 @@ public:
   virtual void Tick(float DeltaSeconds) override;
   virtual void BeginPlay() override;
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
   void RestoreInitialPosition();
   UPROPERTY(EditAnywhere)
     UStaticMeshComponent* OurVisibleComponent;

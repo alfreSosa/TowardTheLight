@@ -35,6 +35,7 @@ public:
   //Class Functions
   virtual void BeginPlay() override;
   virtual void Tick(float DeltaSeconds) override;
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
   virtual void Activate(bool enabled);
   virtual void Execute();
   void Turn(bool on);

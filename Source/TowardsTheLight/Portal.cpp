@@ -141,3 +141,12 @@ void APortal::Execute() {
 void APortal::Turn(bool on){
   PortalMaterialEffects->SetVectorParameterValue("Portal_effect_color", on ? PortalColor : FLinearColor(FVector(0.f)));
 }
+
+void APortal::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+  MeshActivator->SetMaterial(0, nullptr);
+  MeshBG->SetMaterial(0, nullptr);
+  MeshEffects->SetMaterial(0, nullptr);
+  PortalMaterial = nullptr;
+  PortalMaterialBG = nullptr;
+  PortalMaterialEffects = nullptr;
+}

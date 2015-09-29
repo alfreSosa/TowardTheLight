@@ -19,7 +19,8 @@ public:
   //functions
   AKeysTappable();
 	virtual void BeginPlay() override;
-	
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
+
 private:
   UMaterialInstanceDynamic *TowerLightMaterial;
 	

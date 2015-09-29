@@ -205,6 +205,15 @@ void ATower::EndPlay(const EEndPlayReason::Type EndPlayReason){
   if (Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &ATower::OnBeginTriggerOverlap))  {
     Trigger->OnComponentBeginOverlap.RemoveDynamic(this, &ATower::OnBeginTriggerOverlap);
   }
+
+  Light->SetMaterial(0, nullptr);
+  Body->SetMaterial(0, nullptr);
+  Entrance->SetMaterial(0, nullptr);
+
+  LightParticles->DestroyComponent(true);
+  TowerLightMaterial = nullptr;
+  TowerRunesMaterial = nullptr;
+  TowerEntranceMaterial = nullptr;
   Super::EndPlay(EndPlayReason);
 }
 

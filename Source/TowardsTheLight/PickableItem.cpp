@@ -92,5 +92,8 @@ void APickableItem::RestoreInitialPosition() {
   OurVisibleComponent->SetVisibility(true);
 }
 
+void APickableItem::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+  FeedBackParticles->DestroyComponent(true);
+}
 
 
