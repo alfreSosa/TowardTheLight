@@ -37,7 +37,7 @@
 		{"key":"TUTOORIENTATION","value":"You have to reach the Light\nTower on the right direction"},
 		{"key":"TUTOKEY","value":"Tap to get the colour of\nthe Light with your staff"},
 		{"key":"TUTOPORTAL","value":"Tap on the portal\nto teleport"},
-		{"key":"TUTOTOWERHUD","value":"You will need specific light colours\nto activate some elements"},
+		{"key":"TUTOTOWERHUD","value":"From now on you might need a specific light\nto enter the tower. This will let\n you know what colour you need"},
 		{"key":"TITLE1","value":"1. Meet The\nLight Bearer"},
 		{"key":"TITLE2","value":"2. Elevators"},
 		{"key":"TITLE3","value":"3. Enter\nthe Tower"},
@@ -91,7 +91,7 @@
 		{"key":"NARR_2","value":"Gemstones! Collect all of them\nand the Ancestral Masters "},
 		{"key":"NARR_2-1","value":" will reward you for your\ngreat job."},
 		{"key":"NARR_2-2","value":"..."},
-		{"key":"NARR_3","value":"There it is! The Light Tower. Though \nbeing an apprentice, you'll know"},
+		{"key":"NARR_3","value":"There it is! The Light Tower. Though\nbeing an apprentice, you'll know"},
 		{"key":"NARR_3-1","value":"the importance of kindling them.\nEach lit Tower is a star in the sky."},
 		{"key":"NARR_3-2","value":"This is the only way to preserve\nlife and peace in the universe."},
 		{"key":"NARR_4","value":"Light bearers have the power\nto adapt to the many orientations"},
@@ -101,13 +101,13 @@
 		{"key":"NARR_5-2","value":"dwelling them have been corrupted\nand turned poisonous."},
 		{"key":"NARR_5-3","value":"Don't kill them...\nAnd don't touch them!"},
 		{"key":"NARR_5-4","value":"..."},
-		{"key":"NARR_6","value":"[aaaa..."},
+		{"key":"NARR_6","value":"Kraaaak..."},
 		{"key":"NARR_7","value":"Eso que ves es un altar de luz,\npuede tener diferentes colores."},
 		{"key":"NARR_7-1","value":"Puedes recoger su luz para usar\nmecanismos del mismo color."},
 		{"key":"NARR_8","value":"Beware, Ovi. As light is fading\nthe worlds are becoming "},
 		{"key":"NARR_8-1","value":"more dangerous. But we are close\nto the end. Light them!"},
 		{"key":"NARR_9","value":"Ovi, that thorns are dangerous.\nBe careful with touching them!"},
-		{"key":"NARR_10","value":"Esto es un punto de luz, si te\nda+an, volver#s a este lugar."},
-		{"key":"NARR_11","value":"Esto es un portal. Pasa por $l y\naparecer#s en otro lugar."}
+		{"key":"NARR_10","value":"This is light spot. If you\nget hurt, you will appear here."},
+		{"key":"NARR_11","value":"This is a portal. Cross it and\nyou will appear in another place."}
 		]
 }
