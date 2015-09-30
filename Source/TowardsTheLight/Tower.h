@@ -6,7 +6,7 @@
 #include "Tower.generated.h"
 
 UCLASS()
-class TOWARDSTHELIGHT_API ATower : public APawn
+class TOWARDSTHELIGHT_API ATower : public AActor
 {
 	GENERATED_BODY()
 
