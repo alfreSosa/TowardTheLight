@@ -102,9 +102,12 @@
 		{"key":"NARR_5-3","value":"Don't kill them...\nAnd don't touch them!"},
 		{"key":"NARR_5-4","value":"..."},
 		{"key":"NARR_6","value":"[aaaa..."},
-		{"key":"NARR_7","value":"A new landscape! What a relief!"},
+		{"key":"NARR_7","value":"Eso que ves es un altar de luz,\npuede tener diferentes colores."},
+		{"key":"NARR_7-1","value":"Puedes recoger su luz para usar\nmecanismos del mismo color."},
 		{"key":"NARR_8","value":"Beware, Ovi. As light is fading\nthe worlds are becoming "},
 		{"key":"NARR_8-1","value":"more dangerous. But we are close\nto the end. Light them!"},
-		{"key":"NARR_9","value":"Ovi, that thorns are dangerous.\nBe careful with touching them!"}
+		{"key":"NARR_9","value":"Ovi, that thorns are dangerous.\nBe careful with touching them!"},
+		{"key":"NARR_10","value":"Esto es un punto de luz, si te\nda+an, volver#s a este lugar."},
+		{"key":"NARR_11","value":"Esto es un portal. Pasa por $l y\naparecer#s en otro lugar."}
 		]
 }
