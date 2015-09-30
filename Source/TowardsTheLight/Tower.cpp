@@ -214,6 +214,7 @@ void ATower::EndPlay(const EEndPlayReason::Type EndPlayReason){
   TowerLightMaterial = nullptr;
   TowerRunesMaterial = nullptr;
   TowerEntranceMaterial = nullptr;
+  LightParticles = nullptr;
   Super::EndPlay(EndPlayReason);
 }
 

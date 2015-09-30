@@ -116,6 +116,11 @@ void ATappable::EndPlay(const EEndPlayReason::Type EndPlayReason){
   if (Trigger->OnComponentEndOverlap.IsAlreadyBound(this, &ATappable::OnTriggerOverlapEnd))  {
     Trigger->OnComponentEndOverlap.RemoveDynamic(this, &ATappable::OnTriggerOverlapEnd);
   }
+  MeshActivator = nullptr;
+  Trigger = nullptr;
+  EffectsBB = nullptr;
+  m_player = nullptr;
+  MaterialBB = nullptr;
   Super::EndPlay(EndPlayReason);
 }
 

@@ -249,4 +249,5 @@ void AMobilePlatform::RestoreInitialState() {
 void AMobilePlatform::EndPlay(const EEndPlayReason::Type EndPlayReason) {
   OurVisibleComponent->SetMaterial(0, nullptr);
   MobilePlatformMaterial = nullptr;
+  m_player = nullptr;
 }

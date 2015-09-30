@@ -261,7 +261,10 @@ void AMobileEnemy::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimit
 void AMobileEnemy::EndPlay(const EEndPlayReason::Type EndPlayReason){
   if (Trigger->OnComponentBeginOverlap.IsAlreadyBound(this, &AMobileEnemy::OnBeginTriggerOverlap))
     Trigger->OnComponentBeginOverlap.RemoveDynamic(this, &AMobileEnemy::OnBeginTriggerOverlap);
-
+  m_player = nullptr;
+  Trigger = nullptr;
+  EnemyAnimationMesh = nullptr;
+  CapsuleComponent = nullptr;
   Super::EndPlay(EndPlayReason);
 }
 

@@ -149,4 +149,7 @@ void APortal::EndPlay(const EEndPlayReason::Type EndPlayReason) {
   PortalMaterial = nullptr;
   PortalMaterialBG = nullptr;
   PortalMaterialEffects = nullptr;
+  Partner = nullptr;
+  MeshBG = nullptr;
+  MeshEffects = nullptr;
 }
