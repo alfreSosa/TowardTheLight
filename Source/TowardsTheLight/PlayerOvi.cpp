@@ -942,8 +942,9 @@ void APlayerOvi::ResetToCheckPoint(FTransform playerTransform, bool right) {
 }
 
 void APlayerOvi::EndPlay(const EEndPlayReason::Type EndPlayReason) {
-  if (m_stick)
-    GetWorld()->DestroyActor(m_stick);
+  if (!GEngine)
+    if (m_stick)
+      GetWorld()->DestroyActor(m_stick);
 
   m_stick = nullptr;
   CapsuleComponent = nullptr;
