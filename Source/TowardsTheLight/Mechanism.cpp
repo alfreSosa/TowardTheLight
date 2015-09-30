@@ -178,4 +178,6 @@ bool AMechanism::isPushingButton() {
 void AMechanism::EndPlay(const EEndPlayReason::Type EndPlayReason) {
   SkeletalMesh->SetMaterial(0, nullptr);
   MechanismMaterial = nullptr;
+  Targets.Empty();
+  SkeletalMesh = nullptr;
 }

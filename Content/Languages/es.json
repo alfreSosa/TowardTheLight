@@ -102,9 +102,12 @@
 		{"key":"NARR_5-3","value":"vuelto venenosas. No las mates,\n{y no las toques!"},
 		{"key":"NARR_5-4","value":"..."},
 		{"key":"NARR_6","value":"[aaaa..."},
-		{"key":"NARR_7","value":"Un nuevo paisaje {Qu$ refrescante!"},
+		{"key":"NARR_7","value":"Eso que ves es un altar de luz,\npuede tener diferentes colores."},
+		{"key":"NARR_7-1","value":"Puedes recoger su luz para usar\nmecanismos del mismo color."},
 		{"key":"NARR_8","value":"Cuidado Ovi, por la falta de\nluz, los mundos son cada vez"},
 		{"key":"NARR_8-1","value":"m#s peligrosos. Pero ya falta\npoco {Ilum%nalos!"},
-		{"key":"NARR_9","value":"Ovi, esos espinos son peligrosos.\n{Cuidado con ellos!"}
+		{"key":"NARR_9","value":"Ovi, esos espinos son peligrosos.\n{Cuidado con ellos!"},
+		{"key":"NARR_10","value":"Esto es un punto de luz, si te\nda+an, volver#s a este lugar."},
+		{"key":"NARR_11","value":"Esto es un portal. Pasa por $l y\naparecer#s en otro lugar."}
 		]
 }

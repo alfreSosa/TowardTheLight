@@ -21,6 +21,7 @@ public:
 	AIntermittentManager();
 	virtual void BeginPlay() override;
 	virtual void Tick( float DeltaSeconds ) override;
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
   void ChangeEnabled(bool enabled);
   bool isEnabled();
   void InitByMechanism(bool disableAtEnd, int32 numActions);

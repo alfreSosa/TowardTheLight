@@ -280,6 +280,13 @@ void ATowardsTheLightGameMode::PlayerInTutorial(bool value){
   m_player->inTutorial(value);
 }
 
+//
+//void ATowardsTheLightGameMode::BeginPlay() {
+//  for (TActorIterator< AActor > ActorItr(GetWorld()); ActorItr; ++ActorItr)
+//    m_actores.Add(*ActorItr);
+//}
+
 void ATowardsTheLightGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+  m_player = nullptr;
   GetWorld()->ForceGarbageCollection(true);
 }
