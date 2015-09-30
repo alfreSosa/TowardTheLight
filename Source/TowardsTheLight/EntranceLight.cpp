@@ -34,4 +34,5 @@ void AEntranceLight::BeginPlay()
 void AEntranceLight::EndPlay(const EEndPlayReason::Type EndPlayReason) {
   LightMesh->SetMaterial(0, nullptr);
   TowerLightMaterial = nullptr;
+  LightMesh = nullptr;
 }

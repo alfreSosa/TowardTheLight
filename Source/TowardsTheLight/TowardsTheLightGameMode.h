@@ -40,6 +40,7 @@ public:
   };
 
   ATowardsTheLightGameMode(const FObjectInitializer& ObjectInitializer);
+  //virtual void BeginPlay() override;
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
   enum EndGameType { NONE = 0, VICTORY = 1, DEFEAT = -1 };
   void EndGame(EndGameType type);
@@ -130,4 +131,5 @@ private:
   float m_countOrbs;
   APlayerOvi *m_player;
   EndGameType state;
+  //TArray<AActor *> m_actores;
 };

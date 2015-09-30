@@ -781,7 +781,11 @@ void APlayerOvi::CheckCollision() {
       int size = OutTraceResultUpLeftF.Num();
       for (int i = 0; i < size; i++)
         if (OutTraceResultUpLeftF[i].GetActor()->ActorHasTag("Platform")) {
-          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpLeftF[i].Location, m_capsuleHeight + 20));
+          if (OutTraceResultUpLeftF[i].GetActor()->ActorHasTag("MobilePlatform"))
+            SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpLeftF[i].Location, m_capsuleHeight + 20));
+          else
+            SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpLeftF[i].Location, m_capsuleHeight));
+
           m_headCollision = true;
           m_actualJumpSpeed = 0.0f;
           break;
@@ -791,7 +795,11 @@ void APlayerOvi::CheckCollision() {
     int size = OutTraceResultUpRigthF.Num();
     for (int i = 0; i < size; i++)
       if (OutTraceResultUpRigthF[i].GetActor()->ActorHasTag("Platform")) {
-        SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpRigthF[i].Location, m_capsuleHeight + 20));
+        if (OutTraceResultUpRigthF[i].GetActor()->ActorHasTag("MobilePlatform"))
+          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpRigthF[i].Location, m_capsuleHeight + 20));
+        else
+          SetActorLocation(RecalculateLocation(GetActorUpVector(), GetActorLocation(), OutTraceResultUpRigthF[i].Location, m_capsuleHeight));
+
         m_headCollision = true;
         m_actualJumpSpeed = 0.0f;
         break;
@@ -936,6 +944,10 @@ void APlayerOvi::ResetToCheckPoint(FTransform playerTransform, bool right) {
 void APlayerOvi::EndPlay(const EEndPlayReason::Type EndPlayReason) {
   if (m_stick)
     GetWorld()->DestroyActor(m_stick);
-   
- 
+
+  m_stick = nullptr;
+  CapsuleComponent = nullptr;
+  Mesh = nullptr;
+  m_currentMobile = nullptr;
+  m_gameMode = nullptr;
 }

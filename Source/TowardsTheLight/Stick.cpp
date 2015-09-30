@@ -58,4 +58,5 @@ void AStick::EndPlay(const EEndPlayReason::Type EndPlayReason) {
   Stick->SetMaterial(0, nullptr);
   StickMaterial = nullptr;
   EffectsMaterial = nullptr;
+  Stick = nullptr;
 }

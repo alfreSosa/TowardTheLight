@@ -241,6 +241,7 @@ void AIntermittentPlatform::EndPlay(const EEndPlayReason::Type EndPlayReason) {
   OurVisibleComponent->SetMaterial(0, nullptr);
   IntermittentPlatformMaterial = nullptr;
   IPMaterialLarge = nullptr;
+  m_owner = nullptr;
 }
 
 

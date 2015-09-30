@@ -46,5 +46,6 @@ void AStaticEnemy::EndPlay(const EEndPlayReason::Type EndPlayReason){
   if (OurVisibleComponent->OnComponentBeginOverlap.IsBound())
     OurVisibleComponent->OnComponentBeginOverlap.Remove(m_delegate);
 
+  OurVisibleComponent = nullptr;
   Super::EndPlay(EndPlayReason);
 }
