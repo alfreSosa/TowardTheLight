@@ -54,10 +54,14 @@ void ATappable::BeginPlay()
   RegisterDelegate();
 
   EffectsBB->AddElement(MaterialBB, NULL, false, 100, 100, NULL);
-  if (NeedKey)
+  if (NeedKey) {
     MaterialBB->SetVectorParameterValue("Bloom_Color", ColorKey);
-  else
+    MaterialBB->SetScalarParameterValue("Visible", 1.0f);
+  }
+  else {
     MaterialBB->SetVectorParameterValue("Bloom_Color", FLinearColor(FVector(0.f)));
+    MaterialBB->SetScalarParameterValue("Visible", 0.0F);
+  }
 }
 
 //necesario por herencia
