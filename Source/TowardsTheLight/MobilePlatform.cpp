@@ -8,10 +8,12 @@
 
 AMobilePlatform::AMobilePlatform() {
   PrimaryActorTick.bCanEverTick = true;
+  OurVisibleComponent->bGenerateOverlapEvents = true;
   this->SetActorEnableCollision(true);
 
   RootComponent->SetMobility(EComponentMobility::Movable);
   OurVisibleComponent->SetMobility(EComponentMobility::Movable);
+  OurVisibleComponent->CastShadow = false;
 
   //setting
   RightDistance = 100.f;
@@ -35,6 +37,7 @@ AMobilePlatform::AMobilePlatform() {
   intermitedOn = true;
   m_target = ColorEnabled;
   m_origin = ColorDisabled;
+  m_controlOff = false;
 
   MobilePlatformMaterial = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
   UMaterial* mat = nullptr;
@@ -55,23 +58,33 @@ void AMobilePlatform::BeginPlay() {
   m_origin = (!intermitedOn) ? ColorEnabled : ColorDisabled;
   FLinearColor color = (Enabled) ? ColorEnabled : ColorDisabled;
   MobilePlatformMaterial->SetVectorParameterValue("Color", color);
+
+  //variables restore
+  m_initialPosition = GetActorLocation();
+  m_initialColor = color;
+  m_enabledInitial = Enabled;
+  m_controlOff = false;
 }
 
 void AMobilePlatform::Tick(float DeltaSeconds) {
   DeltaSeconds = TimeManager::Instance()->GetDeltaTime(DeltaSeconds);
+  Super::Tick(DeltaSeconds);
   if (Enabled) {
     if (!m_player)
       for (TActorIterator< APawn > ActorItr(GetWorld()); ActorItr; ++ActorItr)
         if (ActorItr->ActorHasTag("Player")){
           m_player = (APlayerOvi*)*ActorItr;
-          break;
+          //break;
         }
-
+    m_controlOff = false;
     doMovement(DeltaSeconds);
     if (m_player && m_isPlayerOn)
       m_player->OnMobilePlatform(this, m_movement);
   } else {
-    MobilePlatformMaterial->SetVectorParameterValue("Color", ColorDisabled);
+    if (!m_controlOff) {
+      m_controlOff = true;
+      MobilePlatformMaterial->SetVectorParameterValue("Color", ColorDisabled); // I think this functions is worst than an 'if'
+    }
   }
 }
 
@@ -84,7 +97,7 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
     t = (t > 1.0f) ? 1.0f : t;
     FLinearColor actual = FMath::Lerp(m_origin, m_target, t);
     MobilePlatformMaterial->SetVectorParameterValue("Color", actual);
-    if (m_elapsedIntermitence >= TimeInIntermittence) {
+    if (m_elapsedIntermitence > TimeInIntermittence) {
       m_elapsedIntermitence = 0.0f;
       intermitedOn = !intermitedOn;
       m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
@@ -165,7 +178,7 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
     t = (t > 1.0f) ? 1.0f : t;
     FLinearColor actual = FMath::Lerp(m_origin, m_target, t);
     MobilePlatformMaterial->SetVectorParameterValue("Color", actual);
-    if (m_elapsedIntermitence >= TimeInIntermittence) {
+    if (m_elapsedIntermitence > TimeInIntermittence) {
       m_elapsedIntermitence = 0.0f;
       intermitedOn = !intermitedOn;
       m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
@@ -185,7 +198,7 @@ void AMobilePlatform::doMovement(float DeltaSeconds){
     t = (t > 1.0f) ? 1.0f : t;
     FLinearColor actual = FMath::Lerp(m_origin, m_target, t);
     MobilePlatformMaterial->SetVectorParameterValue("Color", actual);
-    if (m_elapsedIntermitence >= TimeInIntermittence) {
+    if (m_elapsedIntermitence > TimeInIntermittence) {
       m_elapsedIntermitence = 0.0f;
       intermitedOn = !intermitedOn;
       m_target = (intermitedOn) ? ColorEnabled : ColorDisabled;
@@ -219,6 +232,22 @@ void AMobilePlatform::InitByMechanism(bool disableAtEnd, int32 numActions) {
   m_maxActions = numActions;
 }
 
-//FVector AMobilePlatform::GetPlatformMovement() const{
-//  return m_movement;
-//}
+void AMobilePlatform::RestoreInitialState() {
+  SetActorLocation(m_initialPosition);
+  MobilePlatformMaterial->SetVectorParameterValue("Color", m_initialColor);
+  Enabled = m_enabledInitial;
+  m_state = INITIAL_DELAY;
+  m_totalDistance = RightDistance;
+  m_actions = 0;
+  m_isPlayerOn = false;
+  intermitedOn = true;
+  m_elapsedIntermitence = 0.0f;
+  m_movement = FVector(0);
+  m_currentDistance = 0;
+}
+
+void AMobilePlatform::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+  OurVisibleComponent->SetMaterial(0, nullptr);
+  MobilePlatformMaterial = nullptr;
+  m_player = nullptr;
+}

@@ -23,6 +23,8 @@ GameDataManager::GameDataManager() {
   m_filePath = FPaths::GameContentDir() + m_filePath;
   m_music = NONE;
   m_effects = NONE;
+  m_language = "";
+  m_pageName = "";
 
   FFileHelper::LoadFileToString(m_data, *m_filePath);
   Document doc;
@@ -59,9 +61,6 @@ LevelData GameDataManager::ReadLevelData(FString levelName){
   Document doc;
   doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
 
-  //Quitar el inicio por defecto
-  levelName.RemoveFromStart(FString("UEDPIE_0_"));
-
   if (!doc.HasParseError())
     if (doc.IsObject())
       if (doc.HasMember("levels"))
@@ -86,7 +85,7 @@ LevelData GameDataManager::ReadLevelData(FString levelName){
                     return ret;
                   }
         }
-  
+
   // si no lo ha encontrado en el fichero, devuelve un struct con el nombre y el resto de parámetros por defecto.
   // cuando se llame a la función WriteLevelData, si no existe el bloque, se añadirá al fichero
   ret.name = levelName;
@@ -130,7 +129,7 @@ void GameDataManager::WriteLevelData(LevelData data){
             char* n = TCHAR_TO_ANSI(*data.name);
             lvl.AddMember("name", n, allocator);
             lvl.AddMember("orbs", data.orbs, allocator);
-            lvl.AddMember("points", data.points, allocator);     
+            lvl.AddMember("points", data.points, allocator);
 
             levels.PushBack(lvl, allocator);
           }
@@ -240,7 +239,6 @@ bool GameDataManager::LevelExists(FString levelName){
   return false;
 }
 
-
 //OPTIONS
 bool GameDataManager::HasMusic(){
   if (m_music == NONE){
@@ -260,7 +258,6 @@ bool GameDataManager::HasMusic(){
 
   return m_music == YES;
 }
-
 void GameDataManager::SetMusic(bool enable){
   Document doc;
   doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
@@ -301,7 +298,6 @@ bool GameDataManager::HasEffects(){
 
   return m_effects == YES;
 }
-
 void GameDataManager::SetEffects(bool enable){
   Document doc;
   doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
@@ -314,6 +310,82 @@ void GameDataManager::SetEffects(bool enable){
             if (doc["general"]["effects"].IsBool()){
               doc["general"]["effects"].SetBool(enable);
               m_effects = enable ? YES : NO;
+            }
+
+  StringBuffer buffer;
+  Writer<StringBuffer> writer(buffer);
+  doc.Accept(writer);
+  m_data = buffer.GetString();
+
+  SavedGame();
+}
+
+FString GameDataManager::GetLanguage(){
+  if (m_language == ""){
+    Document doc;
+    doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+    if (!doc.HasParseError())
+      if (doc.IsObject())
+        if (doc.HasMember("general"))
+          if (doc["general"].IsObject())
+            if (doc["general"].HasMember("language"))
+              if (doc["general"]["language"].IsString())
+                m_language = doc["general"]["language"].GetString();
+  }
+
+  return m_language;
+}
+void GameDataManager::SetLanguage(FString language){
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+  if (!doc.HasParseError())
+    if (doc.IsObject())
+      if (doc.HasMember("general"))
+        if (doc["general"].IsObject())
+          if (doc["general"].HasMember("language"))
+            if (doc["general"]["language"].IsString()){
+              doc["general"]["language"].SetString(TCHAR_TO_ANSI(*language), language.Len());
+              m_language = language;
+            }
+
+  StringBuffer buffer;
+  Writer<StringBuffer> writer(buffer);
+  doc.Accept(writer);
+  m_data = buffer.GetString();
+
+  SavedGame();
+}
+
+FString GameDataManager::GetPageName(){
+  if (m_pageName == ""){
+    Document doc;
+    doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+    if (!doc.HasParseError())
+      if (doc.IsObject())
+        if (doc.HasMember("general"))
+          if (doc["general"].IsObject())
+            if (doc["general"].HasMember("page"))
+              if (doc["general"]["page"].IsString())
+                m_pageName = doc["general"]["page"].GetString();
+  }
+
+  return m_pageName;
+}
+void GameDataManager::SetPageName(FString pageName){
+  Document doc;
+  doc.Parse<0>(TCHAR_TO_ANSI(*m_data));
+
+  if (!doc.HasParseError())
+    if (doc.IsObject())
+      if (doc.HasMember("general"))
+        if (doc["general"].IsObject())
+          if (doc["general"].HasMember("page"))
+            if (doc["general"]["page"].IsString()){
+              doc["general"]["page"].SetString(TCHAR_TO_ANSI(*pageName), pageName.Len());
+              m_pageName = pageName;
             }
 
   StringBuffer buffer;

@@ -6,11 +6,10 @@
 #include "Tower.generated.h"
 
 UCLASS()
-class TOWARDSTHELIGHT_API ATower : public APawn
+class TOWARDSTHELIGHT_API ATower : public AActor
 {
 	GENERATED_BODY()
 
- 
 public:	
 	// Sets default values for this actor's properties
 	ATower();
@@ -34,14 +33,30 @@ public:
     bool NeedKey;
   UPROPERTY(EditAnywhere, Category = Tower)
     FLinearColor ColorKey;
+  UPROPERTY(EditAnywhere, Category = Tower)
+    float TimeRunes;
+  UPROPERTY(EditAnywhere)
+    UMaterialBillboardComponent *EffectsBB;
+  UPROPERTY(EditAnywhere)
+    UParticleSystemComponent *LightParticles;
 
   void RegisterDelegate();
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
+  void RestoreInitialState();
 private:
   UMaterialInstanceDynamic *TowerLightMaterial;
+  UMaterialInstanceDynamic *TowerEntranceMaterial;
+  UMaterialInstanceDynamic *TowerRunesMaterial;
+  UMaterialInstanceDynamic *MaterialBB;
+
   bool m_startVictory;
   float m_timeToFinish;
   float m_elapsedTime;
+  float m_elapsedTimeRunes;
+  float m_lightZAngle;
+  FLinearColor m_origin;
+  FLinearColor m_target;
+  bool m_init;
 };

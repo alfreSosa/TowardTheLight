@@ -11,20 +11,26 @@ class TOWARDSTHELIGHT_API APickableItem : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	APickableItem();
   virtual void Tick(float DeltaSeconds) override;
-
+  virtual void BeginPlay() override;
   virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
-
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
+  void RestoreInitialPosition();
   UPROPERTY(EditAnywhere)
-    USceneComponent* OurVisibleComponent;
+    UStaticMeshComponent* OurVisibleComponent;
+  UPROPERTY(EditAnywhere)
+    UParticleSystemComponent *FeedBackParticles;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PickableItem)
     float Points;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PickableItem)
     bool IsOrb;
+
+  bool IsItemPicked();
 private:
   const float DEFAULT_POINTS = 100.0f;
-	
   bool m_collected;
+  FVector m_initialPosition;
+  int m_ciclesInRestore;
+  float m_elapsedParticle;
 };

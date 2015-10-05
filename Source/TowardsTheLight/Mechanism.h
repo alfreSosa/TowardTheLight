@@ -17,9 +17,7 @@ public:
   UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
   class USkeletalMeshComponent* SkeletalMesh;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
-    TArray<AActor *> Targets;
-  UPROPERTY(EditAnywhere, Category = MechanismTarget)
-    bool TargetsAreEnabled;
+    TArray<AStaticPlatform *> Targets;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
     bool CanActivate;
   UPROPERTY(EditAnywhere, Category = MechanismTarget)
@@ -43,6 +41,7 @@ public:
 	//Class Functions
 	virtual void BeginPlay() override;
 	virtual void Tick( float DeltaSeconds ) override;
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
   virtual void Activate(bool enabled);
   virtual void Execute();
 
@@ -59,6 +58,6 @@ private:
   bool intermitedOn;
   FLinearColor m_target;
   FLinearColor m_origin;
-  TArray<AStaticPlatform *> m_Targets;
   UMaterialInstanceDynamic *MechanismMaterial;
+  bool m_justOff;
 };

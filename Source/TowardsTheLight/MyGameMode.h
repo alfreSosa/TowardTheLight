@@ -8,12 +8,26 @@
 /**
  * 
  */
+class APickableItem;
+class APlayerOvi;
+
 UCLASS()
 class TOWARDSTHELIGHT_API AMyGameMode : public AGameMode
 {
 	GENERATED_BODY()
 
 public:
+  struct CheckPointData {
+    bool IsPicked;
+    FTransform PlayerStatus;
+    bool PlayerHasKey;
+    FLinearColor ColorKey;
+    bool PlayerToRight;
+    TArray<APickableItem *> ItemsPicked;
+    float Points;
+    float Orbs;
+  };
+
   enum EndGameType { NONE = 0, VICTORY = 1, DEFEAT = -1 };
 
   AMyGameMode(const FObjectInitializer& ObjectInitializer);  // Our added constructor
@@ -42,8 +56,15 @@ public:
   UFUNCTION(BlueprintCallable, Category = TTLFunctions)
     FString GetLevelNameBP();
 
-  //UFUNCTION(BlueprintCallable, Category = TTLFunctions)
-  //  bool SwipeControlBP();
+  UFUNCTION(BlueprintCallable, Category = TTLFunctions)
+    FString GetString(FString key);
+
+  UFUNCTION(BlueprintCallable, Category = TTLFunctions)
+    bool IsCheckPointPicked();
+
+  UFUNCTION(BlueprintCallable, Category = TTLFunctions)
+    void RestoreLevel(bool checkPoint);
+
 
   UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
     void PointsSoundEvent();
@@ -51,10 +72,16 @@ public:
   UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
     void OrbsSoundEvent();
 
+  //CheckPoint Functions
+  void SetPlayerCheckPoint(APlayerOvi *player, FTransform playerStatus, bool right);
+  void SetPlayerKey(bool hasKey, FLinearColor colorKey);
+  void AddItemPicked(APickableItem *item);
+
 private:
+  CheckPointData m_actualCheckPoint;
   float m_actualPoints;
   float m_countOrbs;
-
+  APlayerOvi *m_player;
   EndGameType state;
 };
 

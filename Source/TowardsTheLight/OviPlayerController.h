@@ -13,6 +13,6 @@ class TOWARDSTHELIGHT_API AOviPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
-    AOviPlayerController(const FObjectInitializer& ObjectInitializer);  // Our added constructor
+    AOviPlayerController(const FObjectInitializer& ObjectInitializer);
 	
 };

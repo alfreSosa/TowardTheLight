@@ -7,7 +7,7 @@
 
 class AMobilePlatform;
 class AStick;
-class AMyGameMode;
+class ATowardsTheLightGameMode;
 
 UCLASS()
 class TOWARDSTHELIGHT_API APlayerOvi : public APawn
@@ -20,6 +20,7 @@ public:
 	APlayerOvi();
 	virtual void BeginPlay() override;
 	virtual void Tick( float DeltaSeconds ) override;
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
   void TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location);
   void TouchEnd(const ETouchIndex::Type FingerIndex, const FVector Location);
@@ -28,6 +29,9 @@ public:
   bool HasKey();
   FLinearColor GetColorKey();
   void EnabledPushButton();
+  void EnabledPickPortal();
+  void EnabledPickAltar();
+  void ResetToCheckPoint(FTransform playerTransform, bool right);
 
   //public editor functions
   UFUNCTION(BlueprintCallable, Category = "PlayerInputTTL")
@@ -58,8 +62,15 @@ public:
     bool PlayerisToRight();
   UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
     bool PlayerisPushinButton();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool PlayerisPickingPortal();
+  UFUNCTION(BlueprintCallable, Category = "PlayerLocomotion")
+    bool PlayerisPickingAltar();
   UFUNCTION(BlueprintCallable, Category = "PlayerState")
     bool isPlayerPaused();
+
+  UFUNCTION(BlueprintCallable, Category = "PlayerInputTTL")
+    void inTutorial(bool value);
 
   //public editor propierties
   UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -77,8 +88,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float JumpSpeed;
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+    float FallSpeed;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
     float AccelerationJump;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+    float AccelerationFall;
 private:
+
+  bool m_isValid;
   //private functions  
   float UpdateState();
   void CalculateOrientation();
@@ -93,7 +110,7 @@ private:
   FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
   
   //private propiertes
-  AMyGameMode *m_gameMode;
+  ATowardsTheLightGameMode *m_gameMode;
   
   //player movement propiertes
   FCollisionQueryParams m_TraceParams; 
@@ -124,14 +141,20 @@ private:
 
   //origin ray position
   FVector m_lastPosition;
-
   //mobile platform interaction propierties
   bool m_isOnMobilePlatform;
   AMobilePlatform *m_currentMobile;
 
   //animation boton
   bool m_isPushingButton;
+  bool m_isPickingAltar;
+  bool m_isPickingPortal;
   float m_elapsedButton;
+  float m_elapsedPortal;
+  float m_elapsedAltar;
+
+  //tutorial
+  bool m_inTutorial;
 
   //key & stick
   bool m_hasKey;

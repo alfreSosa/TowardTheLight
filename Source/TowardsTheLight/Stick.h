@@ -18,10 +18,13 @@ public:
 	//UE4 Functions
 	AStick();
 	virtual void BeginPlay() override;
-	virtual void Tick( float DeltaSeconds ) override;
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
+
   //Own functions
   void SetColor(FLinearColor colorKey, float shinnes);
 private:
   UMaterialInstanceDynamic *StickMaterial;
+  UMaterialInstanceDynamic *EffectsMaterial;
+  UMaterialBillboardComponent *BBMaterial;
 	
 };

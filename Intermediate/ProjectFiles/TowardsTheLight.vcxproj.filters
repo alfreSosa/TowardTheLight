@@ -88,12 +88,6 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\GameDataManager.h">
       <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\MenuGameMode.h">
-      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TowardsTheLight\MyGameMode.h">
-      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\TowardsTheLight\OviPlayerController.h">
       <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
     </ClInclude>
@@ -124,8 +118,29 @@
     <ClInclude Include="..\..\Source\TowardsTheLight\IntermittentPlatform.h">
       <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\IntermittentManager.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\TowardsTheLight\LocalizationManager.h">
-      <Filter>Source</Filter>
+      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\Tutorial.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\CheckPoint.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\SoundManager.h">
+      <Filter>Source\TowardsTheLight\include\SceneControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\NoPawn.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\EntranceLight.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TowardsTheLight\KeysTappable.h">
+      <Filter>Source\TowardsTheLight\include\SceneObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -168,12 +183,6 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\GameDataManager.cpp">
       <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\TowardsTheLight\MenuGameMode.cpp">
-      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TowardsTheLight\MyGameMode.cpp">
-      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\OviPlayerController.cpp">
       <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
     </ClCompile>
@@ -195,8 +204,29 @@
     <ClCompile Include="..\..\Source\TowardsTheLight\IntermittentPlatform.cpp">
       <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\IntermittentManager.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\TowardsTheLight\LocalizationManager.cpp">
-      <Filter>Source</Filter>
+      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\Tutorial.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\CheckPoint.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\SoundManager.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\NoPawn.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\EntranceLight.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TowardsTheLight\KeysTappable.cpp">
+      <Filter>Source\TowardsTheLight\source\SceneObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

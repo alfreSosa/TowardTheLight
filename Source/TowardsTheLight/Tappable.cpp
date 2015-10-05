@@ -16,6 +16,7 @@ ATappable::ATappable()
   MeshActivator->AttachTo(RootComponent);
   RootComponent->SetMobility(EComponentMobility::Static);
   MeshActivator->SetMobility(EComponentMobility::Static);
+  MeshActivator->CastShadow = false;
   m_meshActivator = MeshActivator;
   //trigger component
   Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
@@ -31,6 +32,18 @@ ATappable::ATappable()
   NeedKey = false;
   ColorKey = FLinearColor(0.0f, 0.0f, 0.0f);
   this->Tags.Add("Tappable");
+
+  MaterialBB = ((UPrimitiveComponent*)GetRootComponent())->CreateAndSetMaterialInstanceDynamic(0);
+  UMaterial *mat = nullptr;
+  static ConstructorHelpers::FObjectFinder<UMaterial> MatFinderEffectsBB(TEXT("Material'/Game/Models/Baculo/baculoBloom_material.baculoBloom_material'"));
+  if (MatFinderEffectsBB.Succeeded()){
+    mat = MatFinderEffectsBB.Object;
+    MaterialBB = UMaterialInstanceDynamic::Create(mat, GetWorld());
+  }
+
+  EffectsBB = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("BB"));
+  EffectsBB->AttachTo(RootComponent);
+  EffectsBB->CastShadow = false;
 }
 
 // Called when the game starts or when spawned
@@ -39,9 +52,19 @@ void ATappable::BeginPlay()
 	Super::BeginPlay();
   m_meshActivator = MeshActivator;
   RegisterDelegate();
+
+  EffectsBB->AddElement(MaterialBB, NULL, false, 100, 100, NULL);
+  if (NeedKey) {
+    MaterialBB->SetVectorParameterValue("Bloom_Color", ColorKey);
+    MaterialBB->SetScalarParameterValue("Visible", 1.0f);
+  }
+  else {
+    MaterialBB->SetVectorParameterValue("Bloom_Color", FLinearColor(FVector(0.f)));
+    MaterialBB->SetScalarParameterValue("Visible", 0.0F);
+  }
 }
 
-// Called every frame
+//necesario por herencia
 void ATappable::Tick( float DeltaTime )
 {
   DeltaTime = TimeManager::Instance()->GetDeltaTime(DeltaTime);
@@ -60,15 +83,16 @@ void ATappable::RegisterDelegate() {
 }
 
 void ATappable::OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-  if (OtherActor->ActorHasTag("Player")){
+  if (OtherActor->ActorHasTag("Player")) {
     m_player = dynamic_cast<APlayerOvi *>(OtherActor);
     FVector dif = m_player->GetActorUpVector() - GetActorUpVector();
     dif.X = (dif.X < 0) ? -dif.X : dif.X;
     dif.Y = (dif.Y < 0) ? -dif.Y : dif.Y;
     dif.Z = (dif.Z < 0) ? -dif.Z : dif.Z;
-    if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05)
+    if (dif.X < 0.05 && dif.Y < 0.05 && dif.Z < 0.05 && (!NeedKey || (NeedKey && m_player->HasKey() && ColorKey == m_player->GetColorKey()))){
       m_isPlayerOn = true;
-    Activate(true);
+      Activate(true);
+    }
   }
 }
 
@@ -84,7 +108,7 @@ void  ATappable::ReceiveActorOnInputTouchBegin(const ETouchIndex::Type FingerInd
   if (m_isPlayerOn)
     if (m_player)
       if (!NeedKey || (NeedKey && m_player->HasKey() && ColorKey == m_player->GetColorKey())) {
-          Execute();
+        Execute();
       }
 }
 
@@ -96,6 +120,11 @@ void ATappable::EndPlay(const EEndPlayReason::Type EndPlayReason){
   if (Trigger->OnComponentEndOverlap.IsAlreadyBound(this, &ATappable::OnTriggerOverlapEnd))  {
     Trigger->OnComponentEndOverlap.RemoveDynamic(this, &ATappable::OnTriggerOverlapEnd);
   }
+  MeshActivator = nullptr;
+  Trigger = nullptr;
+  EffectsBB = nullptr;
+  m_player = nullptr;
+  MaterialBB = nullptr;
   Super::EndPlay(EndPlayReason);
 }
 

@@ -12,8 +12,6 @@ UCLASS()
 class TOWARDSTHELIGHT_API AMobileEnemy : public AStaticEnemy
 {
 	GENERATED_BODY()
-  TScriptDelegate<FWeakObjectPtr> m_delegate;
-
 private:
 
   enum state{
@@ -45,12 +43,17 @@ private:
   bool m_enableGravity;
   APlayerOvi *m_player;
   FVector m_lastPosition;
+  FVector m_nextPosition;
 
+  //kill variables
+  int m_tickCounter;
+  //restore data variables
+  FTransform m_initialStatus;
+  bool m_initialMovement;
   void doMovement(float DeltaSeconds);
   void CalculateGravity(float DeltaSeconds);
   void CheckCollision();
   void ResponseCollision();
-  void ResponseCollisionBackward();
   FVector AbsVector(const FVector& vector);
   FVector RecalculateLocation(FVector Direction, FVector Location, FVector HitLocation, float size);
 
@@ -59,6 +62,10 @@ public:
   class USkeletalMeshComponent* EnemyAnimationMesh;
   UPROPERTY()
     UBoxComponent *Trigger;
+  UPROPERTY(EditAnywhere, Category = MobileEnemy)
+    bool Fly;
+  UPROPERTY(EditAnywhere, Category = MobileEnemy)
+    bool HasRotation;
   UPROPERTY(EditAnywhere, Category = MobileEnemy)
     float RightDistance;
   UPROPERTY(EditAnywhere, Category = MobileEnemy)
@@ -81,9 +88,8 @@ public:
   virtual void Tick(float DeltaSeconds) override;
   void RegisterDelegate();
   void EndPlay(const EEndPlayReason::Type EndPlayReason);
+  virtual void RestoreInitialState();
 
-  UFUNCTION()
-    void OnCollisionSkeletal(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
   UFUNCTION()
     void OnBeginTriggerOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
   UFUNCTION(BlueprintCallable, Category = "EnemyLocomotion")

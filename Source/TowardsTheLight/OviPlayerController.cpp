@@ -9,6 +9,3 @@ AOviPlayerController::AOviPlayerController(const class FObjectInitializer& Objec
 	bEnableClickEvents = true;
 	bEnableTouchEvents = true;
 }
-
-
-

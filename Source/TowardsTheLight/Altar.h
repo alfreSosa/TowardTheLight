@@ -14,11 +14,15 @@ public:
     bool GiveKey;
   UPROPERTY(EditAnywhere, Category = Altar)
     FLinearColor AltarColor;
+  UPROPERTY(EditAnywhere, Category = Altar)
+    FLinearColor DisableColor;
 
   AAltar();
   virtual void BeginPlay() override;
-  //virtual void Tick(float DeltaSeconds) override;
+  virtual void Tick(float DeltaSeconds) override;
+  void EndPlay(const EEndPlayReason::Type EndPlayReason);
   virtual void Activate(bool enabled);
   virtual void Execute();
+private:
   UMaterialInstanceDynamic *AltarMaterial;
 };
