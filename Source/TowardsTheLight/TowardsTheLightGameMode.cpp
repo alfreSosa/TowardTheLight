@@ -194,6 +194,7 @@ void ATowardsTheLightGameMode::RestoreLevel(bool checkPoint) {
     m_actualCheckPoint.PlayerHasKey = false;
     m_actualCheckPoint.ColorKey = FLinearColor(1, 1, 1);
   }
+  RestoreScoreEvent();
 }
 
 void ATowardsTheLightGameMode::RestoreGameMode() {

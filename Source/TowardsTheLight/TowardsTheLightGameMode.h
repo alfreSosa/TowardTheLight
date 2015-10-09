@@ -63,6 +63,8 @@ public:
     void PointsSoundEvent();
   UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
     void OrbsSoundEvent();
+  UFUNCTION(BlueprintImplementableEvent, Category = TTLEvents)
+    void RestoreScoreEvent();
 
   UFUNCTION(BlueprintCallable, Category = TTLFunctions)
     void SetPauseBP(bool enable);

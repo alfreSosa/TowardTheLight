@@ -27,6 +27,7 @@ void AAltar::BeginPlay(){
   m_meshActivator->SetMaterial(0, AltarMaterial);
   AltarMaterial->SetVectorParameterValue("Color", AltarColor);
   MaterialBB->SetVectorParameterValue("Bloom_Color", AltarColor);
+  MaterialBB->SetScalarParameterValue("Visible", 1.0f);
 }
 
 void  AAltar::Tick(float DeltaSeconds) {
